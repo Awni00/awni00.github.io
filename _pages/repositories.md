@@ -2,7 +2,7 @@
 layout: page
 permalink: /repositories/
 title: code repositories
-description: A few code repositories that you may find interesting.
+description: code repositories associated with projects i've worked on/am working on.
 nav: true
 nav_order: 4
 ---
@@ -33,7 +33,7 @@ nav_order: 4
 {% endif %}
 {% endif %}
 
-## GitHub Repositories
+<!-- ## GitHub Repositories -->
 
 {% if site.data.repositories.github_repos %}
 <div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
