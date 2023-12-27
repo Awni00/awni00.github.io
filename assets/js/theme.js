@@ -88,12 +88,15 @@ let transTheme = () => {
 };
 
 let initTheme = (theme) => {
-  if (theme == null || theme == "null") {
-    const userPref = window.matchMedia;
-    if (userPref && userPref("(prefers-color-scheme: dark)").matches) {
-      theme = "dark";
-    }
-  }
+  // if (theme == null || theme == "null") {
+  //   const userPref = window.matchMedia;
+  //   if (userPref && userPref("(prefers-color-scheme: dark)").matches) {
+  //     theme = "dark";
+  //   }
+  // }
+  // NOTE: the above code makes the default theme match the user-preferences
+  // I'm making it so that it's light by default.
+  theme = "light";
 
   setTheme(theme);
 };
