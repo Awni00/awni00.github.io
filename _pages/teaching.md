@@ -2,11 +2,10 @@
 layout: page
 permalink: /teaching/
 title: teaching
-description: Materials for courses you taught. Replace this text with your description.
-nav: true
+description: Teaching experience.
+nav: false
 nav_order: 6
 ---
 
-For now, this page is assumed to be a static description of your courses. You can convert it to a collection similar to `_projects/` so that you can have a dedicated page for each course.
-
-Organize your courses by years, topics, or universities, however you like!
+- TA, S&DS 265/565 (and 365/665), Introductory (Intermediate) Machine Learning, Fall 2023
+    - Instructor: John Lafferty
