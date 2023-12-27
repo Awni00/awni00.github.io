@@ -1,12 +1,8 @@
 github_users:
-  - torvalds
-  - alshedivat
+  # - awni00
 
 github_repos:
-  - alshedivat/al-folio
-  - twbs/bootstrap
-  - jekyll/jekyll
-  - jquery/jquery
-  - FortAwesome/Font-Awesome
-  - jpswalsh/academicons
-  - mathjax/MathJax
+  - awni00/relational-convolutions
+  - awni00/abstractor
+  - awni00/decentralized-MARL-general-cts-spaces
+  - awni00/neurol
