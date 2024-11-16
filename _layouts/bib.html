@@ -193,6 +193,9 @@
           {%- if entry.venue %}
             <a href="{{ entry.venue }}" class="btn btn-sm z-depth-0" role="button">Venue</a>
           {%- endif %}
+          {%- if entry.publication %}
+            <a href="{{ entry.publication }}" class="btn btn-sm z-depth-0" role="button">Publication</a>
+          {%- endif %}
           </div>
           {% if site.enable_publication_badges %}
           {% assign entry_has_altmetric_badge = entry.altmetric or entry.doi or  entry.eprint or entry.pmid or entry.isbn %}
