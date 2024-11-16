@@ -21,6 +21,11 @@ social: true  # includes social icons at the bottom of the page
 
 Hi! Welcome to my homepage.
 
-My name is Awni. I am a second year PhD student in the [Department of Statistics & Data Science at Yale University](https://statistics.yale.edu/). I am grateful to be advised by Prof. [John Lafferty](https://statistics.yale.edu/people/john-lafferty).
+My name is Awni. I am a PhD student in the [Department of Statistics & Data Science at Yale University](https://statistics.yale.edu/) studying the foundations of machine learning. My wonderful advisor is Prof. [John Lafferty](https://statistics.yale.edu/people/john-lafferty).
 
-My research interests lie in statistical machine learning, the interface of machine learning and neuroscience, and reinforcement learning theory. My recent projects have explored 1) models of abstraction via relational representation learning; 2) the role of information structures in reinforcement learning; and 3) memory and retrieval mechanisms in machine learning.
+My research interests lie broadly in the intersection of machine learning, statistics, and computer science. More specifically, my research aims to study questions of the following flavor:
+- What are the architectural mechanisms and inductive biases necessary for efficient learning and strong generalization in different domains?
+- What are the fundamental theoretical limits of what is or is not possible to learn under different learning paradigms?
+- To what degree can neural networks learn functions and algorithms that can generalize compositionally to out-of-distribution inputs?
+
+Our work tackles these questions through complementary empirical investigation and theoretical analysis. My current research focus is on algorithmic generalization and reasoning in machine learning models.
