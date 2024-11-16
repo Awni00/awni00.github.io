@@ -14,7 +14,8 @@
   primaryClass={cs.LG},
   abstract = {
     Relational reasoning is a central component of generally intelligent systems, enabling robust and data-efficient inductive generalization. Recent empirical evidence shows that many existing neural architectures, including Transformers, struggle with tasks requiring relational reasoning. In this work, we distinguish between two types of information: sensory information about the properties of individual objects, and relational information about the relationships between objects. While neural attention provides a powerful mechanism for controlling the flow of sensory information between objects, the Transformer lacks an explicit computational mechanism for routing and processing relational information. To address this limitation, we propose an architectural extension of the Transformer framework that we call the Dual Attention Transformer (DAT), featuring two distinct attention mechanisms: sensory attention for directing the flow of sensory information, and a novel relational attention mechanism for directing the flow of relational information. We empirically evaluate DAT on a diverse set of tasks ranging from synthetic relational benchmarks to complex real-world tasks such as language modeling and visual processing. Our results demonstrate that integrating explicit relational computational mechanisms into the Transformer architecture leads to significant performance gains in terms of data efficiency and parameter efficiency.
-  }
+  },
+  preview = {relattn.png},
 }
 
 @article{altabaaRoleInformationStructure2024,
@@ -33,10 +34,10 @@
   urldate = {2024-03-14},
   journal = {Neural Information Processing Systems (NeurIPS)},
   abstract = {In sequential decision-making problems, the information structure describes the causal dependencies between system variables, encompassing the dynamics of the environment and the agents' actions. Classical models of reinforcement learning (e.g., MDPs, POMDPs) assume a restricted and highly regular information structure, while more general models like predictive state representations do not explicitly model the information structure. By contrast, real-world sequential decision-making problems typically involve a complex and time-varying interdependence of system variables, requiring a rich and flexible representation of information structure. In this paper, we formalize a novel reinforcement learning model which explicitly represents the information structure. We then use this model to carry out an information-structural analysis of the statistical complexity of general sequential decision-making problems, obtaining a characterization via a graph-theoretic quantity of the DAG representation of the information structure. We prove an upper bound on the sample complexity of learning a general sequential decision-making problem in terms of its information structure by exhibiting an algorithm achieving the upper bound. This recovers known tractability results and gives a novel perspective on reinforcement learning in general sequential decision-making problems, providing a systematic way of identifying new tractable classes of problems.},
-  archiveprefix = {arxiv}
+  archiveprefix = {arxiv},
+  preview = {post.png},
 }
   month = mar,
-
 
 @article{altabaaApproximationRelationFunctions2024,
   selected={true},
@@ -70,11 +71,13 @@
   author={Awni Altabaa and John Lafferty},
   year={2024},
   journal = {Transactions on Machine Learning Research (TMLR)},
+  publication = {https://openreview.net/forum?id=vNZlnznmV2},
   eprint={2310.03240},
   archivePrefix={arXiv},
   primaryClass={cs.LG},
   abstract = {
   An evolving area of research in deep learning is the study of architectures and inductive biases that support the learning of relational feature representations. In this paper, we address the challenge of learning representations of hierarchical relations--that is, higher-order relational patterns among groups of objects. We introduce "relational convolutional networks", a neural architecture equipped with computational mechanisms that capture progressively more complex relational features through the composition of simple modules. A key component of this framework is a novel operation that captures relational patterns in groups of objects by convolving graphlet filters--learnable templates of relational patterns--against subsets of the input. Composing relational convolutions gives rise to a deep architecture that learns representations of higher-order, hierarchical relations. We present the motivation and details of the architecture, together with a set of experiments to demonstrate how relational convolutional networks can provide an effective framework for modeling relational tasks that have hierarchical structure.},
+  preview = {relconv.png},
 }
   month = sep,
 
@@ -87,6 +90,8 @@
   author = {Webb, Taylor W. and Frankland, Steven M. and Altabaa, Awni and Krishnamurthy, Kamesh and Campbell, Declan and Russin, Jacob and O'Reilly, Randall and Lafferty, John and Cohen, Jonathan D.},
   year = {2024},
   journal = {Trends in Cognitive Science (TICS)},
+  publication = {https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(24)00080-9},
+  preview = {relbottleneck.jpg},
   abstract = {A central challenge for cognitive science is to explain how abstract concepts are acquired from limited experience. This effort has often been framed in terms of a dichotomy between empiricist and nativist approaches, most recently embodied by debates concerning deep neural networks and symbolic cognitive models. Here, we highlight a recently emerging line of work that suggests a novel reconciliation of these approaches, by exploiting an inductive bias that we term the relational bottleneck. We review a family of models that employ this approach to induce abstractions in a data-efficient manner, emphasizing their potential as candidate models for the acquisition of abstract concepts in the human mind and brain.},
 }
   month = sep,
@@ -97,12 +102,13 @@
   code = {https://github.com/awni00/abstractor},
   arxiv = {2304.00195},
   website = {https://awni00.github.io/abstractor},
-  venue = {https://openreview.net/forum?id=XNa6r6ZjoB},
+  publication = {https://openreview.net/forum?id=XNa6r6ZjoB},
   abbr = {ML},
   title = {Abstractors and Relational Cross-Attention: An Inductive Bias for Explicit Relational Reasoning in Transformers},
   shorttitle = {Abstractors and Relational Cross-Attention},
   author = {Altabaa, Awni and Webb, Taylor and Cohen, Jonathan and Lafferty, John},
   journal = {International Conference on Learning Representations (ICLR)},
+  preview = {rca.png},
   year = {2024},
   number = {arXiv:2304.00195},
   eprint = {2304.00195},
@@ -119,7 +125,7 @@
   bibtex_show={true},
   arxiv = {2303.13539},
   code = {https://github.com/awni00/decentralized-MARL-general-cts-spaces},
-  venue = {https://ieeexplore.ieee.org/abstract/document/10155828},
+  publication = {https://ieeexplore.ieee.org/abstract/document/10155828},
   abbr = {RL},
   title = {Decentralized Multi-Agent Reinforcement Learning for Continuous-Space Stochastic Games},
   author = {Altabaa, Awni and Yongacoglu, Bora and Y{\"u}ksel, Serdar},
@@ -127,11 +133,12 @@
   month = mar,
   journal = {2023 IEEE American Control Conference (ACC)},
   abstract = {Stochastic games are a popular framework for studying multi-agent reinforcement learning (MARL). Recent advances in MARL have focused primarily on games with finitely many states. In this work, we study multi-agent learning in stochastic games with general state spaces and an information structure in which agents do not observe each other's actions. In this context, we propose a decentralized MARL algorithm and we prove the near-optimality of its policy updates. Furthermore, we study the global policy-updating dynamics for a general class of best-reply based algorithms and derive a closed-form characterization of convergence probabilities over the joint policy space.},
+  preview = {decrl.gif}
 }
 
 @article{altabaaGeneDRAGNNGeneDisease2022,
   abbr = {Undergrad Project},
-  venue = {https://ieeexplore.ieee.org/abstract/document/9863043},
+  publication = {https://ieeexplore.ieee.org/abstract/document/9863043},
   title = {geneDRAGNN: Gene Disease Prioritization Using Graph Neural Networks},
   shorttitle = {geneDRAGNN},
   journal = {2022 IEEE Conference on Computational Intelligence in Bioinformatics and Computational Biology (CIBCB)},
@@ -141,5 +148,6 @@
   pages = {1--10},
   doi = {10.1109/CIBCB55180.2022.9863043},
   urldate = {2023-12-26},
-  abstract = {Many human diseases exhibit a complex genetic etiology impacted by various genes and proteins in a large network of interactions. The process of evaluating gene-disease associations through in-vivo experiments is both time-consuming and expensive. Thus, network-based computational methods capable of modeling the complex interplay between molecular components can lead to more targeted evaluation. In this paper, we propose and evaluate geneDRAGNN: a general data processing and machine learning methodology for exploiting information about gene-gene interaction networks for predicting gene-disease association. We demonstrate that information derived from the gene-gene interaction network can significantly improve the performance of gene-disease association prediction models. We apply this methodology to lung adenocarcinoma, a histological subtype of lung cancer. We identify new potential gene-disease associations and provide supportive evidence for the association through gene-set enrichment and literature based analysis.}
+  abstract = {Many human diseases exhibit a complex genetic etiology impacted by various genes and proteins in a large network of interactions. The process of evaluating gene-disease associations through in-vivo experiments is both time-consuming and expensive. Thus, network-based computational methods capable of modeling the complex interplay between molecular components can lead to more targeted evaluation. In this paper, we propose and evaluate geneDRAGNN: a general data processing and machine learning methodology for exploiting information about gene-gene interaction networks for predicting gene-disease association. We demonstrate that information derived from the gene-gene interaction network can significantly improve the performance of gene-disease association prediction models. We apply this methodology to lung adenocarcinoma, a histological subtype of lung cancer. We identify new potential gene-disease associations and provide supportive evidence for the association through gene-set enrichment and literature based analysis.},
+  preview = {genedragnngraph.gif},
 }
