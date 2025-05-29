@@ -1,3 +1,30 @@
+TODO: ADD 1-Sentence summary (TL;DR) field for each paper
+Maybe also add lay summary
+
+@article{altabaa2025cotinformation,
+  selected={true},
+  bibtex_show={true},
+  abbr = {ML},
+  arxiv={2505.15927},
+  title={CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision}, 
+  author={Awni Altabaa and Omar Montasser and John Lafferty},
+  year={2025},
+  eprint={2505.15927},
+  archivePrefix={arXiv},
+  primaryClass={stat.ML},
+  url={https://arxiv.org/abs/2505.15927}, 
+  journal = {Under Review},
+  abstract = {
+  Learning complex functions that involve multi-step reasoning poses a significant challenge for standard supervised learning from input-output examples. Chain-of-thought (CoT) supervision, which provides intermediate reasoning steps together with the final output, has emerged as a powerful empirical technique, underpinning much of the recent progress in the reasoning capabilities of large language models. This paper develops a statistical theory of learning under CoT supervision. A key characteristic of the CoT setting, in contrast to standard supervision, is the mismatch between the training objective (CoT risk) and the test objective (end-to-end risk). A central part of our analysis, distinguished from prior work, is explicitly linking those two types of risk to achieve sharper sample complexity bounds. This is achieved via the <i>CoT information measure</i> $CoTInfo(\epsilon)$, which quantifies the additional discriminative power gained from observing the reasoning process. The main theoretical results demonstrate how CoT supervision can yield significantly faster learning rates compared to standard E2E supervision. Specifically, it is shown that the sample complexity required to achieve a target E2E error $\epsilon$ scales as $d/CoTInfo(\epsilon)$, where d is a measure of hypothesis class complexity, which can be much faster than standard $d/\epsilon$ rates. Information-theoretic lower bounds in terms of the CoT information are also obtained. Together, these results suggest that CoT information is a fundamental measure of statistical complexity for learning under chain-of-thought supervision.
+  },
+  preview = {cotinfo.png},
+}
+  abstract = {
+  Learning complex functions that involve multi-step reasoning poses a significant challenge for standard supervised learning from input-output examples. Chain-of-thought (CoT) supervision, which provides intermediate reasoning steps together with the final output, has emerged as a powerful empirical technique, underpinning much of the recent progress in the reasoning capabilities of large language models. This paper develops a statistical theory of learning under CoT supervision. A key characteristic of the CoT setting, in contrast to standard supervision, is the mismatch between the training objective (CoT risk) and the test objective (end-to-end risk). A central part of our analysis, distinguished from prior work, is explicitly linking those two types of risk to achieve sharper sample complexity bounds. This is achieved via the *CoT information measure* $\mathcal{I}_{\mathcal{D}, h_\star}^{\mathrm{CoT}}(\epsilon; \mathcal{H})$, which quantifies the additional discriminative power gained from observing the reasoning process. The main theoretical results demonstrate how CoT supervision can yield significantly faster learning rates compared to standard E2E supervision. Specifically, it is shown that the sample complexity required to achieve a target E2E error \epsilon scales as $d/\mathcal{I}_{\mathcal{D}, h_\star}^{\mathrm{CoT}}(\epsilon; \mathcal{H})$, where d is a measure of hypothesis class complexity, which can be much faster than standard $d/\epsilon$ rates. Information-theoretic lower bounds in terms of the CoT information are also obtained. Together, these results suggest that CoT information is a fundamental measure of statistical complexity for learning under chain-of-thought supervision.
+  },
+  website = {https://awni00.github.io/dual-attention},
+  code = {https://github.com/awni00/dual-attention},
+
 @article{altabaa2024disentangling,
   selected={true},
   bibtex_show={true},
@@ -7,8 +34,8 @@
   arxiv={2405.16727},
   title={Disentangling and Integrating Relational and Sensory Information in Transformer Architectures}, 
   author={Awni Altabaa and John Lafferty},
-  journal = {Under Review},
-  year={2024},
+  journal = {International Conference on Machine Learning (ICML)},
+  year={2025},
   eprint={2405.16727},
   archivePrefix={arXiv},
   primaryClass={cs.LG},
