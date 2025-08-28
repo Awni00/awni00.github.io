@@ -17,7 +17,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   abstract = {
   Learning complex functions that involve multi-step reasoning poses a significant challenge for standard supervised learning from input-output examples. Chain-of-thought (CoT) supervision, which provides intermediate reasoning steps together with the final output, has emerged as a powerful empirical technique, underpinning much of the recent progress in the reasoning capabilities of large language models. This paper develops a statistical theory of learning under CoT supervision. A key characteristic of the CoT setting, in contrast to standard supervision, is the mismatch between the training objective (CoT risk) and the test objective (end-to-end risk). A central part of our analysis, distinguished from prior work, is explicitly linking those two types of risk to achieve sharper sample complexity bounds. This is achieved via the <i>CoT information measure</i> $CoTInfo(\epsilon)$, which quantifies the additional discriminative power gained from observing the reasoning process. The main theoretical results demonstrate how CoT supervision can yield significantly faster learning rates compared to standard E2E supervision. Specifically, it is shown that the sample complexity required to achieve a target E2E error $\epsilon$ scales as $d/CoTInfo(\epsilon)$, where d is a measure of hypothesis class complexity, which can be much faster than standard $d/\epsilon$ rates. Information-theoretic lower bounds in terms of the CoT information are also obtained. Together, these results suggest that CoT information is a fundamental measure of statistical complexity for learning under chain-of-thought supervision.
   },
-  preview = {cotinfo-genai.png},
+  preview = {cotinfo-genai-2.png},
 }
   preview = {cotinfo.png},
 
@@ -37,6 +37,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   title={Disentangling and Integrating Relational and Sensory Information in Transformer Architectures}, 
   author={Awni Altabaa and John Lafferty},
   journal = {International Conference on Machine Learning (ICML)},
+  publication = {https://icml.cc/virtual/2025/poster/44191},
   year={2025},
   eprint={2405.16727},
   archivePrefix={arXiv},
@@ -62,6 +63,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   doi = {10.48550/arXiv.2403.00993},
   urldate = {2024-03-14},
   journal = {Neural Information Processing Systems (NeurIPS)},
+  publication = {https://neurips.cc/virtual/2024/poster/95220},
   abstract = {In sequential decision-making problems, the information structure describes the causal dependencies between system variables, encompassing the dynamics of the environment and the agents' actions. Classical models of reinforcement learning (e.g., MDPs, POMDPs) assume a restricted and highly regular information structure, while more general models like predictive state representations do not explicitly model the information structure. By contrast, real-world sequential decision-making problems typically involve a complex and time-varying interdependence of system variables, requiring a rich and flexible representation of information structure. In this paper, we formalize a novel reinforcement learning model which explicitly represents the information structure. We then use this model to carry out an information-structural analysis of the statistical complexity of general sequential decision-making problems, obtaining a characterization via a graph-theoretic quantity of the DAG representation of the information structure. We prove an upper bound on the sample complexity of learning a general sequential decision-making problem in terms of its information structure by exhibiting an algorithm achieving the upper bound. This recovers known tractability results and gives a novel perspective on reinforcement learning in general sequential decision-making problems, providing a systematic way of identifying new tractable classes of problems.},
   archiveprefix = {arxiv},
   preview = {post.png},
