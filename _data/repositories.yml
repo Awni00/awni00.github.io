@@ -2,6 +2,8 @@ github_users:
   # - awni00
 
 github_repos:
+  - awni00/dual-attention
+  - awni00/transformer-computation-graph
   - awni00/relational-convolutions
   - awni00/abstractor
   - awni00/decentralized-MARL-general-cts-spaces
