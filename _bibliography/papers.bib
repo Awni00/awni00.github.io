@@ -13,10 +13,11 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   archivePrefix={arXiv},
   primaryClass={stat.ML},
   url={https://arxiv.org/abs/2505.15927}, 
-  journal = {Under Review},
+  journal = {Neural Information Processing Systems (NeurIPS), spotlight},
   abstract = {
   Learning complex functions that involve multi-step reasoning poses a significant challenge for standard supervised learning from input-output examples. Chain-of-thought (CoT) supervision, which provides intermediate reasoning steps together with the final output, has emerged as a powerful empirical technique, underpinning much of the recent progress in the reasoning capabilities of large language models. This paper develops a statistical theory of learning under CoT supervision. A key characteristic of the CoT setting, in contrast to standard supervision, is the mismatch between the training objective (CoT risk) and the test objective (end-to-end risk). A central part of our analysis, distinguished from prior work, is explicitly linking those two types of risk to achieve sharper sample complexity bounds. This is achieved via the <i>CoT information measure</i> $CoTInfo(\epsilon)$, which quantifies the additional discriminative power gained from observing the reasoning process. The main theoretical results demonstrate how CoT supervision can yield significantly faster learning rates compared to standard E2E supervision. Specifically, it is shown that the sample complexity required to achieve a target E2E error $\epsilon$ scales as $d/CoTInfo(\epsilon)$, where d is a measure of hypothesis class complexity, which can be much faster than standard $d/\epsilon$ rates. Information-theoretic lower bounds in terms of the CoT information are also obtained. Together, these results suggest that CoT information is a fundamental measure of statistical complexity for learning under chain-of-thought supervision.
   },
+  tldr = {We develop a statistical theory of learning under chain-of-thought (CoT) supervision, introducing the CoT information measure to quantify the additional discriminative power gained from observing the reasoning process, and demonstrate that CoT supervision can yield significantly faster learning rates compared to standard end-to-end supervision.},
   preview = {cotinfo-genai-2.png},
 }
   preview = {cotinfo.png},
@@ -45,6 +46,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   abstract = {
     Relational reasoning is a central component of generally intelligent systems, enabling robust and data-efficient inductive generalization. Recent empirical evidence shows that many existing neural architectures, including Transformers, struggle with tasks requiring relational reasoning. In this work, we distinguish between two types of information: sensory information about the properties of individual objects, and relational information about the relationships between objects. While neural attention provides a powerful mechanism for controlling the flow of sensory information between objects, the Transformer lacks an explicit computational mechanism for routing and processing relational information. To address this limitation, we propose an architectural extension of the Transformer framework that we call the Dual Attention Transformer (DAT), featuring two distinct attention mechanisms: sensory attention for directing the flow of sensory information, and a novel relational attention mechanism for directing the flow of relational information. We empirically evaluate DAT on a diverse set of tasks ranging from synthetic relational benchmarks to complex real-world tasks such as language modeling and visual processing. Our results demonstrate that integrating explicit relational computational mechanisms into the Transformer architecture leads to significant performance gains in terms of data efficiency and parameter efficiency.
   },
+  tldr = {We introduce the Dual Attention Transformer (DAT), an architectural extension of the Transformer framework that incorporates distinct sensory and relational attention mechanisms, leading to significant performance gains in data efficiency and parameter efficiency across various tasks.},
   preview = {relattn.png},
 }
 
@@ -65,6 +67,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   journal = {Neural Information Processing Systems (NeurIPS)},
   publication = {https://neurips.cc/virtual/2024/poster/95220},
   abstract = {In sequential decision-making problems, the information structure describes the causal dependencies between system variables, encompassing the dynamics of the environment and the agents' actions. Classical models of reinforcement learning (e.g., MDPs, POMDPs) assume a restricted and highly regular information structure, while more general models like predictive state representations do not explicitly model the information structure. By contrast, real-world sequential decision-making problems typically involve a complex and time-varying interdependence of system variables, requiring a rich and flexible representation of information structure. In this paper, we formalize a novel reinforcement learning model which explicitly represents the information structure. We then use this model to carry out an information-structural analysis of the statistical complexity of general sequential decision-making problems, obtaining a characterization via a graph-theoretic quantity of the DAG representation of the information structure. We prove an upper bound on the sample complexity of learning a general sequential decision-making problem in terms of its information structure by exhibiting an algorithm achieving the upper bound. This recovers known tractability results and gives a novel perspective on reinforcement learning in general sequential decision-making problems, providing a systematic way of identifying new tractable classes of problems.},
+  tldr = {We introduce a novel reinforcement learning model that explicitly represents the information structure in sequential decision-making problems, providing a systematic way to identify new tractable classes of problems and offering insights into the statistical complexity of learning in such environments.},
   archiveprefix = {arxiv},
   preview = {post.png},
 }
@@ -86,6 +89,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   doi = {10.48550/arXiv.2402.08856},
   urldate = {2024-03-14},
   abstract = {Inner products of neural network feature maps arises in a wide variety of machine learning frameworks as a method of modeling relations between inputs. This work studies the approximation properties of inner products of neural networks. It is shown that the inner product of a multi-layer perceptron with itself is a universal approximator for symmetric positive-definite relation functions. In the case of asymmetric relation functions, it is shown that the inner product of two different multi-layer perceptrons is a universal approximator. In both cases, a bound is obtained on the number of neurons required to achieve a given accuracy of approximation. In the symmetric case, the function class can be identified with kernels of reproducing kernel Hilbert spaces, whereas in the asymmetric case the function class can be identified with kernels of reproducing kernel Banach spaces. Finally, these approximation results are applied to analyzing the attention mechanism underlying Transformers, showing that any retrieval mechanism defined by an abstract preorder can be approximated by attention through its inner product relations. This result uses the Debreu representation theorem in economics to represent preference relations in terms of utility functions.},
+  tldr = {We demonstrate that inner products of multi-layer perceptrons can universally approximate both symmetric and asymmetric relation functions, providing bounds on the number of neurons required for a given accuracy, and apply these findings to analyze the attention mechanisms in Transformers.},
   archiveprefix = {arxiv},
   preview = {rel-approx.png},
 }
@@ -109,6 +113,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   primaryClass={cs.LG},
   abstract = {
   An evolving area of research in deep learning is the study of architectures and inductive biases that support the learning of relational feature representations. In this paper, we address the challenge of learning representations of hierarchical relations--that is, higher-order relational patterns among groups of objects. We introduce "relational convolutional networks", a neural architecture equipped with computational mechanisms that capture progressively more complex relational features through the composition of simple modules. A key component of this framework is a novel operation that captures relational patterns in groups of objects by convolving graphlet filters--learnable templates of relational patterns--against subsets of the input. Composing relational convolutions gives rise to a deep architecture that learns representations of higher-order, hierarchical relations. We present the motivation and details of the architecture, together with a set of experiments to demonstrate how relational convolutional networks can provide an effective framework for modeling relational tasks that have hierarchical structure.},
+  tldr = {We introduce relational convolutional networks, a novel neural architecture that captures hierarchical relational patterns through the composition of learnable graphlet filters, demonstrating its effectiveness in modeling complex relational tasks.},
   preview = {relconv.png},
 }
   month = sep,
@@ -125,6 +130,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   publication = {https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(24)00080-9},
   preview = {relbottleneck.jpg},
   abstract = {A central challenge for cognitive science is to explain how abstract concepts are acquired from limited experience. This effort has often been framed in terms of a dichotomy between empiricist and nativist approaches, most recently embodied by debates concerning deep neural networks and symbolic cognitive models. Here, we highlight a recently emerging line of work that suggests a novel reconciliation of these approaches, by exploiting an inductive bias that we term the relational bottleneck. We review a family of models that employ this approach to induce abstractions in a data-efficient manner, emphasizing their potential as candidate models for the acquisition of abstract concepts in the human mind and brain.},
+  tldr = {We introduce the concept of the relational bottleneck as an inductive bias that reconciles empiricist and nativist approaches in cognitive science, enabling data-efficient acquisition of abstract concepts through a family of models that leverage this bias.},
 }
   month = sep,
 
@@ -148,6 +154,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   publisher = {{arXiv}},
   urldate = {2023-10-30},
   abstract = {An extension of Transformers is proposed that enables explicit relational reasoning through a novel module called the Abstractor. At the core of the Abstractor is a variant of attention called relational cross-attention. The approach is motivated by an architectural inductive bias for relational learning that disentangles relational information from extraneous features about individual objects. This enables explicit relational reasoning, supporting abstraction and generalization from limited data. The Abstractor is first evaluated on simple discriminative relational tasks and compared to existing relational architectures. Next, the Abstractor is evaluated on purely relational sequence-to-sequence tasks, where dramatic improvements are seen in sample efficiency compared to standard Transformers. Finally, Abstractors are evaluated on a collection of tasks based on mathematical problem solving, where modest but consistent improvements in performance and sample efficiency are observed.},
+  tldr = {We introduce the Abstractor model, which incorporates a form of attention called relational cross-attention, enabling explicit relational reasoning in Transformers and demonstrating significant improvements in sample efficiency across various tasks.},
   archiveprefix = {arxiv}
 }
   month = {apr},
@@ -165,6 +172,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   month = mar,
   journal = {2023 IEEE American Control Conference (ACC)},
   abstract = {Stochastic games are a popular framework for studying multi-agent reinforcement learning (MARL). Recent advances in MARL have focused primarily on games with finitely many states. In this work, we study multi-agent learning in stochastic games with general state spaces and an information structure in which agents do not observe each other's actions. In this context, we propose a decentralized MARL algorithm and we prove the near-optimality of its policy updates. Furthermore, we study the global policy-updating dynamics for a general class of best-reply based algorithms and derive a closed-form characterization of convergence probabilities over the joint policy space.},
+  tldr = {We propose a decentralized multi-agent reinforcement learning algorithm for stochastic games with continuous state spaces and prove the near-optimality of its policy updates, along with a characterization of convergence probabilities in best-reply based algorithms.},
   preview = {dec-marl-genai-2.png}
 }
 
@@ -181,6 +189,7 @@ TODO: update preview images. Some are hard to see and not appropriate as a previ
   doi = {10.1109/CIBCB55180.2022.9863043},
   urldate = {2023-12-26},
   abstract = {Many human diseases exhibit a complex genetic etiology impacted by various genes and proteins in a large network of interactions. The process of evaluating gene-disease associations through in-vivo experiments is both time-consuming and expensive. Thus, network-based computational methods capable of modeling the complex interplay between molecular components can lead to more targeted evaluation. In this paper, we propose and evaluate geneDRAGNN: a general data processing and machine learning methodology for exploiting information about gene-gene interaction networks for predicting gene-disease association. We demonstrate that information derived from the gene-gene interaction network can significantly improve the performance of gene-disease association prediction models. We apply this methodology to lung adenocarcinoma, a histological subtype of lung cancer. We identify new potential gene-disease associations and provide supportive evidence for the association through gene-set enrichment and literature based analysis.},
+  tldr = {We present geneDRAGNN, a graph neural network-based methodology that leverages gene-gene interaction networks to enhance the prediction of gene-disease associations, demonstrating its effectiveness in identifying potential associations for lung adenocarcinoma.},
   preview = {genedraggn-genai-2.png},
 }
   preview = {genedragnngraph.gif},
