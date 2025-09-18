@@ -142,9 +142,9 @@
             <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
           {%- endif %}
           {%- if entry.tldr %}
-            <a class="tldr btn btn-sm z-depth-0" role="button" onclick="this.nextElementSibling.classList.toggle('hidden');">TL;DR</a>
+            <a class="tldr btn btn-sm z-depth-0" role="button" onclick="this.nextElementSibling.classList.toggle('hidden');">TLDR</a>
             <div class="tldr-text hidden">
-              <p>{{ entry.tldr }}</p>
+              {{ entry.tldr }}
             </div>
           {%- endif %}
           {%- if entry.arxiv %}
