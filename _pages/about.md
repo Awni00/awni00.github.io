@@ -19,9 +19,9 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-Hi! Welcome to my homepage.
+Hi! My name is Awni. Welcome to my homepage.
 
-My name is Awni. I am a PhD student in the [Department of Statistics & Data Science at Yale University](https://statistics.yale.edu/) studying the foundations of machine learning. My wonderful advisor is Prof. [John Lafferty](https://statistics.yale.edu/people/john-lafferty).
+I am a PhD student in the [Department of Statistics & Data Science at Yale University](https://statistics.yale.edu/) studying the foundations of machine learning. I'm grateful to be advised by Prof. [John Lafferty](https://www.lafferty-lab.org/).
 
 My research interests lie broadly in the intersection of machine learning, statistics, and computer science. More specifically, my research aims to study questions of the following flavor:
 - What are the architectural mechanisms and inductive biases necessary for efficient learning and strong generalization in different domains?
