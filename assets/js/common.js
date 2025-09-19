@@ -1,12 +1,19 @@
 $(document).ready(function() {
-  // add toggle functionality to abstract and bibtex buttons
+  // add toggle functionality to abstract, bibtex, and tldr buttons
   $('a.abstract').click(function() {
-    $(this).parent().parent().find(".abstract.hidden").toggleClass('open');
-    $(this).parent().parent().find(".bibtex.hidden.open").toggleClass('open');
+    $(this).parent().parent().find('.abstract.hidden').toggleClass('open');
+    $(this).parent().parent().find('.bibtex.hidden.open').removeClass('open');
+    $(this).parent().parent().find('.tldr.hidden.open').removeClass('open');
   });
   $('a.bibtex').click(function() {
-    $(this).parent().parent().find(".bibtex.hidden").toggleClass('open');
-    $(this).parent().parent().find(".abstract.hidden.open").toggleClass('open');
+    $(this).parent().parent().find('.bibtex.hidden').toggleClass('open');
+    $(this).parent().parent().find('.abstract.hidden.open').removeClass('open');
+    $(this).parent().parent().find('.tldr.hidden.open').removeClass('open');
+  });
+  $('a.tldr').click(function() {
+    $(this).parent().parent().find('.tldr.hidden').toggleClass('open');
+    $(this).parent().parent().find('.abstract.hidden.open').removeClass('open');
+    $(this).parent().parent().find('.bibtex.hidden.open').removeClass('open');
   });
   $('a').removeClass('waves-effect waves-light');
 
