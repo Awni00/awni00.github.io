@@ -246,7 +246,7 @@
           {% if entry.tldr -%}
           <!-- Hidden tldr block -->
           <div class="tldr hidden">
-            <p>{{ entry.tldr }}</p>
+            <p><em>{{ entry.tldr }}</em></p>
           </div>
           {%- endif %}
 
@@ -262,7 +262,7 @@
           <div class="abstract hidden">
             <div style="text-align: center;">{% include video.html path=entry.video class="img-fluid rounded z-depth-1" controls=true %}</div>
           </div>
-          {%- endif -%}
+          {%- endif %}
 
         </div>
       </div>
