@@ -33,12 +33,13 @@ TODO: add slides? add posters?
   eprint={2505.15927},
   archivePrefix={arXiv},
   primaryClass={stat.ML},
-  url={https://arxiv.org/abs/2505.15927}, 
+  url={https://arxiv.org/abs/2505.15927},
   journal = {Neural Information Processing Systems (NeurIPS), spotlight},
   abstract = {
   Learning complex functions that involve multi-step reasoning poses a significant challenge for standard supervised learning from input-output examples. Chain-of-thought (CoT) supervision, which provides intermediate reasoning steps together with the final output, has emerged as a powerful empirical technique, underpinning much of the recent progress in the reasoning capabilities of large language models. This paper develops a statistical theory of learning under CoT supervision. A key characteristic of the CoT setting, in contrast to standard supervision, is the mismatch between the training objective (CoT risk) and the test objective (end-to-end risk). A central part of our analysis, distinguished from prior work, is explicitly linking those two types of risk to achieve sharper sample complexity bounds. This is achieved via the <i>CoT information measure</i> $CoTInfo(\epsilon)$, which quantifies the additional discriminative power gained from observing the reasoning process. The main theoretical results demonstrate how CoT supervision can yield significantly faster learning rates compared to standard E2E supervision. Specifically, it is shown that the sample complexity required to achieve a target E2E error $\epsilon$ scales as $d/CoTInfo(\epsilon)$, where d is a measure of hypothesis class complexity, which can be much faster than standard $d/\epsilon$ rates. Information-theoretic lower bounds in terms of the CoT information are also obtained. Together, these results suggest that CoT information is a fundamental measure of statistical complexity for learning under chain-of-thought supervision.
   },
   tldr = {We develop a statistical theory of learning under chain-of-thought (CoT) supervision, introducing the CoT information measure to quantify the additional discriminative power gained from observing the reasoning process, and demonstrate that CoT supervision can yield significantly faster learning rates compared to standard end-to-end supervision.},
+  slides = {slides/cotinfo-slides.pdf},
   preview = {cotinfo-genai-2.png},
 }
   preview = {cotinfo.png},
@@ -68,6 +69,8 @@ TODO: add slides? add posters?
     Relational reasoning is a central component of generally intelligent systems, enabling robust and data-efficient inductive generalization. Recent empirical evidence shows that many existing neural architectures, including Transformers, struggle with tasks requiring relational reasoning. In this work, we distinguish between two types of information: sensory information about the properties of individual objects, and relational information about the relationships between objects. While neural attention provides a powerful mechanism for controlling the flow of sensory information between objects, the Transformer lacks an explicit computational mechanism for routing and processing relational information. To address this limitation, we propose an architectural extension of the Transformer framework that we call the Dual Attention Transformer (DAT), featuring two distinct attention mechanisms: sensory attention for directing the flow of sensory information, and a novel relational attention mechanism for directing the flow of relational information. We empirically evaluate DAT on a diverse set of tasks ranging from synthetic relational benchmarks to complex real-world tasks such as language modeling and visual processing. Our results demonstrate that integrating explicit relational computational mechanisms into the Transformer architecture leads to significant performance gains in terms of data efficiency and parameter efficiency.
   },
   tldr = {We introduce the Dual Attention Transformer (DAT), an architectural extension of the Transformer framework that incorporates distinct sensory and relational attention mechanisms, leading to significant performance gains in data efficiency and parameter efficiency across various tasks.},
+  slides = {slides/dat-slides.pdf},
+  poster = {posters/dat-poster.pdf},
   preview = {relattn.png},
 }
 
@@ -91,6 +94,8 @@ TODO: add slides? add posters?
   tldr = {We introduce a novel reinforcement learning model that explicitly represents the information structure in sequential decision-making problems, providing a systematic way to identify new tractable classes of problems and offering insights into the statistical complexity of learning in such environments.},
   archiveprefix = {arxiv},
   preview = {post.png},
+  slides = {slides/rl-info-struct-slides.pdf},
+  poster = {posters/rl-info-struct-poster.pdf}
 }
   month = mar,
 
@@ -176,9 +181,11 @@ TODO: add slides? add posters?
   urldate = {2023-10-30},
   abstract = {An extension of Transformers is proposed that enables explicit relational reasoning through a novel module called the Abstractor. At the core of the Abstractor is a variant of attention called relational cross-attention. The approach is motivated by an architectural inductive bias for relational learning that disentangles relational information from extraneous features about individual objects. This enables explicit relational reasoning, supporting abstraction and generalization from limited data. The Abstractor is first evaluated on simple discriminative relational tasks and compared to existing relational architectures. Next, the Abstractor is evaluated on purely relational sequence-to-sequence tasks, where dramatic improvements are seen in sample efficiency compared to standard Transformers. Finally, Abstractors are evaluated on a collection of tasks based on mathematical problem solving, where modest but consistent improvements in performance and sample efficiency are observed.},
   tldr = {We introduce the Abstractor model, which incorporates a form of attention called relational cross-attention, enabling explicit relational reasoning in Transformers and demonstrating significant improvements in sample efficiency across various tasks.},
-  archiveprefix = {arxiv}
-}
+  archiveprefix = {arxiv},
+  slides = {slides/abstractor-slides.pdf},
+  poster = {posters/abstractor-poster.pdf},
   month = {apr},
+}
 
 @article{altabaaDecentralizedMultiAgentReinforcement2023,
   selected={true},
@@ -194,7 +201,8 @@ TODO: add slides? add posters?
   journal = {2023 IEEE American Control Conference (ACC)},
   abstract = {Stochastic games are a popular framework for studying multi-agent reinforcement learning (MARL). Recent advances in MARL have focused primarily on games with finitely many states. In this work, we study multi-agent learning in stochastic games with general state spaces and an information structure in which agents do not observe each other's actions. In this context, we propose a decentralized MARL algorithm and we prove the near-optimality of its policy updates. Furthermore, we study the global policy-updating dynamics for a general class of best-reply based algorithms and derive a closed-form characterization of convergence probabilities over the joint policy space.},
   tldr = {We propose a decentralized multi-agent reinforcement learning algorithm for stochastic games with continuous state spaces and prove the near-optimality of its policy updates, along with a characterization of convergence probabilities in best-reply based algorithms.},
-  preview = {dec-marl-genai-2.png}
+  preview = {dec-marl-genai-2.png},
+  slides = {slides/cts-dec-rl-slides.pdf},
 }
 
 @article{altabaaGeneDRAGNNGeneDisease2022,
