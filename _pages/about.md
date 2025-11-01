@@ -29,3 +29,5 @@ My research interests lie broadly in the intersection of machine learning, stati
 - To what degree can neural networks learn functions and algorithms that can generalize compositionally to out-of-distribution inputs?
 
 Our work tackles these questions through complementary empirical investigation and theoretical analysis. My current research focus is on algorithmic generalization and reasoning in machine learning models.
+
+**Where to start:** If you're interested in neural network architectures, check out our work on an *extension of the transformer architecture with explicit relational mechanisms and inductive biases* ([blog ⧉](https://awni.xyz/dual-attention)). For theoretical analysis of modern machine learning methods, see our *statistical learning theory framework for chain-of-thought supervised learning* ([blog ⧉](https://awni.xyz/cot-info)).
