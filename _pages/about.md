@@ -19,15 +19,12 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-Hi! My name is Awni. Welcome to my homepage.
+I'm Awni, a PhD student in the [Department of Statistics & Data Science at Yale University](https://statistics.yale.edu/). My research studies the foundations of machine intelligence, with an emphasis on generalization, representation, and learning. 
+<!-- I'm grateful to be advised by [John Lafferty](https://www.lafferty-lab.org/). -->
 
-I am a PhD student in the [Department of Statistics & Data Science at Yale University](https://statistics.yale.edu/) studying the foundations of machine learning. I'm grateful to be advised by Prof. [John Lafferty](https://www.lafferty-lab.org/).
+I explore these themes through complementary theoretical analysis and empirical investigation:
 
-My research interests lie broadly in the intersection of machine learning, statistics, and computer science. More specifically, my research aims to study questions of the following flavor:
-- What are the architectural mechanisms and inductive biases necessary for efficient learning and strong generalization in different domains?
-- What are the fundamental theoretical limits of what is or is not possible to learn under different learning paradigms?
-- To what degree can neural networks learn functions and algorithms that can generalize compositionally to out-of-distribution inputs?
-
-Our work tackles these questions through complementary empirical investigation and theoretical analysis. My current research focus is on algorithmic generalization and reasoning in machine learning models.
+- **Deep learning, representation learning, & inductive structure:** Developing novel methods and architectures to improve systematic compositional generalization and data efficiency, sometimes drawing inspiration from biological intelligence to achieve human-like reasoning and out-of-distribution generalization.
+- **Theory of modern learning systems:** Developing frameworks that explain empirical phenomena in contemporary machine learning through unified *statistical* and *computational* principles, aiming to develop a foundation for future progress in artificial intelligence.
 
 **Where to start:** If you're interested in neural network architectures, check out our work on an *extension of the transformer architecture with explicit relational mechanisms and inductive biases* ([blog ⧉](https://awni.xyz/dual-attention)). For theoretical analysis of modern machine learning methods, see our *statistical learning theory framework for chain-of-thought supervised learning* ([blog ⧉](https://awni.xyz/cot-info)).
