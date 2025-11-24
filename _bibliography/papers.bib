@@ -9,6 +9,8 @@ TODO: add slides? add posters?
   code = {https://github.com/Awni00/algorithmic-generalization-transformer-architectures},
   blog = {https://awni00.github.io/algorithmic-generalization-transformer-architectures},
   tldr = {We introduce and explore a set of four architectural mechanisms aimed at enhancing OOD algorithmic generalization: *(i)* input-adaptive recurrence; *(ii)* algorithmic supervision; *(iii)* anchored latent representations via a discrete bottleneck; and *(iv)* an explicit error-correction mechanism.},
+  abstract = {
+  Systematic, compositional generalization beyond the training distribution remains a core challenge in machine learning -- and a critical bottleneck for the emergent reasoning abilities of modern language models. This work investigates out-of-distribution (OOD) generalization in Transformer networks using a GSM8K-style modular arithmetic on computational graphs task as a testbed. We introduce and explore a set of four architectural mechanisms aimed at enhancing OOD generalization: (i) input-adaptive recurrence; (ii) algorithmic supervision; (iii) anchored latent representations via a discrete bottleneck; and (iv) an explicit error-correction mechanism. Collectively, these mechanisms yield an architectural approach for native and scalable latent space reasoning in Transformer networks with robust algorithmic generalization capabilities. We complement these empirical results with a detailed mechanistic interpretability analysis that reveals how these mechanisms give rise to robust OOD generalization abilities.}
   title={Unlocking Out-of-Distribution Generalization in Transformers via Recursive Latent Space Reasoning}, 
   author={Awni Altabaa and Siyu Chen and John Lafferty and Zhuoran Yang},
   year={2025},
@@ -42,7 +44,7 @@ TODO: add slides? add posters?
   blog = {https://awni00.github.io/cot-info},
   poster = {posters/cotinfo-poster.pdf},
   slides = {slides/cotinfo-slides.pdf},
-  preview = {cotinfo-genai-2.png},
+  preview = {cot-information.png},
 }
   preview = {cotinfo.png},
 
@@ -73,7 +75,7 @@ TODO: add slides? add posters?
   tldr = {We introduce the Dual Attention Transformer (DAT), an architectural extension of the Transformer framework that incorporates distinct sensory and relational attention mechanisms, leading to significant performance gains in data efficiency and parameter efficiency across various tasks.},
   slides = {slides/dat-slides.pdf},
   poster = {posters/dat-poster.pdf},
-  preview = {dat-orthos.jpg},
+  preview = {disentangling-sensory-relational.png},
 }
 
 @article{altabaaRoleInformationStructure2024,
@@ -95,7 +97,7 @@ TODO: add slides? add posters?
   abstract = {In sequential decision-making problems, the information structure describes the causal dependencies between system variables, encompassing the dynamics of the environment and the agents' actions. Classical models of reinforcement learning (e.g., MDPs, POMDPs) assume a restricted and highly regular information structure, while more general models like predictive state representations do not explicitly model the information structure. By contrast, real-world sequential decision-making problems typically involve a complex and time-varying interdependence of system variables, requiring a rich and flexible representation of information structure. In this paper, we formalize a novel reinforcement learning model which explicitly represents the information structure. We then use this model to carry out an information-structural analysis of the statistical complexity of general sequential decision-making problems, obtaining a characterization via a graph-theoretic quantity of the DAG representation of the information structure. We prove an upper bound on the sample complexity of learning a general sequential decision-making problem in terms of its information structure by exhibiting an algorithm achieving the upper bound. This recovers known tractability results and gives a novel perspective on reinforcement learning in general sequential decision-making problems, providing a systematic way of identifying new tractable classes of problems.},
   tldr = {We introduce a novel reinforcement learning model that explicitly represents the information structure in sequential decision-making problems, providing a systematic way to identify new tractable classes of problems and offering insights into the statistical complexity of learning in such environments.},
   archiveprefix = {arxiv},
-  preview = {post.png},
+  preview = {info-structure.png},
   slides = {slides/rl-info-struct-slides.pdf},
   poster = {posters/rl-info-struct-poster.pdf}
 }
@@ -142,7 +144,7 @@ TODO: add slides? add posters?
   abstract = {
   An evolving area of research in deep learning is the study of architectures and inductive biases that support the learning of relational feature representations. In this paper, we address the challenge of learning representations of hierarchical relations--that is, higher-order relational patterns among groups of objects. We introduce "relational convolutional networks", a neural architecture equipped with computational mechanisms that capture progressively more complex relational features through the composition of simple modules. A key component of this framework is a novel operation that captures relational patterns in groups of objects by convolving graphlet filters--learnable templates of relational patterns--against subsets of the input. Composing relational convolutions gives rise to a deep architecture that learns representations of higher-order, hierarchical relations. We present the motivation and details of the architecture, together with a set of experiments to demonstrate how relational convolutional networks can provide an effective framework for modeling relational tasks that have hierarchical structure.},
   tldr = {We introduce relational convolutional networks, a novel neural architecture that captures hierarchical relational patterns through the composition of learnable graphlet filters, demonstrating its effectiveness in modeling complex relational tasks.},
-  preview = {relconv.png},
+  preview = {relconv-genai.png},
 }
   month = sep,
 
@@ -156,10 +158,11 @@ TODO: add slides? add posters?
   year = {2024},
   journal = {Trends in Cognitive Science (TICS)},
   publication = {https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(24)00080-9},
-  preview = {relbottleneck.jpg},
   abstract = {A central challenge for cognitive science is to explain how abstract concepts are acquired from limited experience. This effort has often been framed in terms of a dichotomy between empiricist and nativist approaches, most recently embodied by debates concerning deep neural networks and symbolic cognitive models. Here, we highlight a recently emerging line of work that suggests a novel reconciliation of these approaches, by exploiting an inductive bias that we term the relational bottleneck. We review a family of models that employ this approach to induce abstractions in a data-efficient manner, emphasizing their potential as candidate models for the acquisition of abstract concepts in the human mind and brain.},
   tldr = {We introduce the concept of the relational bottleneck as an inductive bias that reconciles empiricist and nativist approaches in cognitive science, enabling data-efficient acquisition of abstract concepts through a family of models that leverage this bias.},
+  preview = {relational-bottleneck.png},
 }
+  preview = {relbottleneck.jpg},
   month = sep,
 
 @article{altabaaAbstractorsRelationalCrossattention2023,
@@ -174,8 +177,8 @@ TODO: add slides? add posters?
   shorttitle = {Abstractors and Relational Cross-Attention},
   author = {Altabaa, Awni and Webb, Taylor and Cohen, Jonathan and Lafferty, John},
   journal = {International Conference on Learning Representations (ICLR)},
-  preview = {rca.png},
   year = {2024},
+  month = {apr},
   number = {arXiv:2304.00195},
   eprint = {2304.00195},
   primaryclass = {cs, stat},
@@ -185,8 +188,8 @@ TODO: add slides? add posters?
   tldr = {We introduce the Abstractor model, which incorporates a form of attention called relational cross-attention, enabling explicit relational reasoning in Transformers and demonstrating significant improvements in sample efficiency across various tasks.},
   archiveprefix = {arxiv},
   slides = {slides/abstractor-slides.pdf},
+  preview = {abstraction-relational-reasoning.png},
   poster = {posters/abstractor-poster.pdf},
-  month = {apr},
 }
 
 @article{altabaaDecentralizedMultiAgentReinforcement2023,
