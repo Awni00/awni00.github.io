@@ -739,18 +739,20 @@ footer.sticky-bottom {
           }
         }
 
+        // Below, I create some custom styling to highlight publication buttons (e.g. arxiv, blog, code)
         /* Default button: gray (#616161) */
-        a.btn.btn-arxiv {
-          color: #616161;
-          border-color: #616161;
-          font-weight: 600;
+        // Can choose whether want to use this style or default al-folio style above
+        // a.btn_ {
+        //   color: #616161;
+        //   border-color: #616161;
+        //   font-weight: 600;
 
-          &:hover {
-            color: var(--global-card-bg-color);
-            background-color: #616161;
-            border-color: #616161;
-          }
-        }
+        //   &:hover {
+        //     color: var(--global-card-bg-color);
+        //     background-color: #616161;
+        //     border-color: #616161;
+        //   }
+        // }
 
         /* arXiv button: deep red (#b31b1b) */
         a.btn.btn-arxiv {
