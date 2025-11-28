@@ -738,6 +738,58 @@ footer.sticky-bottom {
             border-color: var(--global-theme-color);
           }
         }
+
+        /* Default button: gray (#616161) */
+        a.btn.btn-arxiv {
+          color: #616161;
+          border-color: #616161;
+          font-weight: 600;
+
+          &:hover {
+            color: var(--global-card-bg-color);
+            background-color: #616161;
+            border-color: #616161;
+          }
+        }
+
+        /* arXiv button: deep red (#b31b1b) */
+        a.btn.btn-arxiv {
+          color: #b31b1b;
+          border-color: #b31b1b;
+          font-weight: 600;
+
+          &:hover {
+            color: var(--global-card-bg-color);
+            background-color: #b31b1b;
+            border-color: #b31b1b;
+          }
+        }
+
+        /* Blog button: deep blue (#1f5e96) */
+        a.btn.btn-blog {
+          color: #1f5e96;
+          border-color: #1f5e96;
+          font-weight: 600;
+
+          &:hover {
+            color: var(--global-card-bg-color);
+            background-color: #1f5e96;
+            border-color: #1f5e96;
+          }
+        }
+
+        /* Code button: green (#08872B) */
+        a.btn.btn-code {
+          color: #08872B;
+          border-color: #08872B;
+          font-weight: 600;
+
+          &:hover {
+            color: var(--global-card-bg-color);
+            background-color: #08872B;
+            border-color: #08872B;
+          }
+        }
       }
 
       .badges {
