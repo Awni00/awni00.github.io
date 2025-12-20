@@ -12,9 +12,10 @@ $max-content-width: {{ site.max_width }};
   "layout",
   "base",
   "distill",
-  "cv",
-  "font-awesome/fontawesome",
-  "font-awesome/brands",
-  "font-awesome/solid",
-  "font-awesome/regular"
+  "cv"
+  // now importing font-awesome via <link> in head.html; supports updating version more easily
+  // "font-awesome/fontawesome",
+  // "font-awesome/brands",
+  // "font-awesome/solid",
+  // "font-awesome/regular"
 ;
