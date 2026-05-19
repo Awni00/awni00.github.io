@@ -633,7 +633,7 @@
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 30px;
-  align-items: baseline;
+  align-items: last baseline;
   margin-bottom: 4px;
 }
 
