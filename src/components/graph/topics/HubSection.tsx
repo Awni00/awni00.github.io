@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 
-import type { TopicsConfig, TopicsDensity, TopicsSortKey } from "../../../config/writing";
+import type { TopicsConfig, TopicsDensity, TopicsSort } from "../../../config/writing";
 import type { EntryNode, GraphIndex } from "../../../lib/graph/types";
 import PagedList from "./PagedList";
 import PreviewList from "./PreviewList";
 import SortBar from "./SortBar";
-import { sortEntries } from "./sort";
+import { DEFAULT_DIR, sortEntries } from "./sort";
 
 type HubSectionProps = {
   hub: EntryNode;
@@ -34,7 +34,7 @@ export default function HubSection({
   showDensityToggle,
   onDensity
 }: HubSectionProps) {
-  const [sort, setSort] = useState<TopicsSortKey>(config.defaultSort);
+  const [sort, setSort] = useState<TopicsSort>(config.defaultSort);
   const [page, setPage] = useState(1);
 
   const linked = useMemo(() => {
@@ -76,8 +76,12 @@ export default function HubSection({
       <SortBar
         sortOptions={config.sortOptions}
         activeSort={sort}
-        onSort={(key) => {
-          setSort(key);
+        onSort={(field) => {
+          setSort((current) =>
+            current.field === field
+              ? { field, dir: current.dir === "desc" ? "asc" : "desc" }
+              : { field, dir: DEFAULT_DIR[field] }
+          );
           setPage(1);
         }}
         showDensityToggle={showDensityToggle}

@@ -1,10 +1,10 @@
-import type { TopicsDensity, TopicsSortKey } from "../../../config/writing";
+import type { TopicsDensity, TopicsSort, TopicsSortField } from "../../../config/writing";
 import { SORT_LABELS } from "./sort";
 
 type SortBarProps = {
-  sortOptions: readonly TopicsSortKey[];
-  activeSort: TopicsSortKey;
-  onSort: (key: TopicsSortKey) => void;
+  sortOptions: readonly TopicsSortField[];
+  activeSort: TopicsSort;
+  onSort: (field: TopicsSortField) => void;
   showDensityToggle: boolean;
   density: TopicsDensity;
   onDensity: (d: TopicsDensity) => void;
@@ -33,17 +33,25 @@ export default function SortBar({
         <>
           <span className="topics-sortbar__label">Sort</span>
           <span className="topics-sortbar__group">
-            {sortOptions.map((key) => (
-              <button
-                key={key}
-                type="button"
-                className={key === activeSort ? "topics-sortbar__btn is-active" : "topics-sortbar__btn"}
-                aria-pressed={key === activeSort}
-                onClick={() => onSort(key)}
-              >
-                {SORT_LABELS[key]}
-              </button>
-            ))}
+            {sortOptions.map((field) => {
+              const isActive = field === activeSort.field;
+              return (
+                <button
+                  key={field}
+                  type="button"
+                  className={isActive ? "topics-sortbar__btn is-active" : "topics-sortbar__btn"}
+                  aria-pressed={isActive}
+                  onClick={() => onSort(field)}
+                >
+                  {SORT_LABELS[field]}
+                  {isActive && (
+                    <span className="topics-sortbar__arrow" aria-hidden="true">
+                      {activeSort.dir === "desc" ? " ↓" : " ↑"}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </span>
         </>
       )}

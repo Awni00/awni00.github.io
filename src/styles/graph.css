@@ -746,6 +746,11 @@
   padding-bottom: 1px;
 }
 
+.topics-sortbar__arrow {
+  margin-left: 2px;
+  opacity: 0.8;
+}
+
 .topics-list {
   list-style: none;
   padding: 0;

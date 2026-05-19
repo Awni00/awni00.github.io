@@ -41,15 +41,17 @@ export type ArticleWidth = "reading" | "flex";
  */
 export type TopicsDensity = "comfortable" | "minimal" | "dense";
 export type TopicsPaginationMode = "preview" | "paged";
-export type TopicsSortKey = "date-desc" | "date-asc" | "title" | "type";
+export type TopicsSortField = "date" | "title" | "type";
+export type TopicsSortDir = "asc" | "desc";
+export type TopicsSort = { field: TopicsSortField; dir: TopicsSortDir };
 export type TopicsConfig = {
   showHubSummaries: boolean;
   density: TopicsDensity;
   showDensityToggle: boolean;
   paginationMode: TopicsPaginationMode;
   pageSize: number;
-  defaultSort: TopicsSortKey;
-  sortOptions: readonly TopicsSortKey[];
+  defaultSort: TopicsSort;
+  sortOptions: readonly TopicsSortField[];
 };
 
 export const writingConfig = {
@@ -111,8 +113,13 @@ export const writingConfig = {
      *      "paged"   = show `pageSize` entries with a pager + same hub link.
      *  - `pageSize` — rows per page in both pagination modes.
      *  - `defaultSort` — ephemeral starting sort for every hub on page load.
-     *  - `sortOptions` — which sort controls appear in the bar.
-     *    Empty array hides the sort bar entirely.
+     *    Compound `{ field, dir }`: `field` is "date" | "title" | "type",
+     *    `dir` is "asc" | "desc". Clicking the active field in the sort bar
+     *    flips `dir`; clicking a different field switches to that field at
+     *    its fixed default direction (date→desc, title→asc, type→asc).
+     *  - `sortOptions` — which sort *fields* appear in the bar (direction is
+     *    a per-button toggle, not a separate option). Empty array hides the
+     *    sort bar entirely.
      */
     topics: {
       showHubSummaries: true,
@@ -120,8 +127,8 @@ export const writingConfig = {
       showDensityToggle: false,
       paginationMode: "preview" as TopicsPaginationMode,
       pageSize: 8,
-      defaultSort: "date-desc" as TopicsSortKey,
-      sortOptions: ["date-desc", "title", "type"] as readonly TopicsSortKey[]
+      defaultSort: { field: "date", dir: "desc" } as TopicsSort,
+      sortOptions: ["date", "title", "type"] as readonly TopicsSortField[]
     }
   },
   entryLayout: {
