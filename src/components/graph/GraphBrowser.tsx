@@ -6,6 +6,7 @@ import { graphNeighborhood, neighborhoodIds } from "../../lib/graph/neighborhood
 import type { EntryNode, GraphIndex, WritingBrowserState } from "../../lib/graph/types";
 import { searchWriting, toSearchDocuments } from "../../lib/search/writingSearch";
 import GraphCanvas from "./GraphCanvas";
+import ListView from "./list/ListView";
 import TopicsView from "./topics/TopicsView";
 
 type GraphBrowserProps = {
@@ -259,51 +260,16 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
           {view === "topics" ? (
             <TopicsView graph={graph} entries={filteredEntries} />
           ) : (
-            <ListView entries={filteredEntries} />
+            <ListView
+              entries={filteredEntries}
+              activeTypes={state.types ?? []}
+              onToggleType={toggleType}
+              typeCounts={typeCounts}
+            />
           )}
         </>
       )}
     </section>
-  );
-}
-
-function ListView({ entries }: { entries: EntryNode[] }) {
-  const sorted = [...entries].sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
-  return (
-    <div className="listpage">
-      <div className="listpage-table">
-        <div className="listrow listrow--head">
-          <span className="lc lc-type">Type</span>
-          <span className="lc lc-title">Title</span>
-          <span className="lc lc-tags">Tags</span>
-          <span className="lc lc-date">Date ↓</span>
-        </div>
-        {sorted.map((entry) => (
-          <a key={entry.id} className="listrow" href={entry.url}>
-            <span className="lc lc-type">
-              <span
-                className="swatch"
-                style={{
-                  background: (graphConfig.nodeTypes[entry.type as keyof typeof graphConfig.nodeTypes]
-                    ?.color ?? "var(--color-muted)") as string
-                }}
-              />
-              <span className="lc-typelabel">{entry.type}</span>
-            </span>
-            <span className="lc lc-title">
-              <span className="lc-titletext">{entry.title}</span>
-              {entry.summary && <span className="lc-summary">{entry.summary}</span>}
-            </span>
-            <span className="lc lc-tags">
-              {entry.tags.slice(0, 3).map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
-            </span>
-            <span className="lc lc-date">{entry.date ?? ""}</span>
-          </a>
-        ))}
-      </div>
-    </div>
   );
 }
 

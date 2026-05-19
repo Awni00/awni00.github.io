@@ -1045,6 +1045,69 @@
   text-align: right;
 }
 
+/* ── List toolbar (type filter + density) ───────────────────────────── */
+
+.list-toolbar {
+  width: min(100% - 2rem, 1180px);
+  margin: 14px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.list-toolbar__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.density-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted-2);
+}
+
+/* ── Sortable list-header buttons ───────────────────────────────────── */
+
+.lc--sort {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+.lc--sort:hover {
+  color: var(--color-fg);
+}
+
+.lc--sort.is-active {
+  color: var(--color-fg);
+}
+
+/* ── Density modifiers on listpage ──────────────────────────────────── */
+
+.listpage--minimal .lc-summary,
+.listpage--dense .lc-summary {
+  display: none;
+}
+
+.listpage--dense .listrow {
+  padding: 8px 14px;
+}
+
 /* ── Mobile ─────────────────────────────────────────────────────────── */
 
 @media (max-width: 980px) {

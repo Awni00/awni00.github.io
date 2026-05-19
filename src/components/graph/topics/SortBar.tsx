@@ -1,4 +1,5 @@
 import type { TopicsDensity, TopicsSort, TopicsSortField } from "../../../config/writing";
+import DensityToggle from "../DensityToggle";
 import { SORT_LABELS } from "./sort";
 
 type SortBarProps = {
@@ -8,14 +9,6 @@ type SortBarProps = {
   showDensityToggle: boolean;
   density: TopicsDensity;
   onDensity: (d: TopicsDensity) => void;
-};
-
-const DENSITIES: TopicsDensity[] = ["comfortable", "minimal", "dense"];
-
-const DENSITY_LABEL: Record<TopicsDensity, string> = {
-  comfortable: "Comfortable",
-  minimal: "Minimal",
-  dense: "Dense"
 };
 
 export default function SortBar({
@@ -58,20 +51,7 @@ export default function SortBar({
       {showDensityToggle && (
         <>
           <span className="topics-sortbar__spacer" />
-          <span className="topics-sortbar__label">View</span>
-          <span className="topics-sortbar__group">
-            {DENSITIES.map((d) => (
-              <button
-                key={d}
-                type="button"
-                className={d === density ? "topics-sortbar__btn is-active" : "topics-sortbar__btn"}
-                aria-pressed={d === density}
-                onClick={() => onDensity(d)}
-              >
-                {DENSITY_LABEL[d]}
-              </button>
-            ))}
-          </span>
+          <DensityToggle density={density} onDensity={onDensity} />
         </>
       )}
     </div>

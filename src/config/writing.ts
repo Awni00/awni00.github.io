@@ -54,6 +54,19 @@ export type TopicsConfig = {
   sortOptions: readonly TopicsSortField[];
 };
 
+/**
+ * List-view configuration. See `writingConfig.browser.list` below for live
+ * values. The view is a single sortable/filterable table; sort, density, and
+ * filter UI mirror the Topics view vocabulary.
+ */
+export type ListConfig = {
+  density: TopicsDensity;
+  showDensityToggle: boolean;
+  showTypeFilter: boolean;
+  defaultSort: TopicsSort;
+  sortOptions: readonly TopicsSortField[];
+};
+
 export const writingConfig = {
   route: "/writing",
   label: "Writing",
@@ -127,6 +140,35 @@ export const writingConfig = {
       showDensityToggle: false,
       paginationMode: "preview" as TopicsPaginationMode,
       pageSize: 8,
+      defaultSort: { field: "date", dir: "desc" } as TopicsSort,
+      sortOptions: ["date", "title", "type"] as readonly TopicsSortField[]
+    },
+    /**
+     * List view (`?view=list`) — global presentation knobs. Mirrors Topics's
+     * sort and density vocabulary so the two views feel like siblings.
+     *
+     *  - `density` — row anatomy:
+     *      "comfortable" = roomy rows + entry summaries.
+     *      "minimal"     = roomy rows, no entry summaries.
+     *      "dense"       = tight rows, no entry summaries.
+     *  - `showDensityToggle` — expose the in-page View · Comfortable / Minimal
+     *    / Dense control; active density is ephemeral (resets on navigation).
+     *  - `showTypeFilter` — expose the type-chip filter row above the table.
+     *    Chips share state with the map view's type filter via the browser
+     *    URL state, so toggling here persists across view switches.
+     *  - `defaultSort` — ephemeral starting sort on page load. Compound
+     *    `{ field, dir }`: field is "date" | "title" | "type", dir is "asc"
+     *    | "desc". Clicking the active column header flips `dir`; clicking
+     *    an inactive sortable header switches to that field at its fixed
+     *    default direction (date→desc, title→asc, type→asc).
+     *  - `sortOptions` — which columns are clickable. Empty array disables
+     *    header-driven sorting entirely. "tags" is not a valid option (no
+     *    natural order).
+     */
+    list: {
+      density: "comfortable" as TopicsDensity,
+      showDensityToggle: true,
+      showTypeFilter: true,
       defaultSort: { field: "date", dir: "desc" } as TopicsSort,
       sortOptions: ["date", "title", "type"] as readonly TopicsSortField[]
     }
