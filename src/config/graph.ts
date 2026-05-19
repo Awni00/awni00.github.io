@@ -37,7 +37,7 @@ export const graphConfig = {
       labelVisibility: "hover"
     },
     teaching: {
-      label: "Teaching",
+      label: "Teaching note",
       shape: "diamond",
       size: 11,
       color: "var(--graph-teaching)",

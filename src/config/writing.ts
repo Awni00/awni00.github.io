@@ -34,6 +34,24 @@ export type PlacementSpec = {
  */
 export type ArticleWidth = "reading" | "flex";
 
+/**
+ * Topics-view configuration. See `writingConfig.browser.topics` below for
+ * the live values. The view is a unified per-hub chronological list; counts
+ * appear only at the hub level ("N entries linked"), never beside a row.
+ */
+export type TopicsDensity = "comfortable" | "minimal" | "dense";
+export type TopicsPaginationMode = "preview" | "paged";
+export type TopicsSortKey = "date-desc" | "date-asc" | "title" | "type";
+export type TopicsConfig = {
+  showHubSummaries: boolean;
+  density: TopicsDensity;
+  showDensityToggle: boolean;
+  paginationMode: TopicsPaginationMode;
+  pageSize: number;
+  defaultSort: TopicsSortKey;
+  sortOptions: readonly TopicsSortKey[];
+};
+
 export const writingConfig = {
   route: "/writing",
   label: "Writing",
@@ -74,6 +92,36 @@ export const writingConfig = {
     mobile: {
       graphPlacement: "collapsed",
       defaultPreviewMode: "cards"
+    },
+    /**
+     * Topics view (`?view=topics`) — global presentation knobs. The view
+     * is a unified per-hub chronological list; entry type is shown via a
+     * chip in the row's left gutter. Counts appear only at the hub level.
+     *
+     *  - `showHubSummaries` — render each hub's summary blurb under its title.
+     *  - `density` — row anatomy:
+     *      "comfortable" = roomy rows + entry summaries.
+     *      "minimal"     = roomy rows, no entry summaries.
+     *      "dense"       = tight rows, no entry summaries.
+     *  - `showDensityToggle` — expose the in-page View · Comfortable / Minimal
+     *    / Dense control; active density is ephemeral (resets on navigation).
+     *  - `paginationMode`:
+     *      "preview" = show first `pageSize` entries then a single
+     *                  "Open hub for full list →" link.
+     *      "paged"   = show `pageSize` entries with a pager + same hub link.
+     *  - `pageSize` — rows per page in both pagination modes.
+     *  - `defaultSort` — ephemeral starting sort for every hub on page load.
+     *  - `sortOptions` — which sort controls appear in the bar.
+     *    Empty array hides the sort bar entirely.
+     */
+    topics: {
+      showHubSummaries: true,
+      density: "comfortable" as TopicsDensity,
+      showDensityToggle: false,
+      paginationMode: "preview" as TopicsPaginationMode,
+      pageSize: 8,
+      defaultSort: "date-desc" as TopicsSortKey,
+      sortOptions: ["date-desc", "title", "type"] as readonly TopicsSortKey[]
     }
   },
   entryLayout: {

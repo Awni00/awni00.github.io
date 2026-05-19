@@ -6,6 +6,7 @@ import { graphNeighborhood, neighborhoodIds } from "../../lib/graph/neighborhood
 import type { EntryNode, GraphIndex, WritingBrowserState } from "../../lib/graph/types";
 import { searchWriting, toSearchDocuments } from "../../lib/search/writingSearch";
 import GraphCanvas from "./GraphCanvas";
+import TopicsView from "./topics/TopicsView";
 
 type GraphBrowserProps = {
   graph: GraphIndex;
@@ -21,8 +22,6 @@ const FOCUS_DEPTH = writingConfig.browser.focus.depth;
 
 const VIEWS = ["map", "topics", "list"] as const;
 type View = (typeof VIEWS)[number];
-
-const TYPE_ORDER: EntryType[] = ["hub", "sub-hub", "paper", "post", "note", "project", "teaching"];
 
 export default function GraphBrowser({ graph }: GraphBrowserProps) {
   const [state, setState] = useState<WritingBrowserState>(() => readStateFromUrl());
@@ -265,78 +264,6 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
         </>
       )}
     </section>
-  );
-}
-
-function TopicsView({ graph, entries }: { graph: GraphIndex; entries: EntryNode[] }) {
-  const entryIds = new Set(entries.map((entry) => entry.id));
-  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
-  return (
-    <div className="topicspage">
-      <div className="topicspage-body">
-        {graph.hubs.map((hub) => {
-          const linkedIds = [
-            ...new Set([...(graph.backlinks[hub.id] ?? []), ...(graph.outgoing[hub.id] ?? [])])
-          ].filter((id) => id !== hub.id && entryIds.has(id));
-          const linked = linkedIds
-            .map((id) => nodeById.get(id))
-            .filter((node): node is EntryNode => Boolean(node) && node!.type !== "hub")
-            .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
-          const byType: Record<string, EntryNode[]> = {};
-          for (const item of linked) {
-            (byType[item.type] = byType[item.type] ?? []).push(item);
-          }
-          return (
-            <section className="hubsec" key={hub.id}>
-              <div className="hubsec-head">
-                <div className="hubsec-icon" aria-hidden="true">
-                  <span style={{ background: graphConfig.nodeTypes.hub.color as string }} />
-                </div>
-                <div>
-                  <a className="hubsec-title" href={hub.url}>
-                    {hub.title}
-                  </a>
-                  {hub.summary && <div className="hubsec-summary">{hub.summary}</div>}
-                </div>
-                <div className="hubsec-meta">
-                  <span className="hubsec-count">{linked.length} linked</span>
-                  <a className="cta cta--small" href={hub.url}>
-                    Open hub →
-                  </a>
-                </div>
-              </div>
-              {TYPE_ORDER.filter((tp) => byType[tp]).map((tp) => (
-                <div className="hubsec-grouprow" key={tp}>
-                  <div className="hubsec-grouplabel">
-                    <span
-                      className="swatch"
-                      style={{
-                        background: graphConfig.nodeTypes[tp].color as string
-                      }}
-                    />
-                    {tp}
-                    <span className="hubsec-groupcount">{byType[tp].length}</span>
-                  </div>
-                  <ul className="hubsec-list">
-                    {byType[tp].map((entry) => (
-                      <li key={entry.id} className="hubsec-item">
-                        <a className="hubsec-itemtitle" href={entry.url}>
-                          {entry.title}
-                        </a>
-                        <div className="hubsec-itemmeta">
-                          {entry.date && <span>{entry.date}</span>}
-                        </div>
-                        {entry.summary && <div className="hubsec-itemsum">{entry.summary}</div>}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </section>
-          );
-        })}
-      </div>
-    </div>
   );
 }
 
