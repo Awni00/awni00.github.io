@@ -117,6 +117,13 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
     .map((doc) => nodeById.get(doc.id))
     .filter((node): node is EntryNode => Boolean(node));
 
+  const entryCount =
+    view === "map"
+      ? visibleGraph.nodes.length
+      : view === "topics"
+      ? topicsEntries.length
+      : listEntries.length;
+
   const ViewSwitcher = (
     <div className="graph-seg" role="tablist" aria-label="Writing view">
       {VIEWS.map((v) => (
@@ -135,20 +142,25 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
 
   return (
     <section className="graph-browser" aria-label="Writing browser">
+      <div className="graph-view-bar">
+        <div className="graph-view-bar__left">
+          <span style={{ color: "var(--color-fg)", fontWeight: 500 }}>Writing</span>
+          <span className="graph-view-bar__count">{entryCount} entries</span>
+        </div>
+        <div className="graph-view-bar__right">
+          <input
+            className="graph-input"
+            style={{ width: 240 }}
+            value={state.query ?? ""}
+            onChange={(event) => patch({ query: event.target.value || undefined })}
+            placeholder="Search title, tag, type…"
+          />
+          {ViewSwitcher}
+        </div>
+      </div>
       {view === "map" ? (
         <div className="graph-browser__grid">
           <aside className="graph-panel graph-panel--left">
-            <div className="graph-control">
-              <label htmlFor="writing-search">Search</label>
-              <input
-                id="writing-search"
-                className="graph-input"
-                value={state.query ?? ""}
-                onChange={(event) => patch({ query: event.target.value || undefined })}
-                placeholder="Title, tag, type…"
-              />
-            </div>
-
             <div className="graph-control">
               <label>Topics</label>
               <ul className="topic-list">
@@ -230,11 +242,7 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
                     </button>
                   </>
                 )}
-                <span className="graph-view-bar__count" style={{ marginLeft: 12 }}>
-                  {visibleGraph.nodes.length} entries
-                </span>
               </div>
-              {ViewSwitcher}
             </div>
             <div className="graph-canvas">
               <GraphCanvas
@@ -270,37 +278,15 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
             {selected ? <Preview node={selected} graph={graph} /> : <p className="muted">Select a node.</p>}
           </aside>
         </div>
+      ) : view === "topics" ? (
+        <TopicsView graph={graph} entries={topicsEntries} />
       ) : (
-        <>
-          <div className="graph-view-bar">
-            <div className="graph-view-bar__left">
-              <span style={{ color: "var(--color-fg)", fontWeight: 500 }}>Writing</span>
-              <span className="graph-view-bar__count">
-                {(view === "topics" ? topicsEntries : listEntries).length} entries
-              </span>
-            </div>
-            <div className="graph-view-bar__right">
-              <input
-                className="graph-input"
-                style={{ width: 240 }}
-                value={state.query ?? ""}
-                onChange={(event) => patch({ query: event.target.value || undefined })}
-                placeholder="Search…"
-              />
-              {ViewSwitcher}
-            </div>
-          </div>
-          {view === "topics" ? (
-            <TopicsView graph={graph} entries={topicsEntries} />
-          ) : (
-            <ListView
-              entries={listEntries}
-              activeTypes={state.types ?? []}
-              onToggleType={toggleType}
-              typeCounts={typeCounts}
-            />
-          )}
-        </>
+        <ListView
+          entries={listEntries}
+          activeTypes={state.types ?? []}
+          onToggleType={toggleType}
+          typeCounts={typeCounts}
+        />
       )}
     </section>
   );
