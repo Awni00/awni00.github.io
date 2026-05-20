@@ -1,6 +1,5 @@
 ---
 import Aside from "../components/article/Aside.astro";
-import BibtexBlock from "../components/article/BibtexBlock.astro";
 import Callout from "../components/article/Callout.astro";
 import Comparison from "../components/article/Comparison";
 import EntryFooter from "../components/article/EntryFooter.astro";
@@ -115,7 +114,6 @@ const renderFooter =
 
 const components = {
   Aside,
-  BibtexBlock,
   Callout,
   Comparison,
   Figure,
@@ -306,6 +304,7 @@ const right = renderSide("right");
       showLocalGraph={localGraphInFooter}
       backlinks={backlinksInFooter ? backlinks : []}
       related={relatedInFooter ? related : []}
+      bibtex={entry.data.bibtex}
     />
   </article>
 </BaseLayout>

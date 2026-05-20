@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import Aside from "../components/article/Aside.astro";
-import BibtexBlock from "../components/article/BibtexBlock.astro";
 import Callout from "../components/article/Callout.astro";
 import Comparison from "../components/article/Comparison";
 import Figure from "../components/article/Figure.astro";
@@ -23,7 +22,6 @@ type Props = {
 const { title, description, Content } = Astro.props;
 const components = {
   Aside,
-  BibtexBlock,
   Callout,
   Comparison,
   Figure,

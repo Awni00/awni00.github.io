@@ -29,6 +29,14 @@ external:
   code: "https://github.com/example/vae-demo"
   slides: "/publications/example-slides.pdf"
   doi: "10.23915/example.00002"
+bibtex: |
+  @misc{example2026vaeexplainer,
+    title  = {Variational Autoencoders: A Short Explainer},
+    author = {Your Name and Collaborator Name},
+    year   = {2026},
+    note   = {Sample paper-style entry in the academic-graph template},
+    url    = {https://example.com/writing/research-papers/vae-explainer}
+  }
 ---
 
 Variational autoencoders are a clean example of how a generative model can pair a hidden representation with a tractable training objective. They assume that each observation `x` is produced from an unobserved latent variable `z`, then learn both a decoder that maps `z` back to data and an encoder that approximates the posterior distribution over `z`.
@@ -138,20 +146,6 @@ The same habit of splitting an error or objective into named pieces appears acro
 - [[machine-learning-theory/test-error-decomposition|Decomposing test error three ways]] - a short note on another decomposition lens.
 - [[machine-learning-theory/bv-sim]] - an example project entry with reproducible artifacts.
 
-For citation context, see the BibTeX block below and the [publications page](/publications). The Markdown link goes to a normal route and does not create a graph edge.
+For citation context, see the citation block in the footer below and the [publications page](/publications). The Markdown link goes to a normal route and does not create a graph edge.
 
 > "A useful latent variable is one that earns its keep twice: explaining the data you saw and generating data you have not seen."
-
-## BibTeX
-
-<BibtexBlock>
-```bibtex
-@misc{example2026vaeexplainer,
-  title  = {Variational Autoencoders: A Short Explainer},
-  author = {Your Name and Collaborator Name},
-  year   = {2026},
-  note   = {Sample paper-style entry in the academic-graph template},
-  url    = {https://example.com/writing/research-papers/vae-explainer}
-}
-```
-</BibtexBlock>

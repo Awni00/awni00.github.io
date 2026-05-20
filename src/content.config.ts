@@ -55,6 +55,7 @@ const writing = defineCollection({
     draft: z.boolean().default(false),
     theme: z.enum(["global", "system", "light", "dark"]).default("global"),
     external: externalLinks,
+    bibtex: z.string().optional(),
     layout: z
       .object({
         // Override the article body width for this entry.
