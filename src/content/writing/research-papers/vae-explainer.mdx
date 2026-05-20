@@ -25,10 +25,10 @@ Variational autoencoders are a clean example of how a generative model can pair 
 
 The generative story is:
 
-1. Draw a latent variable `z` from a simple prior, usually `p(z) = N(0, I)`.
-2. Draw data from a decoder distribution `p_\theta(x | z)`.
+1. Draw a latent variable `z` from a simple prior, usually $p(z) = N(0, I)$.
+2. Draw data from a decoder distribution $p_\theta(x | z)$.
 
-The challenge is that the exact posterior `p_\theta(z | x)` is usually intractable. VAEs introduce an encoder `q_\phi(z | x)` that acts as a learned approximation.
+The challenge is that the exact posterior $p_\theta(z | x)$ is usually intractable. VAEs introduce an encoder $q_\phi(z | x)$ that acts as a learned approximation.
 
 <MathBlock title="Evidence lower bound">
 For one data point, the VAE objective is
