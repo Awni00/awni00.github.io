@@ -34,11 +34,38 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
     return out;
   }, [graph.nodes]);
   const docs = useMemo(() => toSearchDocuments(graph.nodes), [graph.nodes]);
-  const searchResults = useMemo(
+  // Per-view filter sets. Each view applies only the filters it surfaces in
+  // its own UI. Inputs to these filters are still a single shared state
+  // object, so toggling a chip in one view that also exists in another
+  // (e.g. type chips appear in map + list) stays in sync. Filters that do
+  // not have a UI in a given view are simply not applied to that view's
+  // results.
+  //
+  //   View    Applies                              Does NOT apply
+  //   ----    -------                              --------------
+  //   map     query, types, tags, focus            —
+  //   list    query, types                         tags, focus
+  //   topics  query                                types, tags, focus
+  //
+  // `state.focus` flows through a separate path (focusIds / visibleGraph)
+  // and only affects the map canvas, so it stays out of the searchResults
+  // here.
+  const mapSearchResults = useMemo(
     () => searchWriting(docs, { query: state.query, types: state.types, tags: state.tags }),
-    [docs, state.query, state.tags, state.types]
+    [docs, state.query, state.types, state.tags]
   );
-  const filteredIds = useMemo(() => new Set(searchResults.map((doc) => doc.id)), [searchResults]);
+  const listSearchResults = useMemo(
+    () => searchWriting(docs, { query: state.query, types: state.types }),
+    [docs, state.query, state.types]
+  );
+  const topicsSearchResults = useMemo(
+    () => searchWriting(docs, { query: state.query }),
+    [docs, state.query]
+  );
+  const mapFilteredIds = useMemo(
+    () => new Set(mapSearchResults.map((doc) => doc.id)),
+    [mapSearchResults]
+  );
   const focusIds = useMemo(() => {
     if (!state.focus) return undefined;
     return neighborhoodIds(graph, state.focus, FOCUS_DEPTH);
@@ -48,14 +75,14 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
       state.focus && FOCUS_MODE === "filter"
         ? graphNeighborhood(graph, state.focus, FOCUS_DEPTH)
         : graph;
-    const nodes = base.nodes.filter((node) => filteredIds.has(node.id));
+    const nodes = base.nodes.filter((node) => mapFilteredIds.has(node.id));
     const allowed = new Set(nodes.map((node) => node.id));
     return {
       ...base,
       nodes,
       edges: base.edges.filter((edge) => allowed.has(edge.source) && allowed.has(edge.target))
     };
-  }, [filteredIds, graph, state.focus]);
+  }, [mapFilteredIds, graph, state.focus]);
   const selected = state.selected ? nodeById.get(state.selected) : graph.hubs[0] ?? graph.nodes[0];
   const focusNode = state.focus ? nodeById.get(state.focus) : undefined;
   const view = (state.view ?? "map") as View;
@@ -82,7 +109,11 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
     patch({ tags: next.size ? [...next] : undefined });
   }
 
-  const filteredEntries = searchResults
+  const listEntries = listSearchResults
+    .map((doc) => nodeById.get(doc.id))
+    .filter((node): node is EntryNode => Boolean(node));
+
+  const topicsEntries = topicsSearchResults
     .map((doc) => nodeById.get(doc.id))
     .filter((node): node is EntryNode => Boolean(node));
 
@@ -244,7 +275,9 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
           <div className="graph-view-bar">
             <div className="graph-view-bar__left">
               <span style={{ color: "var(--color-fg)", fontWeight: 500 }}>Writing</span>
-              <span className="graph-view-bar__count">{filteredEntries.length} entries</span>
+              <span className="graph-view-bar__count">
+                {(view === "topics" ? topicsEntries : listEntries).length} entries
+              </span>
             </div>
             <div className="graph-view-bar__right">
               <input
@@ -258,10 +291,10 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
             </div>
           </div>
           {view === "topics" ? (
-            <TopicsView graph={graph} entries={filteredEntries} />
+            <TopicsView graph={graph} entries={topicsEntries} />
           ) : (
             <ListView
-              entries={filteredEntries}
+              entries={listEntries}
               activeTypes={state.types ?? []}
               onToggleType={toggleType}
               typeCounts={typeCounts}
@@ -341,17 +374,15 @@ function Preview({ node, graph }: { node: EntryNode; graph: GraphIndex }) {
   );
 }
 
+// Only the active view round-trips through the URL. All other state —
+// selection, query, types, tags, focus — is session-only by design so the
+// URL stays clean and shareable without dragging along ephemeral UI state.
 function readStateFromUrl(): WritingBrowserState {
   if (typeof window === "undefined") return defaultState;
   const params = new URLSearchParams(window.location.search);
   const view = params.get("view") as View | null;
   return {
-    view: view && VIEWS.includes(view) ? view : defaultState.view,
-    focus: params.get("focus") || undefined,
-    selected: params.get("selected") || undefined,
-    query: params.get("q") || undefined,
-    types: splitParam(params.get("type")) as EntryType[] | undefined,
-    tags: splitParam(params.get("tag"))
+    view: view && VIEWS.includes(view) ? view : defaultState.view
   };
 }
 
@@ -359,19 +390,9 @@ function writeStateToUrl(state: WritingBrowserState) {
   if (typeof window === "undefined") return;
   const params = new URLSearchParams();
   if (state.view !== defaultState.view) params.set("view", state.view);
-  if (state.focus) params.set("focus", state.focus);
-  if (state.selected) params.set("selected", state.selected);
-  if (state.query) params.set("q", state.query);
-  if (state.types?.length) params.set("type", state.types.join(","));
-  if (state.tags?.length) params.set("tag", state.tags.join(","));
   const query = params.toString();
   const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}`;
   window.history.replaceState(null, "", nextUrl);
-}
-
-function splitParam(value: string | null): string[] | undefined {
-  const parts = value?.split(",").map((part) => part.trim()).filter(Boolean);
-  return parts?.length ? parts : undefined;
 }
 
 type NodeShape = "square" | "circle" | "diamond" | "hexagon";

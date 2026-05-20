@@ -6,6 +6,14 @@ import HubSection from "./HubSection";
 
 type TopicsViewProps = {
   graph: GraphIndex;
+  /**
+   * Entries to render. Currently the parent (`GraphBrowser`) passes a
+   * variant that has the query and tag filters applied but NOT the type
+   * filter — see the comment on `topicsSearchResults` in
+   * `GraphBrowser.tsx` for the rationale. Topics view has no type-filter
+   * UI of its own; if one is added later, switch the parent back to
+   * passing `filteredEntries`.
+   */
   entries: EntryNode[];
 };
 

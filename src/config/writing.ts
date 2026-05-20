@@ -167,7 +167,7 @@ export const writingConfig = {
      */
     list: {
       density: "comfortable" as TopicsDensity,
-      showDensityToggle: true,
+      showDensityToggle: false,
       showTypeFilter: true,
       defaultSort: { field: "date", dir: "desc" } as TopicsSort,
       sortOptions: ["date", "title", "type"] as readonly TopicsSortField[]

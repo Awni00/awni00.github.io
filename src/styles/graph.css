@@ -1057,6 +1057,17 @@
   flex-wrap: wrap;
 }
 
+.list-toolbar__types {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted-2);
+}
+
 .list-toolbar__chips {
   display: flex;
   flex-wrap: wrap;

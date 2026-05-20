@@ -155,26 +155,29 @@ function ListToolbar({
   return (
     <div className="list-toolbar">
       {showTypeFilter ? (
-        <div className="list-toolbar__chips">
-          {writingConfig.entryTypes
-            .filter((t) => (typeCounts[t] ?? 0) > 0)
-            .map((type) => {
-              const cfg = graphConfig.nodeTypes[type as keyof typeof graphConfig.nodeTypes];
-              const active = activeTypes.includes(type);
-              return (
-                <button
-                  key={type}
-                  type="button"
-                  className="graph-button graph-button--type"
-                  style={{ ["--swatch" as any]: cfg?.color }}
-                  aria-pressed={active}
-                  onClick={() => onToggleType(type)}
-                >
-                  {type}
-                  <span style={{ color: "var(--color-muted-2)" }}>{typeCounts[type]}</span>
-                </button>
-              );
-            })}
+        <div className="list-toolbar__types">
+          <span className="topics-sortbar__label">Types</span>
+          <div className="list-toolbar__chips">
+            {writingConfig.entryTypes
+              .filter((t) => (typeCounts[t] ?? 0) > 0)
+              .map((type) => {
+                const cfg = graphConfig.nodeTypes[type as keyof typeof graphConfig.nodeTypes];
+                const active = activeTypes.includes(type);
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    className="graph-button graph-button--type"
+                    style={{ ["--swatch" as any]: cfg?.color }}
+                    aria-pressed={active}
+                    onClick={() => onToggleType(type)}
+                  >
+                    {type}
+                    <span style={{ color: "var(--color-muted-2)" }}>{typeCounts[type]}</span>
+                  </button>
+                );
+              })}
+          </div>
         </div>
       ) : (
         <span />
