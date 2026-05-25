@@ -6,6 +6,8 @@ import {
   getEntryType,
   graphConfig,
   isHubType,
+  publicationsConfig,
+  siteConfig,
   validateEntryTypes
 } from "../../src/config/resolve";
 import type { EntryTypeDefinition } from "../../src/config/types";
@@ -17,6 +19,11 @@ describe("resolved config", () => {
     expect(entryTypeOwnsFolder("sub-hub")).toBe(true);
     expect(getEntryType("paper").label).toBe("Paper");
     expect(graphConfig.nodeTypes.paper).toEqual(getEntryType("paper").graph);
+  });
+
+  it("defaults publication abstracts to popup display on publication surfaces", () => {
+    expect(publicationsConfig.abstractDisplay).toBe("popup");
+    expect(siteConfig.homepage.selectedPublications.abstractDisplay).toBe("popup");
   });
 
   it("validates invalid entry type registries", () => {

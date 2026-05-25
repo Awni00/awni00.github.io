@@ -1,13 +1,15 @@
 ---
 import { groupPublications } from "../../lib/publications/formatPublication";
+import type { PublicationAbstractDisplay } from "../../config/types";
 import type { Publication } from "../../lib/publications/types";
 import PublicationItem from "./PublicationItem.astro";
 
 type Props = {
   publications: Publication[];
+  abstractDisplay?: PublicationAbstractDisplay;
 };
 
-const { publications } = Astro.props;
+const { publications, abstractDisplay = "popup" } = Astro.props;
 const groups = groupPublications(publications);
 ---
 
@@ -16,7 +18,9 @@ const groups = groupPublications(publications);
     groups.map((group) => (
       <section class="publication-year">
         <h2>{group.label}</h2>
-        {group.publications.map((publication) => <PublicationItem publication={publication} />)}
+        {group.publications.map((publication) => (
+          <PublicationItem publication={publication} abstractDisplay={abstractDisplay} />
+        ))}
       </section>
     ))
   }

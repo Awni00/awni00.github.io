@@ -98,7 +98,10 @@ const showResearch = siteConfig.homepage.researchSummary.enabled;
               <h2 class="h2">Selected publications</h2>
               <div class="publication-list">
                 {selectedPublications.map((publication) => (
-                  <PublicationItem publication={publication} />
+                  <PublicationItem
+                    publication={publication}
+                    abstractDisplay={siteConfig.homepage.selectedPublications.abstractDisplay}
+                  />
                 ))}
               </div>
               <a class="cta" href="/publications">All publications →</a>

@@ -47,6 +47,7 @@ export type TopicsPaginationMode = "preview" | "paged";
 export type TopicsSortField = "date" | "title" | "type";
 export type TopicsSortDir = "asc" | "desc";
 export type TopicsSort = { field: TopicsSortField; dir: TopicsSortDir };
+export type PublicationAbstractDisplay = "inline" | "popup" | "hidden";
 
 export type TopicsConfig = {
   showHubSummaries: boolean;
@@ -172,6 +173,7 @@ export type SiteConfig = {
       enabled: boolean;
       field: string;
       maxItems: number;
+      abstractDisplay: PublicationAbstractDisplay;
     };
     recentWriting: {
       enabled: boolean;
@@ -204,6 +206,7 @@ export type PublicationsConfig = {
   bibtex: {
     showButtonField: string;
   };
+  abstractDisplay: PublicationAbstractDisplay;
   previews: {
     enabled: boolean;
     basePath: string;

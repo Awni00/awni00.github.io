@@ -60,6 +60,33 @@ Low-level rendering internals should stay in template-owned code. If a visual or
 feature option should be reusable by many sites, add a documented config knob to
 the template rather than editing a downstream site locally.
 
+## Publication Abstract Display
+
+Publication abstracts can render differently on the full publications page and
+the homepage selected-publications section. Each surface accepts the same modes:
+
+- `"inline"`: show the abstract text in the publication item.
+- `"popup"`: show an `Abstract` button that opens a dialog.
+- `"hidden"`: do not show abstracts.
+
+The template defaults both surfaces to popup dialogs. Downstream sites can
+override either surface in `src/site/config.ts`:
+
+```ts
+export const siteConfigOverrides = {
+  publications: {
+    abstractDisplay: "inline"
+  },
+  site: {
+    homepage: {
+      selectedPublications: {
+        abstractDisplay: "hidden"
+      }
+    }
+  }
+} satisfies SiteConfigOverrides;
+```
+
 ## Entry Type Registry
 
 Entry types are configured records, not hard-coded layout branches. Each record
