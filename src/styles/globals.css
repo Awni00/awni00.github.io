@@ -682,9 +682,9 @@ pre {
   border-color: var(--color-rule);
 }
 
-/* ── BibTeX dialog popup ────────────────────────────────────────────── */
+/* ── Publication dialog popups ──────────────────────────────────────── */
 
-.bibtex-dialog {
+.publication-dialog {
   border: 1px solid var(--color-border);
   border-radius: 8px;
   background: var(--color-bg);
@@ -700,12 +700,12 @@ pre {
   font-family: var(--font-ui);
 }
 
-.bibtex-dialog::backdrop {
+.publication-dialog::backdrop {
   background: color-mix(in srgb, var(--color-fg) 35%, transparent);
   backdrop-filter: blur(2px);
 }
 
-.bibtex-dialog__header {
+.publication-dialog__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -716,7 +716,7 @@ pre {
   border-radius: 8px 8px 0 0;
 }
 
-.bibtex-dialog__title {
+.publication-dialog__title {
   font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 500;
@@ -729,7 +729,7 @@ pre {
   flex: 1;
 }
 
-.bibtex-dialog__actions {
+.publication-dialog__actions {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -743,7 +743,7 @@ pre {
   padding: 5px 12px;
 }
 
-.bibtex-dialog__close {
+.publication-dialog__close {
   display: inline-grid;
   place-items: center;
   width: 28px;
@@ -758,9 +758,23 @@ pre {
   padding: 0;
 }
 
-.bibtex-dialog__close:hover {
+.publication-dialog__close:hover {
   color: var(--color-fg);
   border-color: var(--color-rule);
+}
+
+.publication-dialog__body {
+  padding: 18px 20px 20px;
+  max-height: calc(86vh - 60px);
+  overflow-y: auto;
+  color: var(--color-fg-soft);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.publication-dialog__body p {
+  margin: 0;
 }
 
 .bibtex-dialog__code {

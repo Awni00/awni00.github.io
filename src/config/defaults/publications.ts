@@ -10,6 +10,7 @@ export const defaultPublicationsConfig = {
   bibtex: {
     showButtonField: "bibtex_show"
   },
+  abstractDisplay: "popup",
   previews: {
     enabled: true,
     basePath: "/publications"

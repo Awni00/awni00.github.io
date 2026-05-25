@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PublicationList from "../components/publications/PublicationList.astro";
+import { publicationsConfig } from "../config";
 import { loadPublications } from "../lib/publications/parseBibtex";
 
 const publications = await loadPublications();
@@ -12,6 +13,6 @@ const publications = await loadPublications();
       <h1>Publications</h1>
       <p class="page-description">A generated publication list sourced from <code>src/data/publications.bib</code>.</p>
     </header>
-    <PublicationList publications={publications} />
+    <PublicationList publications={publications} abstractDisplay={publicationsConfig.abstractDisplay} />
   </section>
 </BaseLayout>

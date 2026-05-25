@@ -46,7 +46,8 @@ export const defaultSiteConfig = {
     selectedPublications: {
       enabled: true,
       field: "selected",
-      maxItems: 5
+      maxItems: 5,
+      abstractDisplay: "popup"
     },
     recentWriting: {
       enabled: true,
