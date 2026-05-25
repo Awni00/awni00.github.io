@@ -20,37 +20,99 @@ external:
   poster: "/publications/posters/dat-poster.pdf"
 ---
 
-![Dual Attention Transformer](/publications/disentangling-sensory-relational.png)
+## Abstract
 
-Transformers route information through self-attention. This is powerful for moving object-level features across a sequence, but it does not explicitly separate information about individual objects from information about relationships between objects.
+Relational reasoning is a central component of generally intelligent systems, enabling robust and data-efficient inductive generalization. Recent empirical evidence shows that many existing neural architectures, including Transformers, struggle with tasks requiring relational reasoning. In this work, we distinguish between two types of information: sensory information about the properties of individual objects, and relational information about the relationships between objects. While neural attention provides a powerful mechanism for controlling the flow of sensory information between objects, the Transformer lacks an explicit computational mechanism for routing and processing relational information. To address this limitation, we propose an architectural extension of the Transformer framework that we call the Dual Attention Transformer (DAT), featuring two distinct attention mechanisms: sensory attention for directing the flow of sensory information, and a novel relational attention mechanism for directing the flow of relational information. We empirically evaluate DAT on a diverse set of tasks ranging from synthetic relational benchmarks to complex real-world tasks such as language modeling and visual processing. Our results demonstrate that integrating explicit relational computational mechanisms into the Transformer architecture leads to significant performance gains in terms of data efficiency and parameter efficiency.
 
-This paper frames that limitation as a distinction between two information types:
+<Figure src="/writing/research/dual-attention/static/figs/paper_main_figure.png" alt="Sensory and Relational Attention">
+  <Fragment slot="caption"><em><strong>Figure: Sensory and Relational Attention in the Dual Attention Transformer.</strong></em> Standard self-attention retrieves sensory information $v_i$ about the attributes of individual objects while relational attention retrieves relational information $r(x, y_i)$ about the relationship between the objects in the context and the receiver. Each relation is tagged with a symbol $s_i$ which acts as an abstract variable identifying the sender. In both cases, information is aggregated according to the attention scores $\alpha_i$, which are computed by a softmax over inner products of queries and keys.</Fragment>
+</Figure>
 
-- **Sensory information:** features and attributes of individual objects.
-- **Relational information:** relationships between objects.
+## Summary of Paper
 
-Standard attention naturally routes sensory information. The Dual Attention Transformer adds an explicit relational attention mechanism and integrates it alongside ordinary self-attention.
+The Transformer architecture can be understood as an instantiation of a broader computational paradigm implementing a form of neural message-passing that iterates between two operations: 1) information retrieval (self-attention), and 2) local processing (feedforward block). To process a sequence of objects $x_1, \ldots, x_n$, this general neural message-passing paradigm has the form
 
-## Architecture
+$$
+\begin{align*}
+x_i &\gets \mathrm{Aggregate}(x_i, {\{m_{j \to i}\}}_{j=1}^n)\\
+x_i &\gets \mathrm{Process}(x_i).
+\end{align*}
+$$
 
-Dual Attention is a variant of multi-head attention with two kinds of heads:
+In the case of Transformers, the self-attention mechanism can be seen as sending messages from object $j$ to object $i$ that are encodings of the sender's features, with the message from sender $j$ to receiver $i$ given by $m_{j \to i} = \phi_v(x_j)$. These messages are then aggregated according to some selection criterion based on the receiver's features, typically given by the softmax attention scores.
 
-- **Self-attention heads** route sensory information by sending value vectors derived from the sender's object features.
-- **Relational-attention heads** route relational information by constructing messages that encode relationships between sender and receiver objects.
+We posit that there are essentially two types of information that need to be routed between objects under this general computational paradigm for sequence modeling: 1) <em>sensory</em> information describing the features and attributes of individual objects, and 2) <em>relational</em> information about the relationships between objects. The standard attention mechanism of Transformers naturally encodes the former, but does not explicitly encode the latter.
 
-The resulting block keeps the Transformer interface while changing the inductive bias. Rather than asking ordinary attention heads to implicitly discover relation-routing behavior, the architecture supplies a pathway designed for it.
+To capture routing relational information between objects, we propose a novel attention mechanism called <em>relational attention</em>. Under the message-passing lens, in relational attention, the message from object $j$ to object $i$ is $m_{j \to i} = (r(x_i, x_j), s_j)$: the relation between the sender and the receiver $r(x_i, x_j)$ tagged with the identity of the sender $s_j$. The relation $r(x_i, x_j)$ is represented by an inner product of feature maps, capturing a comparison of the two objects' features under different filters. The identity of the sender is encoded by a vector $s_j$ that we call object $j$'s "symbol"---it acts as a pointer to the object, enabling a relation-centric representation that is disentangled from sensory information.
 
-## Empirical Scope
+$$
+\begin{align*}
+\mathrm{RelationalAttention}(x, (y_1, \ldots, y_n)) &= \sum_{i=1}^{n} \alpha_i(x, \boldsymbol{y}) \left( r(x, y_i) W_r + s_i W_s \right), \\
+\alpha(x, \boldsymbol{y}) &= \mathrm{Softmax}\big(\big[\langle \phi_{q, \ell}^{\mathrm{attn}}(x), \phi_{k, \ell}^{\mathrm{attn}}(y_i)\rangle\big]_{i=1}^{n}\big) \in \Delta^n,\\
+r(x, y) &= \big(\langle \phi_{q, \ell}^{\mathrm{rel}}(x), \phi_{k, \ell}^{\mathrm{rel}}(y)\rangle\big)_{\ell \in [d_r]} \in \mathbb{R}^{d_r},\\
+(s_1, \ldots, s_n) &= \mathrm{SymbolRetriever}(\boldsymbol{y}; S_{\mathrm{lib}}).
+\end{align*}
+$$
 
-The paper evaluates the architecture across synthetic relational benchmarks and larger machine-learning settings, including sequence and vision tasks. The main empirical pattern is improved data efficiency and parameter efficiency in settings where relational structure matters.
+In relational attention, there exists two sets of query/key feature maps. $\phi_{q, \ell}^{\mathrm{attn}}, \phi_{k, \ell}^{\mathrm{attn}}$ are learned feature maps that control the selection criterion for which object(s) in the context to attend to (i.e., they are used to compute the attention scores $\alpha(x, \boldsymbol{y}) \in \Delta^n$). $\phi_{q, \ell}^{\mathrm{attn}}, \phi_{k, \ell}^{\mathrm{attn}}$ are learned feature maps that represent the relationship between pairs of objects through inner product comparisons $\langle \phi_{q, \ell}^{\mathrm{rel}}(x), \phi_{q, \ell}^{\mathrm{rel}}(y)\rangle$. The $\mathrm{SymbolRetriever}$ learns a library of symbols $S_{\mathrm{lib}}$ and assigns a symbol to each object acting as a pointer or identifier. We consider three symbol assignment mechanisms that identify objects via: their absolute position in the sequence, their position relative to the receiver, or an equivalence class over their features.
 
-The accompanying codebase provides PyTorch modules for relational attention, symbol assignment mechanisms, Dual Attention blocks, language models, sequence-to-sequence models, and vision models.
+To develop a model that supports both fundamental types of information (sensory and relational), we propose <em>dual attention</em>---a variant of multi-head attention composed of two types of attention heads. Standard self-attention heads handle routing sensory information between objects while relational attention heads handle routing relational information between objects. This gives rise to the <em>Dual Attention Transformer</em>, a versatile sequence model with both sensory and relational inductive biases.
 
-## Relationship To Earlier Work
+<Figure src="/writing/research/dual-attention/static/figs/dual_attn_alg.png" alt="An algorithmic description of Dual Attention." />
 
-This project extends the line of work around [Abstractors](/writing/research/abstractor) and [relational convolutions](/writing/research/relational-convolutions). The shared theme is to build architectural routes for relational information rather than relying on generic neural modules to discover those routes from data alone.
+## Highlights of Experiments
 
-## Takeaway
+We empirically evaluate the Dual Attention Transformer (abbreviated, <em>DAT</em> ) architecture on a range of tasks spanning different domains and modalities, with the goal of assessing the impact of relational computational mechanisms in complex real-world tasks.
 
-The Dual Attention Transformer is a proposal for making relational computation a first-class part of the Transformer block. It keeps the flexibility of attention while giving the model distinct mechanisms for sensory and relational information flow.
+### Relational Reasoning
 
+The first set of experiments evaluates the data-efficiency of <em>DAT</em> on visual relational reasoning tasks. We consider the “Relational Games” benchmark which is used for evaluating relational architectures. The learning curves depicted in the plot below show that <em>DAT</em> is significantly more data-efficient compared to a Transformer in learning relational tasks.
+
+<EmbedFrame src="/writing/research/dual-attention/static/figs/relgames_learning_curves.html" title="Relational games learning curves" height="560px" />
+
+### Mathematical Problem-Solving
+
+Mathematical problem-solving is an interesting test for neural models because it requires more than statistical pattern recognition---it requires inferring laws, axioms, and symbol manipulation rules. To probe <em>DAT</em>’s abilities in symbolic reasoning in sequence-to-sequence tasks, we evaluate it on a mathematical problem-solving benchmark. We find that <em>DAT</em> outperforms standard Transformers consistently across model sizes.
+
+<EmbedFrame src="/writing/research/dual-attention/static/figs/math_accuracy_scaling.html" title="Mathematical problem solving" height="560px" />
+
+### Visual Processing
+
+In this section, we explore how the relational computational mechanisms introduced into <em>DAT</em>---namely, relational attention---impact visual processing tasks. We evaluate a <em>ViT</em>-style <em>DAT</em> architecture (<em>ViDAT</em>), and compare it against a standard <em>ViT</em> on the CIFAR image recognition benchmarks. We find that the <em>ViDAT</em> architecture outperforms the standard <em>ViT</em> architecture across both datasets, suggesting that the relational computational mechanisms confer benefits in visual processing.
+
+| Dataset | Model | Parameter Count | # Layers | $d_{\mathrm{model}}$ | $n_h^{sa}$ | $n_h^{ra}$ | Accuracy |
+|---|---|---:|---:|---:|---:|---:|---:|
+| CIFAR-10 | *ViT* | 7.1M | 8 | 384 | 12 | 0 | 86.4 ± 0.1% |
+| CIFAR-10 | *ViDAT* | 6.0M | 8 | 384 | 6 | 6 | **89.7 ± 0.1%** |
+| CIFAR-100 | *ViT* | 7.2M | 8 | 384 | 12 | 0 | 68.8 ± 0.2% |
+| CIFAR-100 | *ViDAT* | 6.1M | 8 | 384 | 6 | 6 | **70.5 ± 0.1%** |
+
+### Language Modeling
+
+Language understanding involves processing and organizing relational information, such as syntactic structures, semantic roles, and contextual dependencies, to extract meaning from words and their connections within sentences. We evaluate the impact of the relational computational mechanisms of <em>DAT</em> in language modeling, training models upto 1.3B parameters in size. We observe improvements in data efficiency and parameter efficiency compared to standard Transformers. By [visualizing the internal relational representations of trained DAT language models](/writing/research/dual-attention/static/figs/DAT-sa8-ra8-ns1024-sh8-nkvh4-343M-Relational-Attention%20Relations-Head%20View.html), we find evidence that they encode human-interpretable semantic relations.
+
+<EmbedFrame src="/writing/research/dual-attention/static/figs/language_modeling_scaling_laws.html" title="Language modeling scaling laws" height="560px" />
+
+## Learn More
+
+- **[`dual-attention` Python Package](https://pypi.org/project/dual-attention/)**. The `dual-attention` package published on the Python Package Index implements the Dual Attention Transformer model and its associated layers and modules. The package also includes utilities for visualizing internal representations of pretrained <em>DAT</em> language models as well as loading pretrained model checkpoints from Huggingface.
+- **[Documentation](https://dual-attention-transformer.readthedocs.io/)**. The `dual-attention` documentation provides a user guide for the different components of the package.
+- **[Experiment Code](https://github.com/Awni00/abstract_transformer/)**. This is the github repository used throughout the development of the project. It includes the code used to run each set of experiments in the paper together with instructions for reproducing our experimental results.
+- **[Experimental Logs](https://wandb.ai/dual-attention/projects)**. This online portal provides full experimental logs through the W&B experiment tracking tool. For each experimental run, this includes the git commit ID associated with the version of the code that was used to run the experiment, the script and command line arguments associated with the experimental run, the hardware used for that run, and metrics tracked over the course of training.
+- **[Huggingface Collection](https://huggingface.co/collections/awni00/dual-attention-transformer-66c23425a545b0cefe4b9489)**. This is a collection of model checkpoints and apps associated with the Dual Attention Transformer. In particular, language models trained on the Fineweb dataset can be directly loaded from Huggingface through the `dual-attention` package ([see documentation](https://dual-attention-transformer.readthedocs.io/en/latest/model_classes.html#loading-pre-trained-models-from-hugging-face)). In addition, we also created apps for exploring trained <em>DAT</em> language models:
+  - [Run inference with <em>DAT</em> language models](https://huggingface.co/spaces/awni00/DAT-LM-Inference)
+  - [Visualize the internal representations of <em>DAT</em> language models](https://huggingface.co/spaces/awni00/DAT-LM-Visualization)
+
+## BibTeX
+
+```bibtex
+@misc{altabaa2024disentanglingintegratingrelationalsensory,
+      title={Disentangling and Integrating Relational and Sensory Information in Transformer Architectures},
+      author={Awni Altabaa and John Lafferty},
+      year={2024},
+      eprint={2405.16727},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2405.16727},
+}
+```
