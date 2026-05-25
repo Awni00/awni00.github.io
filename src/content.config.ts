@@ -1,7 +1,9 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
-const entryTypes = ["hub", "sub-hub", "paper", "post", "note", "teaching", "project"] as const;
+import { entryTypeIds } from "./config";
+
+const entryTypes = entryTypeIds as [string, ...string[]];
 
 const dateString = z
   .string()

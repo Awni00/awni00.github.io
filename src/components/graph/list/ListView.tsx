@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 
-import { graphConfig } from "../../../config/graph";
 import {
+  getEntryType,
   writingConfig,
   type EntryType,
   type TopicsDensity,
   type TopicsSort,
   type TopicsSortField
-} from "../../../config/writing";
+} from "../../../config";
 import type { EntryNode } from "../../../lib/graph/types";
 import DensityToggle from "../DensityToggle";
 import { DEFAULT_DIR, sortEntries } from "../topics/sort";
@@ -84,11 +84,10 @@ export default function ListView({
               <span
                 className="swatch"
                 style={{
-                  background: (graphConfig.nodeTypes[entry.type as keyof typeof graphConfig.nodeTypes]
-                    ?.color ?? "var(--color-muted)") as string
+                  background: getEntryType(entry.type).graph.color
                 }}
               />
-              <span className="lc-typelabel">{entry.type}</span>
+              <span className="lc-typelabel">{getEntryType(entry.type).label}</span>
             </span>
             <span className="lc lc-title">
               <span className="lc-titletext">{entry.title}</span>
@@ -161,7 +160,8 @@ function ListToolbar({
             {writingConfig.entryTypes
               .filter((t) => (typeCounts[t] ?? 0) > 0)
               .map((type) => {
-                const cfg = graphConfig.nodeTypes[type as keyof typeof graphConfig.nodeTypes];
+                const entryType = getEntryType(type);
+                const cfg = entryType.graph;
                 const active = activeTypes.includes(type);
                 return (
                   <button
@@ -172,7 +172,7 @@ function ListToolbar({
                     aria-pressed={active}
                     onClick={() => onToggleType(type)}
                   >
-                    {type}
+                    {entryType.label}
                     <span style={{ color: "var(--color-muted-2)" }}>{typeCounts[type]}</span>
                   </button>
                 );

@@ -7,7 +7,7 @@ import {
   type PlacementNav,
   type PlacementSpec,
   type PlacementToc
-} from "../../config/writing";
+} from "../../config";
 import type { WritingEntryLike } from "../graph/types";
 
 /**

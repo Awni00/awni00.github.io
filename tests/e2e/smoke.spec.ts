@@ -10,14 +10,13 @@ test("main static routes render", async ({ page }) => {
 });
 
 test("writing browser supports URL state and preview", async ({ page }) => {
-  await page.goto(
-    "/writing?focus=machine-learning-theory&selected=machine-learning-theory%2Fbias-variance-refresher&depth=2&mode=filter"
-  );
-  await expect(page.getByRole("button", { name: "Machine Learning Theory" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Bias and Variance: an Illustrated Refresher" })).toBeVisible();
+  await page.goto("/writing?view=map");
+  await expect(page.getByRole("tab", { name: "map" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: /Machine Learning Theory/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Education and Teaching" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Open Entry" })).toHaveAttribute(
     "href",
-    "/writing/machine-learning-theory/bias-variance-refresher"
+    "/writing/education-teaching"
   );
 });
 

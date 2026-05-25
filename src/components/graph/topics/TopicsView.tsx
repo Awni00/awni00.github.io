@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import { writingConfig, type TopicsDensity } from "../../../config/writing";
+import { writingConfig, type TopicsDensity } from "../../../config";
 import type { EntryNode, GraphIndex } from "../../../lib/graph/types";
 import HubSection from "./HubSection";
 

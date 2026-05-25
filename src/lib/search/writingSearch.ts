@@ -1,4 +1,4 @@
-import type { EntryType, EntryNode, WritingSearchDocument } from "../graph/types";
+import type { EntryNode, EntryType, WritingSearchDocument } from "../graph/types";
 
 export function toSearchDocuments(nodes: EntryNode[]): WritingSearchDocument[] {
   return nodes.map((node) => ({

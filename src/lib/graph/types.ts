@@ -1,4 +1,4 @@
-import type { EntryType } from "../../config/writing";
+import type { EntryType } from "../../config";
 
 export type { EntryType };
 

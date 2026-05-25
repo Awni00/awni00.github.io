@@ -3,7 +3,7 @@ import path from "node:path";
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 
-import { writingConfig, type EntryType } from "../src/config/writing";
+import { entryTypeOwnsFolder, writingConfig, type EntryType } from "../src/config";
 import { canonicalizeWritingPath } from "../src/lib/graph/resolveLinks";
 
 const args = parseArgs(process.argv.slice(2));
@@ -16,7 +16,7 @@ if (!writingConfig.entryTypes.includes(type)) {
 
 const entryPath = canonicalizeWritingPath(args.path ?? args.slug ?? title);
 if (!entryPath) throw new Error("Entry path must not be empty.");
-const ownsFolder = type === "hub" || type === "sub-hub";
+const ownsFolder = entryTypeOwnsFolder(type);
 const filePath = path.join("src/content/writing", ownsFolder ? entryPath : `${entryPath}.mdx`);
 const finalPath = ownsFolder ? path.join(filePath, "index.mdx") : filePath;
 await assertNoDuplicatePath(entryPath);

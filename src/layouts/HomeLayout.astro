@@ -7,7 +7,7 @@ import type { GraphIndex, EntryNode } from "../lib/graph/types";
 import type { Publication } from "../lib/publications/types";
 import WritingPreview from "../components/graph/WritingPreview";
 import PublicationItem from "../components/publications/PublicationItem.astro";
-import { siteConfig } from "../config/site";
+import { getEntryType, siteConfig } from "../config";
 
 type NewsItem = {
   date: string;
@@ -135,7 +135,9 @@ const showResearch = siteConfig.homepage.researchSummary.enabled;
           {recentWriting.map((entry) => (
             <li class="recent-card">
               <div class="recent-meta">
-                <span class={`pill pill--${entry.type}`}>{entry.type}</span>
+                <span class="pill" style={`--pill-color: ${getEntryType(entry.type).graph.color}`}>
+                  {getEntryType(entry.type).label}
+                </span>
                 <span class="recent-date">{entry.date}</span>
               </div>
               <a class="recent-title" href={entry.url} style="text-decoration: none; color: inherit; display: block;">

@@ -2,9 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 
-import { publicationsConfig } from "../src/config/publications";
-import { siteConfig } from "../src/config/site";
-import { writingConfig, type EntryType } from "../src/config/writing";
+import { publicationsConfig, siteConfig, writingConfig, type EntryType } from "../src/config";
 import { buildGraphIndex, graphWarningSeverity } from "../src/lib/graph/buildGraph";
 import type { WritingEntryLike } from "../src/lib/graph/types";
 import { parseBibtex } from "../src/lib/publications/parseBibtex";

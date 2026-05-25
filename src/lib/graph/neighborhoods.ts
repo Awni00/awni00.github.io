@@ -1,3 +1,4 @@
+import { isHubType } from "../../config";
 import type { GraphEdge, GraphIndex } from "./types";
 
 export function adjacentIds(edges: GraphEdge[], id: string): string[] {
@@ -43,6 +44,6 @@ export function graphNeighborhood(index: GraphIndex, id: string, depth: 1 | 2 = 
     edges,
     backlinks,
     outgoing,
-    hubs: nodes.filter((node) => node.type === "hub")
+    hubs: nodes.filter((node) => isHubType(node.type))
   };
 }

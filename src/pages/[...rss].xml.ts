@@ -1,7 +1,6 @@
 import { getCollection } from "astro:content";
 
-import { siteConfig } from "../config/site";
-import { writingConfig } from "../config/writing";
+import { entryTypeIncludedInRss, siteConfig, writingConfig } from "../config";
 import { buildGraphIndex } from "../lib/graph/buildGraph";
 import { rssRoute, stripSlashes } from "../lib/routes/paths";
 
@@ -18,8 +17,7 @@ export async function GET() {
     return (
       data.draft !== true &&
       Boolean(data.date) &&
-      (writingConfig.rss.includeTypes as readonly string[]).includes(data.type) &&
-      !(writingConfig.rss.excludeTypes as readonly string[]).includes(data.type)
+      entryTypeIncludedInRss(data.type)
     );
   });
   const graph = buildGraphIndex(entries, { collectWarnings: false }).index;

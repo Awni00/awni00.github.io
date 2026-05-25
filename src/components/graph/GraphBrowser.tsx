@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { graphConfig } from "../../config/graph";
-import { writingConfig, type EntryType } from "../../config/writing";
+import {
+  entryTypeDefinitions,
+  getEntryType,
+  graphConfig,
+  writingConfig,
+  type EntryType
+} from "../../config";
 import { graphNeighborhood, neighborhoodIds } from "../../lib/graph/neighborhoods";
 import type { EntryNode, GraphIndex, WritingBrowserState } from "../../lib/graph/types";
 import { searchWriting, toSearchDocuments } from "../../lib/search/writingSearch";
@@ -187,7 +192,8 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
               <label>Types</label>
               <div className="graph-button-row">
                 {writingConfig.entryTypes.map((type) => {
-                  const cfg = graphConfig.nodeTypes[type as keyof typeof graphConfig.nodeTypes];
+                  const entryType = getEntryType(type);
+                  const cfg = entryType.graph;
                   const count = typeCounts[type] ?? 0;
                   return (
                     <button
@@ -198,7 +204,7 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
                       aria-pressed={(state.types ?? []).includes(type)}
                       onClick={() => toggleType(type)}
                     >
-                      {type}
+                      {entryType.label}
                       {count > 0 && <span style={{ color: "var(--color-muted-2)" }}>{count}</span>}
                     </button>
                   );
@@ -258,15 +264,15 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
                 onSelect={(id) => patch({ selected: id })}
               />
               <div className="graph-legend" aria-hidden="true">
-                {(["hub", "sub-hub", "paper", "note", "teaching", "project"] as const).map((type) => {
-                  const cfg = graphConfig.nodeTypes[type];
+                {entryTypeDefinitions.map((entryType) => {
+                  const cfg = entryType.graph;
                   return (
-                    <span key={type}>
+                    <span key={entryType.id}>
                       <NodeIcon
                         shape={cfg.shape as NodeShape}
                         color={cfg.color as string}
                       />
-                      {type}
+                      {entryType.label}
                     </span>
                   );
                 })}
@@ -296,10 +302,13 @@ function Preview({ node, graph }: { node: EntryNode; graph: GraphIndex }) {
   const backlinks = graph.backlinks[node.id] ?? [];
   const outgoing = graph.outgoing[node.id] ?? [];
   const byId = new Map(graph.nodes.map((item) => [item.id, item]));
+  const entryType = getEntryType(node.type);
   return (
     <>
       <div className="preview-header">
-        <span className={`pill pill--${node.type}`}>{node.type}</span>
+        <span className="pill" style={{ ["--pill-color" as any]: entryType.graph.color }}>
+          {entryType.label}
+        </span>
         {node.date && <span className="preview-date">{node.date}</span>}
       </div>
       <h2>{node.title}</h2>

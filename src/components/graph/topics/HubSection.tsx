@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import type { TopicsConfig, TopicsDensity, TopicsSort } from "../../../config/writing";
+import { getEntryType, isHubType, type TopicsConfig, type TopicsDensity, type TopicsSort } from "../../../config";
 import type { EntryNode, GraphIndex } from "../../../lib/graph/types";
 import PagedList from "./PagedList";
 import PreviewList from "./PreviewList";
@@ -42,7 +42,7 @@ export default function HubSection({
     const entries: EntryNode[] = [];
     for (const id of ids) {
       const node = nodeById.get(id);
-      if (node && node.type !== "hub") entries.push(node);
+      if (node && !isHubType(node.type)) entries.push(node);
     }
     return sortEntries(entries, sort);
   }, [hub, graph, visibleEntries, nodeById, sort]);
@@ -55,7 +55,7 @@ export default function HubSection({
     <section className="topics-hub">
       <header className="topics-hub__head">
         <div className="topics-hub__heading">
-          <span className="topics-hub__kicker">Hub</span>
+          <span className="topics-hub__kicker">{getEntryType(hub.type).label}</span>
           <a className="topics-hub__title" href={hub.url}>
             {hub.title}
           </a>

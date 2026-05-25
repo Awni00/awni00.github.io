@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { graphConfig } from "../../config/graph";
+import { getEntryType, graphConfig, isHubType } from "../../config";
 import type { GraphIndex } from "../../lib/graph/types";
 
 type HubLayout = "circle" | "row" | "force";
@@ -98,7 +98,7 @@ export default function GraphCanvas({
   const graphData = useMemo(() => {
     const w = width ?? 800;
     const h = height;
-    const hubs = graph.nodes.filter((node) => node.type === "hub");
+    const hubs = graph.nodes.filter((node) => isHubType(node.type));
     const pinned: Record<string, { fx: number; fy: number; side: "top" | "bottom" }> = {};
 
     if (hubLayout === "circle" && hubs.length > 0) {
@@ -155,7 +155,7 @@ export default function GraphCanvas({
     const fg = fgRef.current;
     const charge = fg.d3Force?.("charge");
     if (charge) {
-      charge.strength((node: any) => (node.type === "hub" ? -180 : -45));
+      charge.strength((node: any) => (isHubType(node.type) ? -180 : -45));
       charge.distanceMax?.(280);
     }
     const link = fg.d3Force?.("link");
@@ -163,7 +163,7 @@ export default function GraphCanvas({
       link.distance((edge: any) => {
         const s = typeof edge.source === "object" ? edge.source.type : undefined;
         const t = typeof edge.target === "object" ? edge.target.type : undefined;
-        return s === "hub" || t === "hub" ? 60 : 35;
+        return isHubType(s) || isHubType(t) ? 60 : 35;
       });
     }
     fg.d3ReheatSimulation?.();
@@ -196,7 +196,7 @@ export default function GraphCanvas({
           // d3-force uses `nodeRelSize * sqrt(nodeVal)` as the collision
           // radius (and the auto-size). Giving hubs a larger val widens the
           // empty bubble around each hub so its satellites don't crowd it.
-          nodeVal={(node: any) => (node.type === "hub" ? 6 : 1)}
+          nodeVal={(node: any) => (isHubType(node.type) ? 6 : 1)}
           nodeLabel={(node: any) => node.title}
           cooldownTicks={80}
           linkDirectionalParticles={0}
@@ -274,7 +274,8 @@ function drawNode(
   globalScale: number,
   state: { selected: boolean; dimmed: boolean; labelMode: LabelMode; selectedStyle: SelectedStyle }
 ) {
-  const radius = node.type === "hub" ? 6 : node.type === "paper" ? 5 : 4;
+  const meta = getEntryType(node.type).graph;
+  const radius = nodePaintedRadius(node);
   const color = nodeColor(node.type);
   ctx.save();
   ctx.globalAlpha = state.dimmed ? 0.18 : 1;
@@ -288,12 +289,12 @@ function drawNode(
     state.selected && state.selectedStyle === "outline" ? cssVar("--color-fg") : cssVar("--color-bg");
   ctx.lineWidth = state.selected && state.selectedStyle === "outline" ? 2.5 : 1;
 
-  if (node.type === "hub" || node.type === "sub-hub") {
+  if (meta.shape === "square") {
     ctx.beginPath();
     ctx.rect(node.x - radius, node.y - radius, radius * 2, radius * 2);
     ctx.fill();
     ctx.stroke();
-  } else if (node.type === "teaching") {
+  } else if (meta.shape === "diamond") {
     ctx.beginPath();
     ctx.moveTo(node.x, node.y - radius);
     ctx.lineTo(node.x + radius, node.y);
@@ -302,7 +303,7 @@ function drawNode(
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-  } else if (node.type === "project") {
+  } else if (meta.shape === "hexagon") {
     polygon(ctx, node.x, node.y, radius + 1, 6);
     ctx.fill();
     ctx.stroke();
@@ -376,22 +377,15 @@ function polygon(ctx: CanvasRenderingContext2D, x: number, y: number, radius: nu
 }
 
 function nodeColor(type: string): string {
-  const map: Record<string, string> = {
-    hub: "--graph-hub",
-    "sub-hub": "--graph-sub-hub",
-    paper: "--graph-paper",
-    post: "--graph-post",
-    note: "--graph-note",
-    teaching: "--graph-teaching",
-    project: "--graph-project"
-  };
-  return cssVar(map[type] ?? "--graph-note");
+  const color = getEntryType(type).graph.color;
+  const cssVariable = color.match(/^var\((--[^),\s]+)/)?.[1];
+  return cssVariable ? cssVar(cssVariable) : color;
 }
 
 // Mirrors the painted radius used inside `drawNode` so arrowhead tips land
 // at the visible node edge instead of its d3 collision radius.
 function nodePaintedRadius(node: any): number {
-  return node?.type === "hub" ? 6 : node?.type === "paper" ? 5 : 4;
+  return Math.max(3, getEntryType(node?.type).graph.size / 2);
 }
 
 function cssVar(name: string): string {

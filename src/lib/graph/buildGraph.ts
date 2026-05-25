@@ -1,4 +1,4 @@
-import { writingConfig } from "../../config/writing";
+import { isHubType, writingConfig } from "../../config";
 import {
   aliasKey,
   canonicalizeWritingPath,
@@ -129,7 +129,7 @@ export function buildGraphIndex<TEntry extends WritingEntryLike>(
       edges,
       backlinks,
       outgoing,
-      hubs: nodes.filter((node) => node.type === "hub")
+      hubs: nodes.filter((node) => isHubType(node.type))
     },
     warnings: options.collectWarnings === false ? [] : warnings
   };

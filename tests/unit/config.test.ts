@@ -1,0 +1,81 @@
+import { describe, expect, it } from "vitest";
+
+import {
+  entryTypeDefinitions,
+  entryTypeOwnsFolder,
+  getEntryType,
+  graphConfig,
+  isHubType,
+  validateEntryTypes
+} from "../../src/config/resolve";
+import type { EntryTypeDefinition } from "../../src/config/types";
+
+describe("resolved config", () => {
+  it("derives graph metadata from the entry type registry", () => {
+    expect(entryTypeDefinitions.map((entryType) => entryType.id)).toContain("hub");
+    expect(isHubType("hub")).toBe(true);
+    expect(entryTypeOwnsFolder("sub-hub")).toBe(true);
+    expect(getEntryType("paper").label).toBe("Paper");
+    expect(graphConfig.nodeTypes.paper).toEqual(getEntryType("paper").graph);
+  });
+
+  it("validates invalid entry type registries", () => {
+    expect(() => validateEntryTypes([])).toThrow(/At least one/);
+    expect(() =>
+      validateEntryTypes([
+        validType("essay"),
+        validType("essay")
+      ])
+    ).toThrow(/Duplicate/);
+    expect(() =>
+      validateEntryTypes([
+        {
+          ...validType("essay"),
+          graph: undefined
+        } as unknown as EntryTypeDefinition
+      ])
+    ).toThrow(/graph metadata/);
+  });
+
+  it("accepts custom entry type labels and graph styling", () => {
+    const [entryType] = validateEntryTypes([
+      {
+        id: "essay",
+        label: "Essay",
+        role: "entry",
+        graph: {
+          shape: "diamond",
+          size: 8,
+          color: "#123456",
+          labelVisibility: "always"
+        }
+      }
+    ]);
+
+    expect(entryType).toMatchObject({
+      id: "essay",
+      label: "Essay",
+      ownsFolder: false,
+      includeInRss: true,
+      includeInRecent: true,
+      graph: {
+        shape: "diamond",
+        color: "#123456"
+      }
+    });
+  });
+});
+
+function validType(id: string): EntryTypeDefinition {
+  return {
+    id,
+    label: id,
+    role: "entry",
+    graph: {
+      shape: "circle",
+      size: 8,
+      color: "var(--graph-note)",
+      labelVisibility: "hover"
+    }
+  };
+}

@@ -903,48 +903,8 @@ pre {
   padding: 1px 7px;
   border-radius: 3px;
   background: var(--color-bg-soft-2);
-  color: var(--color-muted);
+  color: var(--pill-color, var(--color-muted));
   border: 0.5px solid var(--color-border);
-}
-
-.pill--paper {
-  color: var(--color-accent);
-  border-color: var(--color-accent-line);
-  background: var(--color-accent-soft);
-}
-
-.pill--note {
-  color: #525866;
-}
-
-.pill--post {
-  color: #404750;
-}
-
-.pill--hub {
-  color: var(--color-fg);
-}
-
-.pill--teaching {
-  color: var(--graph-teaching);
-  background: #ecf6ee;
-  border-color: #cee5d3;
-}
-
-.pill--project {
-  color: var(--graph-project);
-  background: #f4ecfa;
-  border-color: #e0cef0;
-}
-
-[data-theme="dark"] .pill--teaching {
-  background: #102a18;
-  border-color: #1f4530;
-}
-
-[data-theme="dark"] .pill--project {
-  background: #25153a;
-  border-color: #3a2452;
 }
 
 /* ── Buttons ────────────────────────────────────────────────────────── */

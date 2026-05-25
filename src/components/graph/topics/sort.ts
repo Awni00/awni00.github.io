@@ -4,7 +4,7 @@ import {
   type TopicsSort,
   type TopicsSortDir,
   type TopicsSortField
-} from "../../../config/writing";
+} from "../../../config";
 import type { EntryNode } from "../../../lib/graph/types";
 
 const ARTICLE_RX = /^(a|an|the)\s+/i;

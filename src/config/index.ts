@@ -1,5 +1,46 @@
-export { graphConfig } from "./graph";
-export { publicationsConfig } from "./publications";
-export { siteConfig } from "./site";
-export { themeConfig } from "./theme";
-export { writingConfig } from "./writing";
+export {
+  entryTypeDefinitions,
+  entryTypeIds,
+  entryTypeIncludedInRecent,
+  entryTypeIncludedInRss,
+  entryTypeOwnsFolder,
+  getEntryType,
+  getEntryTypeLabel,
+  graphConfig,
+  isHubType,
+  isSectionType,
+  publicationsConfig,
+  siteConfig,
+  themeConfig,
+  writingConfig
+} from "./resolve";
+export type {
+  ArticleWidth,
+  AsidePlacement,
+  DeepPartial,
+  EntryType,
+  EntryTypeArticleConfig,
+  EntryTypeDefinition,
+  EntryTypeGraphConfig,
+  EntryTypeRole,
+  GraphConfig,
+  GraphConfigBase,
+  GraphNodeShape,
+  LabelVisibility,
+  ListConfig,
+  PlacementGraph,
+  PlacementNav,
+  PlacementSpec,
+  PlacementToc,
+  PublicationsConfig,
+  SiteConfig,
+  SiteConfigOverrides,
+  ThemeConfig,
+  TopicsConfig,
+  TopicsDensity,
+  TopicsPaginationMode,
+  TopicsSort,
+  TopicsSortDir,
+  TopicsSortField,
+  WritingConfig
+} from "./types";
