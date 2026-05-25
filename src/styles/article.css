@@ -699,6 +699,7 @@
 
 .math-block {
   border: 1px solid var(--color-border);
+  border-left: 3px solid var(--math-block-accent, var(--color-border));
   border-radius: 5px;
   padding: 14px 18px;
   background: var(--color-bg);
@@ -719,12 +720,19 @@
   margin: 32px 0;
 }
 
-.article-figure img {
+.article-figure img,
+.article-figure__body img {
   display: block;
   width: 100%;
   border: 1px solid var(--color-border);
   border-radius: 5px;
   background: var(--color-bg-soft);
+}
+
+.article-figure__body {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
 }
 
 .article-figure figcaption {
@@ -733,6 +741,48 @@
   font-size: 13px;
   line-height: 1.55;
   color: var(--color-muted);
+}
+
+.embed-frame__frame {
+  display: block;
+  width: 100%;
+  height: var(--embed-frame-height);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background: var(--color-bg);
+}
+
+.embed-frame figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.image-comparison {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background: var(--color-bg-soft);
+}
+
+.image-comparison img {
+  border: 0;
+  border-radius: 0;
+}
+
+.image-comparison__labels {
+  position: absolute;
+  inset: auto 10px 10px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 0.5);
 }
 
 [data-theme="dark"] .invert-in-dark {

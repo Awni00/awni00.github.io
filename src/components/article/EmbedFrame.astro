@@ -1,0 +1,26 @@
+---
+type Props = {
+  src: string;
+  title?: string;
+  caption?: string;
+  height?: string;
+  linkLabel?: string;
+};
+
+const {
+  src,
+  title = "Embedded figure",
+  caption,
+  height = "520px",
+  linkLabel = "Open embedded figure"
+} = Astro.props;
+const style = `--embed-frame-height: ${height};`;
+---
+
+<figure class="article-figure embed-frame" style={style}>
+  <iframe class="embed-frame__frame" src={src} title={title} loading="lazy"></iframe>
+  <figcaption>
+    {caption && <span>{caption}</span>}
+    <a href={src}>{linkLabel}</a>
+  </figcaption>
+</figure>

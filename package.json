@@ -30,6 +30,7 @@
     "js-yaml": "^4.1.0",
     "katex": "^0.16.22",
     "react": "^19.1.0",
+    "react-compare-slider": "^4.0.0",
     "react-dom": "^19.1.0",
     "react-force-graph-2d": "^1.27.1",
     "rehype-autolink-headings": "^7.1.0",
