@@ -1,10 +1,58 @@
 import type { SiteConfigOverrides } from "../config/types";
 
-/**
- * Site-owned configuration overrides.
- *
- * Downstream websites should edit this file instead of changing template
- * defaults in `src/config/defaults/`. Objects merge into the defaults;
- * arrays, including `nav` and `entryTypes`, replace the default array.
- */
-export const siteConfigOverrides: SiteConfigOverrides = {};
+export const siteConfigOverrides: SiteConfigOverrides = {
+  site: {
+    title: "Awni Altabaa",
+    name: "Awni Altabaa",
+    role: "PhD Student",
+    affiliation: "Yale Statistics & Data Science",
+    description:
+      "Academic website for Awni Altabaa, a PhD student studying the foundations of machine intelligence.",
+    url: "https://awni.xyz",
+    profileImage: "/profile.jpg",
+    links: {
+      email: "mailto:awni.altabaa@yale.edu",
+      cv: "/cv.pdf",
+      github: "https://github.com/awni00",
+      scholar: "https://scholar.google.com/citations?user=SQ4FERQAAAAJ",
+      x: "https://x.com/awni_altabaa",
+      linkedin: "https://www.linkedin.com/in/awni-altabaa"
+    },
+    nav: [
+      { label: "Home", href: "/" },
+      { label: "Writing", href: "/writing" },
+      { label: "Research", href: "/writing/research" },
+      { label: "Publications", href: "/publications" },
+      { label: "Teaching", href: "/teaching" },
+      { label: "CV", href: "/cv.pdf" }
+    ],
+    homepage: {
+      researchSummary: { enabled: true, source: "home" },
+      writingPreview: {
+        title: "Research Writing",
+        description:
+          "Paper pages and research notes organized as a linked map of ideas and projects.",
+        clickTarget: "/writing/research",
+        previewHeight: 380
+      },
+      selectedPublications: {
+        maxItems: 6
+      },
+      recentWriting: {
+        maxItems: 4
+      },
+      news: {
+        enabled: false
+      }
+    }
+  },
+  publications: {
+    authorHighlight: ["Awni Altabaa", "Altabaa, Awni"],
+    previews: {
+      basePath: "/publications"
+    }
+  },
+  theme: {
+    defaultMode: "system"
+  }
+};
