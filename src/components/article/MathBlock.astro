@@ -1,12 +1,14 @@
 ---
 type Props = {
   title?: string;
+  color?: string;
 };
 
-const { title } = Astro.props;
+const { title, color } = Astro.props;
+const style = color ? `--math-block-accent: ${color};` : undefined;
 ---
 
-<section class="math-block">
+<section class="math-block" style={style}>
   {title && <p class="math-block__title">{title}</p>}
   <slot />
 </section>

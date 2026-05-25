@@ -1,14 +1,38 @@
 ---
 type Props = {
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
   caption?: string;
+  class?: string;
 };
 
-const { src, alt, caption } = Astro.props;
+const { src, alt = "", caption, class: className } = Astro.props;
+const hasFigureSlot = Astro.slots.has("figure");
+const hasCaptionSlot = Astro.slots.has("caption");
+const hasDefaultSlot = Astro.slots.has("default");
 ---
 
-<figure class="article-figure">
-  <img src={src} alt={alt} loading="lazy" />
-  {caption && <figcaption>{caption}</figcaption>}
+<figure class:list={["article-figure", className]}>
+  {
+    hasFigureSlot ? (
+      <div class="article-figure__body">
+        <slot name="figure" />
+      </div>
+    ) : src ? (
+      <img src={src} alt={alt} loading="lazy" />
+    ) : hasDefaultSlot ? (
+      <div class="article-figure__body">
+        <slot />
+      </div>
+    ) : null
+  }
+  {
+    hasCaptionSlot ? (
+      <figcaption>
+        <slot name="caption" />
+      </figcaption>
+    ) : (
+      caption && <figcaption>{caption}</figcaption>
+    )
+  }
 </figure>
