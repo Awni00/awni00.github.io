@@ -17,22 +17,22 @@ test("main static routes render", async ({ page }) => {
 test("publication abstracts open as configured popups", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".publication-abstract")).toHaveCount(0);
-  await page.locator('[data-dialog-open="abstract-example2026biasvariance"]').click();
+  await page.locator('[data-dialog-open="abstract-altabaa2025cotinformation"]').click();
   const homeDialog = page.getByRole("dialog", {
-    name: "Abstract for Bias and Variance: an Illustrated Refresher"
+    name: "Abstract for CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision"
   });
   await expect(homeDialog).toBeVisible();
-  await expect(homeDialog).toContainText("A demo publication for the academic-graph template");
+  await expect(homeDialog).toContainText("Learning complex functions");
   await homeDialog.getByRole("button", { name: "Close" }).click();
 
   await page.goto("/publications");
   await expect(page.locator(".publication-abstract")).toHaveCount(0);
-  await page.locator('[data-dialog-open="abstract-example2026biasvariance"]').click();
+  await page.locator('[data-dialog-open="abstract-altabaa2025cotinformation"]').click();
   const publicationsDialog = page.getByRole("dialog", {
-    name: "Abstract for Bias and Variance: an Illustrated Refresher"
+    name: "Abstract for CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision"
   });
   await expect(publicationsDialog).toBeVisible();
-  await expect(publicationsDialog).toContainText("A demo publication for the academic-graph template");
+  await expect(publicationsDialog).toContainText("Learning complex functions");
 });
 
 test("writing browser supports URL state and preview", async ({ page }) => {
