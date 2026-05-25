@@ -856,6 +856,10 @@
   margin: 22px 0;
 }
 
+.two-columns__column {
+  min-width: 0;
+}
+
 .comparison__panel {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
