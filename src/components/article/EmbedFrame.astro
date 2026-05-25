@@ -15,12 +15,21 @@ const {
   linkLabel = "Open embedded figure"
 } = Astro.props;
 const style = `--embed-frame-height: ${height};`;
+const hasCaptionSlot = Astro.slots.has("caption");
 ---
 
 <figure class="article-figure embed-frame" style={style}>
   <iframe class="embed-frame__frame" src={src} title={title} loading="lazy"></iframe>
   <figcaption>
-    {caption && <span>{caption}</span>}
+    {
+      hasCaptionSlot ? (
+        <span>
+          <slot name="caption" />
+        </span>
+      ) : (
+        caption && <span>{caption}</span>
+      )
+    }
     <a href={src}>{linkLabel}</a>
   </figcaption>
 </figure>
