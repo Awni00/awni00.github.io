@@ -1,0 +1,48 @@
+---
+title: "Learning Hierarchical Relational Representations through Relational Convolutions"
+type: "paper"
+aliases:
+  - "Relational Convolutional Networks"
+  - "Relational Convolutions"
+date: "2024-01-01"
+updated: "2026-05-24"
+summary: "Relational convolutional networks learn higher-order relational features by convolving graphlet filters against subsets of objects."
+tags: ["relational reasoning", "neural architectures", "representation learning", "inductive bias"]
+links: ["research", "./abstractor", "./dual-attention"]
+authors: ["Awni Altabaa", "John Lafferty"]
+featured: true
+external:
+  arxiv: "https://arxiv.org/abs/2310.03240"
+  code: "https://github.com/awni00/relational-convolutions"
+  website: "https://openreview.net/forum?id=vNZlnznmV2"
+---
+
+![Relational convolutional networks](/publications/relconv-genai.png)
+
+Many learning problems require representing relations among groups of objects rather than features of isolated objects. Relational convolutional networks are designed for that setting: they learn hierarchical relational representations through a composition of modules that detect relational patterns.
+
+## Relational Graphlet Filters
+
+The key operation is a relational convolution. Instead of sliding a spatial filter over neighboring pixels, the model convolves learnable graphlet filters against subsets of objects. A graphlet filter acts as a template for a relational pattern among a group of objects.
+
+Composing these operations yields a hierarchy:
+
+- lower layers detect simpler relational patterns,
+- higher layers compose those patterns into more complex higher-order relations.
+
+This gives the architecture an inductive bias for relational structure without requiring a fully symbolic representation.
+
+## Why Hierarchy Matters
+
+Relational tasks often have nested structure. A model may need to detect relations between objects, relations between groups, or patterns that only emerge after composing lower-level relations. The paper studies how a neural architecture can make that hierarchy explicit.
+
+Experiments include relational benchmarks where hierarchical structure is central, including relational games and set-like tasks.
+
+## Connection To The Research Hub
+
+This work is an early piece in a broader line of architectural approaches to relational reasoning. [Abstractors](/writing/research/abstractor) use relational cross-attention, while [Dual Attention Transformers](/writing/research/dual-attention) integrate sensory and relational attention inside a Transformer block. Relational convolutions approach the problem through learnable graphlet-style filters and composition.
+
+## Takeaway
+
+Relational convolutions provide a neural primitive for learning relational features over groups of objects. The architectural bias is useful when the relevant representation is not just object-level features, but higher-order structure among those objects.
+

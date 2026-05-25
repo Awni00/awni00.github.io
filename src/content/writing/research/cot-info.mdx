@@ -1,0 +1,67 @@
+---
+title: "CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision"
+type: "paper"
+aliases:
+  - "CoT Information"
+  - "Chain-of-Thought Information"
+date: "2025-05-20"
+updated: "2026-05-24"
+summary: "A statistical learning theory for chain-of-thought supervision, centered on a CoT information measure that governs sample complexity."
+tags: ["chain-of-thought", "statistical learning theory", "sample complexity", "large language models"]
+links: ["research", "./algorithmic-generalization-transformer-architectures"]
+authors: ["Awni Altabaa", "Omar Montasser", "John Lafferty"]
+featured: true
+external:
+  arxiv: "https://arxiv.org/abs/2505.15927"
+  slides: "/publications/slides/cotinfo-slides.pdf"
+  poster: "/publications/posters/cotinfo-poster.pdf"
+---
+
+![CoT information](/publications/cot-information.png)
+
+Chain-of-thought supervision gives a learner more than input-output examples. It provides intermediate reasoning traces, and those traces can expose distinctions between hypotheses that would remain hidden under ordinary supervision.
+
+This paper develops a statistical theory for that advantage. The central question is not whether CoT traces expand what a model can represent, but whether they reduce the number of samples needed to learn a target predictor.
+
+## The Learning Problem
+
+Classical supervised learning observes examples $(x_i, y_i)$ and seeks a predictor with small end-to-end error. In a CoT-supervised setting, each sample also includes a trace $z_i$, so training examples have the form $(x_i, y_i, z_i)$.
+
+That creates an asymmetry:
+
+- **Training objective:** match both the final output and the reasoning trace.
+- **Test objective:** predict the final output correctly.
+
+A direct CoT-risk bound is not enough. It can recover standard rates, but it does not explain when traces carry more information per sample than labels alone.
+
+## CoT Information
+
+The paper introduces a CoT information measure that quantifies how much the trace helps distinguish bad hypotheses from the target. Informally, if every hypothesis with end-to-end error above $\epsilon$ is also likely to disagree with the target trace, then each CoT sample rules out hypotheses quickly.
+
+For finite hypothesis classes, the resulting sample complexity scales like
+
+$$
+\frac{\log |\mathcal{H}| + \log(1 / \delta)}{\operatorname{CoTInfo}(\epsilon)} .
+$$
+
+This replaces the usual $1 / \epsilon$ denominator with $1 / \operatorname{CoTInfo}(\epsilon)$. When CoT information is much larger than $\epsilon$, CoT supervision yields faster learning rates.
+
+## Upper And Lower Bounds
+
+The upper bound follows from a CoT consistency rule: keep hypotheses that match all observed outputs and traces, then evaluate them by end-to-end error. If traces are informative, a small sample eliminates end-to-end-bad hypotheses.
+
+The paper also proves lower bounds using information-theoretic arguments. These show that CoT information is not just an artifact of the proof technique; it is the relevant quantity controlling the statistical difficulty of CoT-supervised learning.
+
+## Simulations
+
+Controlled experiments validate the theory in two settings:
+
+- **Linear autoregressive models:** CoT traces reveal intermediate token trajectories, producing sample-complexity gains that match the CoT information prediction up to constants.
+- **Regular languages:** DFA state trajectories can be far more informative than final accept/reject labels, producing orders-of-magnitude gains when traces expose the right internal computation.
+
+These examples also emphasize that trace quality matters. CoT supervision is useful when traces are aligned with the hypothesis class and with the computation needed at test time.
+
+## Takeaway
+
+CoT traces can make learning statistically easier, but the advantage is not automatic. It depends on whether the trace exposes discriminative information about the target computation. CoT information makes that dependence explicit and gives a sample-complexity scale for comparing trace formats, supervision schemes, and reasoning systems.
+

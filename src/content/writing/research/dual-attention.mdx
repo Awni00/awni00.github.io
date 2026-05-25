@@ -1,0 +1,56 @@
+---
+title: "Disentangling and Integrating Relational and Sensory Information in Transformer Architectures"
+type: "paper"
+aliases:
+  - "Dual Attention Transformer"
+  - "DAT"
+  - "Dual Attention"
+date: "2025-07-14"
+updated: "2026-05-24"
+summary: "Dual Attention augments Transformers with separate mechanisms for routing sensory and relational information."
+tags: ["transformers", "relational reasoning", "attention", "representation learning"]
+links: ["research", "./abstractor", "./relational-convolutions", "./algorithmic-generalization-transformer-architectures"]
+authors: ["Awni Altabaa", "John Lafferty"]
+featured: true
+external:
+  arxiv: "https://arxiv.org/abs/2405.16727"
+  code: "https://github.com/awni00/dual-attention"
+  website: "https://icml.cc/virtual/2025/poster/44191"
+  slides: "/publications/slides/dat-slides.pdf"
+  poster: "/publications/posters/dat-poster.pdf"
+---
+
+![Dual Attention Transformer](/publications/disentangling-sensory-relational.png)
+
+Transformers route information through self-attention. This is powerful for moving object-level features across a sequence, but it does not explicitly separate information about individual objects from information about relationships between objects.
+
+This paper frames that limitation as a distinction between two information types:
+
+- **Sensory information:** features and attributes of individual objects.
+- **Relational information:** relationships between objects.
+
+Standard attention naturally routes sensory information. The Dual Attention Transformer adds an explicit relational attention mechanism and integrates it alongside ordinary self-attention.
+
+## Architecture
+
+Dual Attention is a variant of multi-head attention with two kinds of heads:
+
+- **Self-attention heads** route sensory information by sending value vectors derived from the sender's object features.
+- **Relational-attention heads** route relational information by constructing messages that encode relationships between sender and receiver objects.
+
+The resulting block keeps the Transformer interface while changing the inductive bias. Rather than asking ordinary attention heads to implicitly discover relation-routing behavior, the architecture supplies a pathway designed for it.
+
+## Empirical Scope
+
+The paper evaluates the architecture across synthetic relational benchmarks and larger machine-learning settings, including sequence and vision tasks. The main empirical pattern is improved data efficiency and parameter efficiency in settings where relational structure matters.
+
+The accompanying codebase provides PyTorch modules for relational attention, symbol assignment mechanisms, Dual Attention blocks, language models, sequence-to-sequence models, and vision models.
+
+## Relationship To Earlier Work
+
+This project extends the line of work around [Abstractors](/writing/research/abstractor) and [relational convolutions](/writing/research/relational-convolutions). The shared theme is to build architectural routes for relational information rather than relying on generic neural modules to discover those routes from data alone.
+
+## Takeaway
+
+The Dual Attention Transformer is a proposal for making relational computation a first-class part of the Transformer block. It keeps the flexibility of attention while giving the model distinct mechanisms for sensory and relational information flow.
+

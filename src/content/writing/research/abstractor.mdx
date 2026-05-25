@@ -1,0 +1,45 @@
+---
+title: "Abstractors and Relational Cross-Attention: An Inductive Bias for Explicit Relational Reasoning in Transformers"
+type: "paper"
+aliases:
+  - "Abstractors"
+  - "Relational Cross-Attention"
+date: "2024-05-07"
+updated: "2026-05-24"
+summary: "Abstractors add relational cross-attention to Transformers as an inductive bias for explicit relational reasoning and abstraction."
+tags: ["transformers", "relational reasoning", "abstraction", "inductive bias"]
+links: ["research", "./relational-convolutions", "./dual-attention"]
+authors: ["Awni Altabaa", "Taylor Webb", "Jonathan D. Cohen", "John Lafferty"]
+featured: true
+external:
+  arxiv: "https://arxiv.org/abs/2304.00195"
+  code: "https://github.com/awni00/abstractor"
+  website: "https://openreview.net/forum?id=XNa6r6ZjoB"
+  slides: "/publications/slides/abstractor-slides.pdf"
+  poster: "/publications/posters/abstractor-poster.pdf"
+---
+
+![Abstractors and relational cross-attention](/publications/abstraction-relational-reasoning.png)
+
+Abstractors extend Transformers with an explicit mechanism for relational reasoning. The core module uses relational cross-attention to separate relational information from extraneous object-level features, giving the model an inductive bias for abstraction and systematic generalization.
+
+## Motivation
+
+A standard Transformer can represent many kinds of dependencies, but it does not force a clean separation between object properties and relations among objects. For tasks that depend on abstract relational structure, this can make learning inefficient.
+
+The Abstractor module addresses this by giving the model a route for extracting and manipulating relational information directly.
+
+## Relational Cross-Attention
+
+The central operation is relational cross-attention. It is a form of attention designed to compute over relationships rather than only retrieve features from tokens. In the accompanying implementation, this idea is paired with symbol mechanisms that help the model represent abstract role-like structure.
+
+The paper evaluates Abstractors on discriminative relational tasks, purely relational sequence-to-sequence tasks, and mathematical problem-solving tasks. The strongest gains appear in settings where explicit relational reasoning and data efficiency matter most.
+
+## Relationship To Later Work
+
+This paper motivates several later directions in the research hub. [Dual Attention Transformers](/writing/research/dual-attention) integrate relational information flow into the Transformer block itself, while [relational convolutions](/writing/research/relational-convolutions) explore a convolution-like operation over relational graphlet filters.
+
+## Takeaway
+
+Abstractors make relational abstraction a structural feature of the model rather than an implicit behavior to be learned from scratch. The result is a targeted inductive bias for explicit relational reasoning in Transformer-style architectures.
+

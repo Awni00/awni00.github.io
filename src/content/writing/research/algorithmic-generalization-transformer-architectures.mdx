@@ -1,0 +1,47 @@
+---
+title: "Unlocking Out-of-Distribution Generalization in Transformers via Recursive Latent Space Reasoning"
+type: "paper"
+aliases:
+  - "Algorithmic Generalization in Transformers"
+  - "Recursive Latent Space Reasoning"
+date: "2025-10-20"
+updated: "2026-05-24"
+summary: "Four architectural mechanisms improve OOD algorithmic generalization in Transformers on a modular-arithmetic computation-graph task."
+tags: ["transformers", "out-of-distribution generalization", "algorithmic reasoning", "mechanistic interpretability"]
+links: ["research", "./dual-attention", "./cot-info"]
+authors: ["Awni Altabaa", "Siyu Chen", "John Lafferty", "Zhuoran Yang"]
+featured: true
+external:
+  arxiv: "https://arxiv.org/abs/2510.14095"
+  code: "https://github.com/Awni00/algorithmic-generalization-transformer-architectures"
+---
+
+![Mechanisms for algorithmic generalization](/publications/mechanisms-generalization.png)
+
+Systematic, compositional generalization beyond the training distribution remains a core challenge in machine learning. It is also a central bottleneck for reasoning-like behavior in contemporary language models: a model can interpolate within a training regime while failing once the required computation becomes longer, deeper, or structurally harder.
+
+This work studies that failure mode in a controlled testbed: modular arithmetic on computation graphs. The task is deliberately simple enough to support clean ablations and mechanistic analysis, but it has the structure needed to test whether a Transformer has learned a scalable algorithm rather than a brittle input-output shortcut.
+
+## Core Idea
+
+The paper investigates four architectural mechanisms for native latent-space reasoning:
+
+1. **Input-adaptive recurrence.** Reuse the same recurrent block so computation can scale with problem depth.
+2. **Algorithmic supervision.** Supervise intermediate latent states so the model learns the intended step-by-step procedure rather than only the final answer.
+3. **Anchored discrete latent states.** Use a discrete bottleneck to prevent long recurrent rollouts from drifting in continuous state space.
+4. **Error correction.** Train the recurrent dynamics to repair corrupted intermediate states before continuing the computation.
+
+Together, these mechanisms move the reasoning process from token-space traces into the model's latent dynamics. The target behavior is not simply to produce a longer chain of output tokens; it is to iteratively update internal state until the computation graph is solved.
+
+## Why This Testbed
+
+The benchmark provides a clean difficulty knob. Training uses smaller computation graphs, while evaluation asks the model to solve larger graphs outside the training distribution. Because the ground-truth procedure is known, failures can be interpreted more precisely than in open-ended language tasks.
+
+The task also makes a strict distinction between in-distribution accuracy and algorithmic generalization. Standard models can perform well on the training regime while degrading sharply as graph size or depth increases.
+
+## Takeaway
+
+The main message is that out-of-distribution algorithmic generalization requires more than scale or end-to-end supervision. Recurrence supplies scalable computation, but it needs algorithmic alignment, stable latent representations, and correction mechanisms to behave robustly beyond the training regime.
+
+Mechanistic analysis in the paper links these gains to interpretable circuits, providing evidence that the successful models implement a reusable computation rather than memorizing graph-size-specific patterns.
+
