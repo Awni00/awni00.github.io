@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
+import {
+  DEFAULT_TOC_CONFIG,
+  filterHeadingsForToc,
+  type TocHeading
+} from "../../lib/article/toc";
+import type { TocConfig } from "../../config/types";
 
-type Heading = {
-  depth: number;
-  slug: string;
-  text: string;
-};
+type Heading = TocHeading;
 
 type Props = {
   headings: Heading[];
+  tocConfig?: TocConfig;
 };
 
 /**
- * Distill-style progress strip TOC. Renders one row per h2/h3 with a small
- * leading dot and the heading text. The active row is highlighted via the
- * left-border slab + accent text colour applied by `.article-sidebar .toc
- * a[aria-current="true"]`. The dot stays neutral (deliberately not blue —
- * see article.css notes) so it doesn't read as a highlighted first
- * character of the heading.
+ * Distill-style progress strip TOC. Renders one row per configured heading
+ * depth with a small leading dot and the heading text. The active row is
+ * highlighted via the left-border slab + accent text colour applied by
+ * `.article-sidebar .toc a[aria-current="true"]`. The dot stays neutral
+ * (deliberately not blue — see article.css notes) so it doesn't read as a
+ * highlighted first character of the heading.
  */
-export default function TableOfContents({ headings }: Props) {
-  const items = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+export default function TableOfContents({ headings, tocConfig = DEFAULT_TOC_CONFIG }: Props) {
+  const items = filterHeadingsForToc(headings, tocConfig);
   const activeId = useScrollSpy(items.map((h) => h.slug));
 
   if (items.length === 0) return <p className="muted">No headings yet.</p>;

@@ -42,5 +42,8 @@ export type {
   TopicsSort,
   TopicsSortDir,
   TopicsSortField,
+  TocConfig,
+  TocConfigOverride,
+  TocDepth,
   WritingConfig
 } from "./types";

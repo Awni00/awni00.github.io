@@ -10,6 +10,24 @@ const dateString = z
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Expected YYYY-MM-DD")
   .optional();
 
+const tocDepth = z.number().int().min(2).max(6);
+
+const tocConfig = z
+  .object({
+    minDepth: tocDepth.optional(),
+    maxDepth: tocDepth.optional()
+  })
+  .refine(
+    (value) =>
+      value.minDepth === undefined ||
+      value.maxDepth === undefined ||
+      value.minDepth <= value.maxDepth,
+    {
+      message: "minDepth must be less than or equal to maxDepth",
+      path: ["maxDepth"]
+    }
+  );
+
 const externalLinks = z
   .object({
     paper: z.string().url().or(z.string().startsWith("/")).optional(),
@@ -66,6 +84,9 @@ const writing = defineCollection({
         // Override aside placement: "margin" floats <Aside> blocks into
         // the right gutter; "inline" renders them as left-bordered blocks.
         asides: z.enum(["margin", "inline"]).optional(),
+        // Override which heading depths appear in the article TOC.
+        // Depths are h2-h6; h1 is reserved for the article title.
+        toc: tocConfig.optional(),
         // Structured placement overrides — partial; fields you omit fall
         // through to the type-level or global default. Legacy "sidebar"
         // value is accepted and silently mapped to "right".

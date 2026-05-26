@@ -68,6 +68,13 @@ export const defaultWritingConfig = {
       autoRenderLinkedEntries: true,
       groupLinkedEntriesBy: "type"
     },
+    toc: {
+      default: {
+        minDepth: 2,
+        maxDepth: 3
+      },
+      byType: {}
+    },
     placement: {
       default: {
         toc: { where: "left" },

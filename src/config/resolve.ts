@@ -5,6 +5,7 @@ import { defaultSiteConfig } from "./defaults/site";
 import { defaultThemeConfig } from "./defaults/theme";
 import { defaultWritingConfig } from "./defaults/writing";
 import { siteConfigOverrides } from "../site/config";
+import { normalizeTocConfig } from "../lib/article/toc";
 import type {
   ArticleWidth,
   AsidePlacement,
@@ -17,6 +18,7 @@ import type {
   PublicationsConfig,
   SiteConfig,
   ThemeConfig,
+  TocConfigOverride,
   WritingConfig
 } from "./types";
 
@@ -109,6 +111,7 @@ function resolveWritingConfig(): WritingConfig {
   const localGraphByType: Record<EntryType, boolean> = {};
   const placementByType: WritingConfig["entryLayout"]["placement"]["byType"] = {};
   const asidesByType: Record<EntryType, AsidePlacement> = {};
+  const tocByType: Record<EntryType, TocConfigOverride> = {};
   const rssIncludeTypes: EntryType[] = [];
   const rssExcludeTypes: EntryType[] = [];
 
@@ -118,9 +121,18 @@ function resolveWritingConfig(): WritingConfig {
     localGraphByType[entryType.id] = entryType.article?.localGraph ?? true;
     if (entryType.article?.placement) placementByType[entryType.id] = entryType.article.placement;
     asidesByType[entryType.id] = entryType.article?.asides ?? base.entryLayout.asides.default;
+    if (entryType.article?.toc) tocByType[entryType.id] = entryType.article.toc;
 
     if (entryTypeIncludedInRss(entryType.id)) rssIncludeTypes.push(entryType.id);
     else rssExcludeTypes.push(entryType.id);
+  }
+
+  const mergedTocByType: Record<EntryType, TocConfigOverride> = { ...tocByType };
+  for (const [type, override] of Object.entries(base.entryLayout.toc.byType)) {
+    mergedTocByType[type] = {
+      ...(mergedTocByType[type] ?? {}),
+      ...override
+    };
   }
 
   return {
@@ -146,6 +158,15 @@ function resolveWritingConfig(): WritingConfig {
           ...localGraphByType,
           ...base.entryLayout.localGraph.byType
         }
+      },
+      toc: {
+        ...base.entryLayout.toc,
+        default: normalizeTocConfig(
+          base.entryLayout.toc.default,
+          defaultWritingConfig.entryLayout.toc.default,
+          "writing.entryLayout.toc.default"
+        ),
+        byType: mergedTocByType
       },
       placement: {
         ...base.entryLayout.placement,

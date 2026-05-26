@@ -9,6 +9,12 @@ export type PlacementGraph = "header" | "footer" | "none";
 export type PlacementNav = "left" | "right" | "footer" | "none";
 export type AsidePlacement = "margin" | "inline";
 export type ArticleWidth = "reading" | "flex";
+export type TocDepth = 2 | 3 | 4 | 5 | 6;
+export type TocConfig = {
+  minDepth: TocDepth;
+  maxDepth: TocDepth;
+};
+export type TocConfigOverride = Partial<TocConfig>;
 
 export type PlacementSpec = {
   toc: { where: PlacementToc };
@@ -29,6 +35,7 @@ export type EntryTypeArticleConfig = {
   localGraph?: boolean;
   placement?: Partial<PlacementSpec>;
   asides?: AsidePlacement;
+  toc?: TocConfigOverride;
 };
 
 export type EntryTypeDefinition = {
@@ -118,6 +125,10 @@ export type WritingConfig = {
     hubPages: {
       autoRenderLinkedEntries: boolean;
       groupLinkedEntriesBy: "type";
+    };
+    toc: {
+      default: TocConfig;
+      byType: Record<EntryType, TocConfigOverride>;
     };
     placement: {
       default: PlacementSpec;

@@ -290,7 +290,9 @@
 
 .article-content h2,
 .article-content h3,
-.article-content h4 {
+.article-content h4,
+.article-content h5,
+.article-content h6 {
   font-family: var(--font-body);
   font-weight: 600;
   color: var(--color-fg);
@@ -317,6 +319,12 @@
 .article-content h4 {
   font-size: 16.5px;
   margin: 28px 0 10px;
+}
+
+.article-content h5,
+.article-content h6 {
+  font-size: 15px;
+  margin: 24px 0 8px;
 }
 
 .article-content a:not(.heading-anchor) {
@@ -525,6 +533,14 @@
   flex: 0 0 4px;
 }
 
+.toc--strip li[data-depth="4"] .toc-dot,
+.toc--strip li[data-depth="5"] .toc-dot,
+.toc--strip li[data-depth="6"] .toc-dot {
+  width: 3px;
+  height: 3px;
+  flex: 0 0 3px;
+}
+
 .toc--strip a:hover .toc-dot {
   background: var(--color-fg-soft);
 }
@@ -549,6 +565,21 @@
 .toc--strip li[data-depth="3"] .toc-tip {
   font-size: 12px;
   padding-left: 0.6em;
+}
+
+.toc--strip li[data-depth="4"] .toc-tip {
+  font-size: 11.5px;
+  padding-left: 1.2em;
+}
+
+.toc--strip li[data-depth="5"] .toc-tip {
+  font-size: 11.5px;
+  padding-left: 1.8em;
+}
+
+.toc--strip li[data-depth="6"] .toc-tip {
+  font-size: 11.5px;
+  padding-left: 2.4em;
 }
 
 .toc--strip a[aria-current="true"] .toc-tip {
