@@ -66,7 +66,8 @@ const backlinks = backlinkIds.map(toLinkedItem).filter(Boolean) as Array<{ id: s
 const related = relatedIds.map(toLinkedItem).filter(Boolean) as Array<{ id: string; title: string; url: string }>;
 const authorsRaw = entry.data.authors ?? [];
 const authors = authorsRaw.map((a) => (typeof a === "string" ? { name: a } : a));
-const hasByline = authors.length > 0;
+const venue = entry.data.venue;
+const hasByline = authors.length > 0 || Boolean(venue);
 
 const chipMeta: Record<string, { label: string; icon: any }> = {
   arxiv: { label: "arXiv", icon: FileText },
@@ -191,17 +192,19 @@ const right = renderSide("right");
         {
           hasByline && (
             <div class="article-byline">
-              <div class="article-byline__col">
-                <div class="article-byline__label">Authors</div>
-                <ul class="article-byline__list">
-                  {authors.map((a) => (
-                    <li>
-                      {a.url ? <a href={a.url}>{a.name}</a> : <span>{a.name}</span>}
-                      {a.note && <sup class="article-byline__note">{a.note}</sup>}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {authors.length > 0 && (
+                <div class="article-byline__col">
+                  <div class="article-byline__label">Authors</div>
+                  <ul class="article-byline__list">
+                    {authors.map((a) => (
+                      <li>
+                        {a.url ? <a href={a.url}>{a.name}</a> : <span>{a.name}</span>}
+                        {a.note && <sup class="article-byline__note">{a.note}</sup>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               {authors.some((a) => a.affiliation) && (
                 <div class="article-byline__col">
                   <div class="article-byline__label">Affiliations</div>
@@ -210,6 +213,12 @@ const right = renderSide("right");
                       <li>{a.affiliation ?? " "}</li>
                     ))}
                   </ul>
+                </div>
+              )}
+              {venue && (
+                <div class="article-byline__col">
+                  <div class="article-byline__label">Venue</div>
+                  <div class="article-byline__value">{venue}</div>
                 </div>
               )}
               {publishedLabel && (

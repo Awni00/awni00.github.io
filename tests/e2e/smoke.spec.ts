@@ -53,6 +53,8 @@ test("research entry, RSS, and redirects render", async ({ page }) => {
       name: "CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision"
     })
   ).toBeVisible();
+  await expect(page.locator(".article-byline")).toContainText("Venue");
+  await expect(page.locator(".article-byline")).toContainText("Neural Information Processing Systems (NeurIPS), spotlight");
   await expect(page.locator(".katex").first()).toBeVisible();
 
   const rss = await page.goto("/writing/rss.xml");

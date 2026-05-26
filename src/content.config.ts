@@ -38,6 +38,7 @@ const writing = defineCollection({
     date: dateString,
     updated: dateString,
     summary: z.string().optional(),
+    venue: z.string().optional(),
     tags: z.array(z.string()).default([]),
     links: z.array(z.string()).default([]),
     authors: z
