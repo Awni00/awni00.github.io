@@ -139,10 +139,81 @@ Common fields:
 - `article.placement`: type-level TOC, local graph, backlinks, and related-entry
   placement.
 - `article.asides`: default `<Aside>` placement.
+- `article.toc`: type-level heading depth defaults for the article table of
+  contents.
 
 Replacing `entryTypes` is supported but advanced. Because arrays replace, a site
 that customizes the registry should define the complete intended registry in
 `src/site/config.ts`.
+
+## Article TOC Depth
+
+Article tables of contents include `h2` and `h3` by default:
+
+```ts
+export const siteConfigOverrides = {
+  writing: {
+    entryLayout: {
+      toc: {
+        default: {
+          minDepth: 2,
+          maxDepth: 3
+        }
+      }
+    }
+  }
+} satisfies SiteConfigOverrides;
+```
+
+Depths can be configured globally, by entry type, or per entry. Valid values are
+integers from `2` through `6`; `h1` is reserved for the article title rendered by
+the layout. Partial overrides inherit omitted fields:
+
+```ts
+export const siteConfigOverrides = {
+  writing: {
+    entryLayout: {
+      toc: {
+        default: { maxDepth: 4 },
+        byType: {
+          paper: { maxDepth: 5 },
+          note: { maxDepth: 2 }
+        }
+      }
+    }
+  }
+} satisfies SiteConfigOverrides;
+```
+
+Entry type registry defaults use the same shape:
+
+```ts
+entryTypes: [
+  {
+    id: "paper",
+    label: "Paper",
+    role: "entry",
+    graph: {
+      shape: "circle",
+      size: 12,
+      color: "var(--graph-paper)",
+      labelVisibility: "hover"
+    },
+    article: {
+      toc: { maxDepth: 4 }
+    }
+  }
+]
+```
+
+Individual entries can override the effective depth range in frontmatter:
+
+```yaml
+layout:
+  toc:
+    minDepth: 2
+    maxDepth: 4
+```
 
 ## Content Paths
 

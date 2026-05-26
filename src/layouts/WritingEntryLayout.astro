@@ -16,7 +16,7 @@ import TwoColumns from "../components/article/TwoColumns.astro";
 import Video from "../components/article/Video.astro";
 import YouTubeVideo from "../components/article/YouTubeVideo.astro";
 import LocalGraph from "../components/graph/LocalGraph";
-import { getEntryType } from "../config";
+import { getEntryType, writingConfig } from "../config";
 import {
   Code2,
   FileText,
@@ -34,6 +34,7 @@ import {
   resolveAsides,
   resolvePlacement
 } from "../lib/article/placement";
+import { filterHeadingsForToc, resolveTocConfig } from "../lib/article/toc";
 import type { GraphIndex, WritingEntryLike } from "../lib/graph/types";
 import BaseLayout from "./BaseLayout.astro";
 
@@ -52,6 +53,8 @@ const byId = new Map(graph.nodes.map((item) => [item.id, item]));
 
 const articleWidth = resolveArticleWidth(entry);
 const placement = resolvePlacement(entry);
+const tocConfig = resolveTocConfig(entry, writingConfig);
+const tocHeadings = filterHeadingsForToc(headings, tocConfig);
 const asidesRequested = resolveAsides(entry);
 const asidesEffective = effectiveAsides(asidesRequested, articleWidth, placement.toc.where);
 
@@ -107,7 +110,7 @@ const backlinksInFooter = backlinksSide === "footer";
 const relatedInFooter = relatedSide === "footer";
 
 const sideHasContent = (side: "left" | "right"): boolean =>
-  (tocSide === side && headings.length > 0) ||
+  (tocSide === side && tocHeadings.length > 0) ||
   (backlinksSide === side && backlinks.length > 0) ||
   (relatedSide === side && related.length > 0);
 
@@ -135,7 +138,7 @@ const components = {
 };
 
 const renderSide = (side: "left" | "right") => ({
-  toc: tocSide === side && headings.length > 0,
+  toc: tocSide === side && tocHeadings.length > 0,
   backlinks: backlinksSide === side && backlinks.length > 0,
   related: relatedSide === side && related.length > 0
 });
@@ -245,7 +248,7 @@ const right = renderSide("right");
             {left.toc && (
               <section class="sidebar-section sidebar-section--toc">
                 <h2>On This Page</h2>
-                <TableOfContents client:load headings={headings} />
+                <TableOfContents client:load headings={headings} tocConfig={tocConfig} />
               </section>
             )}
             {left.backlinks && (
@@ -284,7 +287,7 @@ const right = renderSide("right");
             {right.toc && (
               <section class="sidebar-section sidebar-section--toc">
                 <h2>On This Page</h2>
-                <TableOfContents client:load headings={headings} />
+                <TableOfContents client:load headings={headings} tocConfig={tocConfig} />
               </section>
             )}
             {right.backlinks && (
@@ -315,6 +318,7 @@ const right = renderSide("right");
       graph={graph}
       currentId={node.id}
       headings={headings}
+      tocConfig={tocConfig}
       tocInFoot={false}
       showLocalGraph={localGraphInFooter}
       backlinks={backlinksInFooter ? backlinks : []}

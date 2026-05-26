@@ -116,6 +116,10 @@ export type WritingEntryLike = {
     layout?: {
       width?: "reading" | "flex";
       asides?: "margin" | "inline";
+      toc?: {
+        minDepth?: number;
+        maxDepth?: number;
+      };
       placement?: {
         toc?: { where?: "left" | "right" | "sidebar" | "none" };
         localGraph?: { where?: "header" | "footer" | "none" };

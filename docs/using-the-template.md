@@ -82,12 +82,21 @@ external:
 layout:
   width: reading
   asides: margin
+  toc:
+    minDepth: 2
+    maxDepth: 4
 ```
 
 For paper-style writing entries, `venue` is intentionally stored in entry
 frontmatter even if the same paper also appears in `src/data/publications.bib`.
 This keeps writing entries portable and prevents article headers from depending
 on a BibTeX lookup.
+
+`layout.toc` controls which article heading depths appear in the table of
+contents for this entry. Depths map to Markdown heading levels `##` through
+`######`; `#` is reserved for the article title rendered by the layout. Omitted
+fields inherit from the type-level or global default, which includes `h2` and
+`h3`.
 
 Routes mirror the content-relative path:
 

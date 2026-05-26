@@ -1,8 +1,14 @@
 ---
 import LocalGraph from "../graph/LocalGraph";
+import {
+  DEFAULT_TOC_CONFIG,
+  filterHeadingsForToc,
+  type TocHeading
+} from "../../lib/article/toc";
 import type { GraphIndex } from "../../lib/graph/types";
+import type { TocConfig } from "../../config/types";
 
-type Heading = { depth: number; slug: string; text: string };
+type Heading = TocHeading;
 type LinkedItem = { id: string; title: string; url: string };
 
 type Props = {
@@ -10,6 +16,7 @@ type Props = {
   currentId: string;
   /** TOC headings; rendered only if `tocInFoot` is true. */
   headings?: Heading[];
+  tocConfig?: TocConfig;
   tocInFoot?: boolean;
   showLocalGraph?: boolean;
   backlinks?: LinkedItem[];
@@ -21,6 +28,7 @@ const {
   graph,
   currentId,
   headings = [],
+  tocConfig = DEFAULT_TOC_CONFIG,
   tocInFoot = false,
   showLocalGraph = false,
   backlinks = [],
@@ -28,7 +36,7 @@ const {
   bibtex
 } = Astro.props;
 
-const tocHeadings = tocInFoot ? headings.filter((h) => h.depth === 2 || h.depth === 3) : [];
+const tocHeadings = tocInFoot ? filterHeadingsForToc(headings, tocConfig) : [];
 const hasAny =
   (tocInFoot && tocHeadings.length > 0) ||
   showLocalGraph ||

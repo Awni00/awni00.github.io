@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 
 import { publicationsConfig, siteConfig, writingConfig, type EntryType } from "../src/config";
+import { resolveTocConfig } from "../src/lib/article/toc";
 import { buildGraphIndex, graphWarningSeverity } from "../src/lib/graph/buildGraph";
 import type { WritingEntryLike } from "../src/lib/graph/types";
 import { parseBibtex } from "../src/lib/publications/parseBibtex";
@@ -55,7 +56,8 @@ async function readWritingEntries(root: string): Promise<WritingEntryLike[]> {
             summary: parsed.data.summary,
             tags: parsed.data.tags ?? [],
             links: parsed.data.links ?? [],
-            draft: parsed.data.draft ?? false
+            draft: parsed.data.draft ?? false,
+            layout: parsed.data.layout
           }
         } as WritingEntryLike;
       })
@@ -75,6 +77,11 @@ function validateEntries(entries: WritingEntryLike[]): void {
       if (value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
         errors.push(`${entry.id}: ${key} must use YYYY-MM-DD.`);
       }
+    }
+    try {
+      resolveTocConfig(entry, writingConfig);
+    } catch (error) {
+      errors.push(`${entry.id}: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 }
