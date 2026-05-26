@@ -98,6 +98,7 @@ export type WritingEntryLike = {
     date?: string;
     updated?: string;
     summary?: string;
+    venue?: string;
     tags?: string[];
     links?: string[];
     authors?: Array<

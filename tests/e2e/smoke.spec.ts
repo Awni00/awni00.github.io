@@ -44,6 +44,8 @@ test("writing browser supports URL state and preview", async ({ page }) => {
 test("writing entry and RSS render", async ({ page }) => {
   await page.goto("/writing/machine-learning-theory/bias-variance-refresher");
   await expect(page.getByRole("heading", { name: "Bias and Variance: an Illustrated Refresher" })).toBeVisible();
+  await expect(page.locator(".article-byline")).toContainText("Venue");
+  await expect(page.locator(".article-byline")).toContainText("Sample Conference on Learning Systems");
   await expect(page.locator(".katex").first()).toBeVisible();
   const response = await page.goto("/writing/rss.xml");
   expect(await response?.text()).toContain("<rss version=\"2.0\">");

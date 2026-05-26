@@ -70,6 +70,7 @@ aliases:
   - Alternative Name
 date: "2026-05-24"
 summary: "Short description."
+venue: "Conference or Journal Name"
 tags:
   - learning-theory
 links:
@@ -82,6 +83,11 @@ layout:
   width: reading
   asides: margin
 ```
+
+For paper-style writing entries, `venue` is intentionally stored in entry
+frontmatter even if the same paper also appears in `src/data/publications.bib`.
+This keeps writing entries portable and prevents article headers from depending
+on a BibTeX lookup.
 
 Routes mirror the content-relative path:
 
