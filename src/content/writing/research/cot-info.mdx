@@ -22,7 +22,17 @@ external:
   arxiv: "https://arxiv.org/abs/2505.15927"
   slides: "/publications/slides/cotinfo-slides.pdf"
   poster: "/publications/posters/cotinfo-poster.pdf"
+bibtex: |
+  @inproceedings{altabaa2025cotinformation,
+    title={CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision},
+    author={Awni Altabaa and Omar Montasser and John Lafferty},
+    booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+    year={2025},
+    url={https://openreview.net/forum?id=OkVQJZWGfn}
+  }
 ---
+
+
 
 import ImageComparison from "../../../components/article/ImageComparison";
 
@@ -402,13 +412,3 @@ This opens new possibilities: quantifying the value of CoT supervision in large-
 This work develops a learning theory framework for understanding the statistical advantage of chain-of-thought supervision. By introducing the notion of ***CoT information***, we provide an information-theoretic measure that quantifies how observing reasoning traces accelerate learning. The main results establish matching upper and lower bounds, showing that CoT information precisely governs the achievable rates of sample complexity under CoT supervision. Empirical simulations confirm these predictions, demonstrating substantial gains—sometimes by orders of magnitude—when reasoning traces align with the underlying computation.
 
 Several open directions remain. Theoretically, extending the framework to the agnostic and noisy settings raises questions about robustness and alignment between traces and hypotheses. Empirically, estimating CoT information in neural architectures, comparing different trace-generation pipelines, and exploring its role in out-of-distribution generalization and reinforcement learning for reasoning represent promising next steps. Together, these directions aim toward a unified understanding of how CoT supervision reshapes the statistical foundations of reasoning in large models.
-
-## Citation
-```bibtex
-@inproceedings{altabaa2025cotinformation,
-  title={CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision},
-  author={Awni Altabaa and Omar Montasser and John Lafferty},
-  booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
-  year={2025},
-  url={https://openreview.net/forum?id=OkVQJZWGfn}
-}

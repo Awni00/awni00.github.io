@@ -26,7 +26,18 @@ external:
   website: "https://openreview.net/forum?id=XNa6r6ZjoB"
   slides: "/publications/slides/abstractor-slides.pdf"
   poster: "/publications/posters/abstractor-poster.pdf"
+bibtex: |
+  @article{altabaa2023abstractors,
+        title={Abstractors and relational cross-attention: An inductive bias for explicit relational reasoning in Transformers},
+        author={Awni Altabaa and Taylor Webb and Jonathan Cohen and John Lafferty},
+        year={2023},
+        eprint={2304.00195},
+        archivePrefix={arXiv},
+        primaryClass={stat.ML}
+  }
 ---
+
+
 
 <TwoColumns>
   <Figure slot="left" src="/writing/research/abstractor/figs/self_attn_fig.png" alt="depiction of self-attention" />
@@ -102,16 +113,3 @@ Please see the paper for details on these experiments.
 ## Experiment Logs
 
 Detailed experimental logs are publicly available to help promote reproducibility and transparency. They include training and validation metrics tracked during training, test metrics after training, code/git state, resource utilization, etc. Experimental logs for all experiments in the paper can be accessed through the following [web portal](https://wandb.ai/abstractor/projects).
-
-## Citation
-
-```bibtex
-@article{altabaa2023abstractors,
-      title={Abstractors and relational cross-attention: An inductive bias for explicit relational reasoning in Transformers},
-      author={Awni Altabaa and Taylor Webb and Jonathan Cohen and John Lafferty},
-      year={2023},
-      eprint={2304.00195},
-      archivePrefix={arXiv},
-      primaryClass={stat.ML}
-}
-```
