@@ -268,6 +268,7 @@
   line-height: 1.7;
   color: var(--color-fg-soft);
   min-width: 0;
+  overflow-x: hidden;
   /* Cap prose at the reading column even when the body track is wider
      (to reserve the right aside gutter). For data-asides="margin" the
      rule below promotes .article-content to a 760+240 sub-grid that
@@ -703,6 +704,12 @@
   font-style: italic;
 }
 
+.article-content .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
 /* Proof */
 .proof {
   font-size: 16.5px;
@@ -734,6 +741,8 @@
   border-radius: 5px;
   padding: 14px 18px;
   background: var(--color-bg);
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .math-block__title {
@@ -755,9 +764,22 @@
 .article-figure__body img {
   display: block;
   width: 100%;
+  height: auto;
   border: 1px solid var(--color-border);
   border-radius: 5px;
   background: var(--color-bg-soft);
+}
+
+.article-picture {
+  display: block;
+  width: 100%;
+  max-height: 35rem;
+  object-fit: contain;
+}
+
+.article-picture img {
+  max-height: 35rem;
+  object-fit: contain;
 }
 
 .article-figure__body {
@@ -798,9 +820,24 @@
   background: var(--color-bg-soft);
 }
 
+.image-comparison__slider {
+  width: 100%;
+}
+
 .image-comparison img {
   border: 0;
   border-radius: 0;
+}
+
+.image-comparison__image,
+.image-comparison [data-rcs="item"] > img,
+.image-comparison [data-rcs="item"] > picture,
+.image-comparison [data-rcs="item"] picture > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
 }
 
 .image-comparison__labels {
