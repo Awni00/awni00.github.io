@@ -65,20 +65,20 @@ The challenge is that the exact posterior $p_\theta(z \mid x)$ is usually intrac
 />
 
 <TwoColumns>
-<div>
+<Fragment slot="left">
 
 ### Encoder
 
 The encoder maps an observation to a distribution over latents, typically a diagonal Gaussian with learned mean and variance. Its job is not to reconstruct directly; it proposes where in latent space the observation likely came from.
 
-</div>
-<div>
+</Fragment>
+<Fragment slot="right">
 
 ### Decoder
 
 The decoder maps a latent sample back to a distribution over observations. Sampling from the prior and decoding is what turns the trained model into a generator rather than only a compressor.
 
-</div>
+</Fragment>
 </TwoColumns>
 
 ## Objective

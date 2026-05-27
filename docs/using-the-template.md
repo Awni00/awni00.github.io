@@ -166,6 +166,7 @@ MDX entries can use built-in technical writing components:
 - `Proof`
 - `MathBlock`
 - `Figure`
+- `FigureGrid`
 - `Picture`
 - `Aside`
 - `TableOfContents`
@@ -182,6 +183,11 @@ Example:
 The graph should represent intentional conceptual links, not every hyperlink.
 </Callout>
 ```
+
+Prefer these components over raw HTML for article structure. Avoid inline `style`,
+layout `<div>` wrappers, raw `<table>`, and raw `<img>` tags in authored MDX;
+use Markdown tables, `Figure`, `FigureGrid`, `TwoColumns`, and `Callout` so the
+template owns the visual language.
 
 ## Validation
 

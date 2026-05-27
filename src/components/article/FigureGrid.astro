@@ -1,0 +1,27 @@
+---
+type Props = {
+  columns?: 2 | 3 | 4;
+  caption?: string;
+};
+
+const allowedColumns = [2, 3, 4];
+const requestedColumns = Number(Astro.props.columns ?? 2);
+const columns = allowedColumns.includes(requestedColumns) ? requestedColumns : 2;
+const { caption } = Astro.props;
+const hasCaptionSlot = Astro.slots.has("caption");
+---
+
+<figure class="figure-grid" data-columns={columns}>
+  <div class="figure-grid__items">
+    <slot />
+  </div>
+  {
+    hasCaptionSlot ? (
+      <figcaption>
+        <slot name="caption" />
+      </figcaption>
+    ) : (
+      caption && <figcaption>{caption}</figcaption>
+    )
+  }
+</figure>

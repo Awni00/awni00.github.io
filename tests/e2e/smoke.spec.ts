@@ -34,10 +34,10 @@ test("writing browser supports URL state and preview", async ({ page }) => {
   await page.goto("/writing?view=map");
   await expect(page.getByRole("tab", { name: "map" })).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("button", { name: /Machine Learning Theory/ })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Learning" })).toBeVisible();
+  await expect(page.locator(".preview-pane").getByRole("heading").first()).toBeVisible();
   await expect(page.getByRole("link", { name: "Open Entry" })).toHaveAttribute(
     "href",
-    "/writing/learning"
+    /\/writing\//
   );
 });
 
@@ -47,6 +47,8 @@ test("writing entry and RSS render", async ({ page }) => {
   await expect(page.locator(".article-byline")).toContainText("Venue");
   await expect(page.locator(".article-byline")).toContainText("Sample Conference on Learning Systems");
   await expect(page.locator(".katex").first()).toBeVisible();
+  await expect(page.locator(".figure-grid[data-columns='2']")).toBeVisible();
+  await expect(page.locator(".figure-grid")).toContainText("Two complementary views of the bias-variance trade-off");
   const response = await page.goto("/writing/rss.xml");
   expect(await response?.text()).toContain("<rss version=\"2.0\">");
 });

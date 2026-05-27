@@ -93,35 +93,35 @@ The independence step is the one most often skipped. It uses that $Y_0$ is a *fr
 
 The classical picture is the U-shape of expected test error as model complexity grows: $\text{bias}^2$ falls, variance rises, and their sum has a unique minimum.
 
-<Figure
-  src="/figures/bias-variance-curve.svg"
-  alt="Test error as a function of model complexity, decomposed into bias squared, variance, and irreducible noise."
-  caption="Test error (black) as a sum of bias² (blue, decreasing), variance (red, increasing), and an irreducible-noise floor σ² (dashed). The minimum picks out an 'optimal complexity'."
-/>
+<FigureGrid columns={2} caption="Two complementary views of the bias-variance trade-off: an error curve over model complexity and a dart-board view of bias and variance at a fixed point.">
+  <Figure
+    src="/figures/bias-variance-curve.svg"
+    alt="Test error as a function of model complexity, decomposed into bias squared, variance, and irreducible noise."
+    caption="Test error (black) as a sum of bias² (blue, decreasing), variance (red, increasing), and an irreducible-noise floor σ² (dashed)."
+  />
+  <Figure>
+    <Picture slot="figure" src="/figures/dartboard.svg" alt="Dartboard grid: low/high bias crossed with low/high variance." invertInDarkMode />
+    <Fragment slot="caption">Each dot is one model trained on an independent draw of $S$; the bullseye is $f^\star(x_0)$.</Fragment>
+  </Figure>
+</FigureGrid>
 
-A more pedagogical view is the dart-board: each dot is one model trained on an independent draw of $S$, and the bullseye is $f^\star(x_0)$. Bias is *where the cloud is centred*; variance is *how big the cloud is*.
-
-<Picture
-  src="/figures/dartboard.svg"
-  alt="Dartboard grid: low/high bias crossed with low/high variance."
-  invertInDarkMode
-/>
+A more pedagogical view is the dart-board: bias is *where the cloud is centred*; variance is *how big the cloud is*.
 
 <TwoColumns>
-<div>
+<Fragment slot="left">
 
 ### What pushes bias down
 
 Adding capacity to the model class — more features, deeper trees, a larger network — lets $\bar f$ track $f^\star$ more faithfully, especially in regions with curvature.
 
-</div>
-<div>
+</Fragment>
+<Fragment slot="right">
 
 ### What pushes variance up
 
 The same added capacity lets the learner over-fit individual training sets. Two independent draws of $S$ disagree more, so $\mathrm{Var}_S[\hat f_S]$ grows.
 
-</div>
+</Fragment>
 </TwoColumns>
 
 <Comparison

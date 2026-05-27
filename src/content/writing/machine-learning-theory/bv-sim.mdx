@@ -30,7 +30,7 @@ $$
 $$
 
 <TwoColumns>
-<div>
+<Fragment slot="left">
 
 ### Sweepable knobs
 
@@ -40,8 +40,8 @@ $$
 - noise $\sigma \in \{0, 0.1, 1\}$
 - replicates $K$ (default 200)
 
-</div>
-<div>
+</Fragment>
+<Fragment slot="right">
 
 ### What you get back
 
@@ -50,7 +50,7 @@ $$
 - A dartboard render of model fits on a single $x_0$
 - Pickled fits for downstream analysis
 
-</div>
+</Fragment>
 </TwoColumns>
 
 <Callout type="note" title="Static + reproducible">
