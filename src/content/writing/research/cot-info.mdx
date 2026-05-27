@@ -47,14 +47,14 @@ We can see this difference in action when both models attempt the same problem.
 
 
 <Figure>
-  <ImageComparison slot="figure" client:load
-    leftSrc="/writing/research/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-instant+.png"
-    rightSrc="/writing/research/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-thinking+.png"
-    leftAlt="ChatGPT 5 Instant answers the number comparison question incorrectly when forced to respond immediately."
-    rightAlt="ChatGPT 5 Thinking solves the number comparison question correctly by reasoning step-by-step."
+  <ImageComparison slot="figure" client:idle
     leftLabel="Instant"
     rightLabel="Thinking"
-  />
+    showLabels={false}
+  >
+    <Picture slot="itemOne" src="/writing/research/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-instant+.png" alt="ChatGPT 5 Instant answers the number comparison question incorrectly when forced to respond immediately." invertInDarkMode />
+    <Picture slot="itemTwo" src="/writing/research/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-thinking+.png" alt="ChatGPT 5 Thinking solves the number comparison question correctly by reasoning step-by-step." invertInDarkMode />
+  </ImageComparison>
   <Fragment slot="caption">
     ChatGPT 5 Instant (left), prompted to respond instantly, guesses the wrong answer. ChatGPT Thinking (right) produces the correct answer after reasoning step-by-step.
   </Fragment>
@@ -63,14 +63,14 @@ We can see this difference in action when both models attempt the same problem.
 > **Question.** *A forest has 1000 trees. Each year, loggers cut down half of the trees remaining at the start of the year. In the same year, conservationists plant 100 new trees at the end of the year. After this process repeats for two years, how many trees are in the forest?*
 
 <Figure>
-  <ImageComparison slot="figure" client:load
-    leftSrc="/writing/research/cot-info/figs/gpt_cot_examples/forest-no-cot.png"
-    rightSrc="/writing/research/cot-info/figs/gpt_cot_examples/forest-cot-gpt5-thinking.png"
-    leftAlt="ChatGPT 5 Instant fails on the forestry word problem without reasoning."
-    rightAlt="ChatGPT 5 Thinking solves the forestry word problem with chain-of-thought supervision."
+  <ImageComparison slot="figure" client:idle
     leftLabel="Instant"
     rightLabel="Thinking"
-  />
+    showLabels={false}
+  >
+    <Picture slot="itemOne" src="/writing/research/cot-info/figs/gpt_cot_examples/forest-no-cot.png" alt="ChatGPT 5 Instant fails on the forestry word problem without reasoning." invertInDarkMode />
+    <Picture slot="itemTwo" src="/writing/research/cot-info/figs/gpt_cot_examples/forest-cot-gpt5-thinking.png" alt="ChatGPT 5 Thinking solves the forestry word problem with chain-of-thought supervision." invertInDarkMode />
+  </ImageComparison>
   <Fragment slot="caption">
     ChatGPT 5 Instant (left), prompted to respond instantly, guesses the wrong answer. ChatGPT Thinking (right) produces the correct answer after reasoning step-by-step.
   </Fragment>
@@ -79,14 +79,14 @@ We can see this difference in action when both models attempt the same problem.
 > **Question.** *Suppose $x + 2y - z = 4$, $-3x - y + z = 10$, $4x + y - 2z = 15$. Solve for $x, y, z$.*
 
 <Figure>
-  <ImageComparison slot="figure" client:load
-    leftSrc="/writing/research/cot-info/figs/gpt_cot_examples/syseq-gpt5-instant.png"
-    rightSrc="/writing/research/cot-info/figs/gpt_cot_examples/syseq-gpt5-thinking.png"
-    leftAlt="ChatGPT 5 Instant fails to solve the linear system without reasoning."
-    rightAlt="ChatGPT 5 Thinking solves the linear system with a reasoning trace."
+  <ImageComparison slot="figure" client:idle
     leftLabel="Instant"
     rightLabel="Thinking"
-  />
+    showLabels={false}
+  >
+    <Picture slot="itemOne" src="/writing/research/cot-info/figs/gpt_cot_examples/syseq-gpt5-instant.png" alt="ChatGPT 5 Instant fails to solve the linear system without reasoning." invertInDarkMode />
+    <Picture slot="itemTwo" src="/writing/research/cot-info/figs/gpt_cot_examples/syseq-gpt5-thinking.png" alt="ChatGPT 5 Thinking solves the linear system with a reasoning trace." invertInDarkMode />
+  </ImageComparison>
   <Fragment slot="caption">
     ChatGPT 5 Instant (left), prompted to respond instantly, guesses the wrong answer. ChatGPT Thinking (right) produces the correct answer after reasoning step-by-step.
   </Fragment>
@@ -254,9 +254,10 @@ We will see that the CoT information characterizes the sample complexity of lear
 ### Main Theorem: CoT Information Governs the Statistical Rate of Learning under CoT Supervision
 
 
-<EmbedFrame src="/writing/research/cot-info/figs/diagrams/cotcons_dynamic_diagram.pdf" title="Multi-panel illustration comparing end-to-end and CoT consistency sets as sample size increases." height="420px" linkLabel="Open PDF figure">
+<Figure>
+  <Picture slot="figure" src="/writing/research/cot-info/figs/diagrams/cotcons_dynamic_diagram.pdf" alt="Multi-panel illustration comparing end-to-end and CoT consistency sets as sample size increases." />
   <Fragment slot="caption">Geometry of CoT information: consistency sets shrink much faster under CoT supervision.</Fragment>
-</EmbedFrame>
+</Figure>
 
 <MathBlock title="Result: Sample Complexity Under CoT Supervision" color="#ef4444">
   For finite $\calH$, the *CoT consistency rule*
@@ -358,20 +359,24 @@ Each model has window size $d = 8$, produces $T = 16$ autoregressive steps, and 
 The CoT trace corresponds to the full sequence of intermediate tokens, while the final output $y$ is the last generated token.
 
 <TwoColumns>
-  <EmbedFrame slot="left" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_E2EDiff.pdf" title="Scatter plot comparing CoT information and end-to-end disagreement for the linear autoregressive class." height="420px" linkLabel="Open PDF figure">
-  <Fragment slot="caption">Relative CoT information between pairs of hypotheses versus their end-to-end disagreement. Observing the CoT makes distinguishing hypotheses statistically easier.</Fragment>
-</EmbedFrame>
-  <EmbedFrame slot="right" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_Epsilon_log.pdf" title="Plot of CoT information as a function of epsilon for the linear autoregressive class." height="420px" linkLabel="Open PDF figure">
-  <Fragment slot="caption">The CoT information function $\cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H})$. The dashed line is the line $y = \epsilon$. The CoT information always dominates the $\epsilon$ baseline.</Fragment>
-</EmbedFrame>
+  <Figure slot="left">
+    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_E2EDiff.pdf" alt="Scatter plot comparing CoT information and end-to-end disagreement for the linear autoregressive class." invertInDarkMode />
+    <Fragment slot="caption">Relative CoT information between pairs of hypotheses versus their end-to-end disagreement. Observing the CoT makes distinguishing hypotheses statistically easier.</Fragment>
+  </Figure>
+  <Figure slot="right">
+    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_Epsilon_log.pdf" alt="Plot of CoT information as a function of epsilon for the linear autoregressive class." invertInDarkMode />
+    <Fragment slot="caption">The CoT information function $\cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H})$. The dashed line is the line $y = \epsilon$. The CoT information always dominates the $\epsilon$ baseline.</Fragment>
+  </Figure>
 </TwoColumns>
 <TwoColumns>
-  <EmbedFrame slot="left" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/empirical_sample_complexity_legendin.pdf" title="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class." height="420px" linkLabel="Open PDF figure">
-  <Fragment slot="caption">Empirical sample complexity for end-to-end versus CoT learning.</Fragment>
-</EmbedFrame>
-  <EmbedFrame slot="right" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/learning_curves_prob_success_eps0_log_legendin_e2eerr.pdf" title="Empirical probability of zero error for end-to-end vs CoT learners in the linear autoregressive class." height="420px" linkLabel="Open PDF figure">
-  <Fragment slot="caption">Probability that each learning rule achieves zero error as the sample size grows.</Fragment>
-</EmbedFrame>
+  <Figure slot="left">
+    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/empirical_sample_complexity_legendin.pdf" alt="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class." invertInDarkMode />
+    <Fragment slot="caption">Empirical sample complexity for end-to-end versus CoT learning.</Fragment>
+  </Figure>
+  <Figure slot="right">
+    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/learning_curves_prob_success_eps0_log_legendin_e2eerr.pdf" alt="Empirical probability of zero error for end-to-end vs CoT learners in the linear autoregressive class." invertInDarkMode />
+    <Fragment slot="caption">Probability that each learning rule achieves zero error as the sample size grows.</Fragment>
+  </Figure>
 </TwoColumns>
 
 The empirical data closely match the theoretical prediction: $\lim_{\epsilon \to 0} \cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H}) / \epsilon^+ \approx 6$, corresponding to a roughly 6× theoretical gain. Measured sample complexity shows an actual ≈5× empirical improvement, validating that CoT information accurately predicts the observed acceleration in learning.
@@ -382,20 +387,24 @@ Our second experiment examines multi-step reasoning via regular language recogni
 Here, $h^{\text{e2e}}(x)$ indicates whether a string $x$ belongs to a regular language $\mathcal{L}$, while $h^{\text{CoT}}(x)$ records the sequence of states traversed by the corresponding deterministic finite automaton during recognition. The CoT thus captures the latent computational process underlying membership decisions.
 
 <TwoColumns>
-  <EmbedFrame slot="left" src="/writing/research/cot-info/figs/simulation_figs/DFA_transition_diagram.pdf" title="Deterministic finite automaton with four states used in the simulation." height="420px" linkLabel="Open PDF figure">
-  <Fragment slot="caption">DFA whose state trajectory forms the chain-of-thought trace.</Fragment>
-</EmbedFrame>
-  <EmbedFrame slot="right" src="/writing/research/cot-info/figs/simulation_figs/DFA_S4A2L10_varycotdetail/20250503-194523/figs/CoTInfoRatio_vs_Epsilon_by_detail_log.pdf" title="CoT information ratio as a function of epsilon under varying detail levels of the DFA trace." height="420px" linkLabel="Open PDF figure">
-  <Fragment slot="caption">How CoT information scales with epsilon as trace detail varies.</Fragment>
-</EmbedFrame>
+  <Figure slot="left">
+    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/DFA_transition_diagram.pdf" alt="Deterministic finite automaton with four states used in the simulation." invertInDarkMode />
+    <Fragment slot="caption">DFA whose state trajectory forms the chain-of-thought trace.</Fragment>
+  </Figure>
+  <Figure slot="right">
+    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/DFA_S4A2L10_varycotdetail/20250503-194523/figs/CoTInfoRatio_vs_Epsilon_by_detail_log.pdf" alt="CoT information ratio as a function of epsilon under varying detail levels of the DFA trace." invertInDarkMode />
+    <Fragment slot="caption">How CoT information scales with epsilon as trace detail varies.</Fragment>
+  </Figure>
 </TwoColumns>
 <TwoColumns>
-  <EmbedFrame slot="left" src="/writing/research/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/empirical_sample_complexity_legendin.pdf" title="Empirical sample complexity for DFA learning under end-to-end vs CoT supervision." height="420px" linkLabel="Open PDF figure">
-  <Fragment slot="caption">Empirical sample complexity for end-to-end versus CoT learning.</Fragment>
-</EmbedFrame>
-  <EmbedFrame slot="right" src="/writing/research/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/learning_curves_prob_success_eps0_log_legendin.pdf" title="Probability of zero error for DFA learning with and without CoT supervision." height="420px" linkLabel="Open PDF figure">
-  <Fragment slot="caption">Probability that each learning rule achieves zero error as the sample size grows.</Fragment>
-</EmbedFrame>
+  <Figure slot="left">
+    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/empirical_sample_complexity_legendin.pdf" alt="Empirical sample complexity for DFA learning under end-to-end vs CoT supervision." invertInDarkMode />
+    <Fragment slot="caption">Empirical sample complexity for end-to-end versus CoT learning.</Fragment>
+  </Figure>
+  <Figure slot="right">
+    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/learning_curves_prob_success_eps0_log_legendin.pdf" alt="Probability of zero error for DFA learning with and without CoT supervision." invertInDarkMode />
+    <Fragment slot="caption">Probability that each learning rule achieves zero error as the sample size grows.</Fragment>
+  </Figure>
 </TwoColumns>
 
 In this setting, the theoretical $\cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H}) / \epsilon^+$ curve approaches $\approx 600$ as $\epsilon \to 0$, forecasting an improvement on the order of 600× to learn $\hstar$ with very small error. Empirical results confirm dramatic gains: between $10^2$ and $10^3$ times fewer samples are needed under CoT supervision to reach equivalent accuracy. This demonstrates that CoT information can yield *orders-of-magnitude* improvements in sample efficiency, depending on how much structure the reasoning trace exposes about the underlying computation.
