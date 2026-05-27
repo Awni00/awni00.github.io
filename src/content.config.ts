@@ -28,6 +28,10 @@ const tocConfig = z
     }
   );
 
+const mathConfig = z.object({
+  macros: z.array(z.string()).default([])
+});
+
 const externalLinks = z
   .object({
     paper: z.string().url().or(z.string().startsWith("/")).optional(),
@@ -75,6 +79,7 @@ const writing = defineCollection({
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
     theme: z.enum(["global", "system", "light", "dark"]).default("global"),
+    math: mathConfig.optional(),
     external: externalLinks,
     bibtex: z.string().optional(),
     layout: z
@@ -121,6 +126,7 @@ const pages = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     draft: z.boolean().default(false),
+    math: mathConfig.optional(),
     navTitle: z.string().optional()
   })
 });

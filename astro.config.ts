@@ -4,15 +4,16 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 
 import { siteConfig } from "./src/config/site";
 import { writingConfig } from "./src/config/writing";
-import { mathMacros } from "./src/lib/math/macros";
+import { defaultMathMacros } from "./src/lib/math/macros";
+import { rehypeKatexWithMacros } from "./src/lib/math/rehypeKatexWithMacros";
 import { remarkWikilinks } from "./src/lib/wikilinks/remarkWikilinks";
+import { globalMathMacros, mathMacroPacks } from "./src/site/math";
 
 const remarkPlugins: any[] = [
   remarkGfm,
@@ -29,7 +30,15 @@ const rehypePlugins: any[] = [
       properties: { className: ["heading-anchor"] }
     }
   ],
-  [rehypeKatex, { macros: mathMacros, throwOnError: false }]
+  [
+    rehypeKatexWithMacros,
+    {
+      defaultMacros: defaultMathMacros,
+      globalMacros: globalMathMacros,
+      macroPacks: mathMacroPacks,
+      throwOnError: false
+    }
+  ]
 ];
 
 export default defineConfig({
