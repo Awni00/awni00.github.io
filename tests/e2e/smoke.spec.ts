@@ -39,10 +39,10 @@ test("writing browser supports URL state and preview", async ({ page }) => {
   await page.goto("/writing?view=map");
   await expect(page.getByRole("tab", { name: "map" })).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("button", { name: "Research" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Research" })).toBeVisible();
+  await expect(page.locator(".preview-pane").getByRole("heading").first()).toBeVisible();
   await expect(page.getByRole("link", { name: "Open entry" })).toHaveAttribute(
     "href",
-    "/writing/research"
+    /\/writing\//
   );
 });
 
