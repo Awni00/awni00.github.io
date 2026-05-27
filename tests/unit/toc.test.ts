@@ -53,7 +53,7 @@ describe("article TOC depth config", () => {
   });
 
   it("resolves the default config from writing config", () => {
-    expect(resolveTocConfig(entry(), writingConfig)).toEqual({ minDepth: 2, maxDepth: 3 });
+    expect(resolveTocConfig(entry(), writingConfig)).toEqual(writingConfig.entryLayout.toc.default);
   });
 
   it("merges type-level and per-entry overrides", () => {

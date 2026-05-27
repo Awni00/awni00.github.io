@@ -18,6 +18,9 @@ authors:
   - name: "John Lafferty"
     affiliation: "Yale University"
 featured: true
+math:
+  macros:
+    - "cot-info"
 external:
   arxiv: "https://arxiv.org/abs/2505.15927"
   slides: "/publications/slides/cotinfo-slides.pdf"
@@ -138,8 +141,8 @@ CoT traces can be collected in several ways:
 - **Hybrid:** generate with a model and let humans filter/rate/edit.
 - **Programmatic synthesis:** feasible for some domains with algorithmic generators.
 
-[^humancot]: <a href="https://arxiv.org/abs/2110.14168">Cobbe et al. (GSM8K)</a>
-[^modelcot]: <a href="https://arxiv.org/abs/2203.11171">Wang et al. (self-consistency)</a>; <a href="https://arxiv.org/abs/2203.14465">Zelikman et al. (STaR)</a>; <a href="https://arxiv.org/abs/2305.20050">Lightman et al. (Let's Verify Step by Step)</a>.
+[^humancot]: [Cobbe et al. (GSM8K)](https://arxiv.org/abs/2110.14168)
+[^modelcot]: [Wang et al. (self-consistency)](https://arxiv.org/abs/2203.11171); [Zelikman et al. (STaR)](https://arxiv.org/abs/2203.14465); [Lightman et al. (Let's Verify Step by Step)](https://arxiv.org/abs/2305.20050).
 
 In what follows, we abstract away the mechanics of obtaining CoT traces or their format (e.g., natural language or otherwise). We assume the CoT dataset exists, and ask: *What statistical advantage does CoT training confer relative to vanilla input–output supervision?*
 
@@ -219,7 +222,7 @@ This asymmetry prevents the direct application of classical learning theory resu
 
 One approach to studying CoT-supervised learning, taken by recent related work[^joshietal], sidesteps this asymmetry by bounding the CoT risk instead of the end-to-end risk, noting that $\cotrisk{\calD}(h) \geq \eterisk{\calD}(h)$ for all $h$. This problem is now symmetric because both the training and testing objectives are the CoT error, enabling a direct application of standard learning results. In particular, this approach yields a sample complexity of $\bigO\big(\VC(\calLCoT(\calH)) / \epsilon\big)$, where $\calLCoT(\calH) := \{\ell_h^{\CoT}: (x, y, z) \mapsto \Ind{h(x) \neq (y, z)}\}$.
 
-[^joshietal]: <a href="https://arxiv.org/abs/2505.15927">Joshi et al. (2025) [arXiv:2505.15927]</a>
+[^joshietal]: [Joshi et al. (2025) [arXiv:2505.15927]](https://arxiv.org/abs/2505.15927)
 
 While this provides an upper bound, the resulting rate, scaling as $1/\epsilon$, matches that of standard end-to-end supervision (in terms of the dependence on $\epsilon$). Yet, we know that CoT supervision can provide significant statistical advantages in practice. This suggests that the analysis is loose, failing to capture the full benefit of CoT supervision through the extra information encoded in the traces.
 
