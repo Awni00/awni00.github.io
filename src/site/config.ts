@@ -32,7 +32,7 @@ export const siteConfigOverrides: SiteConfigOverrides = {
         title: "Research Writing",
         description:
           "Paper pages and research notes organized as a linked map of ideas and projects.",
-        clickTarget: "/writing/research",
+        clickTarget: "/writing",
         previewHeight: 380
       },
       selectedPublications: {
@@ -50,6 +50,16 @@ export const siteConfigOverrides: SiteConfigOverrides = {
     authorHighlight: ["Awni Altabaa", "Altabaa, Awni"],
     previews: {
       basePath: "/publications"
+    }
+  },
+  writing: {
+    entryLayout: {
+      toc: {
+        default: {
+          minDepth: 2,
+          maxDepth: 2
+        }
+      }
     }
   },
   theme: {
