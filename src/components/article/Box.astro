@@ -1,0 +1,22 @@
+---
+type Props = {
+  /** Optional label for a boxed takeaway or emphasized formula. */
+  title?: string;
+  /** Accent color for the title and left border. Accepts token names or any CSS color. */
+  accent?: string;
+};
+
+const { title, accent } = Astro.props;
+const accentTokens: Record<string, string> = {
+  accent: "var(--color-accent)",
+  fg: "var(--color-fg)",
+  muted: "var(--color-muted)"
+};
+const resolvedAccent = accent ? (accentTokens[accent] ?? accent) : undefined;
+const accentStyle = resolvedAccent ? `--box-accent: ${resolvedAccent};` : undefined;
+---
+
+<section class="box" style={accentStyle}>
+  {title && <p class="box__title">{title}</p>}
+  <slot />
+</section>

@@ -83,7 +83,7 @@ The decoder maps a latent sample back to a distribution over observations. Sampl
 
 ## Objective
 
-<Theorem label="Definition" title="evidence lower bound" id="def:vae-elbo" accent="accent">
+<Statement label="Definition" title="evidence lower bound" id="def:vae-elbo" accent="accent">
 For one observation $x$, latent prior $p(z)$, decoder $p_\theta(x \mid z)$, and variational posterior $q_\phi(z \mid x)$,
 $$
 \log p_\theta(x)
@@ -93,7 +93,7 @@ $$
 \mathrm{KL}(q_\phi(z \mid x) \| p(z)).
 $$
 The right-hand side is the evidence lower bound, or ELBO.
-</Theorem>
+</Statement>
 
 <Proof>
 Start from
@@ -105,7 +105,7 @@ $$
 Multiply and divide the integrand by $q_\phi(z \mid x)$, then view the result as an expectation under $q_\phi(z \mid x)$. Jensen's inequality moves the logarithm inside the expectation, producing the reconstruction term minus the KL penalty.
 </Proof>
 
-<MathBlock title="Training loss">
+<Box title="Training loss">
 Implementations usually minimize the negative ELBO:
 $$
 \mathcal{L}(\theta, \phi; x)
@@ -114,7 +114,7 @@ $$
 +
 \mathrm{KL}(q_\phi(z \mid x) \| p(z)).
 $$
-</MathBlock>
+</Box>
 
 The first term rewards reconstructions that explain the observed data. The second term keeps the inferred latents close to the prior, which makes it possible to sample new examples by drawing `z` from the prior and decoding it.
 

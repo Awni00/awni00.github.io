@@ -657,50 +657,49 @@
   margin-bottom: 0;
 }
 
-/* ── Theorem boxes ──────────────────────────────────────────────────── */
+/* ── Formal statements ──────────────────────────────────────────────── */
 
-.theorem,
+.statement,
 .proof,
-.math-block {
+.box {
   margin: 28px 0;
 }
 
-.theorem {
-  --theorem-accent: var(--color-muted);
-  border-left: 3px solid var(--theorem-accent);
+.statement {
+  --statement-accent: var(--color-muted);
+  border-left: 3px solid var(--statement-accent);
   padding: 4px 0 4px 20px;
 }
 
-.theorem-head {
+.statement-head {
   font-family: var(--font-ui);
   font-size: 13px;
   margin-bottom: 4px;
 }
 
-.theorem-label {
+.statement-label {
   font-weight: 700;
-  color: var(--theorem-accent);
+  color: var(--statement-accent);
   font-family: var(--font-mono);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
-.theorem-title {
-  color: var(--theorem-accent);
+.statement-title {
+  color: var(--statement-accent);
   font-weight: 400;
   font-style: italic;
 }
 
-.theorem-body {
-  font-size: 16.5px;
-  line-height: 1.6;
+.statement-body {
+  line-height: 1.7;
   color: var(--color-fg);
   font-style: normal;
 }
 
-.theorem-body .display-math,
-.theorem-body .katex-display {
+.statement-body .display-math,
+.statement-body .katex-display {
   font-style: italic;
 }
 
@@ -733,11 +732,11 @@
   font-style: normal;
 }
 
-/* ── Math block ─────────────────────────────────────────────────────── */
+/* ── Boxed takeaway ─────────────────────────────────────────────────── */
 
-.math-block {
+.box {
   border: 1px solid var(--color-border);
-  border-left: 3px solid var(--math-block-accent, var(--color-border));
+  border-left: 3px solid var(--box-accent, var(--color-border));
   border-radius: 5px;
   padding: 14px 18px;
   background: var(--color-bg);
@@ -745,13 +744,15 @@
   overflow-x: auto;
 }
 
-.math-block__title {
+.box .box__title {
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-size: 0.875em;
+  line-height: 1.25;
+  margin: 0 0 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: var(--box-accent, var(--color-fg-soft));
 }
 
 /* ── Figure ─────────────────────────────────────────────────────────── */
@@ -939,7 +940,7 @@
 /*
  * Margin notes — `<Aside>` blocks become the right column of the
  * article-content sub-grid. Wide blocks (figures, math, comparison
- * panels, theorems, tables) span both columns so they never overlap an
+ * panels, statements, tables) span both columns so they never overlap an
  * adjacent aside.
  */
 .article-content[data-asides="margin"] {
@@ -950,7 +951,7 @@
 }
 
 /*
- * All body content — prose, headings, lists, figures, math, theorems,
+ * All body content — prose, headings, lists, figures, math, statements,
  * comparisons, callouts, tables — stays in column 1 (the 760px reading
  * column). Only `<Aside>` blocks land in column 2. This keeps the centre
  * column visually contained; the right gutter is reserved for margin

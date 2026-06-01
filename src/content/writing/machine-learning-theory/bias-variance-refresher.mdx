@@ -55,31 +55,31 @@ For squared loss, expected test error splits cleanly into three independent piec
 
 We fix a data-generating distribution $\mathcal{D}$ over $(X, Y) \in \mathcal{X} \times \mathbb{R}$, with conditional mean $f^\star(x) = \mathbb{E}[Y \mid X = x]$ and noise variance $\sigma^2(x) = \mathrm{Var}(Y \mid X = x)$. A *learner* is a function $\hat f$ produced from a training set $S \sim \mathcal{D}^n$; the randomness in $\hat f$ comes from $S$.
 
-<Theorem label="Definition" title="point-wise risk" id="def:risk">
+<Statement label="Definition" title="point-wise risk" id="def:risk">
 The point-wise expected squared loss at a query $x_0$ is
 $$
 R(x_0) \;=\; \mathbb{E}_{S,\, Y_0}\Big[\,(\,\hat f_S(x_0) - Y_0\,)^2 \,\Big],
 $$
 where $Y_0$ is a fresh draw from $\mathcal{D}(\,\cdot \mid X = x_0)$.
-</Theorem>
+</Statement>
 
-<MathBlock title="The decomposition we will prove">
+<Box title="The decomposition we will prove">
 With $\bar f(x_0) = \mathbb{E}_S[\hat f_S(x_0)]$,
 $$
 R(x_0) \;=\; \underbrace{(\bar f(x_0) - f^\star(x_0))^2}_{\text{bias}^2} \;+\; \underbrace{\mathbb{E}_S\!\big[(\hat f_S(x_0) - \bar f(x_0))^2\big]}_{\text{variance}} \;+\; \underbrace{\sigma^2(x_0)}_{\text{noise}}.
 $$
-</MathBlock>
+</Box>
 
 The three terms are *additive* and *non-negative*. The first depends only on the learner-on-average; the second only on its jitter; the third on the world.
 
 ## The decomposition
 
-<Theorem label="Theorem 1" title="Bias–variance decomposition" id="thm:bv" accent="accent">
+<Statement label="Theorem 1" title="Bias–variance decomposition" id="thm:bv" accent="accent">
 For any learning rule whose output $\hat f_S$ has finite second moment at $x_0$,
 $$
 R(x_0) \;=\; \big(\bar f(x_0) - f^\star(x_0)\big)^2 \;+\; \mathrm{Var}_S\!\big[\hat f_S(x_0)\big] \;+\; \sigma^2(x_0).
 $$
-</Theorem>
+</Statement>
 
 <Proof>
 Add and subtract $\bar f(x_0)$ and $f^\star(x_0)$ inside the square, then expand. The three cross terms vanish: $\mathbb{E}_S[\hat f_S(x_0) - \bar f(x_0)] = 0$ by definition of $\bar f$, and $Y_0 - f^\star(x_0)$ has mean zero and is independent of $\hat f_S$ (different randomness). What remains are the three squared terms.

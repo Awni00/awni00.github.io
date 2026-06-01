@@ -161,10 +161,11 @@ Both files are site-owned after adoption.
 
 MDX entries can use built-in technical writing components:
 
+- `Box`
 - `Callout`
+- `Statement`
 - `Theorem`
 - `Proof`
-- `MathBlock`
 - `Figure`
 - `FigureGrid`
 - `Picture`
@@ -176,17 +177,53 @@ MDX entries can use built-in technical writing components:
 - `Comparison`
 - `ModelViewer`
 
-Example:
+Use the prose components by role:
+
+| Component | Use for | Avoid using for |
+| --- | --- | --- |
+| `Callout` | Editorial notes, tips, warnings, caveats, examples, and reader guidance. | Formal claims or boxed equations. |
+| `Statement` | Formal theorem-like environments: `Definition`, `Assumption`, `Lemma`, `Proposition`, `Theorem`, `Corollary`, `Result`, or `Example`. | Informal advice or visual emphasis alone. |
+| `Theorem` | Convenience wrapper for literal theorem environments. | General formal blocks; prefer `Statement` with an explicit `label`. |
+| `Proof` | Proof paragraphs following a formal statement. | Standalone notes or derivations that are not proofs. |
+| `Box` | Boxed takeaways, emphasized formulas, compact summaries, or implementation objectives. | Warnings, tips, or formal theorem-like claims. |
+
+Examples:
 
 ```mdx
 <Callout type="tip" title="Main idea">
 The graph should represent intentional conceptual links, not every hyperlink.
 </Callout>
+
+<Statement label="Definition" title="point-wise risk" id="def:risk">
+The point-wise expected squared loss at a query $x_0$ is
+$$
+R(x_0) = \mathbb{E}[(\hat f(x_0) - Y_0)^2].
+$$
+</Statement>
+
+<Theorem title="Generalization bound" id="thm:generalization">
+Let $\mathcal{F}$ be a finite function class.
+</Theorem>
+
+<Proof>
+Apply the union bound over $\mathcal{F}$.
+</Proof>
+
+<Box title="Training loss">
+$$
+\mathcal{L}(\theta, \phi; x)
+=
+-\mathbb{E}_{q_\phi(z \mid x)}[\log p_\theta(x \mid z)]
++
+\mathrm{KL}(q_\phi(z \mid x) \| p(z)).
+$$
+</Box>
 ```
 
 Prefer these components over raw HTML for article structure. Avoid inline `style`,
 layout `<div>` wrappers, raw `<table>`, and raw `<img>` tags in authored MDX;
-use Markdown tables, `Figure`, `FigureGrid`, `TwoColumns`, and `Callout` so the
+use Markdown tables, `Figure`, `FigureGrid`, `TwoColumns`, `Callout`,
+`Statement`, and `Box` so the
 template owns the visual language.
 
 ## Validation
