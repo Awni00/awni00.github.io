@@ -50,9 +50,9 @@ The graph should represent intentional conceptual relationships in the writing c
 
 The graph is:
 
-\[
+$$
 G=(V,E)
-\]
+$$
 
 where:
 
@@ -876,13 +876,13 @@ type WritingBrowserState = {
 
 Focus semantics:
 
-\[
+$$
 V_h^{(1)} = \{h\} \cup N(h)
-\]
+$$
 
-\[
+$$
 V_h^{(2)} = \{h\} \cup N(h) \cup N^2(h)
-\]
+$$
 
 Dim mode:
 
@@ -941,9 +941,9 @@ filter: {
 
 If `mode = "types"`, preview graph uses:
 
-\[
+$$
 V' = \{v \in V : v.type \in T\}
-\]
+$$
 
 Default preview filter:
 
@@ -1197,11 +1197,11 @@ The optional `accent` prop accepts `accent`, `fg`, `muted`, or any CSS color. Wh
 
 ```mdx
 <Statement label="Definition" title="Risk" id="def:risk">
-Let \(R(f)\) be ...
+Let $R(f)$ be ...
 </Statement>
 
 <Statement label="Theorem" title="Generalization bound" id="thm:generalization">
-Let \(\mathcal{F}\) be ...
+Let $\mathcal{F}$ be ...
 </Statement>
 ```
 
@@ -1223,9 +1223,9 @@ For boxed takeaways, emphasized formulas, compact summaries, or implementation o
 
 ```mdx
 <Box title="Training loss">
-\[
+$$
 R(f)=\mathbb{E}_{(X,Y)\sim P}[\ell(f(X),Y)]
-\]
+$$
 </Box>
 ```
 
@@ -1318,13 +1318,13 @@ src/lib/math/macros.ts
 Support Markdown math syntax:
 
 ```md
-Inline math: \( f(x)=x^2 \)
+Inline math: $f(x)=x^2$
 
 Display math:
 
-\[
+$$
 R(f)=\mathbb{E}_{(X,Y)\sim P}[\ell(f(X),Y)]
-\]
+$$
 ```
 
 Architecture should isolate math rendering enough that `themeConfig.math.renderer` could exist conceptually, but only KaTeX needs implementation.
