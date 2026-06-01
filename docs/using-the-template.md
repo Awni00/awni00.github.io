@@ -226,6 +226,23 @@ use Markdown tables, `Figure`, `FigureGrid`, `TwoColumns`, `Callout`,
 `Statement`, and `Box` so the
 template owns the visual language.
 
+## Article Typography
+
+Article typography is controlled by semantic `--article-*` CSS custom
+properties near the top of `src/styles/article.css`. Override those tokens for
+article-specific scale changes instead of setting one-off component font sizes.
+
+| Role | Default | Used for |
+| --- | --- | --- |
+| Body | `18px` / `1.7` line-height | Article prose and content-bearing component bodies: `Callout`, `Statement`, `Theorem`, `Proof`, and `Box`. |
+| Article title | `48px`, `36px` on mobile | Writing-entry titles. |
+| Summary | `20px`, `17px` on mobile | Entry summaries under the title. |
+| Headings | `24px`, `20px`, `18px`, `16px` | Article `h2` through `h5`/`h6`. |
+| Component title / formal label | `18px` | `Callout` titles, `Box` titles, `Statement` parenthetical titles, and `Statement`/`Theorem` labels; typography, case, weight, and font family distinguish the role. |
+| Metadata label | `12px` | Article metadata labels, sidebar headings, TOC depth labels, footer labels, and compact image labels. |
+| Caption / aside / UI | `13px` | Figure captions, margin notes, TOC text, tags, and compact article navigation. |
+| Table | `14px` | Tables and structured article-footer rows. |
+
 ## Validation
 
 Run:
