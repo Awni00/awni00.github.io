@@ -38,13 +38,13 @@ bibtex: |
 
 
 
-## TL;DR ✨
+## TL;DR
 
-What architectural mechanisms are needed to enable transformers to generalize algorithmically beyond their training distribution? We find that standard transformers, even with Chain-of-Thought training, struggle to scale their reasoning to more complex problems. We explore four key mechanisms which we hypothesize are key to robust algorithmic generalization: ***(i)* input-adaptive recurrence**, ***(ii)* algorithmic supervision**, ***(iii)* depth-invariant discrete latent representations**, and ***(iv)* error correction**. When combined, these mechanisms enable transformers to develop genuine algorithmic reasoning that generalizes to problems much larger than those seen during training. Our mechanistic analysis further uncovers *how* these models compute, revealing a learned circuit that performs modular arithmetic using induction heads and frequency-domain operations. 🔍
+What architectural mechanisms are needed to enable transformers to generalize algorithmically beyond their training distribution? We find that standard transformers, even with Chain-of-Thought training, struggle to scale their reasoning to more complex problems. We explore four key mechanisms which we hypothesize are key to robust algorithmic generalization: ***(i)* input-adaptive recurrence**, ***(ii)* algorithmic supervision**, ***(iii)* depth-invariant discrete latent representations**, and ***(iv)* error correction**. When combined, these mechanisms enable transformers to develop genuine algorithmic reasoning that generalizes to problems much larger than those seen during training. Our mechanistic analysis further uncovers *how* these models compute, revealing a learned circuit that performs modular arithmetic using induction heads and frequency-domain operations.
 
 ---
 
-## 🎯 Motivation: Do Language Models Truly Reason?
+## Motivation: Do Language Models Truly Reason?
 
 The reasoning capabilities of **Large Language Models (LLMs)** have advanced dramatically in recent years, particularly through **Chain-of-Thought (CoT)** techniques that enable models to generate step-by-step reasoning traces. These advances have led to impressive performance on mathematical reasoning tasks, with models now solving complex problems that once seemed beyond reach.
 
@@ -60,7 +60,7 @@ What architectural mechanisms are needed to enable transformer models to discove
 
 ---
 
-## 🧪 Our Testbed: Modular Arithmetic on Scalable Computation Graphs
+## Our Testbed: Modular Arithmetic on Scalable Computation Graphs
 
 ### The Task Definition
 
@@ -129,7 +129,7 @@ To solve this problem, a natural algorithmic approach is to **compute nodes laye
 - $x_{101} = x_{23} \times x_{91} = 22 \times 8 = 15 \pmod{23}$
 - $x_{30} = x_{91} - x_{88} + x_{55} = 8 - 6 + 15 = 17 \pmod{23}$
 
-<Callout type="tip" title="Key Property: Depth-Invariant Algorithm">
+<Callout title="Key Property: Depth-Invariant Algorithm">
 The **complexity** of each problem is parameterized by graph size $N$ and depth $D$. However, the **algorithm itself is independent of depth** each step—it is a recursive procedure with a shared layer-by-layer procedure!
 
 **The Critical Test for Algorithmic Learning:**
@@ -145,17 +145,17 @@ This setup provides a controlled environment for probing whether Transformers ca
 
 This task possesses three key properties that make it perfect for testing whether models learn genuine algorithms:
 
-1. **📏 Complexity is Parameterized by Graph Size**: Problem complexity is directly controlled by the number of nodes $N$ and depth $D$ in the graph.
+1. **Complexity is Parameterized by Graph Size**: Problem complexity is directly controlled by the number of nodes $N$ and depth $D$ in the graph.
 
-2. **🔄 Target Algorithm is Depth-Invariant**: The layer-by-layer algorithm that solves the problem has a **recursive compositional structure**. Thus, once the core problem-solving procedure is learned, it can generalize to arbitrary inputs by the number of iterations, enabling algorithmic generalization.
+2. **Target Algorithm is Depth-Invariant**: The layer-by-layer algorithm that solves the problem has a **recursive compositional structure**. Thus, once the core problem-solving procedure is learned, it can generalize to arbitrary inputs by the number of iterations, enabling algorithmic generalization.
 
-3. **🎯 Captures Real Mathematical Reasoning**: This task mirrors the structure of established mathematical reasoning benchmarks like GSM8K, where multi-step arithmetic must be performed in dependency order.
+3. **Captures Real Mathematical Reasoning**: This task mirrors the structure of established mathematical reasoning benchmarks like GSM8K, where multi-step arithmetic must be performed in dependency order.
 
 **The Critical Test**: If a model learns the **algorithm** (layer-by-layer traversal), it should work on graphs of any size. If it memorizes **distribution-specific patterns**, performance will collapse on larger graphs.
 
 ---
 
-## 📊 Experimental Setup & Baseline Methods
+## Experimental Setup & Baseline Methods
 
 ### Training and Testing Data
 
@@ -195,7 +195,7 @@ Here, `[...]` denotes the preceding CoT trajectory that computed $x_{23}$ and $x
 
 ### Observed OOD Generalization Deficiencies
 
-<Callout type="danger" title="Key Findings: Catastrophic Failure Beyond Training Distribution">
+<Callout type="warning" title="Key Findings: Catastrophic Failure Beyond Training Distribution">
 - **End-to-End models** (both feedforward and recurrent): Fail to effectively learn the task even in-distribution, with performance rapidly degrading as graph size increases.
 
 - **Chain-of-Thought** enables significant improvement, achieving near-perfect in-distribution performance ($N \leq 32$). However, it exhibits only **limited OOD generalization** to moderately larger graphs ($N \approx 40$), and this capability **rapidly deteriorates** as graph sizes exceed the training regime.
@@ -205,32 +205,32 @@ Here, `[...]` denotes the preceding CoT trajectory that computed $x_{23}$ and $x
 
 **These failures highlight a clear need for architectural mechanisms that move beyond brittle token-level reasoning towards models with a native ability to learn algorithms.**
 
-### 🚀 Our Solution: Four Architectural Mechanisms
+### Our Solution: Four Architectural Mechanisms
 
 Effective out-of-distribution generalization demands more than memorizing reasoning traces—it requires learning a scalable algorithm that can adapt its computation to the input’s complexity. We identify four key mechanisms that together enable Transformers to learn true algorithmic reasoning:
 
 <Callout type="info" title="Core Principle: Depth-Invariant Latent Space Reasoning">
 Rather than forcing computation into a token-by-token format (like CoT), we enable **native latent-space reasoning** through:
 
-1. **🔄 Recurrence & Adaptive Computation** - Scale computation time with problem complexity via recurrence
-2. **🧭 Algorithmic Supervision** - Guide learning toward a scalable layer-by-layer procedure via latent space supervision
-3. **🧱 Discrete Latent Anchoring** - Prevent representational drift across iterations via discretization
-4. **🔧 Self-Correction** - Detect and recover from intermediate errors
+1. **Recurrence & Adaptive Computation** - Scale computation time with problem complexity via recurrence
+2. **Algorithmic Supervision** - Guide learning toward a scalable layer-by-layer procedure via latent space supervision
+3. **Discrete Latent Anchoring** - Prevent representational drift across iterations via discretization
+4. **Self-Correction** - Detect and recover from intermediate errors
 
 These mechanisms impose a **depth-invariant structure**: the model learns a recursive solution to the problem, enabling robust scaling far beyond training depth.
 </Callout>
 
 ---
 
-## 🚀 Four Mechanisms for Algorithmic Generalization
+## Four Mechanisms for Algorithmic Generalization
 
 We identify four key architectural mechanisms that enable transformers to develop true algorithmic reasoning:
 
 <FigureGrid columns={4} caption="Four architectural mechanisms enabling algorithmic generalization. (1) Recurrence allows adaptive computation depth matching problem complexity; (2) Algorithmic Supervision guides learning toward the correct layer-by-layer algorithm via latent space supervision; (3) Discretization creates stable checkpoints preventing representational drift across iterations; (4) Error Correction enables the model to detect and fix its own mistakes during iterative reasoning.">
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech1.png" alt="Recurrence & Adaptive Computation" caption="🔄 Recurrence & Adaptive Computation" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech2.png" alt="Algorithmic Supervision" caption="🎯 Algorithmic Supervision" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech3.png" alt="Anchored Discrete Latent Space" caption="🎲 Anchored Discrete Latent Space" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech4.png" alt="Error Correction" caption="🔧 Error Correction" />
+  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech1.png" alt="Recurrence & Adaptive Computation" caption="Recurrence & Adaptive Computation" />
+  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech2.png" alt="Algorithmic Supervision" caption="Algorithmic Supervision" />
+  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech3.png" alt="Anchored Discrete Latent Space" caption="Anchored Discrete Latent Space" />
+  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech4.png" alt="Error Correction" caption="Error Correction" />
 </FigureGrid>
 
 ---
@@ -254,7 +254,7 @@ To evaluate the effectiveness of each mechanism, we study multiple model configu
 
 ### Detailed Mechanism Descriptions
 
-<Callout type="tip" title="Mechanism 1: Recurrence & Input-Adaptive Computation">
+<Callout title="Mechanism 1: Recurrence & Input-Adaptive Computation" accent="accent">
 **Motivation**: Systematic generalization to more complex problem instances requires the ability to scale computation time proportionate to input complexity, beyond the training regime.
 
 **Implementation**: We employ a recurrent Transformer block that iteratively processes the input:
@@ -269,7 +269,7 @@ Crucially, the number of recurrent iterations $T$ is not fixed—it **adapts to 
 
 </Callout>
 
-<Callout type="success" title="Mechanism 2: Latent State Algorithmic Supervision">
+<Callout title="Mechanism 2: Latent State Algorithmic Supervision" accent="accent">
 **Motivation**: While recurrence provides capacity for iterative computation, it does not inherently guarantee that the model learns the desired layer-by-layer algorithmic procedure.
 
 **Implementation**: We provide supervision directly within the model's latent representation space at each recurrent step. At iteration $t$, a shared linear readout layer predicts node values from latent embeddings $E_i^{(t)}$. The training loss is:
@@ -288,7 +288,7 @@ $$
 
 </Callout>
 
-<Callout type="info" title="Mechanism 3: Anchoring Latent Representations via Discretization">
+<Callout title="Mechanism 3: Anchoring Latent Representations via Discretization" accent="accent">
 **Motivation**: Recurrent models can suffer from representational drift during extended out-of-distribution computation. When processing significantly more iterations than seen during training, continuous representations gradually deviate from the learned manifold, causing performance degradation.
 
 **Implementation**: We introduce a discretization mechanism that anchors the model's latent representations. After each recurrent iteration, continuous hidden states are projected into a structured discrete symbolic space with factored components (token syntax, variable identity, operation type, numerical value). These discrete states are then re-embedded to form input for the next iteration.
@@ -308,7 +308,7 @@ Note that the `value` factor of variable tokens (e.g., `x₄₂`) is `empty` ini
 
 </Callout>
 
-<Callout type="warning" title="Mechanism 4: Learning to Self-Correct">
+<Callout title="Mechanism 4: Learning to Self-Correct" accent="accent">
 **Motivation**: In sequential reasoning, errors at any step can propagate and compromise the entire solution. As problem complexity scales, the likelihood of encountering errors increases, limiting the ability to generalize to more complex instances.
 
 **Implementation**: We train the model to detect and correct errors by stochastically corrupting the model's discrete latent states during training. At each recurrent iteration, with small probability, we randomly corrupt value components (e.g., changing a computed value from 15 to 8). This forces the model to learn to:
@@ -322,7 +322,7 @@ Note that the `value` factor of variable tokens (e.g., `x₄₂`) is `empty` ini
 
 ---
 
-## 📊 Experimental Results
+## Experimental Results
 
 ### Enabling Robust Algorithmic OOD Generalization
 
@@ -362,11 +362,11 @@ Figure (a) above shows a systematic ablation study. By comparing methods that di
 
 ---
 
-## 🔬 Mechanistic Interpretability: The Algorithm Learned by the Model?
+## Mechanistic Interpretability: The Algorithm Learned by the Model?
 
 One of the most exciting aspects of our work is that we don't just show *that* it works—we explain *how* it works! Through detailed analysis, we reverse-engineer the exact algorithm the model learned.
 
-> **🎯 Central Questions:**
+> **Central Questions:**
 >
 > 1. What algorithm does the trained model implement?
 > 2. Why can it generalize to OOD data?
@@ -397,20 +397,20 @@ To understand how the MLP performs modular addition, we use 3D Discrete Fourier 
 
 We form hypotheses about each component's role, then design controlled experiments that modify specific input elements and trace how these modifications affect internal representations and final outputs.
 
-### 🎯 The Discovered Algorithm: An Induction Head Mechanism
+### The Discovered Algorithm: An Induction Head Mechanism
 
-Here's what we found—the model implements an **induction head** mechanism tailored to the task! Let's break it down step-by-step:
+Here's what we found: the model implements an **induction head** mechanism tailored to the task. Let's break it down step-by-step:
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/2-layer-illustrated.png" alt="Complete Mechanism" caption="The complete computational circuit showing how each layer contributes 🎨" />
+<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/2-layer-illustrated.png" alt="Complete Mechanism" caption="The complete computational circuit showing how each layer contributes." />
 
-<Callout type="example" title="Layer 1 Attention: Variable Identification">
+<Callout title="Layer 1 Attention: Variable Identification" accent="accent">
 **What It Does**: The first layer's attention heads organize into distinct groups, each specialized for tracking specific variable positions in equations.
 
 **The Grouping Pattern**:
 
-- **Heads $\{4, 8\}$**: Track the first variable ($\mathtt{var}_0$) 🎯
-- **Heads $\{5, 12\}$**: Track the second variable ($\mathtt{var}_1$) 🎯
-- **Heads $\{3, 7, 11, 14\}$**: Track the third variable ($\mathtt{var}_2$) 🎯
+- **Heads $\{4, 8\}$**: Track the first variable ($\mathtt{var}_0$)
+- **Heads $\{5, 12\}$**: Track the second variable ($\mathtt{var}_1$)
+- **Heads $\{3, 7, 11, 14\}$**: Track the third variable ($\mathtt{var}_2$)
 
 **Crucial Detail**: These heads copy variable *identities* (not values) to the position where computation occurs. They're saying: "Remember that we need to look up $x_7$, $x_{42}$, and $x_{88}$"
 
@@ -435,15 +435,15 @@ Here's what we found—the model implements an **induction head** mechanism tail
 
 The `variable` factor (orange) shows dramatically higher amplification than other factors, confirming that first-layer attention heads copy **`variable` identities** (not `value`s) to the $\mathtt{rhs}$ position.
 
-<Callout type="success" title="Layer 1 MLP: Minimal Processing">
+<Callout title="Layer 1 MLP: Minimal Processing" accent="accent">
 **What We Found**: The first MLP makes only minor adjustments to the residual stream (relative $L_2$ change $< 10\%$)
 
 **Interpretation**: The model discovered an induction head mechanism for solving the task, where the role of the first layer is merely to copy variable identities via attention to be used as the *query* in the *next layer attention*. Thus, the first layer *MLP* does not need to carry out any computation, and is approximately the identity. The arithmetic computation will be carried out by the second layer MLP.
 </Callout>
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l2_relative_error.png" alt="L2 Relative Error" caption="Layer 1 MLP contributes minimally—most work happens in attention and the final MLP 📉" />
+<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l2_relative_error.png" alt="L2 Relative Error" caption="Layer 1 MLP contributes minimally; most work happens in attention and the final MLP." />
 
-<Callout type="info" title="Layer 2 Attention: Value Retrieval (The Induction Head)">
+<Callout title="Layer 2 Attention: Value Retrieval (The Induction Head)" accent="accent">
 **What It Does**: Now that we know *which* variables we need, the second layer's attention heads retrieve their *values*.
 
 **The Induction Head Mechanism**:
@@ -454,9 +454,9 @@ The `variable` factor (orange) shows dramatically higher amplification than othe
 
 **Head Grouping Pattern**:
 
-- **Heads $\{0, 8, 15\}$**: Retrieve value of $\mathtt{var}_0$ 🎯
-- **Heads $\{5, 10\}$**: Retrieve value of $\mathtt{var}_1$ 🎯
-- **Heads $\{2, 3, 4, 7, 9\}$**: Retrieve value of $\mathtt{var}_2$ 🎯
+- **Heads $\{0, 8, 15\}$**: Retrieve value of $\mathtt{var}_0$
+- **Heads $\{5, 10\}$**: Retrieve value of $\mathtt{var}_1$
+- **Heads $\{2, 3, 4, 7, 9\}$**: Retrieve value of $\mathtt{var}_2$
 
 **Why "Induction"?**: This mirrors the classic "induction head" pattern discovered in language models—using context from earlier in the sequence to copy relevant information forward.
 
@@ -478,18 +478,18 @@ The `variable` factor (orange) shows dramatically higher amplification than othe
 
 Unlike Layer 1 (which amplified `variable` embeddings), Layer 2 heads strongly amplify the `value` factor, confirming they copy **numerical `value`s** (not `variable` names) from previous equations. This reveals the head specialization: different heads focus on retrieving `value`s for different `variable` positions.
 
-<Callout type="tip" title="Layer 2 MLP: Modular Addition in Frequency Domain">
+<Callout title="Layer 2 MLP: Modular Addition in Frequency Domain" accent="accent">
 **The Setup**: By this point, the MLP receives the sum of three transformed value embeddings—one for each variable. Now it needs to compute (x + y + z) mod 23.
 
-**The Discovery**: The MLP performs modular arithmetic using a **frequency-based mechanism** 🌊
+**The Discovery**: The MLP performs modular arithmetic using a **frequency-based mechanism**.
 
 **How It Works**:
 
 Through 3D Fourier analysis, we observe:
 
-1. **Input Stage**: Dominated by a bias term $(0,0,0)$ frequency 📍
-2. **Processing**: Bias diminishes, diagonal frequencies $(a,a,a)$ amplify 📈
-3. **Output**: Strong components of form $\cos(2\pi a(x+y+z)/23)$ and $\sin(2\pi a(x+y+z)/23)$ ✨
+1. **Input Stage**: Dominated by a bias term $(0,0,0)$ frequency
+2. **Processing**: Bias diminishes, diagonal frequencies $(a,a,a)$ amplify
+3. **Output**: Strong components of form $\cos(2\pi a(x+y+z)/23)$ and $\sin(2\pi a(x+y+z)/23)$
 
 The diagonal frequencies $(a,a,a)$ naturally encode the sum $x+y+z$. For example, consider the cosine terms:
 $$
@@ -497,26 +497,26 @@ $$
 $$
 contains terms with $\cos(2\pi a(x+y+z)/23)$ (via trigonometric product identities). Similar patterns hold for sine functions.
 
-The periodic nature of trigonometric functions **automatically handles** the modulo-23 arithmetic. No explicit mod operation needed—it emerges naturally from the periodic structure. The MLP learns to represent values using combinations of these sine and cosine bases. 🎯
+The periodic nature of trigonometric functions **automatically handles** the modulo-23 arithmetic. No explicit mod operation needed—it emerges naturally from the periodic structure. The MLP learns to represent values using combinations of these sine and cosine bases.
 
 </Callout>
 
 <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-preact.png" alt="FFT MLP Preact" caption="Before MLP: Dominated by bias term (0,0,0 frequency)" />
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-postact.png" alt="FFT MLP Postact" caption="During MLP: Bias decreases, diagonal frequencies increase 🌊" />
+<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-postact.png" alt="FFT MLP Postact" caption="During MLP: Bias decreases, diagonal frequencies increase." />
 
 <Figure>
   <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-output.png" alt="FFT MLP Output" />
-  <Fragment slot="caption">After MLP: Strong diagonal components encoding the sum. The frequency (a,a,a) represents $\cos(2\pi a(\mathtt{var}_0+\mathtt{var}_1+\mathtt{var}_2)/23)$ 🎵</Fragment>
+  <Fragment slot="caption">After MLP: Strong diagonal components encoding the sum. The frequency (a,a,a) represents $\cos(2\pi a(\mathtt{var}_0+\mathtt{var}_1+\mathtt{var}_2)/23)$.</Fragment>
 </Figure>
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_decoder-output.png" alt="FFT Decoder Output" caption="Final output maintains the frequency structure for decoding 🎯" />
+<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_decoder-output.png" alt="FFT Decoder Output" caption="Final output maintains the frequency structure for decoding." />
 
 **Interpreting the Frequency Analysis:** The progression through these figures reveals the MLP's computational strategy. At the output layer (third figure), we observe strong magnitudes for diagonal frequency components $(a,a,a)$ where $a \in \{1, \ldots, 22\}$. These diagonal frequencies are crucial because they encode the sum: a component with frequency $(a,a,a)$ corresponds to trigonometric functions of $\mathtt{var}_0 + \mathtt{var}_1 + \mathtt{var}_2$. The MLP essentially transforms the input into this frequency-based representation, where the final answer can be directly decoded from these sum-encoding components. This elegant mechanism allows modular arithmetic to emerge naturally from the periodic structure of sine and cosine functions.
 
 ---
 
-### 🎬 The Complete Algorithm: A Step-by-Step Walkthrough
+### The Complete Algorithm: A Step-by-Step Walkthrough
 
 Let's trace through how the model solves a concrete example to see everything working together:
 
@@ -524,21 +524,21 @@ Let's trace through how the model solves a concrete example to see everything wo
 
 **Solve:** $x_{23} = x_7 + x_{42} = \, ?$
 
-<Callout type="example" title="Complete Algorithm Walkthrough">
-**🎯 Step 1 - First Attention Layer (Variable Identification)**
+<Callout title="Complete Algorithm Walkthrough">
+**Step 1 - First Attention Layer (Variable Identification)**
 
 - Head group $\{4, 8\}$ identifies $x_7$ is in position $\text{VAR}_0$
 - Head group $\{5, 12\}$ identifies $x_{42}$ is in position $\text{VAR}_1$
 - These heads copy the variable *names* (not values) to the RHS position
 - **Output**: "We need to compute something involving $x_7$ and $x_{42}$"
 
-**🔄 Step 2 - First MLP (Minor Adjustments)**
+**Step 2 - First MLP (Minor Adjustments)**
 
 - Makes minor adjustments ($< 10\%$ change to residual stream)
 - Primarily normalization, no major computation
 - **Output**: Slightly refined representation
 
-**🔍 Step 3 - Second Attention Layer (Value Retrieval via Induction)**
+**Step 3 - Second Attention Layer (Value Retrieval via Induction)**
 
 - Head group $\{0, 8, 15\}$ searches for where $x_7$ was computed
 - Finds "$x_7 = 15$" in a previous equation
@@ -546,16 +546,16 @@ Let's trace through how the model solves a concrete example to see everything wo
 - Similarly, head group $\{5, 10\}$ retrieves value $8$ for $x_{42}$
 - **Output**: The RHS position now has embeddings representing values $15$ and $8$
 
-**✨ Step 4 - Second MLP (Modular Addition in Frequency Domain)**
+**Step 4 - Second MLP (Modular Addition in Frequency Domain)**
 
 - **Input**: Sum of transformed embeddings for $15$ and $8$
 - **Internal computation**:
   - Represents values as combinations of sin/cos bases
   - Amplifies frequencies encoding $(15 + 8) = 23$
   - The periodic structure naturally handles modulo: $23 \bmod 23 = 0$
-- **Output**: Representation of $0$ (since $23 \bmod 23 = 0$) ✅
+- **Output**: Representation of $0$ (since $23 \bmod 23 = 0$)
 
-**🔄 Step 5 - Recurrence (For Deeper Dependencies)**
+**Step 5 - Recurrence (For Deeper Dependencies)**
 
 - The process repeats until all node values in the input graph are computed
 - Each iteration traverses the graph one layer deeper
@@ -565,7 +565,7 @@ Let's trace through how the model solves a concrete example to see everything wo
 
 ---
 
-## 🎓 Conclusion
+## Conclusion
 
 Our work demonstrates that transformers can learn genuine algorithms that generalize far beyond their training distribution; but only with the right architectural mechanisms. By integrating **recurrence**, **latent-space supervision**, **discretization**, and **self-correction**, we give transformers the inductive structure needed for **scalable recursive reasoning**. These mechanisms transform raw sequence processing into a depth-invariant computational process that adapts its reasoning to problem complexity.
 
