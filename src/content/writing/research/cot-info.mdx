@@ -232,7 +232,7 @@ To quantify the true advantage of CoT supervision, we need a measure that explic
 
 To quantify the statistical advantage of intermediate supervision, we introduce the **Chain-of-Thought Information**, capturing the added discriminative power that CoT supervision provides over standard end-to-end learning.
 
-<MathBlock title="Definition: CoT Information">
+<Statement label="Definition" title="CoT Information">
   For a CoT hypothesis class $\calH$ and realizable distribution $\calD$ over $\calX \times \calY \times \calZ$, the CoT information is defined as the function
 
 $$
@@ -240,7 +240,7 @@ $$
 $$
 
   where $\Deltaete_{\calD}(\epsilon; \calH) := \{h \in \calH : \probunder{x,y}{\hete{h}(x) \neq y} > \epsilon\}$ is the set of hypotheses that disagree with the *end-to-end* reference function on at least an $\epsilon$ fraction of the inputs.
-</MathBlock>
+</Statement>
 
 Conceptually, the CoT information quantifies how much more discriminative power is packed into each annotated example. When the CoT information is large, observing the CoT reveals additional information about the target hypothesis, enabling faster learning.
 
@@ -262,7 +262,7 @@ We will see that the CoT information characterizes the sample complexity of lear
   <Fragment slot="caption">Geometry of CoT information: consistency sets shrink much faster under CoT supervision.</Fragment>
 </Figure>
 
-<MathBlock title="Result: Sample Complexity Under CoT Supervision" color="#ef4444">
+<Statement label="Result" title="Sample Complexity Under CoT Supervision" accent="#ef4444">
   For finite $\calH$, the *CoT consistency rule*
 
 $$
@@ -281,7 +281,7 @@ $$
 \forall h \in \CoTCons(S; \calH), \ \eterisk{\calD}(h) \leq \epsilon.
 $$
 
-</MathBlock>
+</Statement>
 
 The take away: the $1/\epsilon$ rate of end-to-end learning is improved to the potentially much faster $1/\cotinfodomain{\calD}(\epsilon; \calH)$ rate under CoT supervision. In particular, the ratio $\cotinfodomain{\calD}(\epsilon; \calH) / \epsilon$ can be interpreted as the relative value of a single CoT-labeled example compared to an end-to-end labeled example.
 
@@ -310,7 +310,7 @@ In the following, we establish information-theoretic lower bounds that validate 
 
 ### Lower Bound via Two-Point Method
 
-<MathBlock title="Result: Lower Bound via Two-Point Method" color="#ef4444">
+<Statement label="Result" title="Lower Bound via Two-Point Method" accent="#ef4444">
   Fix a distribution $\calD$ over $\calX$, and draw $m$ samples, $x_1, \ldots, x_m \simiid \calD$. If
 
 $$
@@ -323,7 +323,7 @@ $$
 \sup_{\hstar \in \calH} \expectunder{S \sim P_{\hstar}^{\otimes}}{\eterisk{\calD}(\calA(S))} \geq \tfrac{1}{2} \sup_{\hstar, \epsilon} \epsilon \cdot \exp(-m \cdot \cotinfo(\epsilon; \calH)).
 $$
 
-</MathBlock>
+</Statement>
 
 This lower bound exhibits the expected dependence on the error parameter $\epsilon$ through the CoT information, confirming its role as the governing quantity for learning with CoT supervision.
 
@@ -332,7 +332,7 @@ However, it does not scale with size of the hypothesis class. This is a limitati
 ### Lower Bound via Fano's Method
 Fano's method generalizes the two-point argument by considering a packing of many hypotheses that are pairwise well-separated with respect to end-to-end error
 
-<MathBlock title="Result: Lower Bound via Fano's Method" color="#ef4444">
+<Statement label="Result" title="Lower Bound via Fano's Method" accent="#ef4444">
   Fix a distribution $\calD$ over $\calX$, and draw $m$ samples, $x_1, \ldots, x_m \simiid \calD$. For any algorithm $\calA$, if the number of samples satisfies
 
 $$
@@ -347,7 +347,7 @@ $$
 
   Here, $M(\mathcal{H}; d_{\mathcal{D}}^{\text{e2e}}, \epsilon)$ denotes the packing number of the hypothesis class under the end-to-end metric, and
   $\relcotinfo(h_1, h_2)$ is the pairwise CoT information, quantifying how distinguishable two hypotheses are when reasoning traces are observed.
-</MathBlock>
+</Statement>
 
 This result scales appropriately with both error and class complexity, confirming that the CoT information is not merely an artifact of the upper bound but a tight characterization of the sample efficiency achievable under CoT supervision.
 

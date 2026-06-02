@@ -50,9 +50,9 @@ The graph should represent intentional conceptual relationships in the writing c
 
 The graph is:
 
-\[
+$$
 G=(V,E)
-\]
+$$
 
 where:
 
@@ -200,9 +200,10 @@ Recommended structure:
 │  │  │  └─ LocalGraph.tsx
 │  │  ├─ article/
 │  │  │  ├─ Callout.astro
+│  │  │  ├─ Statement.astro
 │  │  │  ├─ Theorem.astro
 │  │  │  ├─ Proof.astro
-│  │  │  ├─ MathBlock.astro
+│  │  │  ├─ Box.astro
 │  │  │  ├─ Figure.astro
 │  │  │  ├─ Picture.astro
 │  │  │  ├─ Aside.astro
@@ -875,13 +876,13 @@ type WritingBrowserState = {
 
 Focus semantics:
 
-\[
+$$
 V_h^{(1)} = \{h\} \cup N(h)
-\]
+$$
 
-\[
+$$
 V_h^{(2)} = \{h\} \cup N(h) \cup N^2(h)
-\]
+$$
 
 Dim mode:
 
@@ -940,9 +941,9 @@ filter: {
 
 If `mode = "types"`, preview graph uses:
 
-\[
+$$
 V' = \{v \in V : v.type \in T\}
-\]
+$$
 
 Default preview filter:
 
@@ -1079,7 +1080,7 @@ Default desktop layout:
 │ External links                               │ Backlinks    │
 ├──────────────────────────────────────────────┤ Related      │
 │ MDX content                                  │              │
-│ figures, math, theorem boxes, asides, code   │              │
+│ figures, math, statements, asides, code      │              │
 └──────────────────────────────────────────────┴──────────────┘
 ```
 
@@ -1138,9 +1139,10 @@ Required article components:
 
 ```txt
 Callout
+Statement
 Theorem
 Proof
-MathBlock
+Box
 Figure
 Picture
 Aside
@@ -1189,15 +1191,21 @@ quote
 
 The optional `accent` prop accepts `accent`, `fg`, `muted`, or any CSS color. When omitted, typed callouts use their default Obsidian-style color.
 
-### 15.2 `Theorem`
+### 15.2 `Statement` and `Theorem`
+
+`Statement` is the primary formal theorem-like environment. Use it for labels such as `Definition`, `Assumption`, `Lemma`, `Proposition`, `Theorem`, `Corollary`, `Result`, and `Example`.
 
 ```mdx
-<Theorem label="Theorem" title="Generalization bound" id="thm:generalization">
-Let \(\mathcal{F}\) be ...
-</Theorem>
+<Statement label="Definition" title="Risk" id="def:risk">
+Let $R(f)$ be ...
+</Statement>
+
+<Statement label="Theorem" title="Generalization bound" id="thm:generalization">
+Let $\mathcal{F}$ be ...
+</Statement>
 ```
 
-No automatic theorem numbering in v1.
+No automatic theorem numbering in v1. `Theorem` remains available as a convenience wrapper for literal theorem environments and renders with the same statement style.
 
 ### 15.3 `Proof`
 
@@ -1209,16 +1217,16 @@ By concentration of measure...
 
 Default ending may include a square `□`.
 
-### 15.4 `MathBlock`
+### 15.4 `Box`
 
-For highlighted mathematical definitions, assumptions, or takeaways.
+For boxed takeaways, emphasized formulas, compact summaries, or implementation objectives. Use `Statement` for formal claims and `Callout` for editorial notes or warnings.
 
 ```mdx
-<MathBlock title="Definition: Risk">
-\[
+<Box title="Training loss">
+$$
 R(f)=\mathbb{E}_{(X,Y)\sim P}[\ell(f(X),Y)]
-\]
-</MathBlock>
+$$
+</Box>
 ```
 
 ### 15.5 `Figure` and `Picture`
@@ -1310,13 +1318,13 @@ src/lib/math/macros.ts
 Support Markdown math syntax:
 
 ```md
-Inline math: \( f(x)=x^2 \)
+Inline math: $f(x)=x^2$
 
 Display math:
 
-\[
+$$
 R(f)=\mathbb{E}_{(X,Y)\sim P}[\ell(f(X),Y)]
-\]
+$$
 ```
 
 Architecture should isolate math rendering enough that `themeConfig.math.renderer` could exist conceptually, but only KaTeX needs implementation.
@@ -1842,10 +1850,11 @@ wikilinks
 frontmatter links
 backlinks
 local graph
+Statement
 Theorem
 Proof
 Callout
-MathBlock
+Box
 Figure/Picture
 Aside
 BibtexBlock
@@ -1976,9 +1985,10 @@ Deliver:
 
 ```txt
 Callout
+Statement
 Theorem
 Proof
-MathBlock
+Box
 Figure
 Picture
 Aside
@@ -2130,9 +2140,10 @@ Picture lightSrc/darkSrc works
 
 ```txt
 Callout renders
-Theorem renders without auto-numbering
+Statement renders without auto-numbering
+Theorem renders as a convenience wrapper
 Proof renders
-MathBlock renders
+Box renders
 Figure/Picture render
 Aside renders as margin note on desktop and inline on mobile
 BibtexBlock syntax highlights and has copy button
