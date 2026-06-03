@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 
 import { publicationsConfig, siteConfig, writingConfig, type EntryType } from "../src/config";
+import { findPlotlyFigureReferences, plotlyHtmlNeedsMathJax } from "../src/lib/article/plotlyValidation";
 import { resolveTocConfig } from "../src/lib/article/toc";
 import { buildGraphIndex, graphWarningSeverity } from "../src/lib/graph/buildGraph";
 import type { WritingEntryLike } from "../src/lib/graph/types";
@@ -24,6 +25,7 @@ for (const warning of graphResult.warnings) {
 
 validateRoutes();
 await validatePublications();
+await validatePlotlyFigures(["src/content/writing", "src/content/pages"]);
 
 for (const warning of warnings) console.warn(`Warning: ${warning}`);
 for (const error of errors) console.error(`Error: ${error}`);
@@ -108,6 +110,43 @@ async function validatePublications(): Promise<void> {
   }
 }
 
+async function validatePlotlyFigures(roots: string[]): Promise<void> {
+  const files = (
+    await Promise.all(
+      roots.map(async (root) => {
+        try {
+          return await listFiles(root);
+        } catch (error) {
+          if (isNodeError(error) && error.code === "ENOENT") return [];
+          throw error;
+        }
+      })
+    )
+  )
+    .flat()
+    .filter((file) => /\.(md|mdx)$/.test(file));
+
+  for (const file of files) {
+    const source = await fs.readFile(file, "utf8");
+    for (const reference of findPlotlyFigureReferences(file, source)) {
+      try {
+        const html = await fs.readFile(reference.htmlPath, "utf8");
+        if (plotlyHtmlNeedsMathJax(html)) {
+          warnings.push(
+            `${reference.sourceFile}: PlotlyFigure src "${reference.src}" appears to contain Plotly TeX labels, but ${path.relative(
+              process.cwd(),
+              reference.htmlPath
+            )} does not include MathJax. Export with include_mathjax="cdn" when TeX labels are used.`
+          );
+        }
+      } catch (error) {
+        if (isNodeError(error) && error.code === "ENOENT") continue;
+        throw error;
+      }
+    }
+  }
+}
+
 async function listFiles(root: string): Promise<string[]> {
   const entries = await fs.readdir(root, { withFileTypes: true });
   const files = await Promise.all(
@@ -117,4 +156,8 @@ async function listFiles(root: string): Promise<string[]> {
     })
   );
   return files.flat();
+}
+
+function isNodeError(error: unknown): error is NodeJS.ErrnoException {
+  return error instanceof Error && "code" in error;
 }

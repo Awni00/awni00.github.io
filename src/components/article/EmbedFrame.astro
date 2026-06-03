@@ -5,6 +5,19 @@ type Props = {
   caption?: string;
   height?: string;
   linkLabel?: string;
+  showOpenLink?: boolean;
+  loading?: "lazy" | "eager";
+  sandbox?: string;
+  referrerPolicy?:
+    | "no-referrer"
+    | "no-referrer-when-downgrade"
+    | "origin"
+    | "origin-when-cross-origin"
+    | "same-origin"
+    | "strict-origin"
+    | "strict-origin-when-cross-origin"
+    | "unsafe-url";
+  class?: string;
 };
 
 const {
@@ -12,24 +25,44 @@ const {
   title = "Embedded figure",
   caption,
   height = "520px",
-  linkLabel = "Open embedded figure"
+  linkLabel = "Open embedded figure",
+  showOpenLink = true,
+  loading = "lazy",
+  sandbox,
+  referrerPolicy,
+  class: className
 } = Astro.props;
 const style = `--embed-frame-height: ${height};`;
 const hasCaptionSlot = Astro.slots.has("caption");
+const hasCaption = hasCaptionSlot || Boolean(caption);
+const hasDefaultSlot = Astro.slots.has("default");
+const shouldRenderCaption = hasCaption || showOpenLink;
 ---
 
-<figure class="article-figure embed-frame" style={style}>
-  <iframe class="embed-frame__frame" src={src} title={title} loading="lazy"></iframe>
-  <figcaption>
-    {
-      hasCaptionSlot ? (
-        <span>
-          <slot name="caption" />
-        </span>
-      ) : (
-        caption && <span>{caption}</span>
-      )
-    }
-    <a href={src}>{linkLabel}</a>
-  </figcaption>
+<figure class:list={["article-figure", "embed-frame", className]} style={style}>
+  <iframe
+    class="embed-frame__frame"
+    src={src}
+    title={title}
+    loading={loading}
+    sandbox={sandbox}
+    referrerpolicy={referrerPolicy}
+  ></iframe>
+  {hasDefaultSlot && <slot />}
+  {
+    shouldRenderCaption && (
+      <figcaption>
+        {
+          hasCaptionSlot ? (
+            <span>
+              <slot name="caption" />
+            </span>
+          ) : (
+            caption && <span>{caption}</span>
+          )
+        }
+        {showOpenLink && <a href={src}>{linkLabel}</a>}
+      </figcaption>
+    )
+  }
 </figure>
