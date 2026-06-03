@@ -32,29 +32,48 @@ const hasCaptionSlot = Astro.slots.has("caption");
 const figureClass = ["plotly-figure", className].filter(Boolean).join(" ");
 ---
 
-<EmbedFrame
-  src={src}
-  title={iframeTitle}
-  caption={hasCaptionSlot ? undefined : caption}
-  height={height}
-  linkLabel={linkLabel}
-  showOpenLink={showOpenLink}
-  loading={loading}
-  sandbox={sandbox}
-  class={figureClass}
->
   {
-    fallbackSrc && (
-      <noscript>
-        <img class="plotly-figure__fallback" src={fallbackSrc} alt={fallbackAlt} loading={loading} />
-      </noscript>
+    hasCaptionSlot ? (
+      <EmbedFrame
+        src={src}
+        title={iframeTitle}
+        height={height}
+        linkLabel={linkLabel}
+        showOpenLink={showOpenLink}
+        loading={loading}
+        sandbox={sandbox}
+        class={figureClass}
+      >
+        {
+          fallbackSrc && (
+            <noscript>
+              <img class="plotly-figure__fallback" src={fallbackSrc} alt={fallbackAlt} loading={loading} />
+            </noscript>
+          )
+        }
+        <Fragment slot="caption">
+          <slot name="caption" />
+        </Fragment>
+      </EmbedFrame>
+    ) : (
+      <EmbedFrame
+        src={src}
+        title={iframeTitle}
+        caption={caption}
+        height={height}
+        linkLabel={linkLabel}
+        showOpenLink={showOpenLink}
+        loading={loading}
+        sandbox={sandbox}
+        class={figureClass}
+      >
+        {
+          fallbackSrc && (
+            <noscript>
+              <img class="plotly-figure__fallback" src={fallbackSrc} alt={fallbackAlt} loading={loading} />
+            </noscript>
+          )
+        }
+      </EmbedFrame>
     )
   }
-  {
-    hasCaptionSlot && (
-      <Fragment slot="caption">
-        <slot name="caption" />
-      </Fragment>
-    )
-  }
-</EmbedFrame>

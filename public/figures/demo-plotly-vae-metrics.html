@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dummy VAE method metrics</title>
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [["$", "$"], ["\\(", "\\)"]] },
+        svg: { fontCache: "global" }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+      html,
+      body,
+      #plot {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      html,
+      body {
+        overflow: hidden;
+      }
+
+      body {
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="plot" role="img" aria-label="Dummy grouped bar chart comparing VAE method metrics."></div>
+    <script>
+      const metrics = ["Reconstruction error ↓", "KL penalty ↓", "Disentanglement ↑"];
+
+      const traces = [
+        {
+          x: metrics,
+          y: [0.36, 0.18, 0.32],
+          type: "bar",
+          name: "AE",
+          marker: { color: "#5068d8" },
+          hovertemplate: "%{x}<br>AE: %{y:.2f}<extra></extra>"
+        },
+        {
+          x: metrics,
+          y: [0.42, 0.31, 0.48],
+          type: "bar",
+          name: "VAE",
+          marker: { color: "#16a085" },
+          hovertemplate: "%{x}<br>VAE: %{y:.2f}<extra></extra>"
+        },
+        {
+          x: metrics,
+          y: [0.49, 0.24, 0.66],
+          type: "bar",
+          name: "$\\beta$-VAE",
+          marker: { color: "#d06f2f" },
+          hovertemplate: "%{x}<br>β-VAE: %{y:.2f}<extra></extra>"
+        }
+      ];
+
+      const layout = {
+        title: { text: "Dummy method comparison", x: 0.02, xanchor: "left" },
+        autosize: true,
+        barmode: "group",
+        bargap: 0.28,
+        bargroupgap: 0.08,
+        margin: { t: 72, r: 28, b: 86, l: 58 },
+        plot_bgcolor: "#ffffff",
+        paper_bgcolor: "#ffffff",
+        font: { color: "#1f2933", size: 13 },
+        legend: { orientation: "h", x: 0.5, xanchor: "center", y: -0.22 },
+        xaxis: {
+          title: "paper-style summary metric",
+          tickangle: -12,
+          gridcolor: "#edf0f4"
+        },
+        yaxis: {
+          title: "normalized score",
+          range: [0, 0.78],
+          gridcolor: "#edf0f4",
+          zerolinecolor: "#d8dee8"
+        }
+      };
+
+      Plotly.newPlot("plot", traces, layout, {
+        responsive: true,
+        displaylogo: false
+      });
+    </script>
+  </body>
+</html>
