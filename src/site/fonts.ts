@@ -41,13 +41,13 @@ export const siteFonts = [
     ]
   },
   {
-    name: "Source Code Pro",
+    name: "IBM Plex Mono",
     cssVariable: siteFontCssVariables.mono,
     provider: googleProvider,
     weights: normalWeights,
     styles: normalStyles,
     subsets: latinSubset,
     display: fontDisplay,
-    fallbacks: ["SFMono-Regular", "Consolas", "Liberation Mono", "monospace"]
+    fallbacks: ["Cousine", "Space Mono", "SFMono-Regular", "Consolas", "Liberation Mono", "monospace"]
   }
 ];

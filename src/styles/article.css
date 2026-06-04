@@ -27,7 +27,13 @@
   --article-heading-3-size: 20px;
   --article-heading-4-size: 18px;
   --article-heading-5-size: 16px;
+  /* Non-mono component headings, such as callout titles. */
   --article-component-title-size: var(--article-body-size);
+  /* Uppercase mono labels in Statement and Box headings. */
+  --article-mono-label-size: 16px;
+  /* Parenthetical Statement titles, e.g. "(evidence lower bound)". */
+  --article-statement-title-size: var(--article-body-size);
+  /* Article chrome labels: metadata, bylines, sidebar headings, TOC labels. */
   --article-label-size: 12px;
   --article-caption-size: 13px;
   --article-aside-size: 13px;
@@ -694,23 +700,30 @@
 }
 
 .statement-head {
+  /* Header row size is for the parenthetical title; the mono label overrides it below. */
   font-family: var(--font-ui);
-  font-size: var(--article-component-title-size, var(--article-body-size, 18px));
+  font-size: var(--article-statement-title-size, var(--article-body-size, 18px));
   line-height: 1.35;
   margin-bottom: 4px;
 }
 
 .statement-label {
+  /* Environment label such as "Definition" or "Theorem 1". */
   font-weight: 700;
   color: var(--statement-accent);
   font-family: var(--font-mono);
-  font-size: var(--article-component-title-size, var(--article-body-size, 18px));
+  font-size: var(
+    --article-mono-label-size,
+    var(--article-component-title-size, var(--article-body-size, 18px))
+  );
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
 .statement-title {
+  /* Parenthetical descriptor next to the mono label. */
   color: var(--statement-accent);
+  font-size: var(--article-statement-title-size, var(--article-body-size, 18px));
   font-weight: 400;
   font-style: normal;
 }
@@ -770,8 +783,12 @@
 }
 
 .box .box__title {
+  /* Uppercase mono heading for boxed takeaways/formulas. */
   font-family: var(--font-mono);
-  font-size: var(--article-component-title-size, var(--article-body-size, 18px));
+  font-size: var(
+    --article-mono-label-size,
+    var(--article-component-title-size, var(--article-body-size, 18px))
+  );
   line-height: 1.25;
   margin: 0 0 12px;
   font-weight: 600;
