@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=20.19.5",
+    "node": ">=22.12.0",
     "npm": ">=10.8.2"
   },
   "scripts": {
@@ -20,12 +20,12 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.2.6",
-    "@astrojs/react": "^4.2.1",
-    "@astrojs/sitemap": "^3.3.0",
+    "@astrojs/mdx": "^6.0.2",
+    "@astrojs/react": "^5.0.7",
+    "@astrojs/sitemap": "^3.7.3",
     "@lucide/astro": "^1.16.0",
     "@tailwindcss/vite": "^4.1.5",
-    "astro": "^5.7.10",
+    "astro": "^6.4.4",
     "canvas": "^3.2.3",
     "gray-matter": "^4.0.3",
     "js-yaml": "^4.1.0",
@@ -44,7 +44,8 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/compiler-rs": "^0.1.10",
     "@eslint/js": "^9.26.0",
     "@playwright/test": "^1.52.0",
     "@types/js-yaml": "^4.0.9",
