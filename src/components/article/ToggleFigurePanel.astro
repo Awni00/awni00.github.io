@@ -1,0 +1,19 @@
+---
+type Props = {
+  label: string;
+  value?: string;
+  class?: string;
+};
+
+const { label, value, class: className } = Astro.props;
+const panelValue = value ?? label;
+---
+
+<section
+  class:list={["toggle-figure__panel", className]}
+  data-toggle-figure-panel
+  data-label={label}
+  data-value={panelValue}
+>
+  <slot />
+</section>
