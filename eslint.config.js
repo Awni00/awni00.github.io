@@ -3,7 +3,14 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["dist/**", ".astro/**", "node_modules/**", "playwright-report/**", "test-results/**"]
+    ignores: [
+      "dist/**",
+      ".astro/**",
+      "node_modules/**",
+      "playwright-report/**",
+      "public/**",
+      "test-results/**"
+    ]
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

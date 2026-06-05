@@ -176,6 +176,7 @@ MDX entries can use built-in technical writing components:
 - `TwoColumns`
 - `Comparison`
 - `ModelViewer`
+- `PlotlyFigure`
 
 Use the prose components by role:
 
@@ -219,6 +220,43 @@ $$
 $$
 </Box>
 ```
+
+### Plotly Figures
+
+Use `PlotlyFigure` for standalone Plotly HTML exports that should be embedded
+as interactive article figures:
+
+```mdx
+<PlotlyFigure
+  src="/writing/research/my-entry/figures/latent-map.html"
+  iframeTitle="Interactive latent map"
+  caption="Interactive view of the learned latent geometry."
+/>
+```
+
+`iframeTitle` is used only as the iframe accessible name. It is not displayed
+as a figure title; visible chart titles should be part of the Plotly figure or
+the caption.
+
+Recommended Python export settings:
+
+```py
+fig.write_html(
+    "public/writing/research/my-entry/figures/latent-map.html",
+    include_plotlyjs="cdn",
+    include_mathjax="cdn",
+    full_html=True,
+    config={"responsive": True, "displaylogo": False},
+)
+```
+
+Use `include_mathjax="cdn"` whenever Plotly labels, annotations, legends, or
+hover text contain TeX. The exported HTML is loaded inside an iframe, so the
+site-level math renderer cannot provide MathJax for the embedded document.
+
+Prefer valid TeX strings in Plotly labels and avoid nested dollar math such as
+`\text{$DAT$}`. Use a single math expression, for example `$\mathrm{DAT}$`, or
+move plain text outside the TeX delimiters.
 
 Prefer these components over raw HTML for article structure. Avoid inline `style`,
 layout `<div>` wrappers, raw `<table>`, and raw `<img>` tags in authored MDX;

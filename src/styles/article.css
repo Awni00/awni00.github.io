@@ -27,7 +27,13 @@
   --article-heading-3-size: 20px;
   --article-heading-4-size: 18px;
   --article-heading-5-size: 16px;
+  /* Non-mono component headings, such as callout titles. */
   --article-component-title-size: var(--article-body-size);
+  /* Uppercase mono labels in Statement and Box headings. */
+  --article-mono-label-size: 16px;
+  /* Parenthetical Statement titles, e.g. "(evidence lower bound)". */
+  --article-statement-title-size: var(--article-body-size);
+  /* Article chrome labels: metadata, bylines, sidebar headings, TOC labels. */
   --article-label-size: 12px;
   --article-caption-size: 13px;
   --article-aside-size: 13px;
@@ -694,25 +700,32 @@
 }
 
 .statement-head {
+  /* Header row size is for the parenthetical title; the mono label overrides it below. */
   font-family: var(--font-ui);
-  font-size: var(--article-component-title-size, var(--article-body-size, 18px));
+  font-size: var(--article-statement-title-size, var(--article-body-size, 18px));
   line-height: 1.35;
   margin-bottom: 4px;
 }
 
 .statement-label {
+  /* Environment label such as "Definition" or "Theorem 1". */
   font-weight: 700;
   color: var(--statement-accent);
   font-family: var(--font-mono);
-  font-size: var(--article-component-title-size, var(--article-body-size, 18px));
+  font-size: var(
+    --article-mono-label-size,
+    var(--article-component-title-size, var(--article-body-size, 18px))
+  );
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
 .statement-title {
+  /* Parenthetical descriptor next to the mono label. */
   color: var(--statement-accent);
+  font-size: var(--article-statement-title-size, var(--article-body-size, 18px));
   font-weight: 400;
-  font-style: italic;
+  font-style: normal;
 }
 
 .statement-body {
@@ -770,8 +783,12 @@
 }
 
 .box .box__title {
+  /* Uppercase mono heading for boxed takeaways/formulas. */
   font-family: var(--font-mono);
-  font-size: var(--article-component-title-size, var(--article-body-size, 18px));
+  font-size: var(
+    --article-mono-label-size,
+    var(--article-component-title-size, var(--article-body-size, 18px))
+  );
   line-height: 1.25;
   margin: 0 0 12px;
   font-weight: 600;
@@ -852,6 +869,86 @@
   font-size: var(--article-caption-size, 13px);
   line-height: 1.55;
   color: var(--color-muted);
+}
+
+.toggle-figure {
+  margin: 32px 0;
+}
+
+.toggle-figure__controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+  overflow-x: auto;
+}
+
+.toggle-figure__tablist {
+  display: inline-flex;
+  max-width: 100%;
+  gap: 2px;
+  padding: 2px;
+  border: 0.5px solid var(--color-border);
+  border-radius: 5px;
+  background: var(--color-bg-soft-2);
+}
+
+.toggle-figure__tab {
+  border: 0;
+  border-radius: 3px;
+  padding: 5px 10px;
+  background: transparent;
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--article-body-size, 18px);
+  line-height: 1.3;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-quiet),
+    color var(--dur-fast) var(--ease-quiet);
+}
+
+.toggle-figure__tab:hover,
+.toggle-figure__tab:focus-visible {
+  color: var(--color-fg);
+}
+
+.toggle-figure__tab:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.toggle-figure__tab[aria-selected="true"] {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+
+.toggle-figure__panels {
+  display: grid;
+  gap: 24px;
+}
+
+.toggle-figure[data-toggle-figure-enhanced="true"] .toggle-figure__panels {
+  gap: 0;
+}
+
+.toggle-figure[data-toggle-figure-enhanced="true"] .toggle-figure__panel {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+.toggle-figure[data-toggle-figure-enhanced="true"] .toggle-figure__panel:not([data-active="true"]) {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.toggle-figure__panel > .article-figure:first-child {
+  margin-top: 0;
+}
+
+.toggle-figure__panel > .article-figure:last-child {
+  margin-bottom: 0;
 }
 
 .article-content table {

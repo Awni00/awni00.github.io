@@ -1,0 +1,79 @@
+---
+import EmbedFrame from "./EmbedFrame.astro";
+
+type Props = {
+  src: string;
+  iframeTitle: string;
+  caption?: string;
+  height?: string;
+  linkLabel?: string;
+  showOpenLink?: boolean;
+  fallbackSrc?: string;
+  fallbackAlt?: string;
+  loading?: "lazy" | "eager";
+  sandbox?: string;
+  class?: string;
+};
+
+const {
+  src,
+  iframeTitle,
+  caption,
+  height = "560px",
+  linkLabel = "Open interactive figure",
+  showOpenLink = true,
+  fallbackSrc,
+  fallbackAlt = iframeTitle,
+  loading = "lazy",
+  sandbox = "allow-scripts allow-same-origin",
+  class: className
+} = Astro.props;
+const hasCaptionSlot = Astro.slots.has("caption");
+const figureClass = ["plotly-figure", className].filter(Boolean).join(" ");
+---
+
+  {
+    hasCaptionSlot ? (
+      <EmbedFrame
+        src={src}
+        title={iframeTitle}
+        height={height}
+        linkLabel={linkLabel}
+        showOpenLink={showOpenLink}
+        loading={loading}
+        sandbox={sandbox}
+        class={figureClass}
+      >
+        {
+          fallbackSrc && (
+            <noscript>
+              <img class="plotly-figure__fallback" src={fallbackSrc} alt={fallbackAlt} loading={loading} />
+            </noscript>
+          )
+        }
+        <Fragment slot="caption">
+          <slot name="caption" />
+        </Fragment>
+      </EmbedFrame>
+    ) : (
+      <EmbedFrame
+        src={src}
+        title={iframeTitle}
+        caption={caption}
+        height={height}
+        linkLabel={linkLabel}
+        showOpenLink={showOpenLink}
+        loading={loading}
+        sandbox={sandbox}
+        class={figureClass}
+      >
+        {
+          fallbackSrc && (
+            <noscript>
+              <img class="plotly-figure__fallback" src={fallbackSrc} alt={fallbackAlt} loading={loading} />
+            </noscript>
+          )
+        }
+      </EmbedFrame>
+    )
+  }

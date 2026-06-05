@@ -13,6 +13,7 @@ import { writingConfig } from "./src/config/writing";
 import { defaultMathMacros } from "./src/lib/math/macros";
 import { rehypeKatexWithMacros } from "./src/lib/math/rehypeKatexWithMacros";
 import { remarkWikilinks } from "./src/lib/wikilinks/remarkWikilinks";
+import { siteFonts } from "./src/site/fonts";
 import { globalMathMacros, mathMacroPacks } from "./src/site/math";
 
 const remarkPlugins: any[] = [
@@ -44,6 +45,7 @@ const rehypePlugins: any[] = [
 export default defineConfig({
   site: siteConfig.url,
   output: "static",
+  fonts: siteFonts,
   devToolbar: {
     enabled: false
   },
