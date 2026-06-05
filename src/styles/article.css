@@ -892,6 +892,10 @@
   margin: 0;
 }
 
+.article-figure__body > .toggle-figure {
+  margin: 0;
+}
+
 .figure-grid[data-equal-frames="true"] .figure-grid__items {
   align-items: stretch;
 }
