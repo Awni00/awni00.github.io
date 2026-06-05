@@ -178,6 +178,63 @@ MDX entries can use built-in technical writing components:
 - `ModelViewer`
 - `PlotlyFigure`
 
+### Media layout controls
+
+Use component props for figure sizing before reaching for raw HTML or page-local
+CSS. The common props are:
+
+- `width`, `maxWidth`: size the outer figure or media container.
+- `mediaWidth`, `mediaMaxWidth`, `mediaHeight`, `mediaMaxHeight`: size the media
+  frame inside a figure.
+- `mediaAspectRatio`: set a frame ratio such as `"3 / 2"` or `"16 / 9"`.
+- `mediaFit`: choose `"contain"`, `"cover"`, `"fill"`, `"none"`, or
+  `"scale-down"`.
+- `mediaInset`: add padding inside the media frame for diagrams.
+- `mediaAlign`: align media with `"start"`, `"center"`, `"end"`, or
+  `"stretch"`.
+
+For matched scientific plots, prefer `FigureGrid` with equal frames:
+
+```mdx
+<FigureGrid columns={2} equalFrames mediaAspectRatio="3 / 2">
+  <Figure>
+    <Picture slot="figure" src="/figures/plot-a.svg" alt="Plot A." />
+    <Fragment slot="caption">First plot.</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src="/figures/plot-b.svg" alt="Plot B." />
+    <Fragment slot="caption">Second plot.</Fragment>
+  </Figure>
+</FigureGrid>
+```
+
+Use per-figure overrides for diagrams that need breathing room:
+
+```mdx
+<Figure mediaInset="18px 40px">
+  <Picture slot="figure" src="/figures/transition-diagram.svg" alt="DFA transition diagram." />
+  <Fragment slot="caption">DFA transition diagram.</Fragment>
+</Figure>
+```
+
+Interactive and video embeds use the same outer controls. Existing `height`
+props on `EmbedFrame` and `PlotlyFigure` remain supported:
+
+```mdx
+<PlotlyFigure
+  src="/figures/demo-plotly.html"
+  iframeTitle="Interactive Plotly figure"
+  height="480px"
+  maxWidth="48rem"
+/>
+
+<Video src="/media/demo.mp4" mediaAspectRatio="16 / 9" maxWidth="42rem" />
+```
+
+`class` and `style` are available as escape hatches on media components, but
+prefer semantic props for reusable layouts so the template keeps control of the
+visual system.
+
 Use the prose components by role:
 
 | Component | Use for | Avoid using for |

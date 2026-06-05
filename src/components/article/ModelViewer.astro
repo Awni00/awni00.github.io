@@ -1,16 +1,56 @@
 ---
+import { buildMediaLayoutStyle, type MediaLayoutProps } from "./mediaLayout";
+
 type Props = {
   src: string;
   alt?: string;
   poster?: string;
-};
+  caption?: string;
+  class?: string;
+  style?: string;
+} & MediaLayoutProps;
 
-const { src, alt = "3D model", poster } = Astro.props;
+const {
+  src,
+  alt = "3D model",
+  poster,
+  caption,
+  class: className,
+  style,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
+} = Astro.props;
+const layoutStyle = buildMediaLayoutStyle(
+  {
+    width,
+    maxWidth,
+    mediaWidth,
+    mediaMaxWidth,
+    mediaHeight,
+    mediaMaxHeight,
+    mediaAspectRatio,
+    mediaFit,
+    mediaInset,
+    mediaAlign
+  },
+  { style }
+);
 ---
 
-<figure class="article-figure">
-  <div class="model-viewer">
-    <p><a href={src}>Open 3D model</a></p>
-    {poster && <img src={poster} alt={alt} loading="lazy" />}
+<figure class:list={["article-figure", className]} style={layoutStyle}>
+  <div class="article-figure__body">
+    <div class="model-viewer">
+      <p><a href={src}>Open 3D model</a></p>
+      {poster && <img src={poster} alt={alt} loading="lazy" />}
+    </div>
   </div>
+  {caption && <figcaption>{caption}</figcaption>}
 </figure>

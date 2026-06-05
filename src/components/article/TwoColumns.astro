@@ -1,8 +1,37 @@
 ---
+import { buildMediaLayoutStyle } from "./mediaLayout";
+
+type Props = {
+  class?: string;
+  style?: string;
+  width?: string;
+  maxWidth?: string;
+  gap?: string;
+  align?: "start" | "center" | "end" | "stretch";
+};
+
+const {
+  class: className,
+  style,
+  width,
+  maxWidth,
+  gap,
+  align
+} = Astro.props;
 const hasNamedColumns = Astro.slots.has("left") || Astro.slots.has("right");
+const layoutStyle = buildMediaLayoutStyle(
+  { width, maxWidth },
+  {
+    style,
+    extraVars: {
+      "--two-columns-gap": gap,
+      "--two-columns-align": align
+    }
+  }
+);
 ---
 
-<div class="two-columns">
+<div class:list={["two-columns", className]} style={layoutStyle}>
   {
     hasNamedColumns ? (
       <>

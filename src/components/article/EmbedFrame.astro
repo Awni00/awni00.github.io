@@ -1,4 +1,6 @@
 ---
+import { buildMediaLayoutStyle, type MediaLayoutProps } from "./mediaLayout";
+
 type Props = {
   src: string;
   title?: string;
@@ -18,7 +20,8 @@ type Props = {
     | "strict-origin-when-cross-origin"
     | "unsafe-url";
   class?: string;
-};
+  style?: string;
+} & MediaLayoutProps;
 
 const {
   src,
@@ -30,25 +33,52 @@ const {
   loading = "lazy",
   sandbox,
   referrerPolicy,
-  class: className
+  class: className,
+  style,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
 } = Astro.props;
-const style = `--embed-frame-height: ${height};`;
+const layoutStyle = buildMediaLayoutStyle(
+  {
+    width,
+    maxWidth,
+    mediaWidth,
+    mediaMaxWidth,
+    mediaHeight,
+    mediaMaxHeight,
+    mediaAspectRatio,
+    mediaFit,
+    mediaInset,
+    mediaAlign
+  },
+  { style, defaults: { mediaHeight: height } }
+);
 const hasCaptionSlot = Astro.slots.has("caption");
 const hasCaption = hasCaptionSlot || Boolean(caption);
 const hasDefaultSlot = Astro.slots.has("default");
 const shouldRenderCaption = hasCaption || showOpenLink;
 ---
 
-<figure class:list={["article-figure", "embed-frame", className]} style={style}>
-  <iframe
-    class="embed-frame__frame"
-    src={src}
-    title={title}
-    loading={loading}
-    sandbox={sandbox}
-    referrerpolicy={referrerPolicy}
-  ></iframe>
-  {hasDefaultSlot && <slot />}
+<figure class:list={["article-figure", "embed-frame", className]} style={layoutStyle}>
+  <div class="article-figure__body">
+    <iframe
+      class="embed-frame__frame"
+      src={src}
+      title={title}
+      loading={loading}
+      sandbox={sandbox}
+      referrerpolicy={referrerPolicy}
+    ></iframe>
+    {hasDefaultSlot && <slot />}
+  </div>
   {
     shouldRenderCaption && (
       <figcaption>

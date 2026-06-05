@@ -1,19 +1,49 @@
 ---
+import { buildMediaLayoutStyle, type MediaLayoutProps } from "./mediaLayout";
+
 type Props = {
   ariaLabel?: string;
   defaultValue?: string;
   class?: string;
-};
+  style?: string;
+} & MediaLayoutProps;
 
 const {
   ariaLabel = "Figure variants",
   defaultValue,
-  class: className
+  class: className,
+  style,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
 } = Astro.props;
+const layoutStyle = buildMediaLayoutStyle(
+  {
+    width,
+    maxWidth,
+    mediaWidth,
+    mediaMaxWidth,
+    mediaHeight,
+    mediaMaxHeight,
+    mediaAspectRatio,
+    mediaFit,
+    mediaInset,
+    mediaAlign
+  },
+  { style }
+);
 ---
 
 <div
   class:list={["toggle-figure", className]}
+  style={layoutStyle}
   data-toggle-figure
   data-aria-label={ariaLabel}
   data-default-value={defaultValue}

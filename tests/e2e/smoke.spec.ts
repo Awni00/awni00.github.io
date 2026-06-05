@@ -53,6 +53,43 @@ test("writing entry and RSS render", async ({ page }) => {
   expect(await response?.text()).toContain("<rss version=\"2.0\">");
 });
 
+test("media layout controls size figures and embeds", async ({ page }) => {
+  await page.goto("/fixtures/media-layout-controls");
+  await expect(page.locator("#media-layout-controls-fixture")).toBeVisible();
+
+  const grid = page.locator(".fixture-equal-grid");
+  await expect(grid).toHaveAttribute("data-equal-frames", "true");
+  const bodies = grid.locator(".article-figure__body");
+  await expect(bodies).toHaveCount(2);
+
+  const firstBody = await bodies.nth(0).boundingBox();
+  const secondBody = await bodies.nth(1).boundingBox();
+  expect(firstBody).not.toBeNull();
+  expect(secondBody).not.toBeNull();
+
+  const viewport = page.viewportSize();
+  if ((viewport?.width ?? 0) > 680) {
+    expect(Math.abs(firstBody!.height - secondBody!.height)).toBeLessThanOrEqual(1);
+    const captions = grid.locator(".article-figure > figcaption");
+    const firstCaption = await captions.nth(0).boundingBox();
+    const secondCaption = await captions.nth(1).boundingBox();
+    expect(firstCaption).not.toBeNull();
+    expect(secondCaption).not.toBeNull();
+    expect(Math.abs(firstCaption!.y - secondCaption!.y)).toBeLessThanOrEqual(1);
+  } else {
+    expect(secondBody!.y).toBeGreaterThan(firstBody!.y);
+  }
+
+  const picture = page.locator(".fixture-picture");
+  await expect(picture).toHaveAttribute("style", /--fixture-style-token: 1/);
+  await expect(picture).toHaveCSS("padding", "12px");
+
+  await expect(page.locator(".fixture-plotly .embed-frame__frame")).toHaveCSS("height", "480px");
+  await expect(page.locator(".fixture-embed .embed-frame__frame")).toHaveCSS("height", "360px");
+  await expect(page.locator(".fixture-two-columns")).toHaveCSS("gap", "32px");
+  await expect(page.locator(".fixture-image-comparison")).toBeVisible();
+});
+
 test("theme toggle changes preference", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /Theme:/ }).click();

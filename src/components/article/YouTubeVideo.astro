@@ -1,21 +1,58 @@
 ---
+import { buildMediaLayoutStyle, type MediaLayoutProps } from "./mediaLayout";
+
 type Props = {
   id: string;
   title?: string;
   caption?: string;
-};
+  class?: string;
+  style?: string;
+} & MediaLayoutProps;
 
-const { id, title = "YouTube video", caption } = Astro.props;
+const {
+  id,
+  title = "YouTube video",
+  caption,
+  class: className,
+  style,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
+} = Astro.props;
+const layoutStyle = buildMediaLayoutStyle(
+  {
+    width,
+    maxWidth,
+    mediaWidth,
+    mediaMaxWidth,
+    mediaHeight,
+    mediaMaxHeight,
+    mediaAspectRatio,
+    mediaFit,
+    mediaInset,
+    mediaAlign
+  },
+  { style, defaults: { mediaAspectRatio: "16 / 9" } }
+);
 ---
 
-<figure class="article-figure">
-  <iframe
-    src={`https://www.youtube-nocookie.com/embed/${id}`}
-    title={title}
-    loading="lazy"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen
-    style="aspect-ratio: 16 / 9; width: 100%; border: 0;"
-  ></iframe>
+<figure class:list={["article-figure", className]} style={layoutStyle}>
+  <div class="article-figure__body">
+    <iframe
+      class="youtube-video__frame"
+      src={`https://www.youtube-nocookie.com/embed/${id}`}
+      title={title}
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
+  </div>
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
