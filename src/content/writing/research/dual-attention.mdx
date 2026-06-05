@@ -85,13 +85,13 @@ We empirically evaluate the Dual Attention Transformer (abbreviated, *DAT*) arch
 
 The first set of experiments evaluates the data-efficiency of *DAT* on visual relational reasoning tasks. We consider the “Relational Games” benchmark which is used for evaluating relational architectures. The learning curves depicted in the plot below show that *DAT* is significantly more data-efficient compared to a Transformer in learning relational tasks.
 
-<EmbedFrame src="/writing/research/dual-attention/static/figs/relgames_learning_curves.html" title="Relational games learning curves" height="560px" />
+<PlotlyFigure src="/writing/research/dual-attention/static/figs/relgames_learning_curves.html" iframeTitle="Relational games learning curves" height="560px" />
 
 ### Mathematical Problem-Solving
 
 Mathematical problem-solving is an interesting test for neural models because it requires more than statistical pattern recognition---it requires inferring laws, axioms, and symbol manipulation rules. To probe *DAT*’s abilities in symbolic reasoning in sequence-to-sequence tasks, we evaluate it on a mathematical problem-solving benchmark. We find that *DAT* outperforms standard Transformers consistently across model sizes.
 
-<EmbedFrame src="/writing/research/dual-attention/static/figs/math_accuracy_scaling.html" title="Mathematical problem solving" height="560px" />
+<PlotlyFigure src="/writing/research/dual-attention/static/figs/math_accuracy_scaling.html" iframeTitle="Mathematical problem solving" height="560px" />
 
 ### Visual Processing
 
@@ -108,7 +108,7 @@ In this section, we explore how the relational computational mechanisms introduc
 
 Language understanding involves processing and organizing relational information, such as syntactic structures, semantic roles, and contextual dependencies, to extract meaning from words and their connections within sentences. We evaluate the impact of the relational computational mechanisms of *DAT* in language modeling, training models upto 1.3B parameters in size. We observe improvements in data efficiency and parameter efficiency compared to standard Transformers. By [visualizing the internal relational representations of trained DAT language models](/writing/research/dual-attention/static/figs/DAT-sa8-ra8-ns1024-sh8-nkvh4-343M-Relational-Attention%20Relations-Head%20View.html), we find evidence that they encode human-interpretable semantic relations.
 
-<EmbedFrame src="/writing/research/dual-attention/static/figs/language_modeling_scaling_laws.html" title="Language modeling scaling laws" height="560px" />
+<PlotlyFigure src="/writing/research/dual-attention/static/figs/language_modeling_scaling_laws.html" iframeTitle="Language modeling scaling laws" height="560px" />
 
 ## Learn More
 

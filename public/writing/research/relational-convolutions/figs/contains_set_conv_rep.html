@@ -3,24 +3,73 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="text/javascript">window.PlotlyConfig = { MathJaxConfig: "local" };</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_SVG"></script>
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
     <style>
-      html, body, #contains_set_conv_rep {
+      html,
+      body,
+      #contains_set_conv_rep {
         width: 100%;
         height: 100%;
         margin: 0;
+        min-width: 0;
+        overflow: hidden;
       }
     </style>
   </head>
   <body>
     <div id="contains_set_conv_rep"></div>
     <script>
+      const plot = document.getElementById("contains_set_conv_rep");
+      const clone = (value) => JSON.parse(JSON.stringify(value || {}));
+      const pc1Title = "$\\langle R[g], \\boldsymbol{f} \\rangle_{\\mathrm{rel}} \\ \\text{[PC1]}$";
+      const pc2Title = "$\\langle R[g], \\boldsymbol{f} \\rangle_{\\mathrm{rel}} \\ \\text{[PC2]}$";
+      const relayoutForWidth = (width) => {
+        const mobile = width < 520;
+        return {
+          autosize: true,
+          "font.size": mobile ? 10 : 12,
+          "title.font.size": mobile ? 13 : 16,
+          "margin.l": mobile ? 42 : 50,
+          "margin.r": mobile ? 4 : 12,
+          "margin.t": mobile ? 54 : 58,
+          "margin.b": mobile ? 72 : 58,
+          "legend.font.size": mobile ? 10 : 11,
+          "legend.orientation": "h",
+          "legend.x": 0.5,
+          "legend.xanchor": "center",
+          "legend.y": mobile ? -0.26 : -0.18,
+          "legend.yanchor": "top",
+          "xaxis.automargin": true,
+          "xaxis.title.text": pc1Title,
+          "xaxis.title.standoff": mobile ? 4 : 6,
+          "xaxis.tickfont.size": mobile ? 10 : 11,
+          "yaxis.automargin": true,
+          "yaxis.title.text": pc2Title,
+          "yaxis.title.standoff": mobile ? 4 : 6,
+          "yaxis.tickfont.size": mobile ? 10 : 11
+        };
+      };
+      const resizePlot = () => {
+        const width = plot.clientWidth || document.documentElement.clientWidth || window.innerWidth;
+        Plotly.relayout(plot, relayoutForWidth(width)).then(() => Plotly.Plots.resize(plot));
+      };
+
       fetch("./contains_set_conv_rep.json")
         .then((response) => response.json())
         .then((figure) => {
-          const layout = figure.layout || {};
+          const layout = clone(figure.layout);
+          delete layout.width;
+          delete layout.height;
           layout.autosize = true;
-          Plotly.react("contains_set_conv_rep", figure.data || [], layout, { responsive: true });
+          Plotly.react(plot, figure.data || [], layout, { responsive: true, displaylogo: false })
+            .then(resizePlot)
+            .then(() => {
+              const observer = new ResizeObserver(() => requestAnimationFrame(resizePlot));
+              observer.observe(plot);
+              window.addEventListener("resize", resizePlot);
+            });
         });
     </script>
   </body>

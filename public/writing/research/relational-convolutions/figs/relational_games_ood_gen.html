@@ -5,22 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
     <style>
-      html, body, #relational_games_ood_gen {
+      html,
+      body,
+      #relational_games_ood_gen {
         width: 100%;
         height: 100%;
         margin: 0;
+        min-width: 0;
+        overflow: hidden;
       }
     </style>
   </head>
   <body>
     <div id="relational_games_ood_gen"></div>
     <script>
+      const plot = document.getElementById("relational_games_ood_gen");
+      const clone = (value) => JSON.parse(JSON.stringify(value || {}));
+      const relayoutForWidth = (width) => {
+        const mobile = width < 520;
+        return {
+          autosize: true,
+          "font.size": mobile ? 10 : 12,
+          "title.text": mobile
+            ? "Relational games OOD generalization"
+            : "Out-of-Distribution Generalization Performance on Relational Games Tasks",
+          "title.font.size": mobile ? 13 : 16,
+          "margin.l": mobile ? 38 : 48,
+          "margin.r": mobile ? 6 : 16,
+          "margin.t": mobile ? 46 : 58,
+          "margin.b": mobile ? 112 : 86,
+          "legend.font.size": mobile ? 9 : 11,
+          "legend.orientation": "h",
+          "legend.x": 0.5,
+          "legend.xanchor": "center",
+          "legend.y": mobile ? -0.34 : -0.22,
+          "legend.yanchor": "top",
+          "xaxis.automargin": true,
+          "xaxis.tickangle": mobile ? -45 : -30,
+          "xaxis.tickfont.size": mobile ? 9 : 11,
+          "xaxis2.automargin": true,
+          "xaxis2.tickangle": mobile ? -45 : -30,
+          "xaxis2.tickfont.size": mobile ? 9 : 11,
+          "yaxis.automargin": true,
+          "yaxis.tickfont.size": mobile ? 9 : 11,
+          "yaxis2.automargin": true,
+          "yaxis2.tickfont.size": mobile ? 9 : 11
+        };
+      };
+      const resizePlot = () => {
+        const width = plot.clientWidth || document.documentElement.clientWidth || window.innerWidth;
+        Plotly.relayout(plot, relayoutForWidth(width)).then(() => Plotly.Plots.resize(plot));
+      };
+
       fetch("./relational_games_ood_gen.json")
         .then((response) => response.json())
         .then((figure) => {
-          const layout = figure.layout || {};
+          const layout = clone(figure.layout);
+          delete layout.width;
+          delete layout.height;
           layout.autosize = true;
-          Plotly.react("relational_games_ood_gen", figure.data || [], layout, { responsive: true });
+          Plotly.react(plot, figure.data || [], layout, { responsive: true, displaylogo: false })
+            .then(resizePlot)
+            .then(() => {
+              const observer = new ResizeObserver(() => requestAnimationFrame(resizePlot));
+              observer.observe(plot);
+              window.addEventListener("resize", resizePlot);
+            });
         });
     </script>
   </body>

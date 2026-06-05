@@ -62,15 +62,15 @@ We evaluate our proposed architecture on two sets of relational tasks: relationa
 
 **Relational games.** The relational games benchmark allows us to evaluate out-of-distribution generalization. The dataset consists of a series of classification tasks involving a set of objects. In the figure below, we show generalization performance on two sets of objects different from those used during training.
 
-<EmbedFrame src="/writing/research/relational-convolutions/figs/relational_games_ood_gen.html" title="Relational games out-of-distribution generalization" height="520px" />
+<PlotlyFigure src="/writing/research/relational-convolutions/figs/relational_games_ood_gen.html" iframeTitle="Relational games out-of-distribution generalization" height="520px" />
 
 ***SET*.** *SET* is a card game which forms a simple but challenging relational task. To solve the task, one must process the sensory information of individual cards to identify the values of each attribute, then somehow search over combinations of cards and reason about the relations between them. This is a task which tests a model's ability to represent and reason over relations among *subgroups* of objects. This is a capability built explicitly into relational convolutional networks, but is missing from other relational models.
 
-<EmbedFrame src="/writing/research/relational-convolutions/figs/contains_set_acc.html" title="SET accuracy" height="520px" />
+<PlotlyFigure src="/writing/research/relational-convolutions/figs/contains_set_acc.html" iframeTitle="SET accuracy" height="520px" />
 
 Finally, we explore the geometry of the learned representations in relational convolutional networks. As a preview, the figure below depicts the geometry of the relational convolution operation, demonstrating its ability to learn compositional features.
 
-<EmbedFrame src="/writing/research/relational-convolutions/figs/contains_set_conv_rep.html" title="SET convolution representation" height="520px" />
+<PlotlyFigure src="/writing/research/relational-convolutions/figs/contains_set_conv_rep.html" iframeTitle="SET convolution representation" height="520px" />
 
 ## Experiment Logs
 
