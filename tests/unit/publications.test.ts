@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { groupPublications } from "../../src/lib/publications/formatPublication";
+import {
+  groupPublications,
+  publicationLinks
+} from "../../src/lib/publications/formatPublication";
 import { parseBibtex } from "../../src/lib/publications/parseBibtex";
 
 const bibtex = `@inproceedings{sample2026,
@@ -17,6 +20,7 @@ const bibtex = `@inproceedings{sample2026,
   preview = {sample.svg},
   pdf = {/publications/sample.pdf},
   arxiv = {2601.00000},
+  publisher_page = {https://publisher.example/sample},
   code = {https://github.com/example/sample}
 }
 
@@ -35,6 +39,7 @@ describe("publications", () => {
       title: "Sample Paper",
       selected: true,
       bibtexShow: true,
+      publisherPage: "https://publisher.example/sample",
       preview: "/publications/sample.svg"
     });
   });
@@ -56,9 +61,19 @@ describe("publications", () => {
     expect(publication.bibtex).not.toContain("preview");
     expect(publication.bibtex).not.toContain("pdf");
     expect(publication.bibtex).not.toContain("arxiv");
+    expect(publication.bibtex).not.toContain("publisher_page");
     expect(publication.bibtex).not.toContain("code");
     expect(publication.bibtex).not.toContain("abstract");
     expect(publication.bibtex).not.toContain("abbr");
+  });
+
+  it("labels publisher-page links as Publisher", () => {
+    const [publication] = parseBibtex(bibtex);
+
+    expect(publicationLinks(publication)).toContainEqual({
+      label: "Publisher",
+      href: "https://publisher.example/sample"
+    });
   });
 
   it("generates concise BibTeX for misc entries", () => {
@@ -71,7 +86,7 @@ describe("publications", () => {
       eprint = {2601.00000},
       archivePrefix = {arXiv},
       primaryClass = {cs.LG},
-      website = {https://example.com},
+      publisher_page = {https://example.com},
       selected = {true}
     }`);
 
@@ -85,7 +100,7 @@ describe("publications", () => {
   archiveprefix = {arXiv},
   primaryclass = {cs.LG}
 }`);
-    expect(publication.bibtex).not.toContain("website");
+    expect(publication.bibtex).not.toContain("publisher_page");
     expect(publication.bibtex).not.toContain("selected");
   });
 

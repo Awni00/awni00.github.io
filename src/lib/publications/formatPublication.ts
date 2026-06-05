@@ -43,7 +43,7 @@ export function publicationLinks(publication: Publication): Array<{ label: strin
     ["Slides", publication.slides],
     ["Poster", publication.poster],
     ["Video", publication.video],
-    ["Website", publication.website],
+    ["Publisher", publication.publisherPage],
     ["DOI", publication.doi ? doiUrl(publication.doi) : undefined],
     ["URL", publication.url]
   ]

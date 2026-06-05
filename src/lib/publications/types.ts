@@ -18,7 +18,7 @@ export type Publication = {
   slides?: string;
   poster?: string;
   video?: string;
-  website?: string;
+  publisherPage?: string;
   preview?: string;
   selected: boolean;
   bibtexShow: boolean;

@@ -13,7 +13,7 @@ const { publication, compact = false, abstractDisplay = "popup" } = Astro.props;
 const links = publicationLinks(publication);
 const authorParts = highlightedAuthorParts(publication.author);
 const thumbHref =
-  publication.pdf ?? publication.url ?? publication.website ?? undefined;
+  publication.pdf ?? publication.url ?? publication.publisherPage ?? undefined;
 const effectiveAbstractDisplay: PublicationAbstractDisplay = compact ? "hidden" : abstractDisplay;
 const showInlineAbstract = Boolean(publication.abstract) && effectiveAbstractDisplay === "inline";
 const showAbstractButton = Boolean(publication.abstract) && effectiveAbstractDisplay === "popup";

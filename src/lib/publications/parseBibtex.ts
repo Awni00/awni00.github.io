@@ -110,7 +110,7 @@ function normalizePublication(entry: RawEntry): Publication {
     slides: fields.slides,
     poster: fields.poster,
     video: fields.video,
-    website: fields.website,
+    publisherPage: fields.publisher_page,
     preview: resolvePreview(fields.preview),
     selected: boolField(fields.selected),
     bibtexShow: boolField(fields[publicationsConfig.bibtex.showButtonField]),
