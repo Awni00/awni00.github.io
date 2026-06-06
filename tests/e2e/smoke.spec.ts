@@ -46,9 +46,16 @@ test("writing entry and RSS render", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Bias and Variance: an Illustrated Refresher" })).toBeVisible();
   await expect(page.locator(".article-byline")).toContainText("Venue");
   await expect(page.locator(".article-byline")).toContainText("Sample Conference on Learning Systems");
+  await expect(page.locator(".article-byline__col--date")).toContainText("Date");
+  await expect(page.locator(".article-byline__col--date")).toContainText("May 12, 2026");
+  await expect(page.locator(".article-byline")).not.toContainText("Published");
   await expect(page.locator(".katex").first()).toBeVisible();
   await expect(page.locator(".figure-grid[data-columns='2']")).toBeVisible();
   await expect(page.locator(".figure-grid")).toContainText("Two complementary views of the bias-variance trade-off");
+  await page.goto("/writing/research-papers/vae-explainer");
+  await expect(page.locator(".article-byline__col--date")).toContainText("Page: May 18, 2026");
+  await expect(page.locator(".article-byline__col--date")).toContainText("arXiv v1: Apr 7, 2026");
+  await expect(page.locator(".article-byline__col--date")).toContainText("Demo venue: May 12, 2026");
   const response = await page.goto("/writing/rss.xml");
   expect(await response?.text()).toContain("<rss version=\"2.0\">");
 });

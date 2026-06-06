@@ -5,10 +5,16 @@ import { entryTypeIds } from "./config";
 
 const entryTypes = entryTypeIds as [string, ...string[]];
 
-const dateString = z
+const requiredDateString = z
   .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, "Expected YYYY-MM-DD")
-  .optional();
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Expected YYYY-MM-DD");
+
+const dateString = requiredDateString.optional();
+
+const displayDate = z.object({
+  label: z.string().min(1),
+  date: requiredDateString
+});
 
 const tocDepth = z.number().int().min(2).max(6);
 
@@ -58,6 +64,7 @@ const writing = defineCollection({
     slug: z.string().optional(),
     aliases: z.array(z.string()).default([]),
     date: dateString,
+    displayDates: z.array(displayDate).min(1).optional(),
     updated: dateString,
     summary: z.string().optional(),
     venue: z.string().optional(),

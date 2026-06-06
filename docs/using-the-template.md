@@ -69,6 +69,9 @@ Common optional frontmatter:
 aliases:
   - Alternative Name
 date: "2026-05-24"
+displayDates:
+  - label: "Page"
+    date: "2026-05-24"
 summary: "Short description."
 venue: "Conference or Journal Name"
 tags:
@@ -91,6 +94,46 @@ For paper-style writing entries, `venue` is intentionally stored in entry
 frontmatter even if the same paper also appears in `src/data/publications.bib`.
 This keeps writing entries portable and prevents article headers from depending
 on a BibTeX lookup.
+
+### Article Date Display
+
+Use canonical `date` for sorting, RSS, graph/list views, and recent entries.
+Article headers render that date under one `Date` byline column.
+
+```yaml
+date: "2025-10-29"
+```
+
+renders as:
+
+```txt
+Date
+Oct 29, 2025
+```
+
+If the article needs a small date history in the header, add `displayDates`.
+This only changes the article header display; `date` remains canonical for
+ordering and feeds.
+
+```yaml
+date: "2025-10-29"
+displayDates:
+  - label: "Page"
+    date: "2025-10-29"
+  - label: "arXiv v1"
+    date: "2025-05-21"
+  - label: "NeurIPS"
+    date: "2025-09-18"
+```
+
+renders as:
+
+```txt
+Date
+Page: Oct 29, 2025
+arXiv v1: May 21, 2025
+NeurIPS: Sep 18, 2025
+```
 
 `layout.toc` controls which article heading depths appear in the table of
 contents for this entry. Depths map to Markdown heading levels `##` through
