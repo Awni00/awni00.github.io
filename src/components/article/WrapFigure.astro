@@ -1,0 +1,58 @@
+---
+import { buildMediaLayoutStyle } from "./mediaLayout";
+
+type Props = {
+  src: string;
+  alt: string;
+  caption?: string;
+  side?: "left" | "right";
+  figureWidth?: string;
+  figureMaxWidth?: string;
+  gap?: string;
+  class?: string;
+  style?: string;
+};
+
+const {
+  src,
+  alt,
+  caption,
+  side: sideProp = "right",
+  figureWidth = "50%",
+  figureMaxWidth = "360px",
+  gap = "1.25rem",
+  class: className,
+  style
+} = Astro.props;
+const side = sideProp === "left" ? "left" : "right";
+const hasCaptionSlot = Astro.slots.has("caption");
+const layoutStyle = buildMediaLayoutStyle(
+  {},
+  {
+    style,
+    extraVars: {
+      "--wrap-figure-width": figureWidth,
+      "--wrap-figure-max-width": figureMaxWidth,
+      "--wrap-figure-gap": gap
+    }
+  }
+);
+---
+
+<div class:list={["wrap-figure", className]} data-side={side} style={layoutStyle}>
+  <figure class="article-figure wrap-figure__figure">
+    <div class="article-figure__body">
+      <img class="article-picture" src={src} alt={alt} loading="lazy" />
+    </div>
+    {
+      hasCaptionSlot ? (
+        <figcaption>
+          <slot name="caption" />
+        </figcaption>
+      ) : (
+        caption && <figcaption>{caption}</figcaption>
+      )
+    }
+  </figure>
+  <slot />
+</div>

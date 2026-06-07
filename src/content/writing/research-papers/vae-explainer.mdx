@@ -65,11 +65,19 @@ The generative story is:
 
 The challenge is that the exact posterior $p_\theta(z \mid x)$ is usually intractable. VAEs introduce an encoder $q_\phi(z \mid x)$ that acts as a learned approximation.
 
-<Figure
+<WrapFigure
+  class="vae-model-wrap"
   src="/figures/latent-map.svg"
   alt="A placeholder latent-space map with curves, sample points, and decoded examples."
   caption="A local placeholder figure standing in for the kind of latent-space diagnostic a VAE explainer might include."
-/>
+  side="right"
+  figureWidth="48%"
+  figureMaxWidth="340px"
+>
+The useful picture is geometric: nearby latent points should decode to related observations, and smooth paths through the latent space should correspond to meaningful changes in the generated examples.
+
+In practice, diagnostics like the map shown here help check whether the learned representation is organized enough to support interpolation, sampling, and downstream comparisons.
+</WrapFigure>
 
 <ToggleFigure ariaLabel="VAE figure variants" defaultValue="latent">
   <ToggleFigurePanel label="Latent-space diagnostic" value="latent">

@@ -1,4 +1,34 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
+
+async function firstTextLineRect(locator: Locator) {
+  return locator.evaluate((element) => {
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    let textNode = walker.nextNode();
+    let textOffset = -1;
+    while (textNode) {
+      textOffset = textNode.textContent?.search(/\S/) ?? -1;
+      if (textOffset >= 0) break;
+      textNode = walker.nextNode();
+    }
+    if (!textNode || textOffset < 0) return null;
+
+    const range = document.createRange();
+    range.setStart(textNode, textOffset);
+    range.setEnd(textNode, textNode.textContent?.length ?? textOffset);
+    const rect = range.getClientRects()[0];
+    range.detach();
+    return rect
+      ? {
+          x: rect.x,
+          y: rect.y,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height
+        }
+      : null;
+  });
+}
 
 test("main static routes render", async ({ page }) => {
   await page.goto("/");
@@ -53,9 +83,37 @@ test("writing entry and RSS render", async ({ page }) => {
   await expect(page.locator(".figure-grid[data-columns='2']")).toBeVisible();
   await expect(page.locator(".figure-grid")).toContainText("Two complementary views of the bias-variance trade-off");
   await page.goto("/writing/research-papers/vae-explainer");
+  await expect(page.getByRole("heading", { name: "Variational autoencoders: a short explainer" })).toBeVisible();
   await expect(page.locator(".article-byline__col--date")).toContainText("Page: May 18, 2026");
   await expect(page.locator(".article-byline__col--date")).toContainText("arXiv v1: Apr 7, 2026");
   await expect(page.locator(".article-byline__col--date")).toContainText("Demo venue: May 12, 2026");
+
+  const wrapFigure = page.locator(".vae-model-wrap");
+  const wrapInnerFigure = wrapFigure.locator(".wrap-figure__figure");
+  const wrapParagraphs = wrapFigure.locator(":scope > p");
+  await expect(wrapFigure).toBeVisible();
+  await expect(wrapParagraphs).toHaveCount(2);
+
+  const wrapBox = await wrapFigure.boundingBox();
+  const wrapFigureBox = await wrapInnerFigure.boundingBox();
+  expect(wrapBox).not.toBeNull();
+  expect(wrapFigureBox).not.toBeNull();
+
+  const firstLine = await firstTextLineRect(wrapParagraphs.first());
+  expect(firstLine).not.toBeNull();
+
+  const viewport = page.viewportSize();
+  if ((viewport?.width ?? 0) > 680) {
+    await expect(wrapInnerFigure).toHaveCSS("float", "right");
+    expect(Math.abs(wrapFigureBox!.width - 340)).toBeLessThanOrEqual(1);
+    expect(firstLine!.y).toBeLessThan(wrapFigureBox!.y + 40);
+    expect(firstLine!.right).toBeLessThanOrEqual(wrapFigureBox!.x - 8);
+  } else {
+    await expect(wrapInnerFigure).toHaveCSS("float", "none");
+    expect(Math.abs(wrapFigureBox!.width - wrapBox!.width)).toBeLessThanOrEqual(1);
+    expect(firstLine!.y).toBeGreaterThanOrEqual(wrapFigureBox!.y + wrapFigureBox!.height);
+  }
+
   const response = await page.goto("/writing/rss.xml");
   expect(await response?.text()).toContain("<rss version=\"2.0\">");
 });
