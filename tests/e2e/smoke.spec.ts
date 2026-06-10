@@ -215,6 +215,8 @@ test("media layout controls size figures and embeds", async ({ page }) => {
     )
     .toBeLessThan(300);
   expect((await autoFitFrame.boundingBox())!.height).toBeGreaterThan(200);
+  // invertInDarkMode tags the iframe with the shared dark-mode invert class.
+  await expect(autoFitFrame).toHaveClass(/invert-in-dark/);
   await expect(page.locator(".fixture-two-columns")).toHaveCSS("gap", "32px");
   await expect(page.locator(".fixture-image-comparison")).toBeVisible();
 });

@@ -13,6 +13,11 @@ type Props = {
    * `height` is kept) for cross-origin embeds.
    */
   autoFit?: boolean;
+  /**
+   * Apply the dark-mode inversion filter to the iframe so a light-scheme embed
+   * matches inverted figures in dark mode. Affects the iframe content only.
+   */
+  invertInDarkMode?: boolean;
   linkLabel?: string;
   showOpenLink?: boolean;
   loading?: "lazy" | "eager";
@@ -36,6 +41,7 @@ const {
   caption,
   height = "520px",
   autoFit = false,
+  invertInDarkMode = false,
   linkLabel = "Open embedded figure",
   showOpenLink = true,
   loading = "lazy",
@@ -81,7 +87,7 @@ const shouldRenderCaption = hasCaption || showOpenLink;
 <figure class:list={["article-figure", "embed-frame", className]} style={layoutStyle}>
   <div class="article-figure__body">
     <iframe
-      class="embed-frame__frame"
+      class:list={["embed-frame__frame", { "invert-in-dark": invertInDarkMode }]}
       src={src}
       title={title}
       loading={loading}
