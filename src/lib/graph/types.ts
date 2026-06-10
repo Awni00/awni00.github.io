@@ -96,6 +96,10 @@ export type WritingEntryLike = {
     slug?: string;
     aliases?: string[];
     date?: string;
+    displayDates?: Array<{
+      label: string;
+      date: string;
+    }>;
     updated?: string;
     summary?: string;
     venue?: string;

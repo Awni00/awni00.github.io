@@ -1,17 +1,64 @@
 ---
+import { buildMediaLayoutStyle, type MediaLayoutProps } from "./mediaLayout";
+
 type Props = {
   columns?: 2 | 3 | 4;
   caption?: string;
-};
+  class?: string;
+  style?: string;
+  gap?: string;
+  equalFrames?: boolean;
+} & MediaLayoutProps;
 
 const allowedColumns = [2, 3, 4];
 const requestedColumns = Number(Astro.props.columns ?? 2);
 const columns = allowedColumns.includes(requestedColumns) ? requestedColumns : 2;
-const { caption } = Astro.props;
+const {
+  caption,
+  class: className,
+  style,
+  gap,
+  equalFrames = false,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
+} = Astro.props;
 const hasCaptionSlot = Astro.slots.has("caption");
+const layoutStyle = buildMediaLayoutStyle(
+  {
+    width,
+    maxWidth,
+    mediaWidth,
+    mediaMaxWidth,
+    mediaHeight,
+    mediaMaxHeight,
+    mediaAspectRatio,
+    mediaFit,
+    mediaInset,
+    mediaAlign
+  },
+  {
+    style,
+    extraVars: {
+      "--figure-grid-gap": gap
+    }
+  }
+);
 ---
 
-<figure class="figure-grid" data-columns={columns}>
+<figure
+  class:list={["figure-grid", className]}
+  data-columns={columns}
+  data-equal-frames={equalFrames ? "true" : undefined}
+  style={layoutStyle}
+>
   <div class="figure-grid__items">
     <slot />
   </div>

@@ -1,5 +1,6 @@
 ---
 import EmbedFrame from "./EmbedFrame.astro";
+import type { MediaLayoutProps } from "./mediaLayout";
 
 type Props = {
   src: string;
@@ -13,7 +14,8 @@ type Props = {
   loading?: "lazy" | "eager";
   sandbox?: string;
   class?: string;
-};
+  style?: string;
+} & MediaLayoutProps;
 
 const {
   src,
@@ -26,7 +28,18 @@ const {
   fallbackAlt = iframeTitle,
   loading = "lazy",
   sandbox = "allow-scripts allow-same-origin",
-  class: className
+  class: className,
+  style,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
 } = Astro.props;
 const hasCaptionSlot = Astro.slots.has("caption");
 const figureClass = ["plotly-figure", className].filter(Boolean).join(" ");
@@ -43,6 +56,17 @@ const figureClass = ["plotly-figure", className].filter(Boolean).join(" ");
         loading={loading}
         sandbox={sandbox}
         class={figureClass}
+        style={style}
+        width={width}
+        maxWidth={maxWidth}
+        mediaWidth={mediaWidth}
+        mediaMaxWidth={mediaMaxWidth}
+        mediaHeight={mediaHeight}
+        mediaMaxHeight={mediaMaxHeight}
+        mediaAspectRatio={mediaAspectRatio}
+        mediaFit={mediaFit}
+        mediaInset={mediaInset}
+        mediaAlign={mediaAlign}
       >
         {
           fallbackSrc && (
@@ -66,6 +90,17 @@ const figureClass = ["plotly-figure", className].filter(Boolean).join(" ");
         loading={loading}
         sandbox={sandbox}
         class={figureClass}
+        style={style}
+        width={width}
+        maxWidth={maxWidth}
+        mediaWidth={mediaWidth}
+        mediaMaxWidth={mediaMaxWidth}
+        mediaHeight={mediaHeight}
+        mediaMaxHeight={mediaMaxHeight}
+        mediaAspectRatio={mediaAspectRatio}
+        mediaFit={mediaFit}
+        mediaInset={mediaInset}
+        mediaAlign={mediaAlign}
       >
         {
           fallbackSrc && (

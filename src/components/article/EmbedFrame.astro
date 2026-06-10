@@ -1,9 +1,18 @@
 ---
+import { buildMediaLayoutStyle, type MediaLayoutProps } from "./mediaLayout";
+
 type Props = {
   src: string;
   title?: string;
   caption?: string;
   height?: string;
+  /**
+   * Size a same-origin iframe to its content height on load and on resize, so
+   * there is no whitespace gap or internal scrollbar below the embedded figure.
+   * `height` is used only as the pre-hydration placeholder. No-op (and the fixed
+   * `height` is kept) for cross-origin embeds.
+   */
+  autoFit?: boolean;
   linkLabel?: string;
   showOpenLink?: boolean;
   loading?: "lazy" | "eager";
@@ -18,37 +27,71 @@ type Props = {
     | "strict-origin-when-cross-origin"
     | "unsafe-url";
   class?: string;
-};
+  style?: string;
+} & MediaLayoutProps;
 
 const {
   src,
   title = "Embedded figure",
   caption,
   height = "520px",
+  autoFit = false,
   linkLabel = "Open embedded figure",
   showOpenLink = true,
   loading = "lazy",
   sandbox,
   referrerPolicy,
-  class: className
+  class: className,
+  style,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
 } = Astro.props;
-const style = `--embed-frame-height: ${height};`;
+const layoutStyle = buildMediaLayoutStyle(
+  {
+    width,
+    maxWidth,
+    mediaWidth,
+    mediaMaxWidth,
+    mediaHeight,
+    mediaMaxHeight,
+    mediaAspectRatio,
+    mediaFit,
+    mediaInset,
+    mediaAlign
+  },
+  // When autoFit is on, do not pin the wrapper to a fixed media height; the
+  // `.article-figure__body` then collapses to the iframe once the script sizes
+  // it. The iframe keeps `height` as an inline placeholder to avoid a flash.
+  { style, defaults: autoFit ? {} : { mediaHeight: height } }
+);
 const hasCaptionSlot = Astro.slots.has("caption");
 const hasCaption = hasCaptionSlot || Boolean(caption);
 const hasDefaultSlot = Astro.slots.has("default");
 const shouldRenderCaption = hasCaption || showOpenLink;
 ---
 
-<figure class:list={["article-figure", "embed-frame", className]} style={style}>
-  <iframe
-    class="embed-frame__frame"
-    src={src}
-    title={title}
-    loading={loading}
-    sandbox={sandbox}
-    referrerpolicy={referrerPolicy}
-  ></iframe>
-  {hasDefaultSlot && <slot />}
+<figure class:list={["article-figure", "embed-frame", className]} style={layoutStyle}>
+  <div class="article-figure__body">
+    <iframe
+      class="embed-frame__frame"
+      src={src}
+      title={title}
+      loading={loading}
+      sandbox={sandbox}
+      referrerpolicy={referrerPolicy}
+      data-embed-auto-fit={autoFit ? "" : undefined}
+      style={autoFit ? `height: ${height};` : undefined}
+    ></iframe>
+    {hasDefaultSlot && <slot />}
+  </div>
   {
     shouldRenderCaption && (
       <figcaption>
@@ -66,3 +109,54 @@ const shouldRenderCaption = hasCaption || showOpenLink;
     )
   }
 </figure>
+
+<script>
+  // Size same-origin `autoFit` embeds to their content so there is no whitespace
+  // or internal scrollbar. No-ops for cross-origin frames (contentDocument throws).
+  function fitEmbed(iframe: HTMLIFrameElement) {
+    try {
+      const doc = iframe.contentDocument;
+      if (!doc?.body) return;
+      const height = Math.ceil(doc.body.getBoundingClientRect().height);
+      if (height > 0) iframe.style.height = `${height}px`;
+      doc.documentElement.style.overflow = "hidden";
+      doc.body.style.overflow = "hidden";
+    } catch {
+      /* cross-origin: keep the placeholder height */
+    }
+  }
+
+  function wireEmbed(iframe: HTMLIFrameElement) {
+    if (iframe.dataset.embedFitReady === "true") return;
+    iframe.dataset.embedFitReady = "true";
+
+    const refit = () => fitEmbed(iframe);
+    const observe = () => {
+      try {
+        const body = iframe.contentDocument?.body;
+        if (body && "ResizeObserver" in window) {
+          new ResizeObserver(refit).observe(body);
+        }
+      } catch {
+        /* cross-origin */
+      }
+      // Late reflows (web fonts, KaTeX, embedded charts) settle after load.
+      [0, 150, 600].forEach((delay) => window.setTimeout(refit, delay));
+    };
+
+    iframe.addEventListener("load", () => {
+      refit();
+      observe();
+    });
+    window.addEventListener("resize", refit);
+
+    if (iframe.contentDocument?.readyState === "complete") {
+      refit();
+      observe();
+    }
+  }
+
+  document
+    .querySelectorAll<HTMLIFrameElement>("iframe[data-embed-auto-fit]")
+    .forEach(wireEmbed);
+</script>

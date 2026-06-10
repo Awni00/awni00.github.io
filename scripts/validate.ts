@@ -54,6 +54,7 @@ async function readWritingEntries(root: string): Promise<WritingEntryLike[]> {
             slug: parsed.data.slug,
             aliases: parsed.data.aliases ?? [],
             date: parsed.data.date,
+            displayDates: parsed.data.displayDates,
             updated: parsed.data.updated,
             summary: parsed.data.summary,
             tags: parsed.data.tags ?? [],
@@ -78,6 +79,21 @@ function validateEntries(entries: WritingEntryLike[]): void {
       const value = entry.data[key];
       if (value && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
         errors.push(`${entry.id}: ${key} must use YYYY-MM-DD.`);
+      }
+    }
+    if (entry.data.displayDates !== undefined) {
+      if (!Array.isArray(entry.data.displayDates) || entry.data.displayDates.length === 0) {
+        errors.push(`${entry.id}: displayDates must be a non-empty array.`);
+      } else {
+        entry.data.displayDates.forEach((item, index) => {
+          const value = item as Partial<Record<"label" | "date", unknown>> | null;
+          if (!value || typeof value.label !== "string" || !value.label) {
+            errors.push(`${entry.id}: displayDates[${index}].label is required.`);
+          }
+          if (!value || typeof value.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.date)) {
+            errors.push(`${entry.id}: displayDates[${index}].date must use YYYY-MM-DD.`);
+          }
+        });
       }
     }
     try {

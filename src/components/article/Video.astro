@@ -1,16 +1,53 @@
 ---
+import { buildMediaLayoutStyle, type MediaLayoutProps } from "./mediaLayout";
+
 type Props = {
   src: string;
   poster?: string;
   caption?: string;
-};
+  class?: string;
+  style?: string;
+} & MediaLayoutProps;
 
-const { src, poster, caption } = Astro.props;
+const {
+  src,
+  poster,
+  caption,
+  class: className,
+  style,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
+} = Astro.props;
+const layoutStyle = buildMediaLayoutStyle(
+  {
+    width,
+    maxWidth,
+    mediaWidth,
+    mediaMaxWidth,
+    mediaHeight,
+    mediaMaxHeight,
+    mediaAspectRatio,
+    mediaFit,
+    mediaInset,
+    mediaAlign
+  },
+  { style }
+);
 ---
 
-<figure class="article-figure">
-  <video controls preload="metadata" poster={poster}>
-    <source src={src} />
-  </video>
+<figure class:list={["article-figure", className]} style={layoutStyle}>
+  <div class="article-figure__body">
+    <video class="article-video" controls preload="metadata" poster={poster}>
+      <source src={src} />
+    </video>
+  </div>
   {caption && <figcaption>{caption}</figcaption>}
 </figure>

@@ -69,6 +69,9 @@ Common optional frontmatter:
 aliases:
   - Alternative Name
 date: "2026-05-24"
+displayDates:
+  - label: "Page"
+    date: "2026-05-24"
 summary: "Short description."
 venue: "Conference or Journal Name"
 tags:
@@ -91,6 +94,46 @@ For paper-style writing entries, `venue` is intentionally stored in entry
 frontmatter even if the same paper also appears in `src/data/publications.bib`.
 This keeps writing entries portable and prevents article headers from depending
 on a BibTeX lookup.
+
+### Article Date Display
+
+Use canonical `date` for sorting, RSS, graph/list views, and recent entries.
+Article headers render that date under one `Date` byline column.
+
+```yaml
+date: "2025-10-29"
+```
+
+renders as:
+
+```txt
+Date
+Oct 29, 2025
+```
+
+If the article needs a small date history in the header, add `displayDates`.
+This only changes the article header display; `date` remains canonical for
+ordering and feeds.
+
+```yaml
+date: "2025-10-29"
+displayDates:
+  - label: "Page"
+    date: "2025-10-29"
+  - label: "arXiv v1"
+    date: "2025-05-21"
+  - label: "NeurIPS"
+    date: "2025-09-18"
+```
+
+renders as:
+
+```txt
+Date
+Page: Oct 29, 2025
+arXiv v1: May 21, 2025
+NeurIPS: Sep 18, 2025
+```
 
 `layout.toc` controls which article heading depths appear in the table of
 contents for this entry. Depths map to Markdown heading levels `##` through
@@ -177,6 +220,63 @@ MDX entries can use built-in technical writing components:
 - `Comparison`
 - `ModelViewer`
 - `PlotlyFigure`
+
+### Media layout controls
+
+Use component props for figure sizing before reaching for raw HTML or page-local
+CSS. The common props are:
+
+- `width`, `maxWidth`: size the outer figure or media container.
+- `mediaWidth`, `mediaMaxWidth`, `mediaHeight`, `mediaMaxHeight`: size the media
+  frame inside a figure.
+- `mediaAspectRatio`: set a frame ratio such as `"3 / 2"` or `"16 / 9"`.
+- `mediaFit`: choose `"contain"`, `"cover"`, `"fill"`, `"none"`, or
+  `"scale-down"`.
+- `mediaInset`: add padding inside the media frame for diagrams.
+- `mediaAlign`: align media with `"start"`, `"center"`, `"end"`, or
+  `"stretch"`.
+
+For matched scientific plots, prefer `FigureGrid` with equal frames:
+
+```mdx
+<FigureGrid columns={2} equalFrames mediaAspectRatio="3 / 2">
+  <Figure>
+    <Picture slot="figure" src="/figures/plot-a.svg" alt="Plot A." />
+    <Fragment slot="caption">First plot.</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src="/figures/plot-b.svg" alt="Plot B." />
+    <Fragment slot="caption">Second plot.</Fragment>
+  </Figure>
+</FigureGrid>
+```
+
+Use per-figure overrides for diagrams that need breathing room:
+
+```mdx
+<Figure mediaInset="18px 40px">
+  <Picture slot="figure" src="/figures/transition-diagram.svg" alt="DFA transition diagram." />
+  <Fragment slot="caption">DFA transition diagram.</Fragment>
+</Figure>
+```
+
+Interactive and video embeds use the same outer controls. Existing `height`
+props on `EmbedFrame` and `PlotlyFigure` remain supported:
+
+```mdx
+<PlotlyFigure
+  src="/figures/demo-plotly.html"
+  iframeTitle="Interactive Plotly figure"
+  height="480px"
+  maxWidth="48rem"
+/>
+
+<Video src="/media/demo.mp4" mediaAspectRatio="16 / 9" maxWidth="42rem" />
+```
+
+`class` and `style` are available as escape hatches on media components, but
+prefer semantic props for reusable layouts so the template keeps control of the
+visual system.
 
 Use the prose components by role:
 

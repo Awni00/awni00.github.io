@@ -1,28 +1,64 @@
 ---
+import { buildMediaLayoutStyle, type MediaLayoutProps } from "./mediaLayout";
+
 type Props = {
   src?: string;
   alt?: string;
   caption?: string;
   class?: string;
-};
+  style?: string;
+} & MediaLayoutProps;
 
-const { src, alt = "", caption, class: className } = Astro.props;
+const {
+  src,
+  alt = "",
+  caption,
+  class: className,
+  style,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
+} = Astro.props;
 const hasFigureSlot = Astro.slots.has("figure");
 const hasCaptionSlot = Astro.slots.has("caption");
 const hasDefaultSlot = Astro.slots.has("default");
+const layoutStyle = buildMediaLayoutStyle(
+  {
+    width,
+    maxWidth,
+    mediaWidth,
+    mediaMaxWidth,
+    mediaHeight,
+    mediaMaxHeight,
+    mediaAspectRatio,
+    mediaFit,
+    mediaInset,
+    mediaAlign
+  },
+  { style }
+);
 ---
 
-<figure class:list={["article-figure", className]}>
+<figure class:list={["article-figure", className]} style={layoutStyle}>
   {
-    hasFigureSlot ? (
+    hasFigureSlot || src || hasDefaultSlot ? (
       <div class="article-figure__body">
-        <slot name="figure" />
-      </div>
-    ) : src ? (
-      <img src={src} alt={alt} loading="lazy" />
-    ) : hasDefaultSlot ? (
-      <div class="article-figure__body">
-        <slot />
+        {
+          hasFigureSlot ? (
+            <slot name="figure" />
+          ) : src ? (
+            <img class="article-picture" src={src} alt={alt} loading="lazy" />
+          ) : (
+            <slot />
+          )
+        }
       </div>
     ) : null
   }

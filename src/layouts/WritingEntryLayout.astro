@@ -19,6 +19,7 @@ import ToggleFigure from "../components/article/ToggleFigure.astro";
 import ToggleFigurePanel from "../components/article/ToggleFigurePanel.astro";
 import TwoColumns from "../components/article/TwoColumns.astro";
 import Video from "../components/article/Video.astro";
+import WrapFigure from "../components/article/WrapFigure.astro";
 import YouTubeVideo from "../components/article/YouTubeVideo.astro";
 import LocalGraph from "../components/graph/LocalGraph";
 import { getEntryType, writingConfig } from "../config";
@@ -94,14 +95,23 @@ const external = Object.entries(entry.data.external ?? {})
     return { key, href: href as string, label: meta.label, Icon: meta.icon };
   });
 
-const formatPublished = (iso: string | undefined) => {
+const formatDate = (iso: string | undefined) => {
   if (!iso) return undefined;
   const [y, m, d] = iso.split("-").map(Number);
   if (!y || !m || !d) return iso;
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   return `${months[m - 1]} ${d}, ${y}`;
 };
-const publishedLabel = formatPublished(node.date);
+// displayDates customizes only the header; node.date remains canonical elsewhere.
+const displayDateRows = entry.data.displayDates?.map((item) => ({
+  label: item.label,
+  date: formatDate(item.date) ?? item.date
+}));
+const dateRows = displayDateRows?.length
+  ? displayDateRows
+  : node.date
+    ? [{ date: formatDate(node.date) ?? node.date }]
+    : [];
 
 // Slot derivation. The TOC lives in either the left or right grid
 // column; backlinks/related can also live there if explicitly placed.
@@ -144,6 +154,7 @@ const components = {
   ToggleFigurePanel,
   TwoColumns,
   Video,
+  WrapFigure,
   YouTubeVideo
 };
 
@@ -234,10 +245,21 @@ const right = renderSide("right");
                   <div class="article-byline__value">{venue}</div>
                 </div>
               )}
-              {publishedLabel && (
-                <div class="article-byline__col">
-                  <div class="article-byline__label">Published</div>
-                  <div class="article-byline__value">{publishedLabel}</div>
+              {dateRows.length > 0 && (
+                <div class="article-byline__col article-byline__col--date">
+                  <div class="article-byline__label">Date</div>
+                  {dateRows.length === 1 && !("label" in dateRows[0]) ? (
+                    <div class="article-byline__value">{dateRows[0].date}</div>
+                  ) : (
+                    <ul class="article-date-list">
+                      {dateRows.map((row) => (
+                        <li class="article-date-list__item">
+                          {"label" in row && <span class="article-date-list__label">{row.label}:</span>}
+                          <span class="article-date-list__date">{row.date}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )}
             </div>

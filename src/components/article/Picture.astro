@@ -2,29 +2,63 @@
 import { Picture as AstroPicture } from "astro:assets";
 
 import { isPdfSource, renderPdfFirstPage } from "../../lib/article/pdf";
+import { buildMediaLayoutStyle, type MediaLayoutProps } from "./mediaLayout";
 
 type Props = {
   src?: string | ImageMetadata;
   alt: string;
+  class?: string;
+  style?: string;
   priority?: boolean;
   invertInDarkMode?: boolean;
   lightSrc?: string;
   darkSrc?: string;
-};
+} & MediaLayoutProps;
 
 const {
   src,
   alt,
+  class: classNameProp,
+  style,
   priority = false,
   invertInDarkMode = false,
   lightSrc,
-  darkSrc
+  darkSrc,
+  width,
+  maxWidth,
+  mediaWidth,
+  mediaMaxWidth,
+  mediaHeight,
+  mediaMaxHeight,
+  mediaAspectRatio,
+  mediaFit,
+  mediaInset,
+  mediaAlign
 } = Astro.props;
 
 const loading = priority ? "eager" : "lazy";
 const decoding = priority ? "sync" : "async";
 const fetchpriority = priority ? "high" : "auto";
-const className = `article-picture${invertInDarkMode ? " invert-in-dark" : ""}`;
+const fullClassName = [
+  "article-picture",
+  invertInDarkMode ? "invert-in-dark" : "",
+  classNameProp
+].filter(Boolean).join(" ");
+const layoutStyle = buildMediaLayoutStyle(
+  {
+    width,
+    maxWidth,
+    mediaWidth,
+    mediaMaxWidth,
+    mediaHeight,
+    mediaMaxHeight,
+    mediaAspectRatio,
+    mediaFit,
+    mediaInset,
+    mediaAlign
+  },
+  { style, directMedia: true }
+);
 const renderedPdf = isPdfSource(src)
   ? await renderPdfFirstPage(src, { emitToDist: import.meta.env.PROD })
   : undefined;
@@ -32,7 +66,7 @@ const renderedPdf = isPdfSource(src)
 
 {
   lightSrc && darkSrc ? (
-    <picture class="article-picture">
+    <picture class={fullClassName} style={layoutStyle}>
       <source srcset={darkSrc} media="(prefers-color-scheme: dark)" />
       <img
         class:list={{ "invert-in-dark": invertInDarkMode }}
@@ -45,7 +79,8 @@ const renderedPdf = isPdfSource(src)
     </picture>
   ) : renderedPdf ? (
     <img
-      class={className}
+      class={fullClassName}
+      style={layoutStyle}
       src={renderedPdf.src}
       width={renderedPdf.width}
       height={renderedPdf.height}
@@ -56,7 +91,8 @@ const renderedPdf = isPdfSource(src)
     />
   ) : typeof src === "object" ? (
     <AstroPicture
-      class={className}
+      class={fullClassName}
+      style={layoutStyle}
       src={src}
       alt={alt}
       layout="constrained"
@@ -66,7 +102,8 @@ const renderedPdf = isPdfSource(src)
     />
   ) : (
     <img
-      class={className}
+      class={fullClassName}
+      style={layoutStyle}
       src={src}
       alt={alt}
       loading={loading}
