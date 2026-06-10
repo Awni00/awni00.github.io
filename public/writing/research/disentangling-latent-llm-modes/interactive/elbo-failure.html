@@ -1,0 +1,1392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ELBO Failure Dynamics</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #151515;
+      --muted: #5f6670;
+      --grid: #d0d6da;
+      --panel-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      background: #ffffff;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    .elbo-figure {
+      width: min(100%, 860px);
+      margin: 0 auto;
+      padding: 4px;
+      background: var(--panel-bg);
+    }
+
+    .chart-shell {
+      position: relative;
+      width: 100%;
+      background: var(--panel-bg);
+      overflow: visible;
+    }
+
+    .chart {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    .tooltip {
+      position: absolute;
+      left: 0;
+      top: 0;
+      min-width: 176px;
+      max-width: 260px;
+      padding: 8px 9px;
+      border: 1px solid #d8dee7;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 6px 18px rgba(24, 32, 44, 0.12);
+      color: var(--ink);
+      font-size: 12px;
+      line-height: 1.35;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 120ms ease;
+      z-index: 2;
+    }
+
+    .tooltip[data-visible="true"] {
+      opacity: 1;
+    }
+
+    .tooltip__label {
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .tooltip__row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fallback {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--panel-bg);
+    }
+  </style>
+</head>
+<body>
+  <figure class="elbo-figure" data-elbo-figure aria-label="ELBO failure dynamics">
+    <div class="chart-shell">
+      <svg class="chart" data-chart viewBox="0 0 860 460" role="img" aria-labelledby="figure-title figure-desc">
+        <title id="figure-title">ELBO training preserves fidelity while the latent remains unused.</title>
+        <desc id="figure-desc">Line chart showing distributional fidelity, strategy alignment, and posterior-router KL over training progress.</desc>
+      </svg>
+      <div class="tooltip" data-tooltip aria-hidden="true"></div>
+    </div>
+
+    <noscript>
+      <img class="fallback" src="fallback.png" alt="Static ELBO failure dynamics plot." />
+    </noscript>
+  </figure>
+
+  <script>
+    const FIGURE_DATA = {
+      "metrics": [
+            {
+                  "color": "#009988",
+                  "key": "distributional_fidelity",
+                  "label": "Distributional Fidelity",
+                  "points": [
+                        {
+                              "globalStep": 31.0,
+                              "metricValue": 0.629,
+                              "plotValue": 0.629,
+                              "progress": 0.019834
+                        },
+                        {
+                              "globalStep": 62.0,
+                              "metricValue": 0.84,
+                              "plotValue": 0.84,
+                              "progress": 0.039667
+                        },
+                        {
+                              "globalStep": 93.0,
+                              "metricValue": 0.903,
+                              "plotValue": 0.903,
+                              "progress": 0.059501
+                        },
+                        {
+                              "globalStep": 124.0,
+                              "metricValue": 0.924,
+                              "plotValue": 0.924,
+                              "progress": 0.079335
+                        },
+                        {
+                              "globalStep": 155.0,
+                              "metricValue": 0.928,
+                              "plotValue": 0.928,
+                              "progress": 0.099168
+                        },
+                        {
+                              "globalStep": 186.0,
+                              "metricValue": 0.947,
+                              "plotValue": 0.947,
+                              "progress": 0.119002
+                        },
+                        {
+                              "globalStep": 217.0,
+                              "metricValue": 0.952,
+                              "plotValue": 0.952,
+                              "progress": 0.138836
+                        },
+                        {
+                              "globalStep": 248.0,
+                              "metricValue": 0.944,
+                              "plotValue": 0.944,
+                              "progress": 0.158669
+                        },
+                        {
+                              "globalStep": 279.0,
+                              "metricValue": 0.959,
+                              "plotValue": 0.959,
+                              "progress": 0.178503
+                        },
+                        {
+                              "globalStep": 310.0,
+                              "metricValue": 0.96,
+                              "plotValue": 0.96,
+                              "progress": 0.198337
+                        },
+                        {
+                              "globalStep": 341.0,
+                              "metricValue": 0.954,
+                              "plotValue": 0.954,
+                              "progress": 0.21817
+                        },
+                        {
+                              "globalStep": 372.0,
+                              "metricValue": 0.959,
+                              "plotValue": 0.959,
+                              "progress": 0.238004
+                        },
+                        {
+                              "globalStep": 403.0,
+                              "metricValue": 0.961,
+                              "plotValue": 0.961,
+                              "progress": 0.257837
+                        },
+                        {
+                              "globalStep": 434.0,
+                              "metricValue": 0.968,
+                              "plotValue": 0.968,
+                              "progress": 0.277671
+                        },
+                        {
+                              "globalStep": 465.0,
+                              "metricValue": 0.955,
+                              "plotValue": 0.955,
+                              "progress": 0.297505
+                        },
+                        {
+                              "globalStep": 496.0,
+                              "metricValue": 0.964,
+                              "plotValue": 0.964,
+                              "progress": 0.317338
+                        },
+                        {
+                              "globalStep": 527.0,
+                              "metricValue": 0.963,
+                              "plotValue": 0.963,
+                              "progress": 0.337172
+                        },
+                        {
+                              "globalStep": 558.0,
+                              "metricValue": 0.964,
+                              "plotValue": 0.964,
+                              "progress": 0.357006
+                        },
+                        {
+                              "globalStep": 589.0,
+                              "metricValue": 0.962,
+                              "plotValue": 0.962,
+                              "progress": 0.376839
+                        },
+                        {
+                              "globalStep": 620.0,
+                              "metricValue": 0.957,
+                              "plotValue": 0.957,
+                              "progress": 0.396673
+                        },
+                        {
+                              "globalStep": 651.0,
+                              "metricValue": 0.977,
+                              "plotValue": 0.977,
+                              "progress": 0.416507
+                        },
+                        {
+                              "globalStep": 682.0,
+                              "metricValue": 0.966,
+                              "plotValue": 0.966,
+                              "progress": 0.43634
+                        },
+                        {
+                              "globalStep": 713.0,
+                              "metricValue": 0.965,
+                              "plotValue": 0.965,
+                              "progress": 0.456174
+                        },
+                        {
+                              "globalStep": 744.0,
+                              "metricValue": 0.974,
+                              "plotValue": 0.974,
+                              "progress": 0.476008
+                        },
+                        {
+                              "globalStep": 775.0,
+                              "metricValue": 0.966,
+                              "plotValue": 0.966,
+                              "progress": 0.495841
+                        },
+                        {
+                              "globalStep": 806.0,
+                              "metricValue": 0.968,
+                              "plotValue": 0.968,
+                              "progress": 0.515675
+                        },
+                        {
+                              "globalStep": 837.0,
+                              "metricValue": 0.962,
+                              "plotValue": 0.962,
+                              "progress": 0.535509
+                        },
+                        {
+                              "globalStep": 868.0,
+                              "metricValue": 0.969,
+                              "plotValue": 0.969,
+                              "progress": 0.555342
+                        },
+                        {
+                              "globalStep": 899.0,
+                              "metricValue": 0.969,
+                              "plotValue": 0.969,
+                              "progress": 0.575176
+                        },
+                        {
+                              "globalStep": 930.0,
+                              "metricValue": 0.962,
+                              "plotValue": 0.962,
+                              "progress": 0.59501
+                        },
+                        {
+                              "globalStep": 961.0,
+                              "metricValue": 0.963,
+                              "plotValue": 0.963,
+                              "progress": 0.614843
+                        },
+                        {
+                              "globalStep": 992.0,
+                              "metricValue": 0.961,
+                              "plotValue": 0.961,
+                              "progress": 0.634677
+                        },
+                        {
+                              "globalStep": 1023.0,
+                              "metricValue": 0.958,
+                              "plotValue": 0.958,
+                              "progress": 0.654511
+                        },
+                        {
+                              "globalStep": 1054.0,
+                              "metricValue": 0.973,
+                              "plotValue": 0.973,
+                              "progress": 0.674344
+                        },
+                        {
+                              "globalStep": 1085.0,
+                              "metricValue": 0.976,
+                              "plotValue": 0.976,
+                              "progress": 0.694178
+                        },
+                        {
+                              "globalStep": 1116.0,
+                              "metricValue": 0.961,
+                              "plotValue": 0.961,
+                              "progress": 0.714012
+                        },
+                        {
+                              "globalStep": 1147.0,
+                              "metricValue": 0.953,
+                              "plotValue": 0.953,
+                              "progress": 0.733845
+                        },
+                        {
+                              "globalStep": 1178.0,
+                              "metricValue": 0.98,
+                              "plotValue": 0.98,
+                              "progress": 0.753679
+                        },
+                        {
+                              "globalStep": 1209.0,
+                              "metricValue": 0.975,
+                              "plotValue": 0.975,
+                              "progress": 0.773512
+                        },
+                        {
+                              "globalStep": 1240.0,
+                              "metricValue": 0.976,
+                              "plotValue": 0.976,
+                              "progress": 0.793346
+                        },
+                        {
+                              "globalStep": 1271.0,
+                              "metricValue": 0.979,
+                              "plotValue": 0.979,
+                              "progress": 0.81318
+                        },
+                        {
+                              "globalStep": 1302.0,
+                              "metricValue": 0.973,
+                              "plotValue": 0.973,
+                              "progress": 0.833013
+                        },
+                        {
+                              "globalStep": 1333.0,
+                              "metricValue": 0.981,
+                              "plotValue": 0.981,
+                              "progress": 0.852847
+                        },
+                        {
+                              "globalStep": 1364.0,
+                              "metricValue": 0.974,
+                              "plotValue": 0.974,
+                              "progress": 0.872681
+                        },
+                        {
+                              "globalStep": 1395.0,
+                              "metricValue": 0.982,
+                              "plotValue": 0.982,
+                              "progress": 0.892514
+                        },
+                        {
+                              "globalStep": 1426.0,
+                              "metricValue": 0.981,
+                              "plotValue": 0.981,
+                              "progress": 0.912348
+                        },
+                        {
+                              "globalStep": 1457.0,
+                              "metricValue": 0.979,
+                              "plotValue": 0.979,
+                              "progress": 0.932182
+                        },
+                        {
+                              "globalStep": 1488.0,
+                              "metricValue": 0.975,
+                              "plotValue": 0.975,
+                              "progress": 0.952015
+                        },
+                        {
+                              "globalStep": 1519.0,
+                              "metricValue": 0.978,
+                              "plotValue": 0.978,
+                              "progress": 0.971849
+                        },
+                        {
+                              "globalStep": 1550.0,
+                              "metricValue": 0.968,
+                              "plotValue": 0.968,
+                              "progress": 0.991683
+                        },
+                        {
+                              "globalStep": 1563.0,
+                              "metricValue": 0.973,
+                              "plotValue": 0.973,
+                              "progress": 1.0
+                        }
+                  ]
+            },
+            {
+                  "color": "#EE3377",
+                  "key": "strategy_alignment",
+                  "label": "Strategy Alignment",
+                  "points": [
+                        {
+                              "globalStep": 31.0,
+                              "metricValue": 0.5503241758241758,
+                              "plotValue": 0.5503241758241758,
+                              "progress": 0.019834
+                        },
+                        {
+                              "globalStep": 62.0,
+                              "metricValue": 0.492943529073666,
+                              "plotValue": 0.492943529073666,
+                              "progress": 0.039667
+                        },
+                        {
+                              "globalStep": 93.0,
+                              "metricValue": 0.4671280239314553,
+                              "plotValue": 0.4671280239314553,
+                              "progress": 0.059501
+                        },
+                        {
+                              "globalStep": 124.0,
+                              "metricValue": 0.4832550155113678,
+                              "plotValue": 0.4832550155113678,
+                              "progress": 0.079335
+                        },
+                        {
+                              "globalStep": 155.0,
+                              "metricValue": 0.4643631655184082,
+                              "plotValue": 0.4643631655184082,
+                              "progress": 0.099168
+                        },
+                        {
+                              "globalStep": 186.0,
+                              "metricValue": 0.4769572285261758,
+                              "plotValue": 0.4769572285261758,
+                              "progress": 0.119002
+                        },
+                        {
+                              "globalStep": 217.0,
+                              "metricValue": 0.4969266325727773,
+                              "plotValue": 0.4969266325727773,
+                              "progress": 0.138836
+                        },
+                        {
+                              "globalStep": 248.0,
+                              "metricValue": 0.4641185022108366,
+                              "plotValue": 0.4641185022108366,
+                              "progress": 0.158669
+                        },
+                        {
+                              "globalStep": 279.0,
+                              "metricValue": 0.4740370023183324,
+                              "plotValue": 0.4740370023183324,
+                              "progress": 0.178503
+                        },
+                        {
+                              "globalStep": 310.0,
+                              "metricValue": 0.4956349071100795,
+                              "plotValue": 0.4956349071100795,
+                              "progress": 0.198337
+                        },
+                        {
+                              "globalStep": 341.0,
+                              "metricValue": 0.4463897904164127,
+                              "plotValue": 0.4463897904164127,
+                              "progress": 0.21817
+                        },
+                        {
+                              "globalStep": 372.0,
+                              "metricValue": 0.4932379994636631,
+                              "plotValue": 0.4932379994636631,
+                              "progress": 0.238004
+                        },
+                        {
+                              "globalStep": 403.0,
+                              "metricValue": 0.4833247598007644,
+                              "plotValue": 0.4833247598007644,
+                              "progress": 0.257837
+                        },
+                        {
+                              "globalStep": 434.0,
+                              "metricValue": 0.46622050895268,
+                              "plotValue": 0.46622050895268,
+                              "progress": 0.277671
+                        },
+                        {
+                              "globalStep": 465.0,
+                              "metricValue": 0.4861046017113142,
+                              "plotValue": 0.4861046017113142,
+                              "progress": 0.297505
+                        },
+                        {
+                              "globalStep": 496.0,
+                              "metricValue": 0.4498526940250338,
+                              "plotValue": 0.4498526940250338,
+                              "progress": 0.317338
+                        },
+                        {
+                              "globalStep": 527.0,
+                              "metricValue": 0.463651235325111,
+                              "plotValue": 0.463651235325111,
+                              "progress": 0.337172
+                        },
+                        {
+                              "globalStep": 558.0,
+                              "metricValue": 0.4672345893885263,
+                              "plotValue": 0.4672345893885263,
+                              "progress": 0.357006
+                        },
+                        {
+                              "globalStep": 589.0,
+                              "metricValue": 0.4808161882398311,
+                              "plotValue": 0.4808161882398311,
+                              "progress": 0.376839
+                        },
+                        {
+                              "globalStep": 620.0,
+                              "metricValue": 0.4931548633458933,
+                              "plotValue": 0.4931548633458933,
+                              "progress": 0.396673
+                        },
+                        {
+                              "globalStep": 651.0,
+                              "metricValue": 0.480343613606393,
+                              "plotValue": 0.480343613606393,
+                              "progress": 0.416507
+                        },
+                        {
+                              "globalStep": 682.0,
+                              "metricValue": 0.4758888426562126,
+                              "plotValue": 0.4758888426562126,
+                              "progress": 0.43634
+                        },
+                        {
+                              "globalStep": 713.0,
+                              "metricValue": 0.4727721980096089,
+                              "plotValue": 0.4727721980096089,
+                              "progress": 0.456174
+                        },
+                        {
+                              "globalStep": 744.0,
+                              "metricValue": 0.443080366296761,
+                              "plotValue": 0.443080366296761,
+                              "progress": 0.476008
+                        },
+                        {
+                              "globalStep": 775.0,
+                              "metricValue": 0.4805429045667814,
+                              "plotValue": 0.4805429045667814,
+                              "progress": 0.495841
+                        },
+                        {
+                              "globalStep": 806.0,
+                              "metricValue": 0.4531012927569933,
+                              "plotValue": 0.4531012927569933,
+                              "progress": 0.515675
+                        },
+                        {
+                              "globalStep": 837.0,
+                              "metricValue": 0.4681429548018924,
+                              "plotValue": 0.4681429548018924,
+                              "progress": 0.535509
+                        },
+                        {
+                              "globalStep": 868.0,
+                              "metricValue": 0.4758288641513746,
+                              "plotValue": 0.4758288641513746,
+                              "progress": 0.555342
+                        },
+                        {
+                              "globalStep": 899.0,
+                              "metricValue": 0.4814206162859589,
+                              "plotValue": 0.4814206162859589,
+                              "progress": 0.575176
+                        },
+                        {
+                              "globalStep": 930.0,
+                              "metricValue": 0.4607366853394106,
+                              "plotValue": 0.4607366853394106,
+                              "progress": 0.59501
+                        },
+                        {
+                              "globalStep": 961.0,
+                              "metricValue": 0.4702959339238557,
+                              "plotValue": 0.4702959339238557,
+                              "progress": 0.614843
+                        },
+                        {
+                              "globalStep": 992.0,
+                              "metricValue": 0.4743715865191396,
+                              "plotValue": 0.4743715865191396,
+                              "progress": 0.634677
+                        },
+                        {
+                              "globalStep": 1023.0,
+                              "metricValue": 0.4538530784342225,
+                              "plotValue": 0.4538530784342225,
+                              "progress": 0.654511
+                        },
+                        {
+                              "globalStep": 1054.0,
+                              "metricValue": 0.4610647918428692,
+                              "plotValue": 0.4610647918428692,
+                              "progress": 0.674344
+                        },
+                        {
+                              "globalStep": 1085.0,
+                              "metricValue": 0.4594667227075582,
+                              "plotValue": 0.4594667227075582,
+                              "progress": 0.694178
+                        },
+                        {
+                              "globalStep": 1116.0,
+                              "metricValue": 0.4896923577663836,
+                              "plotValue": 0.4896923577663836,
+                              "progress": 0.714012
+                        },
+                        {
+                              "globalStep": 1147.0,
+                              "metricValue": 0.4717627454898338,
+                              "plotValue": 0.4717627454898338,
+                              "progress": 0.733845
+                        },
+                        {
+                              "globalStep": 1178.0,
+                              "metricValue": 0.4718374940479541,
+                              "plotValue": 0.4718374940479541,
+                              "progress": 0.753679
+                        },
+                        {
+                              "globalStep": 1209.0,
+                              "metricValue": 0.4891157848084241,
+                              "plotValue": 0.4891157848084241,
+                              "progress": 0.773512
+                        },
+                        {
+                              "globalStep": 1240.0,
+                              "metricValue": 0.469590622433803,
+                              "plotValue": 0.469590622433803,
+                              "progress": 0.793346
+                        },
+                        {
+                              "globalStep": 1271.0,
+                              "metricValue": 0.4431318750236072,
+                              "plotValue": 0.4431318750236072,
+                              "progress": 0.81318
+                        },
+                        {
+                              "globalStep": 1302.0,
+                              "metricValue": 0.46242301303922,
+                              "plotValue": 0.46242301303922,
+                              "progress": 0.833013
+                        },
+                        {
+                              "globalStep": 1333.0,
+                              "metricValue": 0.4689308503239286,
+                              "plotValue": 0.4689308503239286,
+                              "progress": 0.852847
+                        },
+                        {
+                              "globalStep": 1364.0,
+                              "metricValue": 0.4838664623070248,
+                              "plotValue": 0.4838664623070248,
+                              "progress": 0.872681
+                        },
+                        {
+                              "globalStep": 1395.0,
+                              "metricValue": 0.4869713784230268,
+                              "plotValue": 0.4869713784230268,
+                              "progress": 0.892514
+                        },
+                        {
+                              "globalStep": 1426.0,
+                              "metricValue": 0.4856951485310255,
+                              "plotValue": 0.4856951485310255,
+                              "progress": 0.912348
+                        },
+                        {
+                              "globalStep": 1457.0,
+                              "metricValue": 0.4777556217341104,
+                              "plotValue": 0.4777556217341104,
+                              "progress": 0.932182
+                        },
+                        {
+                              "globalStep": 1488.0,
+                              "metricValue": 0.4611664078150375,
+                              "plotValue": 0.4611664078150375,
+                              "progress": 0.952015
+                        },
+                        {
+                              "globalStep": 1519.0,
+                              "metricValue": 0.4846076095929895,
+                              "plotValue": 0.4846076095929895,
+                              "progress": 0.971849
+                        },
+                        {
+                              "globalStep": 1550.0,
+                              "metricValue": 0.466978981129809,
+                              "plotValue": 0.466978981129809,
+                              "progress": 0.991683
+                        },
+                        {
+                              "globalStep": 1563.0,
+                              "metricValue": 0.4769989750096885,
+                              "plotValue": 0.4769989750096885,
+                              "progress": 1.0
+                        }
+                  ]
+            },
+            {
+                  "color": "#0077BB",
+                  "key": "posterior_router_kl",
+                  "label": "KL / initial KL",
+                  "points": [
+                        {
+                              "globalStep": 31.0,
+                              "metricValue": 0.0173873560786058,
+                              "plotValue": 1.0,
+                              "progress": 0.019834
+                        },
+                        {
+                              "globalStep": 62.0,
+                              "metricValue": 0.0080142276467684,
+                              "plotValue": 0.4609227308934838,
+                              "progress": 0.039667
+                        },
+                        {
+                              "globalStep": 93.0,
+                              "metricValue": 0.0062778458246796,
+                              "plotValue": 0.3610581043085757,
+                              "progress": 0.059501
+                        },
+                        {
+                              "globalStep": 124.0,
+                              "metricValue": 0.0038747380906126,
+                              "plotValue": 0.2228480323917824,
+                              "progress": 0.079335
+                        },
+                        {
+                              "globalStep": 155.0,
+                              "metricValue": 0.0043419248283003,
+                              "plotValue": 0.2497173698330595,
+                              "progress": 0.099168
+                        },
+                        {
+                              "globalStep": 186.0,
+                              "metricValue": 0.0026535393988501,
+                              "plotValue": 0.1526131625103794,
+                              "progress": 0.119002
+                        },
+                        {
+                              "globalStep": 217.0,
+                              "metricValue": 0.0028718591791495,
+                              "plotValue": 0.1651694004635453,
+                              "progress": 0.138836
+                        },
+                        {
+                              "globalStep": 248.0,
+                              "metricValue": 0.0020639828724574,
+                              "plotValue": 0.1187059644448772,
+                              "progress": 0.158669
+                        },
+                        {
+                              "globalStep": 279.0,
+                              "metricValue": 0.0018112422055505,
+                              "plotValue": 0.1041700760806949,
+                              "progress": 0.178503
+                        },
+                        {
+                              "globalStep": 310.0,
+                              "metricValue": 0.001793627258791,
+                              "plotValue": 0.1031569866449081,
+                              "progress": 0.198337
+                        },
+                        {
+                              "globalStep": 341.0,
+                              "metricValue": 0.0014592706626634,
+                              "plotValue": 0.0839271166971126,
+                              "progress": 0.21817
+                        },
+                        {
+                              "globalStep": 372.0,
+                              "metricValue": 0.0013226526995672,
+                              "plotValue": 0.0760698000079869,
+                              "progress": 0.238004
+                        },
+                        {
+                              "globalStep": 403.0,
+                              "metricValue": 0.0013270751968073,
+                              "plotValue": 0.0763241513435268,
+                              "progress": 0.257837
+                        },
+                        {
+                              "globalStep": 434.0,
+                              "metricValue": 0.0010716498393235,
+                              "plotValue": 0.0616338582173575,
+                              "progress": 0.277671
+                        },
+                        {
+                              "globalStep": 465.0,
+                              "metricValue": 0.0010787141951437,
+                              "plotValue": 0.062040150915814,
+                              "progress": 0.297505
+                        },
+                        {
+                              "globalStep": 496.0,
+                              "metricValue": 0.0009619001611548,
+                              "plotValue": 0.0553218187288616,
+                              "progress": 0.317338
+                        },
+                        {
+                              "globalStep": 527.0,
+                              "metricValue": 0.0008664914418624,
+                              "plotValue": 0.0498345716246399,
+                              "progress": 0.337172
+                        },
+                        {
+                              "globalStep": 558.0,
+                              "metricValue": 0.0009692772998934,
+                              "plotValue": 0.0557461005291105,
+                              "progress": 0.357006
+                        },
+                        {
+                              "globalStep": 589.0,
+                              "metricValue": 0.0008562797491874,
+                              "plotValue": 0.0492472659624775,
+                              "progress": 0.376839
+                        },
+                        {
+                              "globalStep": 620.0,
+                              "metricValue": 0.0007005218664019,
+                              "plotValue": 0.0402891539826376,
+                              "progress": 0.396673
+                        },
+                        {
+                              "globalStep": 651.0,
+                              "metricValue": 0.0007408387764486,
+                              "plotValue": 0.0426079027253696,
+                              "progress": 0.416507
+                        },
+                        {
+                              "globalStep": 682.0,
+                              "metricValue": 0.0006753161484729,
+                              "plotValue": 0.0388394960924415,
+                              "progress": 0.43634
+                        },
+                        {
+                              "globalStep": 713.0,
+                              "metricValue": 0.0006076435564392,
+                              "plotValue": 0.0349474384542496,
+                              "progress": 0.456174
+                        },
+                        {
+                              "globalStep": 744.0,
+                              "metricValue": 0.0005823842137816,
+                              "plotValue": 0.0334946964419847,
+                              "progress": 0.476008
+                        },
+                        {
+                              "globalStep": 775.0,
+                              "metricValue": 0.0005320133022445,
+                              "plotValue": 0.0305977113391675,
+                              "progress": 0.495841
+                        },
+                        {
+                              "globalStep": 806.0,
+                              "metricValue": 0.0005810861298932,
+                              "plotValue": 0.0334200396694121,
+                              "progress": 0.515675
+                        },
+                        {
+                              "globalStep": 837.0,
+                              "metricValue": 0.0005318217032553,
+                              "plotValue": 0.030586691895594,
+                              "progress": 0.535509
+                        },
+                        {
+                              "globalStep": 868.0,
+                              "metricValue": 0.0003540203936067,
+                              "plotValue": 0.0203607950516584,
+                              "progress": 0.555342
+                        },
+                        {
+                              "globalStep": 899.0,
+                              "metricValue": 0.0005181034573035,
+                              "plotValue": 0.0297977136351971,
+                              "progress": 0.575176
+                        },
+                        {
+                              "globalStep": 930.0,
+                              "metricValue": 0.0006547111758514,
+                              "plotValue": 0.0376544411290332,
+                              "progress": 0.59501
+                        },
+                        {
+                              "globalStep": 961.0,
+                              "metricValue": 0.0003780811329525,
+                              "plotValue": 0.021744601723416,
+                              "progress": 0.614843
+                        },
+                        {
+                              "globalStep": 992.0,
+                              "metricValue": 0.0004535785174775,
+                              "plotValue": 0.0260866870976205,
+                              "progress": 0.634677
+                        },
+                        {
+                              "globalStep": 1023.0,
+                              "metricValue": 0.0005803118442197,
+                              "plotValue": 0.0333755081333925,
+                              "progress": 0.654511
+                        },
+                        {
+                              "globalStep": 1054.0,
+                              "metricValue": 0.0006872989278569,
+                              "plotValue": 0.0395286623653255,
+                              "progress": 0.674344
+                        },
+                        {
+                              "globalStep": 1085.0,
+                              "metricValue": 0.0003412851144241,
+                              "plotValue": 0.0196283502150181,
+                              "progress": 0.694178
+                        },
+                        {
+                              "globalStep": 1116.0,
+                              "metricValue": 0.0003363019963608,
+                              "plotValue": 0.0193417558621578,
+                              "progress": 0.714012
+                        },
+                        {
+                              "globalStep": 1147.0,
+                              "metricValue": 0.0002617679972531,
+                              "plotValue": 0.0150550777283034,
+                              "progress": 0.733845
+                        },
+                        {
+                              "globalStep": 1178.0,
+                              "metricValue": 0.0003602531962568,
+                              "plotValue": 0.0207192625853031,
+                              "progress": 0.753679
+                        },
+                        {
+                              "globalStep": 1209.0,
+                              "metricValue": 0.0003043346849706,
+                              "plotValue": 0.0175032180622945,
+                              "progress": 0.773512
+                        },
+                        {
+                              "globalStep": 1240.0,
+                              "metricValue": 0.0005216413100922,
+                              "plotValue": 0.0300011863640413,
+                              "progress": 0.793346
+                        },
+                        {
+                              "globalStep": 1271.0,
+                              "metricValue": 0.0003872321641567,
+                              "plotValue": 0.0222709055020255,
+                              "progress": 0.81318
+                        },
+                        {
+                              "globalStep": 1302.0,
+                              "metricValue": 0.0002965603754678,
+                              "plotValue": 0.0170560937572735,
+                              "progress": 0.833013
+                        },
+                        {
+                              "globalStep": 1333.0,
+                              "metricValue": 0.0003356348894112,
+                              "plotValue": 0.0193033885021875,
+                              "progress": 0.852847
+                        },
+                        {
+                              "globalStep": 1364.0,
+                              "metricValue": 0.0003621663951279,
+                              "plotValue": 0.0208292965008938,
+                              "progress": 0.872681
+                        },
+                        {
+                              "globalStep": 1395.0,
+                              "metricValue": 0.0005152893512026,
+                              "plotValue": 0.0296358657908108,
+                              "progress": 0.892514
+                        },
+                        {
+                              "globalStep": 1426.0,
+                              "metricValue": 0.0002132408480053,
+                              "plotValue": 0.0122641330309949,
+                              "progress": 0.912348
+                        },
+                        {
+                              "globalStep": 1457.0,
+                              "metricValue": 0.0006345202851616,
+                              "plotValue": 0.0364932012833361,
+                              "progress": 0.932182
+                        },
+                        {
+                              "globalStep": 1488.0,
+                              "metricValue": 0.0002305716500157,
+                              "plotValue": 0.0132608804336506,
+                              "progress": 0.952015
+                        },
+                        {
+                              "globalStep": 1519.0,
+                              "metricValue": 0.0006480077458427,
+                              "plotValue": 0.0372689063773208,
+                              "progress": 0.971849
+                        },
+                        {
+                              "globalStep": 1550.0,
+                              "metricValue": 0.0002905225729027,
+                              "plotValue": 0.0167088412746186,
+                              "progress": 0.991683
+                        },
+                        {
+                              "globalStep": 1563.0,
+                              "metricValue": 0.000169732065612,
+                              "plotValue": 0.0097618099522817,
+                              "progress": 1.0
+                        }
+                  ]
+            }
+      ],
+      "xLabel": "Training progress",
+      "yLabel": "Metric value"
+};
+
+    const figure = document.querySelector("[data-elbo-figure]");
+    const svg = document.querySelector("[data-chart]");
+    const tooltip = document.querySelector("[data-tooltip]");
+
+    const state = {
+      progress: 1,
+      hasAnimated: false,
+    };
+
+    const WIDTH = 860;
+    const HEIGHT = 460;
+    const PLOT = { left: 108, right: 36, top: 22, bottom: 82 };
+    const LABEL_X_PROGRESS = 0.58;
+    const LABEL_Y_OFFSET = {
+      distributional_fidelity: 30,
+      strategy_alignment: -30,
+      posterior_router_kl: -30,
+    };
+    const NS = "http://www.w3.org/2000/svg";
+    const ANIMATION_MS = 1650;
+
+    function createSvg(tag, attrs = {}) {
+      const node = document.createElementNS(NS, tag);
+      for (const [key, value] of Object.entries(attrs)) {
+        if (value !== undefined && value !== null) {
+          node.setAttribute(key, String(value));
+        }
+      }
+      return node;
+    }
+
+    function addText(parent, textValue, attrs = {}) {
+      const node = createSvg("text", attrs);
+      node.textContent = textValue;
+      parent.append(node);
+      return node;
+    }
+
+    function linearScale(domain, range) {
+      const [d0, d1] = domain;
+      const [r0, r1] = range;
+      return (value) => {
+        const t = (value - d0) / (d1 - d0);
+        return r0 + t * (r1 - r0);
+      };
+    }
+
+    function clearSvg() {
+      const keep = Array.from(svg.children).filter((child) => child.tagName === "title" || child.tagName === "desc");
+      svg.replaceChildren(...keep);
+    }
+
+    function metricDisplayValue(metric, point) {
+      if (metric.key === "posterior_router_kl") return point.plotValue;
+      return point.metricValue;
+    }
+
+    function visiblePoints(metric) {
+      const points = metric.points.filter((point) => point.progress <= state.progress + 1e-9);
+      return points.length > 0 ? points : [metric.points[0]];
+    }
+
+    function pathFromPoints(points, xScale, yScale, metric) {
+      return points.map((point, index) => {
+        const x = xScale(point.progress);
+        const y = yScale(metricDisplayValue(metric, point));
+        return (index === 0 ? "M " : "L ") + x.toFixed(2) + " " + y.toFixed(2);
+      }).join(" ");
+    }
+
+    function metricValueAtProgress(metric, progress) {
+      const points = metric.points;
+      if (progress <= points[0].progress) return metricDisplayValue(metric, points[0]);
+      if (progress >= points[points.length - 1].progress) {
+        return metricDisplayValue(metric, points[points.length - 1]);
+      }
+
+      for (let index = 1; index < points.length; index += 1) {
+        const previous = points[index - 1];
+        const current = points[index];
+        if (progress <= current.progress) {
+          const span = current.progress - previous.progress;
+          const weight = span === 0 ? 0 : (progress - previous.progress) / span;
+          const previousValue = metricDisplayValue(metric, previous);
+          const currentValue = metricDisplayValue(metric, current);
+          return previousValue + weight * (currentValue - previousValue);
+        }
+      }
+
+      return metricDisplayValue(metric, points[points.length - 1]);
+    }
+
+    function drawGrid(parent, xScale, yScale) {
+      const grid = createSvg("g", { "aria-hidden": "true" });
+      parent.append(grid);
+
+      for (const tick of [0, 0.2, 0.4, 0.6, 0.8, 1]) {
+        const x = xScale(tick);
+        grid.append(createSvg("line", {
+          x1: x,
+          x2: x,
+          y1: PLOT.top,
+          y2: HEIGHT - PLOT.bottom,
+          stroke: "var(--grid)",
+          "stroke-width": 1,
+          opacity: 0.62,
+        }));
+      }
+
+      for (const tick of [0, 0.25, 0.5, 0.75, 1]) {
+        const y = yScale(tick);
+        grid.append(createSvg("line", {
+          x1: PLOT.left,
+          x2: WIDTH - PLOT.right,
+          y1: y,
+          y2: y,
+          stroke: "var(--grid)",
+          "stroke-width": 1,
+          opacity: 0.52,
+        }));
+      }
+    }
+
+    function drawAxes(parent, xScale, yScale) {
+      const axis = createSvg("g");
+      parent.append(axis);
+
+      const x0 = PLOT.left;
+      const x1 = WIDTH - PLOT.right;
+      const y0 = HEIGHT - PLOT.bottom;
+      const y1 = PLOT.top;
+
+      axis.append(createSvg("line", { x1: x0, x2: x1, y1: y0, y2: y0, stroke: "#111", "stroke-width": 2 }));
+      axis.append(createSvg("line", { x1: x0, x2: x0, y1: y0, y2: y1, stroke: "#111", "stroke-width": 2 }));
+
+      for (const tick of [0, 0.2, 0.4, 0.6, 0.8, 1]) {
+        const x = xScale(tick);
+        axis.append(createSvg("line", { x1: x, x2: x, y1: y0, y2: y0 + 7, stroke: "#111", "stroke-width": 1.5 }));
+        addText(axis, tick.toFixed(1), {
+          x,
+          y: y0 + 30,
+          "text-anchor": "middle",
+          "font-size": 21,
+          fill: "var(--ink)",
+        });
+      }
+
+      for (const tick of [0, 0.25, 0.5, 0.75, 1]) {
+        const y = yScale(tick);
+        axis.append(createSvg("line", { x1: x0 - 7, x2: x0, y1: y, y2: y, stroke: "#111", "stroke-width": 1.5 }));
+        addText(axis, tick === 0 || tick === 1 ? tick.toFixed(0) : tick.toFixed(2), {
+          x: x0 - 13,
+          y: y + 7,
+          "text-anchor": "end",
+          "font-size": 21,
+          fill: "var(--ink)",
+        });
+      }
+
+      addText(axis, FIGURE_DATA.xLabel, {
+        x: (x0 + x1) / 2,
+        y: HEIGHT - 18,
+        "text-anchor": "middle",
+        "font-size": 28,
+        "font-weight": 650,
+        fill: "var(--ink)",
+      });
+
+      const yLabel = addText(axis, FIGURE_DATA.yLabel, {
+        x: 25,
+        y: (y0 + y1) / 2,
+        "text-anchor": "middle",
+        "font-size": 28,
+        "font-weight": 650,
+        fill: "var(--ink)",
+      });
+      yLabel.setAttribute("transform", "rotate(-90 25 " + ((y0 + y1) / 2) + ")");
+    }
+
+    function drawMetric(metric, xScale, yScale) {
+      const points = visiblePoints(metric);
+      svg.append(createSvg("path", {
+        d: pathFromPoints(points, xScale, yScale, metric),
+        fill: "none",
+        stroke: metric.color,
+        "stroke-width": 5.2,
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+      }));
+
+      const first = metric.points[0];
+      const current = points[points.length - 1];
+      for (const point of [first, current]) {
+        svg.append(createSvg("circle", {
+          cx: xScale(point.progress),
+          cy: yScale(metricDisplayValue(metric, point)),
+          r: point === current ? 8 : 6,
+          fill: metric.color,
+          stroke: metric.color,
+          "stroke-width": 2.6,
+        }));
+      }
+
+      const labelValue = metricValueAtProgress(metric, LABEL_X_PROGRESS);
+      addText(svg, metric.label, {
+        x: xScale(LABEL_X_PROGRESS),
+        y: yScale(labelValue) + (LABEL_Y_OFFSET[metric.key] || 0),
+        "text-anchor": "middle",
+        "dominant-baseline": "middle",
+        "font-size": 26,
+        "font-weight": 500,
+        fill: metric.color,
+      });
+    }
+
+    function render() {
+      clearSvg();
+      const xScale = linearScale([0, 1], [PLOT.left, WIDTH - PLOT.right]);
+      const yScale = linearScale([0, 1.05], [HEIGHT - PLOT.bottom, PLOT.top]);
+      drawGrid(svg, xScale, yScale);
+      drawAxes(svg, xScale, yScale);
+      for (const metric of FIGURE_DATA.metrics) {
+        drawMetric(metric, xScale, yScale);
+      }
+    }
+
+    function nearestPoint(svgX, svgY) {
+      const xScale = linearScale([0, 1], [PLOT.left, WIDTH - PLOT.right]);
+      const yScale = linearScale([0, 1.05], [HEIGHT - PLOT.bottom, PLOT.top]);
+      let best = null;
+
+      for (const metric of FIGURE_DATA.metrics) {
+        for (const point of visiblePoints(metric)) {
+          const x = xScale(point.progress);
+          const y = yScale(metricDisplayValue(metric, point));
+          const distance = Math.hypot(svgX - x, svgY - y);
+          if (!best || distance < best.distance) {
+            best = { metric, point, distance };
+          }
+        }
+      }
+      return best && best.distance < 28 ? best : null;
+    }
+
+    function svgPointFromEvent(event) {
+      const point = svg.createSVGPoint();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      return point.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function formatProgress(value) {
+      return Math.round(value * 100) + "%";
+    }
+
+    function showTooltip(event, nearest) {
+      tooltip.dataset.visible = "true";
+      tooltip.setAttribute("aria-hidden", "false");
+      const rawKl = nearest.metric.key === "posterior_router_kl"
+        ? "<div class=\"tooltip__row\"><span>Raw KL</span><span>" + nearest.point.metricValue.toExponential(2) + "</span></div>"
+        : "";
+      tooltip.innerHTML =
+        "<div class=\"tooltip__label\" style=\"color:" + nearest.metric.color + "\">" + nearest.metric.label + "</div>" +
+        "<div class=\"tooltip__row\"><span>Progress</span><span>" + formatProgress(nearest.point.progress) + "</span></div>" +
+        "<div class=\"tooltip__row\"><span>Value</span><span>" + metricDisplayValue(nearest.metric, nearest.point).toFixed(3) + "</span></div>" +
+        rawKl;
+
+      const shell = svg.parentElement.getBoundingClientRect();
+      const left = Math.min(event.clientX - shell.left + 8, shell.width - 270);
+      const top = Math.min(event.clientY - shell.top + 8, shell.height - 94);
+      tooltip.style.left = Math.max(8, left) + "px";
+      tooltip.style.top = Math.max(8, top) + "px";
+    }
+
+    function hideTooltip() {
+      tooltip.dataset.visible = "false";
+      tooltip.setAttribute("aria-hidden", "true");
+    }
+
+    function animateOnce() {
+      if (state.hasAnimated) return;
+      state.hasAnimated = true;
+      state.progress = 0;
+      render();
+
+      const start = performance.now();
+      function step(now) {
+        const elapsed = Math.min(1, (now - start) / ANIMATION_MS);
+        state.progress = 1 - Math.pow(1 - elapsed, 3);
+        render();
+        if (elapsed < 1) {
+          requestAnimationFrame(step);
+        } else {
+          state.progress = 1;
+          render();
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function shouldAutoplay() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("autoplay") === "0") return false;
+      if (params.get("autoplay") === "1") return true;
+      return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    svg.addEventListener("mousemove", (event) => {
+      const point = svgPointFromEvent(event);
+      const nearest = nearestPoint(point.x, point.y);
+      if (nearest) showTooltip(event, nearest);
+      else hideTooltip();
+    });
+    svg.addEventListener("mouseleave", hideTooltip);
+
+    if (shouldAutoplay()) {
+      state.progress = 0;
+      render();
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+          if (entries.some((entry) => entry.isIntersecting && entry.intersectionRatio > 0.35)) {
+            observer.disconnect();
+            animateOnce();
+          }
+        }, { threshold: [0, 0.35, 0.7] });
+        observer.observe(figure);
+      } else {
+        requestAnimationFrame(animateOnce);
+      }
+    } else {
+      render();
+    }
+  </script>
+</body>
+</html>

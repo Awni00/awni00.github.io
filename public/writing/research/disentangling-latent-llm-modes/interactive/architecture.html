@@ -1,0 +1,1382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Router–Generator Architecture (web figure)</title>
+
+  <!-- KaTeX for math labels. Crisp, light, and the standard math stack for Astro blogs.
+       Pinned versions keep this file reproducible when opened offline-of-cache. -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+        crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+          crossorigin="anonymous"></script>
+
+  <style>
+    /* ---- Style tokens (Paul Tol palette, mirrored from paper/shared/figstyle.tex) ---- */
+    :root {
+      color-scheme: light;
+
+      /* Router / latent = magenta. */
+      --router:        #EE3377;   /* figRouter — bell/latent accents */
+      --router-text:   #ca2b65;   /* figRouterText (EE3377!85!black) — strokes, labels */
+      --router-fill:   #fbe9f1;   /* figRouterFill (~EE3377!12 on white) */
+      --router-bell:   #fcdae6;   /* figRouter!18 — bell fill */
+      --router-head:   #fdf2f7;   /* figRouterLightFill (~EE3377!5) — head box fill */
+
+      /* Generator = blue. */
+      --generator:      #0077BB;  /* figGenerator */
+      --generator-text: #006299;  /* figGeneratorText (0077BB!82!black) — output labels */
+      --generator-line: #72b4d9;  /* figGenerator!55 — hidden/backbone strokes */
+      --generator-fill: #eef6fb;  /* figGeneratorFill (~0077BB!7) — hidden fill */
+      --backbone-fill:  #ebf4fa;  /* figGeneratorPanelFill (~0077BB!8) */
+      --hist-fill:      #80bbdd;  /* figGenerator!50 — histogram bars */
+      --hist-stroke:    #4099cc;  /* figGenerator!75 */
+
+      /* Posterior = orange (training-only). */
+      --posterior:      #EE7733;  /* figPosterior / figPosteriorBorder */
+      --posterior-text: #b85c1e;  /* darkened for labels/strokes */
+      --posterior-fill: #fdf1e7;  /* light orange box fill */
+      --posterior-bell: #f8dece;  /* figPosteriorBell — bell fill */
+
+      /* Neutral structure. */
+      --muted: #8B8B8B;  /* black!55 — ellipses, attention arc, faded text */
+      --ink:   #2e2e2e;  /* black!82 — main arrows */
+      --line:  #999999;  /* black!60 — box strokes, axis baselines */
+
+      --ui-text: #20242b;
+      --ui-line: #e3e7ee;
+      --ui-muted: #697282;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", sans-serif;
+      color: var(--ui-text);
+      background: #ffffff;
+    }
+
+    .arch-figure {
+      width: min(100%, 1000px);
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* A single compact controls row: mode toggle on the left, play/reset on the right. */
+    .fig-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .play-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .fig-controls button {
+      appearance: none;
+      border: 1px solid #c9d1dd;
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ui-text);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      height: 30px;
+      padding: 0 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .fig-controls button.primary {
+      color: var(--router-text);
+      border-color: var(--router-text);
+      background: var(--router-fill);
+    }
+    .fig-controls button:disabled { opacity: 0.5; cursor: default; }
+    .fig-controls button:focus-visible {
+      outline: 2px solid rgba(238, 51, 119, 0.35);
+      outline-offset: 2px;
+    }
+
+    /* Inference <-> Training toggle: switches the latent source (r_phi vs q_xi). */
+    .mode-toggle {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--ui-line);
+      border-radius: 7px;
+      overflow: hidden;
+    }
+    .mode-toggle button {
+      appearance: none;
+      border: none;
+      background: #ffffff;
+      color: var(--ui-muted);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      cursor: pointer;
+    }
+    .mode-toggle button:focus-visible {
+      outline: 2px solid rgba(238, 51, 119, 0.35);
+      outline-offset: -2px;
+    }
+    .mode-toggle button.inf[aria-pressed="true"] {
+      background: var(--router-fill);
+      color: var(--router-text);
+    }
+    .mode-toggle button.train[aria-pressed="true"] {
+      background: var(--posterior-fill);
+      color: var(--posterior-text);
+    }
+
+    /* The SVG scales as one unit; the viewBox owns the internal coordinate system. */
+    .arch-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .arch-svg foreignObject { overflow: visible; }
+
+    /* KaTeX label wrapper: a flex box centered on the SVG anchor point. */
+    .lbl-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    /* Keep KaTeX from inheriting any italic/serif defaults oddly inside SVG. */
+    .lbl-inner .katex { font-size: 1em; }
+  </style>
+</head>
+
+<body>
+  <figure class="arch-figure">
+    <!-- Compact controls row: inference/training toggle (left) + play/reset (right). -->
+    <div class="fig-controls">
+      <!-- Latent source: router prior r_phi (inference) vs. training posterior q_xi. -->
+      <div class="mode-toggle" role="group" aria-label="Latent source">
+        <button id="mode-inf" class="inf" type="button" aria-pressed="true">Inference</button>
+        <button id="mode-train" class="train" type="button" aria-pressed="false">Training</button>
+      </div>
+      <div class="play-controls">
+        <button id="play-btn" type="button" class="primary">&#9654;&nbsp; Play</button>
+      </div>
+    </div>
+
+    <svg id="arch-svg" class="arch-svg" xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 960 468" preserveAspectRatio="xMidYMid meet"
+         role="img"
+         aria-label="Architecture diagram: token sequence through a Transformer backbone with a latent sampling slot.">
+      <defs>
+        <marker id="ah-ink" viewBox="0 0 10 10" refX="8.5" refY="5"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--ink)" />
+        </marker>
+        <marker id="ah-router" viewBox="0 0 10 10" refX="8.5" refY="5"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--router-text)" />
+        </marker>
+        <marker id="ah-muted" viewBox="0 0 10 10" refX="8.5" refY="5"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)" />
+        </marker>
+        <marker id="ah-posterior" viewBox="0 0 10 10" refX="8.5" refY="5"
+                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--posterior)" />
+        </marker>
+      </defs>
+    </svg>
+  </figure>
+
+  <script>
+    // =====================================================================
+    //  Layout description (declarative). The animation references these named
+    //  anchors, so positions live in one place — the web analog of the TikZ
+    //  \cA..\cG column / \yT..\yPL row definitions.
+    // =====================================================================
+
+    // Column centers (x). Box columns plus two ellipsis gaps.
+    const COL = {
+      x1:  90,   // x_1
+      xtx: 220,  // x_{t_x}
+      lat: 350,  // <lat>
+      ez:  480,  // E(z)
+      lae: 610,  // </lat>
+      y1:  740,  // y_1
+      yty: 870,  // y_{t_y}
+    };
+    const GAP = {
+      x: (COL.x1 + COL.xtx) / 2,   // ellipsis between x_1 and x_{t_x}
+      y: (COL.y1 + COL.yty) / 2,   // ellipsis between y_1 and y_{t_y}
+    };
+
+    // Row centers / baselines (y). Mirrors the TikZ figure's vertical layout:
+    // screen_y = 416 - 72 * tikz_y, so the spacing matches \yT..\yPL exactly.
+    // SVG y grows downward, so top-to-bottom is:
+    // output labels -> distributions -> heads -> hidden -> backbone -> tokens.
+    const ROW = {
+      feedbackLane:  34,   // top routing lane for the sample-feedback arrow (yPL + 0.55)
+      outLabel:      74,   // p(.|.) / r_phi labels (yPL = 4.75)
+      histBaseline: 128,   // bars + bell baseline; distributions grow upward (yPD = 4.00)
+      attnPeak:     182,   // peak of the "y attends to E(z)" arc (yH + 0.95)
+      head:         193,   // [mu, logsigma^2] head box, <lat> only (yPM = 3.10)
+      hidden:       250,   // hidden-state boxes (yH = 2.30)
+      backboneTop:  297,   // yBt = 1.65
+      backboneBot:  355,   // yBb = 0.85
+      token:        416,   // input/output token boxes (yT = 0)
+      feedbackLane2:456,   // bottom routing lane for the sample-feedback arrow (yT - 0.55)
+    };
+
+    // Arrows into a distribution stop just below its baseline (matching the TikZ
+    // `(...) -- (col, yPD-0.05)`), so the arrowhead points at the *bottom* of the
+    // histogram / bell, not the top.
+    const DIST_TIP = 3;
+
+    // Box dimensions.
+    const BOX = {
+      tokenW: 88, tokenH: 38,
+      hiddenW: 82, hiddenH: 34,
+      headW: 122, headH: 28,
+    };
+
+    // Training-only posterior panel lives to the right; the viewBox widens to
+    // reveal it when Training mode is active.
+    const POST_X = 1075;        // posterior column center
+    const POST_INPUT_W = 150;   // wide "(x, y)" input box
+    const VIEW_W_INF = 960;     // inference viewBox width
+    const VIEW_W_TRAIN = 1180;  // training viewBox width (room for the posterior)
+    const VIEW_H = 468;
+
+    // Single knob for label legibility. Every KaTeX label size is multiplied by
+    // this in label(); the per-call sizes set the relative hierarchy. Labels live
+    // in the viewBox, so they scale with the figure — this just raises the base.
+    const FONT_SCALE = 1.18;
+
+    const SVGNS = "http://www.w3.org/2000/svg";
+
+    // Stroke/fill color per semantic role; same keys index the arrowhead markers
+    // (ah-ink / ah-router / ah-muted / ah-posterior).
+    const COLOR_VAR = {
+      ink:       "var(--ink)",
+      router:    "var(--router-text)",
+      muted:     "var(--muted)",
+      posterior: "var(--posterior)",
+    };
+    const strokeVar = (c) => COLOR_VAR[c] || COLOR_VAR.ink;
+
+    // ----------------------------------------------------------------- helpers
+    function el(tag, attrs = {}) {
+      const node = document.createElementNS(SVGNS, tag);
+      for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+      return node;
+    }
+
+    // A rounded rectangle centered at (cx, cy).
+    function box(g, cx, cy, w, h, { fill, stroke, rx = 4, sw = 1, dashed = false } = {}) {
+      const rect = el("rect", {
+        x: cx - w / 2, y: cy - h / 2, width: w, height: h, rx,
+        fill: fill ?? "white",
+        stroke: stroke ?? "var(--line)",
+        "stroke-width": sw,
+      });
+      if (dashed) rect.setAttribute("stroke-dasharray", "4 3");
+      g.appendChild(rect);
+      return rect;
+    }
+
+    // A straight arrow from (x1,y1) to (x2,y2).
+    function arrow(g, x1, y1, x2, y2, { color = "ink", dashed = false, sw = 1.2 } = {}) {
+      const line = el("line", {
+        x1, y1, x2, y2, stroke: strokeVar(color), "stroke-width": sw,
+        "marker-end": `url(#ah-${color})`,
+      });
+      if (dashed) line.setAttribute("stroke-dasharray", "4 3");
+      g.appendChild(line);
+      return line;
+    }
+
+    // A path through `points` with rounded corners of radius r, plus optional marker.
+    function roundedPath(g, points, r, { color, dashed = false, sw = 1.6 } = {}) {
+      let d = `M ${points[0][0]} ${points[0][1]}`;
+      for (let i = 1; i < points.length - 1; i++) {
+        const [px, py] = points[i - 1];
+        const [cx, cy] = points[i];
+        const [nx, ny] = points[i + 1];
+        // Trim the corner by r along each adjoining segment, join with a quadratic.
+        const v1 = norm(px - cx, py - cy), v2 = norm(nx - cx, ny - cy);
+        const a = [cx + v1.x * r, cy + v1.y * r];
+        const b = [cx + v2.x * r, cy + v2.y * r];
+        d += ` L ${a[0]} ${a[1]} Q ${cx} ${cy} ${b[0]} ${b[1]}`;
+      }
+      const last = points[points.length - 1];
+      d += ` L ${last[0]} ${last[1]}`;
+      const path = el("path", {
+        d, fill: "none", stroke: strokeVar(color), "stroke-width": sw,
+        "stroke-linejoin": "round", "stroke-linecap": "round",
+        "marker-end": `url(#ah-${color})`,
+      });
+      if (dashed) path.setAttribute("stroke-dasharray", "5 4");
+      g.appendChild(path);
+      return path;
+    }
+    function norm(dx, dy) {
+      const m = Math.hypot(dx, dy) || 1;
+      return { x: dx / m, y: dy / m };
+    }
+
+    // A KaTeX-rendered math label centered at (cx, cy), placed via foreignObject so
+    // SVG coordinates remain the single source of truth for positioning.
+    function label(g, latex, cx, cy, { color = "var(--ink)", size = 13, w = 150, h = 30 } = {}) {
+      const fo = el("foreignObject", { x: cx - w / 2, y: cy - h / 2, width: w, height: h });
+      const div = document.createElement("div");
+      div.className = "lbl-inner";
+      div.style.fontSize = (size * FONT_SCALE) + "px";
+      div.style.color = color;
+      katex.render(latex, div, { throwOnError: false, displayMode: false });
+      fo.appendChild(div);
+      g.appendChild(fo);
+      return fo;
+    }
+
+    // Five-bar histogram (next-token categorical) centered on cx, sitting on baselineY.
+    // Bar heights are in cm (scaled to pixels), in the same range as the TikZ \arHistAt
+    // heights. Each position gets a distinct shape (peak location / skew) for variety;
+    // the caller passes the per-column array from HIST_HEIGHTS_BY_ID.
+    const HIST_HEIGHTS_BY_ID = {
+      x1:  [0.18, 0.34, 0.50, 0.24, 0.10],
+      xtx: [0.04, 0.07, 0.10, 0.50, 0.05],  // p(<lat>|x): peaked — model confidently predicts <lat>
+      ez:  [0.50, 0.06, 0.05, 0.07, 0.04],  // p(</lat>|.): peaked — model confidently predicts </lat>
+      lae: [0.10, 0.20, 0.30, 0.48, 0.26],
+      y1:  [0.24, 0.50, 0.32, 0.14, 0.08],
+      yty: [0.50, 0.22, 0.14, 0.10, 0.30],
+    };
+    const CM = 72; // px per cm
+    function histogram(g, cx, baselineY, heights) {
+      const bw = 7, gapw = 1.5;
+      const n = heights.length;
+      const totalW = n * bw + (n - 1) * gapw;
+      let x = cx - totalW / 2;
+      for (const hcm of heights) {
+        const h = hcm * CM;
+        g.appendChild(el("rect", {
+          class: "hbar",
+          x, y: baselineY - h, width: bw, height: h,
+          fill: "var(--hist-fill)", stroke: "var(--hist-stroke)", "stroke-width": 0.4,
+        }));
+        x += bw + gapw;
+      }
+      axis(g, cx, baselineY, totalW / 2 + 4);
+    }
+
+    // Baseline tick under a distribution.
+    function axis(g, cx, baselineY, half) {
+      g.appendChild(el("line", {
+        class: "axis",
+        x1: cx - half, y1: baselineY, x2: cx + half, y2: baselineY,
+        stroke: "var(--line)", "stroke-width": 0.5,
+      }));
+    }
+
+    // Gaussian bell curve: 0.55*exp(-1.5 x^2), x in [-1.5, 1.5], matching the TikZ plot.
+    // BELL_SX / BELL_SY are the px scales; BELL_PEAK_CM is the peak height (cm).
+    const BELL_SX = 0.32 * CM;   // horizontal scale (TikZ: \x*0.32 cm)
+    const BELL_SY = CM;          // vertical scale (cm -> px)
+    const BELL_PEAK_CM = 0.55;
+    const bellY = (cx, baselineY, u) => baselineY - BELL_PEAK_CM * Math.exp(-1.5 * u * u) * BELL_SY;
+    function bell(g, cx, baselineY, { fill = "var(--router-bell)", stroke = "var(--router-text)" } = {}) {
+      const pts = [];
+      for (let i = 0; i <= 40; i++) {
+        const xx = -1.5 + (3.0 * i) / 40;
+        pts.push([cx + xx * BELL_SX, bellY(cx, baselineY, xx)]);
+      }
+      // Filled area under the curve.
+      let d = `M ${pts[0][0]} ${baselineY} `;
+      d += pts.map((p) => `L ${p[0]} ${p[1]}`).join(" ");
+      d += ` L ${pts[pts.length - 1][0]} ${baselineY} Z`;
+      g.appendChild(el("path", { class: "bell-fill", d, fill, stroke: "none" }));
+      // Outline.
+      const outline = "M " + pts.map((p) => `${p[0]} ${p[1]}`).join(" L ");
+      g.appendChild(el("path", { class: "bell-outline", d: outline, fill: "none", stroke, "stroke-width": 1.4 }));
+      axis(g, cx, baselineY, 0.5 * CM);
+    }
+
+    // A marker dot riding on a bell curve at draw u (0 = peak), showing the
+    // current latent sample. The resample button moves it to a fresh draw.
+    function sampleMarker(g, cx, baselineY, color) {
+      const dot = el("circle", {
+        cx, cy: bellY(cx, baselineY, 0), r: 3.2,
+        fill: strokeVar(color), stroke: "white", "stroke-width": 0.8,
+      });
+      g.appendChild(dot);
+      return dot;
+    }
+
+    function ellipsis(g, cx, cy) {
+      label(g, "\\cdots", cx, cy, { color: "var(--muted)", size: 13, w: 30, h: 20 });
+    }
+
+    // =====================================================================
+    //  Build the figure.
+    //
+    //  Each column's elements are registered into `cols` (keyed by id) and the
+    //  full set of "generated" elements into `GEN`, so the animation can hide
+    //  them and reveal them position by position. `extras` holds the shared
+    //  cross-column elements (ellipses, sample-feedback loop, attention arc).
+    // =====================================================================
+    const cols = {};        // id -> { token, hidden, dist, arrows, ... }
+    const extras = {};      // gEllipX, gEllipY, feedbackPath, feedbackLabel, routerSample, sampleLoop
+    const GEN = [];         // every element that hides on reset-to-start
+    const posterior = {};   // training posterior panel refs (subPath, sample, bell anchor)
+    const POST = [];        // posterior elements toggled on by Training mode
+    const HOVER = {};       // attention-hover arc + per-column targets
+    let animLayer = null;   // top layer for the moving "pulse" dots
+    let hoverLayer = null;  // top layer for the attention-hover targets
+
+    // Generation order (left to right). E(z) follows <lat> because it is the
+    // projection of the sampled z.
+    const ORDER = ["x1", "xtx", "lat", "ez", "lae", "y1", "yty"];
+
+    function build() {
+      const svg = document.getElementById("arch-svg");
+
+      // Layers (draw order = stacking order). Feedback arrow sits behind the boxes;
+      // the animation layer sits on top so pulse dots are never occluded.
+      const lFeedback = el("g", { id: "layer-feedback" });
+      const lArrows   = el("g", { id: "layer-arrows" });
+      const lBoxes    = el("g", { id: "layer-boxes" });
+      const lDist     = el("g", { id: "layer-dist" });
+      const lAttn     = el("g", { id: "layer-attn" });
+      const lLabels   = el("g", { id: "layer-labels" });
+      animLayer       = el("g", { id: "layer-anim" });
+      hoverLayer      = el("g", { id: "layer-hover" });   // transparent attention-hover targets, on top
+      svg.append(lFeedback, lArrows, lBoxes, lDist, lAttn, lLabels, animLayer, hoverLayer);
+
+      // Per-position spec: column id, x, math labels, and role flags.
+      const positions = [
+        { id: "x1",  x: COL.x1,  tok: "x_1",             hid: "h^x_1",                        out: "p(x_2 \\mid \\cdot)" },
+        { id: "xtx", x: COL.xtx, tok: "x_{t_x}",         hid: "h^x_{t_x}",                    out: "p(\\texttt{<lat>} \\mid \\cdot)" },
+        { id: "lat", x: COL.lat, tok: "\\texttt{<lat>}", hid: "h^{\\mathrm{lat}}_{\\langle}", isLat: true },
+        { id: "ez",  x: COL.ez,  tok: "E(z)",            hid: "h^{\\mathrm{lat}}_{z}",        out: "p(\\texttt{</lat>} \\mid \\cdot)", isEz: true },
+        { id: "lae", x: COL.lae, tok: "\\texttt{</lat>}",hid: "h^{\\mathrm{lat}}_{\\rangle}", out: "p(y_1 \\mid x,z)" },
+        { id: "y1",  x: COL.y1,  tok: "y_1",             hid: "h^y_1",                        out: "p(y_2 \\mid \\cdot)" },
+        { id: "yty", x: COL.yty, tok: "y_{t_y}",         hid: "h^y_{t_y}",                    out: "p(\\mathrm{EOS} \\mid \\cdot)" },
+      ];
+
+      // ---- Backbone bar (always visible; arrows land on its edges) ------------
+      const bbLeft = COL.x1 - BOX.tokenW / 2 - 4;
+      const bbRight = COL.yty + BOX.tokenW / 2 + 4;
+      const bbCx = (bbLeft + bbRight) / 2;
+      const bbCy = (ROW.backboneTop + ROW.backboneBot) / 2;
+      box(lBoxes, bbCx, bbCy, bbRight - bbLeft, ROW.backboneBot - ROW.backboneTop, {
+        fill: "var(--backbone-fill)", stroke: "var(--generator-line)", rx: 7, sw: 1.2,
+      });
+      label(lLabels, "\\text{Adapted Transformer backbone } \\phi", bbCx, bbCy,
+            { color: "var(--ink)", size: 14, w: 360, h: 26 });
+
+      // ---- Per-position elements (registered for the animation) ---------------
+      for (const p of positions) {
+        const col = { id: p.id, x: p.x, isLat: !!p.isLat, isEz: !!p.isEz, arrows: [] };
+
+        // Vertical flow arrows (bottom to top): token->backbone, backbone->hidden.
+        col.arrows.push(arrow(lArrows, p.x, ROW.token - BOX.tokenH / 2, p.x, ROW.backboneBot));
+        col.arrows.push(arrow(lArrows, p.x, ROW.backboneTop, p.x, ROW.hidden + BOX.hiddenH / 2));
+
+        // token box (latent slot E(z) styled magenta).
+        const tokStyle = p.isEz
+          ? { fill: "var(--router-fill)", stroke: "var(--router-text)", rx: 4, sw: 1.4 }
+          : { fill: "white", stroke: "var(--line)", rx: 3 };
+        col.token = box(lBoxes, p.x, ROW.token, BOX.tokenW, BOX.tokenH, tokStyle);
+        col.tokenLabel = label(lLabels, p.tok, p.x, ROW.token,
+              { color: p.isEz ? "var(--router-text)" : "var(--ink)", size: 13, w: 84 });
+
+        // hidden box.
+        col.hidden = box(lBoxes, p.x, ROW.hidden, BOX.hiddenW, BOX.hiddenH,
+            { fill: "var(--generator-fill)", stroke: "var(--generator-line)", rx: 3 });
+        col.hiddenLabel = label(lLabels, p.hid, p.x, ROW.hidden, { color: "var(--ink)", size: 12, w: 78 });
+
+        // distribution (wrapped in a group so it can be hidden/shown as a unit).
+        col.dist = el("g");
+        lDist.appendChild(col.dist);
+
+        if (p.isLat) {
+          // Router: hidden -> head box -> bell curve.
+          col.arrows.push(arrow(lArrows, p.x, ROW.hidden - BOX.hiddenH / 2, p.x, ROW.head + BOX.headH / 2));
+          col.head = box(lBoxes, p.x, ROW.head, BOX.headW, BOX.headH,
+              { fill: "var(--router-head)", stroke: "var(--router-text)", rx: 4, sw: 1.3 });
+          col.headLabel = label(lLabels, "\\mu_\\phi,\\; \\log\\sigma^2_\\phi", p.x, ROW.head,
+                { color: "var(--router-text)", size: 12, w: 116 });
+          col.arrows.push(arrow(lArrows, p.x, ROW.head - BOX.headH / 2,
+                p.x, ROW.histBaseline + DIST_TIP, { color: "router" }));
+          bell(col.dist, p.x, ROW.histBaseline);
+          extras.routerSample = sampleMarker(col.dist, p.x, ROW.histBaseline, "router");
+          col.outLabel = label(lLabels, "r_\\phi(z \\mid x)", p.x, ROW.outLabel,
+                { color: "var(--router-text)", size: 13, w: 90 });
+        } else {
+          // Token positions: hidden -> histogram, with output label above.
+          col.arrows.push(arrow(lArrows, p.x, ROW.hidden - BOX.hiddenH / 2,
+                p.x, ROW.histBaseline + DIST_TIP));
+          histogram(col.dist, p.x, ROW.histBaseline, HIST_HEIGHTS_BY_ID[p.id]);
+          col.outLabel = label(lLabels, p.out, p.x, ROW.outLabel,
+                { color: "var(--generator-text)", size: 12.5, w: 116 });
+        }
+
+        cols[p.id] = col;
+        GEN.push(col.token, col.tokenLabel, col.hidden, col.hiddenLabel, col.dist, col.outLabel,
+                 ...col.arrows);
+        if (col.head) GEN.push(col.head, col.headLabel);
+      }
+
+      // ---- Ellipses in the two variable-length gaps (grouped per gap) ---------
+      const makeEllipsisGroup = (gx) => {
+        const g = el("g");
+        lLabels.appendChild(g);
+        for (const cy of [ROW.token, ROW.hidden, ROW.histBaseline - 24, ROW.outLabel]) {
+          ellipsis(g, gx, cy);
+        }
+        return g;
+      };
+      extras.gEllipX = makeEllipsisGroup(GAP.x);
+      extras.gEllipY = makeEllipsisGroup(GAP.y);
+      GEN.push(extras.gEllipX, extras.gEllipY);
+
+      // ---- Sample feedback loop: bell -> E(z) (magenta, behind backbone) ------
+      // Up from the bell, across the top lane, down through the gap left of E(z),
+      // under the tokens, then up into E(z) from below. Mirrors figSampleArrow.
+      const midLatEz = (COL.lat + COL.ez) / 2;
+      // The loop emanates from just above the r_phi(z|x) label (matching the TikZ
+      // rphiLabel.north start), then loops over and down into E(z).
+      const feedbackStartY = ROW.outLabel - 12;
+      extras.feedbackPath = roundedPath(lFeedback, [
+        [COL.lat, feedbackStartY],
+        [COL.lat, ROW.feedbackLane],
+        [midLatEz, ROW.feedbackLane],
+        [midLatEz, ROW.feedbackLane2],
+        [COL.ez - 8, ROW.feedbackLane2],
+        [COL.ez - 8, ROW.token + BOX.tokenH / 2 + 2],
+      ], 8, { color: "router", dashed: true, sw: 1.7 });
+      extras.feedbackLabel = label(lLabels,
+        "\\text{sample } z \\sim r_\\phi(z\\mid x)\\text{, project as } E(z)",
+        (COL.lat + COL.ez) / 2 + 20, ROW.feedbackLane - 16,
+        { color: "var(--router-text)", size: 11.5, w: 320, h: 22 });
+      GEN.push(extras.feedbackPath, extras.feedbackLabel);
+
+      // The magenta sample loop is dimmed (not hidden) in Training mode, since the
+      // router still computes r_phi but its sample is replaced by the posterior's.
+      extras.sampleLoop = [extras.feedbackPath, extras.feedbackLabel];
+
+      // =====================================================================
+      //  Training-only posterior q_xi(z | x, y): a separate network on the right,
+      //  revealed when Training mode is active (the viewBox widens to fit it).
+      //  Mirrors the TikZ compact posterior column.
+      // =====================================================================
+      const pX = POST_X;
+      const postBox = { fill: "var(--posterior-fill)", stroke: "var(--posterior)" };
+      const postArrowOpts = { color: "posterior", dashed: true };
+      const postBbCy = (ROW.backboneTop + ROW.backboneBot) / 2;
+
+      // dashed container (behind the panel contents).
+      const cLeft = pX - POST_INPUT_W / 2 - 12;
+      const cRight = pX + POST_INPUT_W / 2 + 12;
+      const cTop = ROW.outLabel - 16;
+      const cBot = ROW.token + BOX.tokenH / 2 + 12;
+      const postPanel = el("rect", {
+        x: cLeft, y: cTop, width: cRight - cLeft, height: cBot - cTop, rx: 8,
+        fill: "var(--posterior-fill)", "fill-opacity": 0.35,
+        stroke: "var(--posterior)", "stroke-width": 1, "stroke-dasharray": "5 4",
+      });
+      lFeedback.appendChild(postPanel);
+
+      // (x, y) input -> backbone xi -> h_xy -> heads -> q_xi bell.
+      const pa1 = arrow(lArrows, pX, ROW.token - BOX.tokenH / 2, pX, ROW.backboneBot, postArrowOpts);
+      const postInput = box(lBoxes, pX, ROW.token, POST_INPUT_W, BOX.tokenH, { ...postBox, rx: 3 });
+      const postInputLabel = label(lLabels, "x_{1:t_x},\\; y_{1:t_y}", pX, ROW.token,
+            { color: "var(--posterior-text)", size: 12, w: POST_INPUT_W - 8 });
+
+      const postBb = box(lBoxes, pX, postBbCy, 124, ROW.backboneBot - ROW.backboneTop,
+            { ...postBox, rx: 6, dashed: true });
+      const postBbLabel = label(lLabels, "\\textit{Backbone } \\xi", pX, postBbCy,
+            { color: "var(--posterior-text)", size: 12, w: 110 });
+
+      const pa2 = arrow(lArrows, pX, ROW.backboneTop, pX, ROW.hidden + BOX.hiddenH / 2, postArrowOpts);
+      const postHidden = box(lBoxes, pX, ROW.hidden, BOX.hiddenW, BOX.hiddenH, { ...postBox, rx: 3 });
+      const postHiddenLabel = label(lLabels, "h_{xy}", pX, ROW.hidden,
+            { color: "var(--posterior-text)", size: 12, w: 60 });
+
+      const pa3 = arrow(lArrows, pX, ROW.hidden - BOX.hiddenH / 2, pX, ROW.head + BOX.headH / 2, postArrowOpts);
+      const postHead = box(lBoxes, pX, ROW.head, BOX.headW, BOX.headH, { ...postBox, rx: 4 });
+      const postHeadLabel = label(lLabels, "\\mu_\\xi,\\; \\log\\sigma^2_\\xi", pX, ROW.head,
+            { color: "var(--posterior-text)", size: 12, w: 116 });
+
+      const pa4 = arrow(lArrows, pX, ROW.head - BOX.headH / 2, pX, ROW.histBaseline + DIST_TIP, postArrowOpts);
+      const postDist = el("g");
+      lDist.appendChild(postDist);
+      bell(postDist, pX, ROW.histBaseline, { fill: "var(--posterior-bell)", stroke: "var(--posterior)" });
+      posterior.sample = sampleMarker(postDist, pX, ROW.histBaseline, "posterior");
+      const postOutLabel = label(lLabels, "q_\\xi(z \\mid x,y)", pX, ROW.outLabel,
+            { color: "var(--posterior-text)", size: 13, w: 120 });
+
+      const postTitle = label(lLabels, "\\textit{Training-only posterior}", pX, cBot + 13,
+            { color: "var(--posterior-text)", size: 11.5, w: 180, h: 20 });
+
+      // substitution arrow: q_xi -> E(z). Mirrors the magenta sample loop on the
+      // right: exit the posterior container's LEFT edge from the q_xi label, run a
+      // top lane, descend through the E(z)/</lat> gap, and enter E(z).south at
+      // ez+8 (symmetric to the magenta loop's ez-8). Drawn behind, like the loop.
+      const midEzLae = (COL.ez + COL.lae) / 2;
+      const qxiWest = pX - 58;       // left edge of the q_xi(z|x,y) label
+      const exitX = cLeft - 14;      // just left of the dashed container
+      posterior.subPath = roundedPath(lFeedback, [
+        [qxiWest, ROW.outLabel],          // emanate from q_xi (label west), inside the panel
+        [exitX, ROW.outLabel],            // exit the container's left edge cleanly
+        [exitX, ROW.feedbackLane],        // rise to the top lane (shares the magenta lane height)
+        [midEzLae, ROW.feedbackLane],     // run left across the top
+        [midEzLae, ROW.feedbackLane2],    // descend through the E(z)/</lat> gap
+        [COL.ez + 8, ROW.feedbackLane2],  // back toward E(z)
+        [COL.ez + 8, ROW.token + BOX.tokenH / 2 + 2],  // up into E(z).south (right half)
+      ], 8, { color: "posterior", dashed: true, sw: 1.7 });
+      const subLabel = label(lLabels, "\\text{substituted at } E(z)",
+            (midEzLae + exitX) / 2, ROW.feedbackLane - 12,
+            { color: "var(--posterior-text)", size: 11.5, w: 200, h: 20 });
+
+      POST.push(postPanel, pa1, postInput, postInputLabel, postBb, postBbLabel, pa2,
+                postHidden, postHiddenLabel, pa3, postHead, postHeadLabel, pa4, postDist,
+                postOutLabel, postTitle, posterior.subPath, subLabel);
+      posterior.bellAnchor = { cx: pX, baselineY: ROW.histBaseline };
+
+      // =====================================================================
+      //  Attention hover: hovering a response column (after E(z)) draws the arc
+      //  from it back to E(z), with a matching-color "y attends to E(z)" label
+      //  above that arc. This is the only attention indicator (no persistent arc).
+      // =====================================================================
+      HOVER.arc = el("path", {
+        fill: "none", stroke: "var(--router-text)", "stroke-width": 1.7,
+        "stroke-dasharray": "4 3", "marker-end": "url(#ah-router)", opacity: 0,
+      });
+      lAttn.appendChild(HOVER.arc);
+      const HOVER_LABEL_W = 170;
+      HOVER.label = label(lLabels, "y \\text{ attends to } E(z)", COL.ez, ROW.attnPeak - 10,
+            { color: "var(--router-text)", size: 11.5, w: HOVER_LABEL_W, h: 20 });
+      HOVER.label.style.opacity = "0";
+      const arcTop = ROW.hidden - BOX.hiddenH / 2;
+      const arcAt = (sx) =>
+        `M ${sx} ${arcTop} C ${sx} ${ROW.attnPeak}, ${COL.ez} ${ROW.attnPeak}, ${COL.ez} ${arcTop}`;
+      // Draw the "y attends to E(z)" arc from column `c` back to E(z), with its label
+      // above the arc peak and E(z) emphasized. Shared by the hover handlers and the
+      // inference animation (so the arc looks identical in both).
+      // The arc reveals with a right-to-left swipe: a clip-path inset that starts
+      // collapsed at the response-token (right) end and opens toward E(z) (left), so
+      // the arrowhead lands on E(z) last — the attention "drawing" toward the latent.
+      // `dur` controls the swipe: snappy (~120ms) on hover, gentler (~320ms) in the
+      // animation. The label and E(z) emphasis fade in over the same duration.
+      HOVER.show = (c, { dur = 120 } = {}) => {
+        const midX = (c.x + COL.ez) / 2;   // arc midpoint, where its label sits
+        HOVER.arc.setAttribute("d", arcAt(c.x));
+        HOVER.arc.style.transition = "none";
+        HOVER.arc.style.opacity = "1";
+        HOVER.arc.style.clipPath = "inset(-20% 0 -20% 100%)";   // hidden (right edge)
+        void HOVER.arc.getBoundingClientRect();                  // flush before swiping
+        HOVER.arc.style.transition = `clip-path ${dur}ms ease`;
+        HOVER.arc.style.clipPath = "inset(-20% 0 -20% 0)";       // swiped fully open
+        HOVER.label.setAttribute("x", midX - HOVER_LABEL_W / 2);
+        HOVER.label.style.transition = `opacity ${dur}ms ease`;
+        HOVER.label.style.opacity = "1";
+        cols.ez.token.style.transition = `stroke-width ${dur}ms ease`;
+        cols.ez.token.style.strokeWidth = "2.6";
+      };
+      HOVER.hide = ({ dur = 120 } = {}) => {
+        HOVER.arc.style.transition = `opacity ${dur}ms ease`;
+        HOVER.arc.style.opacity = "0";
+        HOVER.label.style.transition = `opacity ${dur}ms ease`;
+        HOVER.label.style.opacity = "0";
+        cols.ez.token.style.transition = `stroke-width ${dur}ms ease`;
+        cols.ez.token.style.strokeWidth = "";
+      };
+      for (const id of ["lae", "y1", "yty"]) {
+        const c = cols[id];
+        const target = el("rect", {
+          x: c.x - 52, y: ROW.outLabel - 14, width: 104,
+          height: ROW.token - ROW.outLabel + 34,
+          fill: "transparent", "pointer-events": "all", cursor: "pointer",
+        });
+        target.addEventListener("mouseenter", () => HOVER.show(c));
+        target.addEventListener("mouseleave", () => HOVER.hide());
+        hoverLayer.appendChild(target);
+      }
+
+      // Click a bell to draw a fresh z (replaces the old resample button). Each
+      // hit area triggers a resample of whichever distribution is active.
+      for (const cx of [COL.lat, POST_X]) {
+        const hit = el("rect", {
+          x: cx - 44, y: ROW.histBaseline - 0.55 * CM - 8, width: 88, height: 0.55 * CM + 16,
+          fill: "transparent", "pointer-events": "all", cursor: "pointer",
+        });
+        hit.addEventListener("click", () => resample());
+        hoverLayer.appendChild(hit);
+      }
+
+      // Posterior starts hidden (Inference is the default mode).
+      for (const node of POST) node.style.opacity = "0";
+    }
+
+    // =====================================================================
+    //  Autoregressive build-up animation.
+    //
+    //  `play()` hides every generated element, then reveals the sequence column
+    //  by column. Vertical "flow" is shown by a small pulse dot traveling up the
+    //  arrows; at <lat> the dot instead travels the sample-feedback loop into
+    //  E(z). A monotonically increasing `runToken` cancels an in-flight run.
+    // =====================================================================
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    let runToken = 0;       // cancels in-flight play / resample animations
+    let vbToken = 0;        // cancels in-flight viewBox tweens
+    let mode = "inference"; // "inference" (router prior r_phi) or "training" (posterior q_xi)
+    let playBtn = null, infBtn = null, trainBtn = null;
+
+    function show(node, dur = 220) {
+      node.style.transition = `opacity ${dur}ms ease`;
+      node.style.opacity = "1";
+    }
+    function setAll(opacity) {
+      const full = opacity === "1";
+      for (const node of GEN) {
+        if (full) clearAppear(node);   // drop any half-finished appear transforms
+        node.style.transition = "none";
+        node.style.opacity = opacity;
+      }
+    }
+
+    const dotColor = strokeVar;
+    // Cubic ease-in-out — smoother accel/decel than the quadratic version.
+    const easeInOut = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+
+    // Animate a pulse dot, sampling positions from `at(progress)`.
+    function pulse(at, { color = "ink", dur = 220, r = 3.4 } = {}) {
+      return new Promise((resolve) => {
+        const myToken = runToken;
+        const c = el("circle", { r, fill: dotColor(color) });
+        const p0 = at(0);
+        c.setAttribute("cx", p0.x); c.setAttribute("cy", p0.y);
+        animLayer.appendChild(c);
+        const t0 = performance.now();
+        function frame(t) {
+          if (myToken !== runToken) { c.remove(); resolve(); return; }
+          const k = Math.min(1, (t - t0) / dur);
+          const pt = at(easeInOut(k));
+          c.setAttribute("cx", pt.x); c.setAttribute("cy", pt.y);
+          if (k < 1) requestAnimationFrame(frame);
+          else { c.remove(); resolve(); }
+        }
+        requestAnimationFrame(frame);
+      });
+    }
+    // Pulse along an SVG path element.
+    const pulseAlong = (pathEl, opts) => {
+      const len = pathEl.getTotalLength();
+      return pulse((e) => pathEl.getPointAtLength(len * e), opts);
+    };
+
+    // Glide a single dot up a column's centerline (yStart -> yEnd, y decreasing) in
+    // one continuous eased motion, firing each mark's callback as the dot passes its
+    // y. This replaces the stop-start per-segment pulses for a smooth column reveal.
+    function glide(x, yStart, yEnd, marks = [], { color = "ink", dur = 720, r = 3.6 } = {}) {
+      return new Promise((resolve) => {
+        const myToken = runToken;
+        const pending = marks.slice().sort((a, b) => b.y - a.y); // bottom (high y) first
+        const fireUpTo = (y) => { while (pending.length && y <= pending[0].y) pending.shift().fn(); };
+        const c = el("circle", { r, cx: x, cy: yStart, fill: dotColor(color) });
+        animLayer.appendChild(c);
+        const t0 = performance.now();
+        function frame(t) {
+          if (myToken !== runToken) { c.remove(); resolve(); return; }
+          const k = Math.min(1, (t - t0) / dur);
+          const y = yStart + (yEnd - yStart) * easeInOut(k);
+          c.setAttribute("cy", y);
+          fireUpTo(y);
+          if (k < 1) requestAnimationFrame(frame);
+          else { fireUpTo(yEnd); c.remove(); resolve(); }
+        }
+        requestAnimationFrame(frame);
+      });
+    }
+    const glideSeg = (x, y1, y2, opts) => glide(x, y1, y2, [], opts);
+    const easeOutCubic = (k) => 1 - Math.pow(1 - k, 3);
+
+    // ---- Semantic "appear" animations -----------------------------------
+    // A box pops in from a point (token boxes, router head).
+    function appearPop(node, { dur = 300 } = {}) {
+      node.style.transition = "none";
+      node.style.transformBox = "fill-box";
+      node.style.transformOrigin = "center";
+      node.style.transform = "scale(0.45)";
+      node.style.opacity = "0";
+      void node.getBoundingClientRect();
+      node.style.transition = `transform ${dur}ms cubic-bezier(.34,1.45,.6,1), opacity ${Math.round(dur * 0.6)}ms ease`;
+      node.style.transform = "scale(1)";
+      node.style.opacity = "1";
+    }
+    // A box rises/fills from its bottom edge (hidden states — flow upward).
+    function appearRise(node, { dur = 320 } = {}) {
+      node.style.transition = "none";
+      node.style.transformBox = "fill-box";
+      node.style.transformOrigin = "bottom";
+      node.style.transform = "scaleY(0.04)";
+      node.style.opacity = "0";
+      void node.getBoundingClientRect();
+      node.style.transition = `transform ${dur}ms cubic-bezier(.22,1,.36,1), opacity ${Math.round(dur * 0.5)}ms ease`;
+      node.style.transform = "scaleY(1)";
+      node.style.opacity = "1";
+    }
+    // Histogram bars grow from the baseline, staggered left -> right (the
+    // distribution forming sequentially).
+    function appearBars(distGroup, { rise = 220, stagger = 70 } = {}) {
+      distGroup.style.transition = "none";
+      distGroup.style.opacity = "1";
+      distGroup.querySelectorAll(".hbar").forEach((bar, i) => {
+        bar.style.transition = "none";
+        bar.style.transformBox = "fill-box";
+        bar.style.transformOrigin = "bottom";
+        bar.style.transform = "scaleY(0)";
+        bar.style.opacity = "0";
+        void bar.getBoundingClientRect();
+        setTimeout(() => {
+          bar.style.transition = `transform ${rise}ms cubic-bezier(.22,1,.36,1), opacity 130ms ease`;
+          bar.style.transform = "scaleY(1)";
+          bar.style.opacity = "1";
+        }, i * stagger);
+      });
+    }
+    // The bell curve draws left -> right (outline via stroke-dashoffset, fill fades).
+    function appearBell(distGroup, { dur = 660 } = {}) {
+      return new Promise((resolve) => {
+        distGroup.style.transition = "none";
+        distGroup.style.opacity = "1";
+        const fill = distGroup.querySelector(".bell-fill");
+        const outline = distGroup.querySelector(".bell-outline");
+        if (fill) { fill.style.transition = "none"; fill.style.opacity = "0"; }
+        const len = outline.getTotalLength();
+        outline.style.transition = "none";
+        outline.style.strokeDasharray = String(len);
+        outline.style.strokeDashoffset = String(len);
+        void outline.getBoundingClientRect();
+        outline.style.transition = `stroke-dashoffset ${dur}ms ease`;
+        outline.style.strokeDashoffset = "0";
+        if (fill) { fill.style.transition = `opacity ${dur}ms ease`; fill.style.opacity = "1"; }
+        setTimeout(resolve, dur);
+      });
+    }
+
+    // Place a bell marker at draw u (it rides the curve).
+    function setMarkerU(marker, anchor, u) {
+      marker.setAttribute("cx", anchor.cx + u * BELL_SX);
+      marker.setAttribute("cy", bellY(anchor.cx, anchor.baselineY, u));
+    }
+    // The sample dot appears, then visits a few real random draws — easing between
+    // them along the curve and decelerating (each hop a little slower, with a brief
+    // dwell) until it settles on the final draw. Conveys "sampling" without jitter.
+    async function wiggleMarker(marker, anchor, { dur = 1000, hops = 8 } = {}) {
+      const myToken = runToken;
+      const draws = Array.from({ length: hops }, () => clamp(gaussian() * 1.4, -1.35, 1.35));
+      const finalU = draws[hops - 1];
+      const weights = draws.map((_, i) => Math.pow(1.55, i));   // later hops take longer
+      const total = weights.reduce((a, b) => a + b, 0);
+
+      // Start from the marker's current position, so a resample click eases away
+      // from where the dot is rather than snapping to the peak first. During Play
+      // the dot is hidden at this point, so the start position is invisible anyway.
+      const startU = clamp((parseFloat(marker.getAttribute("cx")) - anchor.cx) / BELL_SX, -1.5, 1.5);
+      marker.style.transition = "opacity 130ms ease";
+      marker.style.opacity = "1";
+
+      let fromU = startU;
+      for (let i = 0; i < hops; i++) {
+        if (myToken !== runToken) break;
+        const seg = (weights[i] / total) * dur;
+        const ease = i === hops - 1 ? easeOutCubic : easeInOut;   // settle on the last hop
+        await tweenU(marker, anchor, fromU, draws[i], seg * 0.82, ease, myToken);
+        fromU = draws[i];
+        if (i < hops - 1) await sleep(seg * 0.18);                // brief dwell per candidate
+      }
+      if (myToken === runToken) setMarkerU(marker, anchor, finalU);
+    }
+    // Ease a bell marker from draw fromU to toU along the curve.
+    function tweenU(marker, anchor, fromU, toU, dur, ease, myToken) {
+      return new Promise((resolve) => {
+        const t0 = performance.now();
+        function frame(t) {
+          if (myToken !== runToken) { resolve(); return; }
+          const k = Math.min(1, (t - t0) / dur);
+          setMarkerU(marker, anchor, fromU + (toU - fromU) * ease(k));
+          if (k < 1) requestAnimationFrame(frame); else resolve();
+        }
+        requestAnimationFrame(frame);
+      });
+    }
+
+    // ---- Discrete token sampling (the histogram analogue of the bell ceremony) --
+    // Toggle a histogram bar between the neutral fill and the "selected" highlight
+    // (saturated generator-blue), matching the figure's token/generator color.
+    function setBarHighlight(bar, on) {
+      bar.style.transition = "fill 120ms ease";
+      bar.style.fill = on ? "var(--generator)" : "var(--hist-fill)";
+    }
+    // Sample a token from a formed histogram: visit a few random bars (highlighting
+    // each, decelerating with a growing dwell — same hop cadence as wiggleMarker),
+    // then settle on a final bar chosen with probability proportional to bar height
+    // and leave it highlighted. Returns { distGroup, bar } so the caller can fade it
+    // back to neutral when the realized token flashes on the next column.
+    async function sampleBars(distGroup, { hops = 6, dur = 600 } = {}) {
+      const myToken = runToken;
+      const bars = [...distGroup.querySelectorAll(".hbar")];
+      if (!bars.length) return null;
+      const heights = bars.map((b) => parseFloat(b.getAttribute("height")) || 0);
+
+      // Final pick weighted by bar height (sample proportional to probability).
+      const totalH = heights.reduce((a, b) => a + b, 0) || 1;
+      let r = Math.random() * totalH;
+      let finalIndex = heights.length - 1;
+      for (let i = 0; i < heights.length; i++) {
+        r -= heights[i];
+        if (r <= 0) { finalIndex = i; break; }
+      }
+      // Hop sequence: a few random candidates, then settle on finalIndex.
+      const hopIndices = Array.from({ length: hops - 1 }, () =>
+        Math.floor(Math.random() * bars.length));
+      hopIndices.push(finalIndex);
+
+      const weights = hopIndices.map((_, i) => Math.pow(1.55, i)); // later hops linger
+      const total = weights.reduce((a, b) => a + b, 0);
+
+      let prev = null;
+      for (let i = 0; i < hopIndices.length; i++) {
+        if (myToken !== runToken) break;
+        if (prev !== null && prev !== bars[hopIndices[i]]) setBarHighlight(prev, false);
+        const bar = bars[hopIndices[i]];
+        setBarHighlight(bar, true);
+        prev = bar;
+        await sleep((weights[i] / total) * dur);
+      }
+      if (myToken !== runToken) return null;
+      return { distGroup, bar: bars[finalIndex] };
+    }
+    // Realize the sampled token: highlight the token box (bump stroke) while the
+    // previously-sampled bar stays lit, hold both together briefly, then fade the
+    // token and the bar back to neutral in sync — the discrete sample "becoming" the
+    // next input. prevBar may be null.
+    function realizeToken(tokenBox, prevBar, { hold = 400, fade = 320 } = {}) {
+      tokenBox.style.transition = "stroke 140ms ease, stroke-width 140ms ease";
+      tokenBox.style.stroke = "var(--generator-text)";
+      tokenBox.style.strokeWidth = "2.6";
+      setTimeout(() => {
+        tokenBox.style.transition = `stroke ${fade}ms ease, stroke-width ${fade}ms ease`;
+        tokenBox.style.stroke = "";
+        tokenBox.style.strokeWidth = "";
+        if (prevBar) {
+          prevBar.style.transition = `fill ${fade}ms ease`;
+          prevBar.style.fill = "var(--hist-fill)";
+        }
+      }, hold);
+    }
+
+    // Clear lingering appear transforms/clips so the static "full" figure renders
+    // crisply (used when snapping to the full figure on cancel / mode switch).
+    function clearAppear(node) {
+      // Drop any appear transforms and sampling-ceremony highlights (bar fill / token
+      // stroke) so a re-Play starts from a neutral figure. The token-box flash is a
+      // GEN node itself (no children), so reset the node too, not just descendants —
+      // the timed reverts in realizeToken / setBarHighlight may be mid-flight on
+      // cancel.
+      const reset = (s) => {
+        s.transition = "none";
+        s.transform = "";
+        s.opacity = "";
+        s.strokeDasharray = "";
+        s.strokeDashoffset = "";
+        s.fill = "";
+        s.stroke = "";
+        s.strokeWidth = "";
+      };
+      reset(node.style);
+      node.style.clipPath = "";
+      if (node.querySelectorAll) {
+        for (const ch of node.querySelectorAll("*")) reset(ch.style);
+      }
+    }
+
+    // Reveal one column bottom-to-top: a flow dot glides each arrow segment with a
+    // subtle pause between segments, and each box "appears" with a semantic motion
+    // (tokens pop from a point, hidden states rise from their base, histograms form
+    // left-to-right). At <lat> the bell draws first, then the sample dot wiggles.
+    // Options (inference autoregressive ceremony):
+    //  sampleHere — after the histogram forms, sample a bar and hold it highlighted.
+    //  flashToken — flash this column's token as the realized sample of the previous draw.
+    //  fadePrev   — the previously-held { distGroup, bar } to fade back to neutral now.
+    //  attend     — show the "y attends to E(z)" arc while this token is generated,
+    //               then drop it as the histogram forms (response columns only).
+    //  keepToken  — the token box is given and already on screen (training tokens, and
+    //               the just-substituted E(z)): keep it in place instead of popping it.
+    //  dwell      — post-histogram pause (ms) for columns without the sampling ceremony.
+    //               Training passes a large value so its cadence matches Inference's
+    //               sampling-ceremony dwell instead of racing ahead. null = defaults.
+    // Returns the { distGroup, bar } held by this column (or null).
+    async function revealColumn(col, { sampleHere = false, flashToken = false, fadePrev = null, attend = false, keepToken = false, dwell = null } = {}) {
+      const myToken = runToken;
+      const live = () => myToken === runToken;
+      const flow = "ink";   // generator-flow color for the lower part of every column
+      let held = null;
+
+      const yTokTop = ROW.token - BOX.tokenH / 2;
+      const yHidBot = ROW.hidden + BOX.hiddenH / 2;
+      const yHidTop = ROW.hidden - BOX.hiddenH / 2;
+      const yDist = ROW.histBaseline + DIST_TIP;
+
+      // token expands from a point (unless keepToken: it is given and stays in place,
+      // e.g. the training tokens and the just-substituted E(z)). If it is the realized
+      // sample of the previous histogram, highlight it while the sampled bar holds,
+      // then fade both together. As this token starts, fade out the previous token's
+      // attention arc ("kept there until the next token").
+      if (!keepToken) { appearPop(col.token); show(col.tokenLabel, 260); }
+      HOVER.hide({ dur: 280 });
+      if (flashToken) realizeToken(col.token, fadePrev && fadePrev.bar);
+      else if (fadePrev) setBarHighlight(fadePrev.bar, false);
+      await sleep(190); if (!live()) return held;
+
+      // token -> backbone.
+      show(col.arrows[0]);
+      await glideSeg(col.x, yTokTop, ROW.backboneBot, { color: flow, dur: 280 });
+      if (!live()) return;
+      await sleep(80); if (!live()) return;
+
+      // backbone -> hidden; the hidden state rises from its base.
+      show(col.arrows[1]);
+      await glideSeg(col.x, ROW.backboneTop, yHidBot, { color: flow, dur: 280 });
+      if (!live()) return;
+      appearRise(col.hidden); show(col.hiddenLabel, 260);
+      await sleep(150); if (!live()) return;
+
+      if (col.isLat) {
+        // hidden -> router head (pops) -> bell (draws), then z is sampled (wiggle).
+        show(col.arrows[2]);
+        await glideSeg(col.x, yHidTop, ROW.head + BOX.headH / 2, { color: "router", dur: 260 });
+        if (!live()) return;
+        appearPop(col.head); show(col.headLabel, 240);
+        await sleep(150); if (!live()) return;
+
+        show(col.arrows[3]);
+        await glideSeg(col.x, ROW.head - BOX.headH / 2, yDist, { color: "router", dur: 260 });
+        if (!live()) return;
+        // bell appears first (slower, emphasized); keep the sample dot hidden for now.
+        extras.routerSample.style.opacity = "0";
+        await appearBell(col.dist, { dur: 680 });
+        show(col.outLabel, 260);
+        if (!live()) return;
+        await sleep(240); if (!live()) return;
+
+        // then the sample dot appears, wiggles (random draw), and travels into E(z).
+        await wiggleMarker(extras.routerSample, { cx: COL.lat, baselineY: ROW.histBaseline }, { dur: 1050 });
+        if (!live()) return;
+        await sleep(200); if (!live()) return;
+        show(extras.feedbackPath); show(extras.feedbackLabel);
+        await pulseAlong(extras.feedbackPath, { color: "router", dur: 980, r: 4 });
+        if (!live()) return;
+      } else {
+        // Response tokens attend to the latent: gently fade in the "y attends to
+        // E(z)" arc as this token's hidden state feeds forward, and leave it up. It
+        // is cleared when the next token starts (the HOVER.hide on token-appear
+        // above), so the arc stays for the whole token. (Same arc as the hover.)
+        if (attend) HOVER.show(col, { dur: 320 });
+        // hidden -> histogram; the bars form left-to-right.
+        show(col.arrows[2]);
+        await glideSeg(col.x, yHidTop, yDist, { color: flow, dur: 300 });
+        if (!live()) return held;
+        appearBars(col.dist); show(col.outLabel, 260);
+        if (sampleHere) {
+          // let all bars finish forming (appearBars staggers ~500ms), then sample one.
+          await sleep(560); if (!live()) return held;
+          held = await sampleBars(col.dist);
+          if (!live()) return held;
+          await sleep(120);
+        } else if (attend) {
+          // No discrete sampling here (Training reconstructs the given y), but let the
+          // attention arc linger so it visibly stays until the next token starts —
+          // matching the dwell the sampling ceremony gives it in Inference.
+          await sleep(dwell ?? 900); if (!live()) return held;
+        } else {
+          // A plain column (e.g. Training's E(z) -> p(</lat>)). Without sampling or an
+          // arc, dwell a bit less than the attend columns, but still enough that
+          // Training does not race past it.
+          await sleep(dwell ? Math.round(dwell * 0.6) : 150); if (!live()) return held;
+        }
+      }
+      return held;
+    }
+
+    // Play is mode-aware: it animates the current mode's story (and stays in that
+    // mode). Each run draws a fresh z.
+    async function play() {
+      runToken++;
+      const myToken = runToken;
+      if (playBtn) playBtn.disabled = true;
+      clearDots();
+      if (mode === "training") await playTraining(myToken);
+      else await playInference(myToken);
+      if (myToken === runToken && playBtn) playBtn.disabled = false;
+    }
+
+    // Which generated-response histograms get the discrete-sampling ceremony, and
+    // which tokens flash as the realized sample. The prompt histograms (x1, xtx) and
+    // the terminal EOS histogram (yty) just form; x is given, EOS ends the sequence.
+    const CEREMONY_HISTS = new Set(["ez", "lae", "y1"]);    // sample a bar here, then hold it
+    const REALIZED_TOKENS = new Set(["lae", "y1", "yty"]);  // flash this token as that sample
+    const ATTEND_LATENT = new Set(["lae", "y1", "yty"]);    // show the E(z) attention arc here
+
+    // Where the inference Play animation begins.
+    //   true  — begin at the <lat> latent slot. The x-prompt (x1 … x_{t_x}) is shown
+    //           immediately as given context, then the animation samples z and
+    //           generates the response. This matches inference practice: at run time
+    //           x is the provided prompt; only z and y are produced by the model.
+    //   false — begin at the very start (x_1) and reveal the whole sequence,
+    //           including the prompt, column by column.
+    const INFERENCE_START_AT_LATENT = true;
+
+    // Reveal a whole column instantly (no per-element animation), used to drop the
+    // given x-prompt onto the canvas before the latent animation starts.
+    function showColumnInstant(col) {
+      const nodes = [col.token, col.tokenLabel, col.hidden, col.hiddenLabel,
+                     col.dist, col.outLabel, ...col.arrows];
+      if (col.head) nodes.push(col.head, col.headLabel);
+      for (const n of nodes) { n.style.transition = "none"; n.style.opacity = "1"; }
+    }
+
+    // Reveal columns [startIndex .. end] as the autoregressive generation: each
+    // column glides up through its arrows, the histogram forms and a token is sampled
+    // (discrete ceremony), the realized token flashes, and response tokens show the
+    // attention arc back to E(z). Shared by Inference (sampling z at <lat> then
+    // generating) and Training (the generator producing the response from the
+    // posterior-substituted z). With keepToken the token boxes are left in place
+    // (given), so only the generation flow is animated. With sampling=false the
+    // discrete bar-sampling ceremony (and its realized-token flash) is skipped — the
+    // histograms just form — used by Training, which reconstructs the given y rather
+    // than sampling it.
+    async function revealSequence(myToken, startIndex, { keepToken = false, sampling = true, dwell = null } = {}) {
+      let heldBar = null;       // sampled bar awaiting its realized token, or null
+      for (let i = startIndex; i < ORDER.length; i++) {
+        const id = ORDER[i];
+        if (myToken !== runToken) return;
+        if (id === "xtx") show(extras.gEllipX);   // "more x tokens" once the prompt is in
+        if (id === "yty") show(extras.gEllipY);   // "more y tokens" as the response runs on
+        heldBar = await revealColumn(cols[id], {
+          sampleHere: sampling && CEREMONY_HISTS.has(id),
+          flashToken: sampling && REALIZED_TOKENS.has(id),
+          fadePrev: heldBar,
+          attend: ATTEND_LATENT.has(id),
+          keepToken,
+          dwell,
+        });
+        await sleep(55);
+      }
+      // The final response token has no "next token" to clear its arc; hold it a
+      // moment, then fade it out so the figure rests clean.
+      await sleep(420); if (myToken !== runToken) return;
+      HOVER.hide({ dur: 320 });
+    }
+
+    // Hide a column's generation flow (hidden state, arrows, histogram, output label,
+    // router head) while keeping its given token box visible — used by Training to
+    // re-animate the generator producing the response from the latent.
+    function hideColumnGeneration(col) {
+      const nodes = [col.hidden, col.hiddenLabel, col.dist, col.outLabel, ...col.arrows];
+      if (col.head) nodes.push(col.head, col.headLabel);
+      for (const n of nodes) { n.style.transition = "none"; n.style.opacity = "0"; }
+    }
+
+    // Inference: hide the generated sequence, then glide it back column by column.
+    // Starts at x_1 or at <lat> depending on INFERENCE_START_AT_LATENT.
+    async function playInference(myToken) {
+      setAll("0");              // hide generated elements (backbone stays visible)
+      HOVER.hide();             // clear any leftover attention arc from a prior run
+
+      // When starting at the latent, paint the given x-prompt back in immediately
+      // (in the same tick, so the blank state is never shown), and begin the
+      // animated reveal at <lat>.
+      const latIndex = ORDER.indexOf("lat");
+      let startIndex = 0;
+      if (INFERENCE_START_AT_LATENT) {
+        for (let i = 0; i < latIndex; i++) showColumnInstant(cols[ORDER[i]]);
+        show(extras.gEllipX);   // "more x tokens" ellipsis is part of the prompt
+        startIndex = latIndex;
+      }
+
+      await sleep(180); if (myToken !== runToken) return;
+      await revealSequence(myToken, startIndex);
+    }
+
+    // Training (variational step): over the full figure, the posterior reads the
+    // given (x,y), samples z, substitutes it at E(z), and the generator reconstructs
+    // y. The router r_phi stays dimmed; only the y-outputs are "reconstructed".
+    async function playTraining(myToken) {
+      setAll("1");
+      applyModeVisuals(false);   // posterior shown, router dimmed
+      clearDots();
+      HOVER.hide();              // clear any leftover attention arc from a prior run
+
+      // Hide the generation the generator will produce from z: the latent-region
+      // (E(z)'s hidden state + p(</lat>) histogram) and the response columns' hidden
+      // states, arrows, and histograms. The token boxes stay (the (x, y) pair is
+      // given to the posterior) and E(z) stays in place to receive z.
+      const genIds = ["ez", "lae", "y1", "yty"];
+      for (const id of genIds) hideColumnGeneration(cols[id]);
+      extras.gEllipY.style.transition = "none"; extras.gEllipY.style.opacity = "0";
+      await sleep(260); if (myToken !== runToken) return;
+
+      // 1. posterior reads (x,y) -> computes q_xi: glide up the posterior column.
+      await glideSeg(POST_X, ROW.token - BOX.tokenH / 2, ROW.histBaseline + DIST_TIP,
+                     { color: "posterior", dur: 900 });
+      if (myToken !== runToken) return;
+      await sleep(160);
+
+      // 2. sample z from q_xi (wiggle), then substitute it at E(z).
+      posterior.sample.style.opacity = "0";
+      await wiggleMarker(posterior.sample, posterior.bellAnchor, { dur: 950 });
+      if (myToken !== runToken) return;
+      await sleep(160);
+      await pulseAlong(posterior.subPath, { color: "posterior", dur: 1000, r: 4 });
+      if (myToken !== runToken) return;
+      flashEz();
+      await sleep(240);
+
+      // 3. the generator produces the latent-region (</lat>) and the response from z,
+      //    like inference (arrows, attention-to-latent arcs) — but the given token
+      //    boxes are kept in place and the discrete bar-sampling ceremony is skipped
+      //    (Training reconstructs the given y, it does not sample it).
+      // dwell ~ the Inference sampling-ceremony duration, so Training paces the same
+      // even though it skips the bar sampling.
+      await revealSequence(myToken, ORDER.indexOf("ez"), { keepToken: true, sampling: false, dwell: 1300 });
+    }
+
+    function clearDots() {
+      if (animLayer) while (animLayer.firstChild) animLayer.removeChild(animLayer.firstChild);
+    }
+
+    // =====================================================================
+    //  Inference <-> Training mode. The generator phi is unchanged; only the
+    //  source of z differs (router prior r_phi vs. training posterior q_xi).
+    //  Training reveals the right-hand posterior panel and widens the viewBox.
+    // =====================================================================
+    function showPosterior(on, animate = true) {
+      for (const node of POST) {
+        node.style.transition = animate ? "opacity 300ms ease" : "none";
+        node.style.opacity = on ? "1" : "0";
+      }
+    }
+    function dimSampleLoop(on) {
+      // In Training the router still computes r_phi, but its sample is replaced
+      // by the posterior's — so the magenta loop recedes rather than disappears.
+      for (const node of extras.sampleLoop) {
+        node.style.transition = "opacity 300ms ease";
+        node.style.opacity = on ? "0.25" : "1";
+      }
+    }
+    function applyModeVisuals(animate = true) {
+      const training = mode === "training";
+      showPosterior(training, animate);
+      dimSampleLoop(training);
+      // the sample dots are part of the resting figure (a wiggle may have left the
+      // posterior one hidden); ensure both markers are visible.
+      if (posterior.sample) { posterior.sample.style.transition = "none"; posterior.sample.style.opacity = "1"; }
+      if (extras.routerSample) { extras.routerSample.style.transition = "none"; extras.routerSample.style.opacity = "1"; }
+      if (infBtn) infBtn.setAttribute("aria-pressed", String(!training));
+      if (trainBtn) trainBtn.setAttribute("aria-pressed", String(training));
+    }
+    function tweenViewBox(targetW, animate) {
+      const svg = document.getElementById("arch-svg");
+      const setW = (w) => svg.setAttribute("viewBox", `0 0 ${w} ${VIEW_H}`);
+      if (!animate) { vbToken++; setW(targetW); return; }
+      const cur = svg.viewBox.baseVal.width || VIEW_W_INF;
+      const myToken = ++vbToken;
+      const t0 = performance.now(), dur = 420;
+      function frame(t) {
+        if (myToken !== vbToken) return;
+        const k = Math.min(1, (t - t0) / dur);
+        setW(cur + (targetW - cur) * easeInOut(k));
+        if (k < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    function setMode(target, animate = true) {
+      mode = target;
+      applyModeVisuals(animate);
+      tweenViewBox(mode === "training" ? VIEW_W_TRAIN : VIEW_W_INF, animate);
+    }
+    function switchMode(target) {
+      if (target === mode) return;
+      runToken++;            // stop any running play
+      clearDots();
+      HOVER.hide();          // clear any attention arc left up by an inference play
+      setAll("1");           // ensure the full static figure before switching
+      if (playBtn) playBtn.disabled = false;
+      setMode(target, true);
+    }
+
+    // =====================================================================
+    //  Resample z: clicking a bell runs the same sampling animation as Play —
+    //  the dot hops among random draws and settles — then travels into E(z).
+    //  The active distribution is the router bell (Inference) or q_xi (Training).
+    // =====================================================================
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const gaussian = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
+    function flashEz() {
+      const t = cols.ez.token;
+      t.style.transition = "stroke-width 140ms ease";
+      t.style.strokeWidth = "2.8";
+      setTimeout(() => { t.style.strokeWidth = "1.4"; }, 380);
+    }
+    let resampleBusy = false;
+    async function resample() {
+      // Ignore while a Play is running or another resample is in flight.
+      if (resampleBusy || (playBtn && playBtn.disabled)) return;
+      resampleBusy = true;
+      try {
+        const training = mode === "training";
+        const anchor = training ? posterior.bellAnchor : { cx: COL.lat, baselineY: ROW.histBaseline };
+        const marker = training ? posterior.sample : extras.routerSample;
+        const path = training ? posterior.subPath : extras.feedbackPath;
+        const color = training ? "posterior" : "router";
+        await wiggleMarker(marker, anchor, { dur: 900 });
+        await pulseAlong(path, { color, dur: 850, r: 4 });
+        flashEz();
+      } finally {
+        resampleBusy = false;
+      }
+    }
+
+    // KaTeX is deferred; build and wire controls once it is ready.
+    function whenKatexReady(fn) {
+      if (window.katex) { fn(); return; }
+      const t = setInterval(() => {
+        if (window.katex) { clearInterval(t); fn(); }
+      }, 25);
+    }
+    whenKatexReady(() => {
+      build();
+      playBtn = document.getElementById("play-btn");
+      infBtn = document.getElementById("mode-inf");
+      trainBtn = document.getElementById("mode-train");
+      playBtn.addEventListener("click", play);
+      infBtn.addEventListener("click", () => switchMode("inference"));
+      trainBtn.addEventListener("click", () => switchMode("training"));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+---
+title: "Learning Strategy-Aligned Latent-Variable Factorizations of Language Models"
+type: "paper"
+aliases:
+  - "Disentangling Latent LLM Modes"
+  - "Strategy-Aligned Latent-Variable Factorizations"
+date: "2026-06-05"
+summary: "Recovering a disentangled, strategy-aligned latent-variable factorization of a pretrained language model, and the model-directed reconstruction objective that makes it possible despite posterior collapse at initialization."
+tags: ["large language models", "latent variable models", "variational inference", "disentanglement", "reasoning strategies"]
+links: ["research", "./cot-info"]
+authors:
+  - name: "Awni Altabaa"
+    affiliation: "Yale University"
+  - name: "John Lafferty"
+    affiliation: "Yale University"
+featured: false
+bibtex: |
+  @misc{altabaa2026strategyaligned,
+    title={Learning Strategy-Aligned Latent-Variable Factorizations of Language Models},
+    author={Awni Altabaa and John Lafferty},
+    year={2026}
+  }
+---
+
+When used for reasoning tasks, a language model $p_\theta(y \mid x)$ defines a distribution over response sequences $y$ that implicitly use certain high-level *strategies* to solve an input problem $x$. A model asked to prove a theorem may produce a proof by contradiction, induction, or construction; a model asked to solve a programming problem may formulate it as dynamic programming, graph search, or a greedy algorithm. Such strategies recur across many input problems, but they are represented only implicitly: they are *entangled* in the model's hidden states rather than exposed as a separable variable that can be identified or intervened on during generation.
+
+This work studies the problem of recovering a disentangled representation of these implicit strategies from a *pretrained* language model. We seek a **router–generator factorization** $(r_\phi(z \mid x),\, g_\phi(y \mid x, z))$ of the base model, where a router $r$ assigns a latent strategy $z$ to each input and a strategy-conditioned generator $g$ produces the response conditioned on that strategy. The goal is to find a factorization that preserves the observable response distribution, so that $\int r_\phi(z \mid x)\, g_\phi(y \mid x, z)\, dz =: p_\phi(y \mid x) \approx p_\theta(y \mid x)$, while making $z$ informative and strategy-aligned: varying $z$ should change which strategy the generator uses, and the same latent value should carry the same strategy meaning across related inputs.
+
+<Figure>
+  <ToggleFigure slot="figure" ariaLabel="Concept figure states" defaultValue="implicit">
+    <ToggleFigurePanel label="Implicit mixture" value="implicit">
+      <Picture src="/writing/research/disentangling-latent-llm-modes/figs/concept-1-implicit.png" alt="Output space of a pretrained LM showing an entangled gray distribution over responses, annotated with proof-opening callouts for different strategies." invertInDarkMode />
+    </ToggleFigurePanel>
+    <ToggleFigurePanel label="Misaligned latent" value="misaligned">
+      <Picture src="/writing/research/disentangling-latent-llm-modes/figs/concept-2-misaligned.png" alt="The same output space colored by a latent that is informative but not aligned with strategies; colored regions overlap without separating into strategies." invertInDarkMode />
+    </ToggleFigurePanel>
+    <ToggleFigurePanel label="Strategy-aligned" value="aligned">
+      <Picture src="/writing/research/disentangling-latent-llm-modes/figs/concept-3-aligned.png" alt="The same output space colored by a strategy-aligned latent; strategies separate into distinct regions labeled proof by induction, contradiction, contrapositive, and algebraic manipulation." invertInDarkMode />
+    </ToggleFigurePanel>
+  </ToggleFigure>
+  <Fragment slot="caption">
+    **Latent strategy structure in output space.** Toggle between three states: the pretrained LM's implicit mixture over strategies $p_\theta(y \mid x)$; a latent $z$ that is informative but *misaligned* with strategies; and a *strategy-aligned* $z$ that disentangles the strategies in latent space while preserving the base distribution.
+  </Fragment>
+</Figure>
+
+## The problem: factorizing, not relearning
+
+This problem is distinct from standard latent-variable generative modeling. In VAE-style methods, the latent-variable model is trained from data, and the target distribution is not already represented at initialization. Here, $p_\theta(y \mid x)$ is not a target to be relearned from data; it is the already-represented response law whose latent strategy structure we aim to expose.
+
+The objective cannot be merely to fit the latent marginal $p_\phi(y \mid x)$ to the base model distribution. For expressive router–generator classes, many factorizations can induce nearly the same distribution over $y$ after integrating out $z$. One extreme ignores $z$, with $g_\phi(y \mid x, z)$ reproducing the base model distribution for all $z$. More generally, a marginal-preserving factorization may use $z$ for input-specific partitions, surface form, or other predictive details rather than reusable strategy structure. The problem is therefore not ordinary latent-variable modeling of $p_\theta(y \mid x)$, but **selection among marginal-preserving factorizations** for one whose latent variable is informative and strategy-aligned.
+
+This imposes two distinct requirements. *Within-input strategy separation* asks whether varying $z$ changes the strategy used for a fixed input $x$. The stronger requirement is *cross-input semantic consistency*: a latent value or region should retain its strategy meaning across related inputs. Only with this stability does $z$ behave like a reusable strategy variable, rather than an input-specific response index.
+
+## The core obstacle: posterior collapse at initialization
+
+Because the pretrained generator already captures $p_\theta(y \mid x)$ without any latent variable, this setting creates a pathological form of posterior collapse. A factorization that ignores $z$ — by reproducing the base model's response law for every $z$ — is available at initialization and is a stable optimum for any objective that only fits the observable response distribution.
+
+The standard negative conditional ELBO satisfies the identity
+
+$$
+\calJ_{\mathrm{cELBO}}(x,y;\phi,\xi)
+= -\log p_\phi(y \mid x)
++ \KL\!\left( q_\xi(\cdot \mid x,y) \,\Vert\, p_\phi(\cdot \mid x,y) \right).
+$$
+
+Thus the standard variational objective asks the induced marginal to match the observed response law, and asks $q_\xi$ to match the posterior of whichever factorization produced that marginal. It does not ask whether $z$ explains variation in $y$ beyond $x$, nor whether the resulting latent is strategy-aligned. If the generator class can represent the base model while ignoring $z$, then setting $g_\phi(y \mid x, z) = p_\theta(y \mid x)$ for all $z$ and $q_\xi(z \mid x, y) = r_\phi(z \mid x)$ preserves the base marginal and attains the objective's optimum, leaving the latent inert even though $p_\phi(y \mid x) = p_\theta(y \mid x)$. With expressive generators built from pretrained language models, this $z$-ignoring factorization is not only available, but also close to initialization, making it a likely attractor for optimization.
+
+<EmbedFrame
+  src="/writing/research/disentangling-latent-llm-modes/interactive/elbo-failure.html?autoplay=1"
+  title="ELBO training can preserve fidelity while leaving the latent unused"
+  height="400px"
+  autoFit
+  linkLabel="Open interactive figure"
+>
+  <Fragment slot="caption">
+    **ELBO training can preserve fidelity while leaving the latent unused.** Distributional fidelity rises, posterior–router KL collapses relative to initialization, and strategy alignment remains low.
+  </Fragment>
+</EmbedFrame>
+
+## The method: model-directed reconstruction pressure
+
+The ELBO failure shows that marginal fidelity is not enough: a factorized model can preserve $p_\theta(y \mid x)$ while leaving $z$ unused. We address this selection problem with a **model-directed reconstruction term** that replaces marginal-fit pressure with reconstruction pressure directed by the base model itself.
+
+We implement the factorization by *adapting* a pretrained Transformer into three roles. The router $r_\phi(z \mid x)$ reads the input and produces a distribution over latent strategy values; the strategy-conditioned generator $g_\phi(y \mid x, z)$ generates the response autoregressively while attending to an embedding $E(z)$ of the latent strategy, inserted as a pseudo-token; and a training-time posterior $q_\xi(z \mid x, y)$ reads the full input–response pair to provide variational training signal. The router and generator are a single autoregressive model with shared parameters $\phi$, adapted from the base parameters via LoRA-style low-rank updates so the generator inherits the base response law rather than relearning it.
+
+<EmbedFrame
+  src="/writing/research/disentangling-latent-llm-modes/interactive/architecture.html"
+  title="Autoregressive router–generator Transformer architecture"
+  height="420px"
+  autoFit
+  linkLabel="Open interactive figure"
+>
+  <Fragment slot="caption">
+    **Autoregressive router–generator Transformer architecture.** The adapted Transformer $\phi$ implements both the router $r_\phi(z \mid x)$, which reads the prompt and produces a latent distribution, and the strategy-conditioned generator $g_\phi(y \mid x, z)$, which attends to $E(z)$ while generating the response. During variational training, $q_\xi(z \mid x, y)$ infers $z$ from the full input–response pair. (Toggle *Inference ↔ Training* and press *Play*.)
+  </Fragment>
+</EmbedFrame>
+
+The core idea is to use the base model $p_\theta$ to *adaptively* rescale the reconstruction loss and direct reconstruction pressure toward tokens where the base model is uncertain. We instantiate this with token-level base model surprisal $b_{\theta,t}(x,y) = -\log p_\theta(y_t \mid x, y_{<t})$, which measures how much uncertainty remains about $y_t$ after conditioning on $x$ and $y_{<t}$, giving a local estimate of where $z$ can explain variation beyond the $z$-free prefix model. This token-level view matters because autoregressive responses quickly become partially self-predictable: after an early commitment, many later tokens may be determined by $x$ and $y_{<t}$, even if the commitment itself reflects a strategy choice. The reconstruction term therefore substitutes uniform token pressure with $p_\theta$-surprisal-directed pressure, assigning more weight to **branch points** where the base model leaves multiple continuations plausible.
+
+<Figure>
+  <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/token-weighting.png" alt="Left: a response path with high-surprisal branch points and determined positions, with next-token distribution glyphs above each node. Right: base model surprisal above each token and the corresponding reconstruction weight below it." invertInDarkMode />
+  <Fragment slot="caption">
+    **Token-level $p_\theta$ surprisal weighting.** Left: a response path with *branch points*, where several next tokens remain plausible, and *determined positions*, where the next token is mostly fixed by $x$ and earlier response tokens. Right: $z$-free base model surprisal $b_{\theta,t}(x,y)$ above each token and the corresponding token weight below it; higher-surprisal positions receive more reconstruction pressure.
+  </Fragment>
+</Figure>
+
+<Statement label="Objective" title="Model-directed reconstruction" accent="accent">
+The proposed objective combines a normalized, surprisal-weighted reconstruction term with the router KL:
+
+$$
+\calJ_\theta(x,y;\phi,\xi)
+= \calR_\theta(x,y;\phi,\xi)
++ \beta\, \KL\!\left( q_\xi(\cdot \mid x,y) \,\Vert\, r_\phi(\cdot \mid x) \right),
+$$
+
+$$
+\calR_\theta(x,y;\phi,\xi)
+= \frac{1}{c_\theta}\,
+\expectunder{z \sim q_\xi(\cdot \mid x,y)}{
+  \sum_{t=1}^{T_y} a_{\theta,t}(x,y)\,\bigl[-\log g_\phi(y_t \mid x, z, y_{<t})\bigr]
+},
+$$
+
+$$
+a_{\theta,t}(x,y) = \alpha\, \frac{1}{T_y} + (1-\alpha)\, w_{\theta,t}^{(\gamma)}(x,y),
+\qquad
+c_\theta = \expectunder{x \sim \calD_X,\; y \sim p_\theta(\cdot \mid x)}{ b_\theta(x,y) }.
+$$
+
+The global scale $c_\theta$ expresses reconstruction in base model reference units, keeping it comparable to the KL term even when the base model already has low $z$-free loss. The interpolation $\alpha \in [0,1]$ mixes uniform pressure with surprisal-directed weights $w_{\theta,t}^{(\gamma)}$ (a normalized power of token surprisal, concentration controlled by $\gamma$). The term is calibrated so that $\calR_\theta = 1$ when the generator matches the base model, and can be read as the *fraction* of base model response loss that remains after conditioning on $z$.
+</Statement>
+
+Together, this objective pressures $z$ to explain residual variation that is not already determined by $x$, rather than reconstructing what the base model already captures.
+
+## Benchmark and empirical results
+
+We evaluate on a controlled multi-strategy algorithmic benchmark designed to make strategy alignment measurable. The benchmark covers six task families — list summation, sorting algorithms, grid pathfinding, linear equation solving, base conversion, and multidigit addition — where solution traces instantiate task-specific procedures for reaching the same valid answer. Traces are parseable and can be assigned reference strategy attributions; these labels are withheld during training and used only for evaluation. We report two axes: **Distributional Fidelity** (does the factorized model still produce valid solution traces?) and **Strategy Alignment** (does the learned latent achieve cross-input semantic consistency?).
+
+**Strategy information is already present in the base model.** For each task and token position, a lightweight linear probe on the base model's hidden states can predict the reference strategy annotation. Strategy information is broadly decodable across the benchmark, especially at positions where strategy-specific computation is expressed. This establishes the premise for factorization: the target structure is present in the base model, but is not exposed as a reusable latent variable that can be sampled, transferred, or compared across inputs.
+
+<Figure>
+  <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/entanglement-heatmap.png" alt="Heatmap with rows as benchmark tasks and columns as normalized token positions; color gives linear-probe accuracy for predicting the ground-truth strategy from the entangled base model's hidden states." invertInDarkMode />
+  <Fragment slot="caption">
+    **Strategy labels are decodable from base model hidden states.** Rows are benchmark tasks, columns are normalized token positions, and color gives linear-probe accuracy for predicting the ground-truth strategy from hidden states of the entangled base model.
+  </Fragment>
+</Figure>
+
+**The proposed objective recovers strategy-aligned latents; ELBO does not.** Across pretrained Qwen2.5 runs, ELBO-style baselines preserve Distributional Fidelity but leave the latent inert or strategy-unaligned, while the model-directed reconstruction objective and its variants recover strategy-aligned latents *and* preserve the base model response distribution. An ablation that weights reconstruction by *inverse* surprisal — emphasizing low-surprisal tokens — weakens Strategy Alignment, supporting the view that the gains come from pressuring $z$ to explain strategy-relevant residual surprisal.
+
+<Figure>
+  <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/method-comparison.png" alt="Bar chart over objective variants and two model sizes; bars show Distributional Fidelity and Strategy Alignment, with open points for per-task values and hatching marking baselines and ablations." invertInDarkMode />
+  <Fragment slot="caption">
+    **Method comparison on pretrained Qwen2.5 runs.** For each objective variant and model size, bars show Distributional Fidelity and Strategy Alignment, with open points giving per-task values. Strategy Alignment denotes cross-input latent strategy alignment measured by Analogical Consistency. Hatching marks baselines and ablations.
+  </Fragment>
+</Figure>
+
+The latent dynamics provide complementary geometric evidence: posterior latents that begin as an overlapping cloud separate into task- and strategy-structured regions over training. In the multi-task setting this organization is task-conditioned rather than a single global strategy codebook — the same latent regions can carry different strategy meanings for different task families, a multiplexing that is visible in linear diagnostics.
+
+<Figure>
+  <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/posterior-geometry.png" alt="Six PCA panels of posterior mean latents at increasing fractions of training; an initially overlapping cloud separates into task- and strategy-specific regions, colored by task and strategy." invertInDarkMode />
+  <Fragment slot="caption">
+    **Posterior latent geometry over training.** Each panel is a PCA projection of posterior mean latents at the indicated fraction of training. Points are colored by task and strategy; the initially overlapping cloud separates into task- and strategy-specific regions over training.
+  </Fragment>
+</Figure>
+
+**Cross-input semantic consistency.** A latent variable can separate strategies locally for each input while failing to give $z$ a stable strategy meaning across inputs. We therefore evaluate the stronger notion of Strategy Alignment via **Analogical Consistency**: sample a source input $X$, draw $Z \sim r_\phi(\cdot \mid X)$, reuse the same $Z$ on a related target input $X'$, and check whether the responses $Y$ and $Y'$ use the same inferred strategy, $\operatorname{AnalogicalConsistency} = \prob{\operatorname{strat}(Y) = \operatorname{strat}(Y')}$. High Strategy Alignment means $Z$ carries the same strategy meaning across inputs — so the latent transfers the same strategy from one problem to another.
+
+**What drives the alignment gains.** Examining training trajectories in fidelity–alignment phase space, an underspecified objective can move toward high Distributional Fidelity without moving toward high Strategy Alignment. Across all methods, the token-weighted reconstruction loss tracks Strategy Alignment: alignment improves precisely when $z$ is pressured to explain response regions where the frozen base model still has strategy-relevant residual surprisal.
+
+<TwoColumns>
+  <Figure slot="left">
+    <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/fidelity-alignment-phase-space.png" alt="Training trajectories in fidelity-alignment phase space; proposed variants move up and to the right toward high alignment and high fidelity, while ELBO baselines and the inverse-surprisal ablation increase fidelity without gaining alignment." invertInDarkMode />
+    <Fragment slot="caption">
+      Training trajectories in fidelity–alignment phase space for different objective variants.
+    </Fragment>
+  </Figure>
+  <Figure slot="right">
+    <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/token-recon-vs-alignment.png" alt="Scatter of token-weighted reconstruction loss versus Strategy Alignment at training endpoints; lower token-weighted reconstruction loss is associated with higher strategy alignment across all methods." invertInDarkMode />
+    <Fragment slot="caption">
+      Token-weighted reconstruction loss versus Strategy Alignment at training endpoints; outlined points show method centroids and translucent points show individual runs.
+    </Fragment>
+  </Figure>
+</TwoColumns>
+
+## A theory of strategy-structure recovery
+
+To understand *when* the variational approach can identify a latent variable $Z$ that aligns with a target strategy structure $S^\star$ implicit in the pretrained model, we study a population complexity-penalized variational objective $\calL_{\beta,\lambda}(q,r,g)$, where $C(r,g)$ is a theoretical proxy for the architecture, parameterization, and optimization biases that favor simple router–generator factorizations. Profiling over $r$ and $g$ shows that minimizing $\calL_{\beta,\lambda}$ is equivalent to maximizing
+
+$$
+\calJ^{\mathrm{prof}}_{\beta,\lambda}(q) := I_q(Y;Z \mid X) - \frac{A_{\beta,\lambda}(q)}{1-\beta}.
+$$
+
+The first term is the **information pressure** that encourages $Z$ to capture information about $Y$ beyond what is already predictable from $X$; the second is an effective **approximation–complexity penalty** measuring whether the induced distribution is close to the target while remaining simple.
+
+<Statement label="Result" title="Sufficient conditions for recovery" accent="#ef4444">
+Let $S^\star = f(X,Y)$ be the target strategy with $q^\star(z \mid x,y) = \Ind{z = S^\star}$, and let $d(q, S^\star)$ be a recovery discrepancy. Define the profiled margin
+
+$$
+\Delta_{\beta,\lambda}^{\mathrm{prof}}(\delta) = \calJ^{\mathrm{prof}}_{\beta,\lambda}(q^\star) - \!\!\sup_{q:\; d(q,S^\star) \ge \delta} \calJ^{\mathrm{prof}}_{\beta,\lambda}(q).
+$$
+
+If $\Delta_{\beta,\lambda}^{\mathrm{prof}}(\delta) > 0$, then every population minimizer of $\calL_{\beta,\lambda}$ satisfies $d(\widehat q, S^\star) < \delta$. For finite classes with sub-Gaussian losses, $n = \bigO\!\big( (\log(|\calQ||\calR||\calG|) + \log(1/\eta)) \,/\, (1-\beta)^2 (\Delta_{\beta,\lambda}^{\mathrm{prof}}(\delta))^2 \big)$ samples suffice for empirical recovery with probability at least $1-\eta$.
+</Statement>
+
+The analysis is preliminary, and the connection between this oracle selection criterion and actual training dynamics is not yet formally characterized.
+
+## Takeaways
+
+A pretrained model's response distribution is an entangled mixture over high-level strategies, and exposing this structure requires more than fitting a latent-variable model to observable outputs. Because the base generator already realizes the target distribution, a factorization that ignores the latent variable is immediately available and is a stable optimum of any objective that only measures marginal fit — and standard variational training falls into this failure mode. The model-directed reconstruction objective uses the base model itself as a reference: reconstruction is normalized by the base model's response loss and weighted by token-level uncertainty, concentrating pressure where strategy choices are most consequential. On a controlled benchmark of multi-strategy algorithmic tasks, this recovers latent structure that is well-aligned with reference solution strategies and semantically consistent across inputs.
+
+The broader promise is to expose latent capabilities that large language models already possess but do not reliably express under default sampling. By recovering a strategy-aligned factorization, implicit strategy structure becomes an explicit object of analysis and intervention — with applications across interpretability, controllability, and exploration, and the potential to drive more *active* self-improvement loops via strategy-level interventions rather than passive token-level sampling. The benchmarks here cover synthetic algorithmic tasks with ground-truth strategies; how well the methodology extends to open-ended reasoning remains an open question.
