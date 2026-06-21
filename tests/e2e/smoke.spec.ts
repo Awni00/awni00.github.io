@@ -211,6 +211,27 @@ test("media layout controls size figures and embeds", async ({ page }) => {
   expect(firstBody).not.toBeNull();
   expect(secondBody).not.toBeNull();
 
+  const mediaBoxes = await grid.locator(".article-figure__body > img").evaluateAll((images) =>
+    images.map((image) => {
+      const media = image.getBoundingClientRect();
+      const body = image.closest(".article-figure__body")?.getBoundingClientRect();
+      const caption = image.closest(".article-figure")?.querySelector("figcaption")?.getBoundingClientRect();
+      return {
+        mediaHeight: media.height,
+        mediaBottom: media.bottom,
+        bodyHeight: body?.height ?? 0,
+        bodyBottom: body?.bottom ?? 0,
+        captionTop: caption?.top ?? 0
+      };
+    })
+  );
+
+  for (const box of mediaBoxes) {
+    expect(box.mediaHeight).toBeLessThanOrEqual(box.bodyHeight + 1);
+    expect(box.mediaBottom).toBeLessThanOrEqual(box.bodyBottom + 1);
+    expect(box.mediaBottom).toBeLessThanOrEqual(box.captionTop);
+  }
+
   const viewport = page.viewportSize();
   if ((viewport?.width ?? 0) > 680) {
     expect(
