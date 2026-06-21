@@ -41,6 +41,42 @@ test("main static routes render", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Research" })).toBeVisible();
 });
 
+test("mobile navbar uses available row width before wrapping", async ({
+  baseURL,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 800, height: 900 },
+  });
+  const page = await context.newPage();
+  try {
+    await page.goto("/");
+
+    const linkRects = await page
+      .locator(".site-nav__links a")
+      .evaluateAll((links) =>
+        links.map((link) => {
+          const rect = link.getBoundingClientRect();
+          return {
+            text: link.textContent?.trim(),
+            top: Math.round(rect.top),
+          };
+        }),
+      );
+    const home = linkRects.find((link) => link.text === "Home");
+    const publications = linkRects.find((link) => link.text === "Publications");
+    const rows = new Set(linkRects.map((link) => link.top));
+
+    expect(home).toBeDefined();
+    expect(publications).toBeDefined();
+    expect(publications!.top).toBe(home!.top);
+    expect(rows.size).toBe(1);
+  } finally {
+    await context.close();
+  }
+});
+
 test("publication abstracts open as configured popups", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".publication-abstract")).toHaveCount(0);
@@ -174,6 +210,27 @@ test("media layout controls size figures and embeds", async ({ page }) => {
   const secondBody = await bodies.nth(1).boundingBox();
   expect(firstBody).not.toBeNull();
   expect(secondBody).not.toBeNull();
+
+  const mediaBoxes = await grid.locator(".article-figure__body > img").evaluateAll((images) =>
+    images.map((image) => {
+      const media = image.getBoundingClientRect();
+      const body = image.closest(".article-figure__body")?.getBoundingClientRect();
+      const caption = image.closest(".article-figure")?.querySelector("figcaption")?.getBoundingClientRect();
+      return {
+        mediaHeight: media.height,
+        mediaBottom: media.bottom,
+        bodyHeight: body?.height ?? 0,
+        bodyBottom: body?.bottom ?? 0,
+        captionTop: caption?.top ?? 0
+      };
+    })
+  );
+
+  for (const box of mediaBoxes) {
+    expect(box.mediaHeight).toBeLessThanOrEqual(box.bodyHeight + 1);
+    expect(box.mediaBottom).toBeLessThanOrEqual(box.bodyBottom + 1);
+    expect(box.mediaBottom).toBeLessThanOrEqual(box.captionTop);
+  }
 
   const viewport = page.viewportSize();
   if ((viewport?.width ?? 0) > 680) {
