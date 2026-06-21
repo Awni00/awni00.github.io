@@ -6,10 +6,10 @@ aliases:
   - "Recursive Latent Space Reasoning"
 date: "2025-10-20"
 updated: "2026-05-24"
-summary: "Four architectural mechanisms improve OOD algorithmic generalization in Transformers on a modular-arithmetic computation-graph task."
+summary: "Four architectural mechanisms to improve OOD algorithmic generalization in Transformers, evaluated on a modular-arithmetic circuit task."
 venue: "Under review"
 tags: ["transformers", "out-of-distribution generalization", "algorithmic reasoning", "mechanistic interpretability"]
-links: ["research", "./dual-attention", "./cot-info"]
+links: ["research"]
 authors:
   - name: "Awni Altabaa"
     affiliation: "Yale University"
@@ -37,6 +37,47 @@ bibtex: |
 ---
 
 
+<style>{`
+  .dag-example-figure {
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .method-results-figure {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+
+  .method-results-figure .article-figure__body {
+    min-height: 0;
+    width: 100%;
+  }
+
+  .method-results-figure .article-picture {
+    aspect-ratio: 1.55 / 1;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .method-results-figure figcaption {
+    margin-top: 0;
+  }
+
+  @media (max-width: 680px) {
+    .method-results-figure {
+      display: block;
+    }
+
+    .method-results-figure .article-picture {
+      aspect-ratio: auto;
+      height: auto;
+      max-height: 35rem;
+    }
+  }
+`}</style>
 
 ## TL;DR
 
@@ -77,8 +118,8 @@ What architectural mechanisms are needed to enable transformer models to discove
 
 Consider this computation graph with 9 nodes:
 
-<Figure>
-  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/formula_graph.png" alt="Computation Graph" />
+<Figure class="dag-example-figure">
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/formula_graph.pdf" alt="Computation Graph" invertInDarkMode />
   <Fragment slot="caption">Computation graph illustration: green nodes ($x_7$, $x_{42}$, $x_{88}$, $x_{115}$) are leaf nodes with given values; pink boxes denote arithmetic operations ($+$, $\times$, $-$); blue nodes ($x_{23}$, $x_{91}$, $x_{55}$, $x_{101}$, $x_{30}$) are computed from their dependencies.</Fragment>
 </Figure>
 
@@ -227,10 +268,18 @@ These mechanisms impose a **depth-invariant structure**: the model learns a recu
 We identify four key architectural mechanisms that enable transformers to develop true algorithmic reasoning:
 
 <FigureGrid columns={4} caption="Four architectural mechanisms enabling algorithmic generalization. (1) Recurrence allows adaptive computation depth matching problem complexity; (2) Algorithmic Supervision guides learning toward the correct layer-by-layer algorithm via latent space supervision; (3) Discretization creates stable checkpoints preventing representational drift across iterations; (4) Error Correction enables the model to detect and fix its own mistakes during iterative reasoning.">
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech1.SVG" alt="Recurrence & Adaptive Computation" caption="Recurrence & Adaptive Computation" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech2.SVG" alt="Algorithmic Supervision" caption="Algorithmic Supervision" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech3.SVG" alt="Anchored Discrete Latent Space" caption="Anchored Discrete Latent Space" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech4.SVG" alt="Error Correction" caption="Error Correction" />
+  <Figure caption="Recurrence & Adaptive Computation">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech1.SVG" alt="Recurrence & Adaptive Computation" invertInDarkMode />
+  </Figure>
+  <Figure caption="Algorithmic Supervision">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech2.SVG" alt="Algorithmic Supervision" invertInDarkMode />
+  </Figure>
+  <Figure caption="Anchored Discrete Latent Space">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech3.SVG" alt="Anchored Discrete Latent Space" invertInDarkMode />
+  </Figure>
+  <Figure caption="Error Correction">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/mech4.SVG" alt="Error Correction" invertInDarkMode />
+  </Figure>
 </FigureGrid>
 
 ---
@@ -331,16 +380,18 @@ Combining these mechanisms yields dramatic improvement in out-of-distribution pe
 <TwoColumns>
   <Figure
     slot="left"
-    src="/writing/research/algorithmic-generalization-transformer-architectures/figures/method_ood_comparison_compact.png"
-    alt="Method OOD Comparison"
+    class="method-results-figure"
     caption="Figure (a): OOD generalization across methods. Our full method (dark blue) achieves near-perfect performance even at 4× training size."
-  />
+  >
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/method_ood_comparison_legendtop.pdf" alt="Method OOD Comparison" invertInDarkMode />
+  </Figure>
   <Figure
     slot="right"
-    src="/writing/research/algorithmic-generalization-transformer-architectures/figures/ourmethod_stepwise_results_Blues.png"
-    alt="Stepwise Results"
+    class="method-results-figure"
     caption="Figure (b): Effective OOD generalization via input-adaptive scaling of computation time (Discrete Latent Space Supervision ↻)."
-  />
+  >
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/ourmethod_stepwise_results_Blues.pdf" alt="Stepwise Results" invertInDarkMode />
+  </Figure>
 </TwoColumns>
 
 
@@ -366,10 +417,10 @@ Figure (a) above shows a systematic ablation study. By comparing methods that di
 
 One of the most exciting aspects of our work is that we don't just show *that* it works—we explain *how* it works! Through detailed analysis, we reverse-engineer the exact algorithm the model learned.
 
-> **Central Questions:**
->
-> 1. What algorithm does the trained model implement?
-> 2. Why can it generalize to OOD data?
+<Callout type="question" title="Central Questions">
+1. What algorithm does the trained model implement?
+2. Why can it generalize to OOD data?
+</Callout>
 
 ### Technical Overview: Analysis Methodology
 
@@ -401,7 +452,9 @@ We form hypotheses about each component's role, then design controlled experimen
 
 Here's what we found: the model implements an **induction head** mechanism tailored to the task. Let's break it down step-by-step:
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/2-layer-illustrated.png" alt="Complete Mechanism" caption="The complete computational circuit showing how each layer contributes." />
+<Figure caption="The complete computational circuit showing how each layer contributes.">
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/2-layer-illustrated.pdf" alt="Complete Mechanism" invertInDarkMode />
+</Figure>
 
 <Callout title="Layer 1 Attention: Variable Identification" accent="accent">
 **What It Does**: The first layer's attention heads organize into distinct groups, each specialized for tracking specific variable positions in equations.
@@ -416,22 +469,34 @@ Here's what we found: the model implements an **induction head** mechanism tailo
 
 </Callout>
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_head_allocation.png" alt="L0 Head Allocation" caption="First-layer attention heads organize into groups based on which variable position they track. This figure shows the grouping structure discovered through relative variance analysis." />
+<Figure caption="First-layer attention heads organize into groups based on which variable position they track. This figure shows the grouping structure discovered through relative variance analysis.">
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_head_allocation.pdf" alt="L0 Head Allocation" invertInDarkMode />
+</Figure>
 
 **Relative Variance Analysis Results** — Each heatmap below shows which attention heads respond strongly when perturbing a specific variable position:
 
 <FigureGrid columns={4}>
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_var_0_relative_variance_heatmap.png" alt="VAR_0" caption="`var₀` (Heads 4, 8)" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_var_1_relative_variance_heatmap.png" alt="VAR_1" caption="`var₁` (Heads 5, 12)" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_var_2_relative_variance_heatmap.png" alt="VAR_2" caption="`var₂` (Heads 3, 7, 11, 14)" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_rhs_relative_variance_heatmap.png" alt="RHS" caption="`rhs` (result position)" />
+  <Figure caption="`var₀` (Heads 4, 8)">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_var_0_relative_variance_heatmap.pdf" alt="VAR_0" invertInDarkMode />
+  </Figure>
+  <Figure caption="`var₁` (Heads 5, 12)">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_var_1_relative_variance_heatmap.pdf" alt="VAR_1" invertInDarkMode />
+  </Figure>
+  <Figure caption="`var₂` (Heads 3, 7, 11, 14)">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_var_2_relative_variance_heatmap.pdf" alt="VAR_2" invertInDarkMode />
+  </Figure>
+  <Figure caption="`rhs` (result position)">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_rhs_relative_variance_heatmap.pdf" alt="RHS" invertInDarkMode />
+  </Figure>
 </FigureGrid>
 
 *Reading the heatmaps: Each row represents an attention head (0-15), and red indicates high relative variance. When we perturb $\mathtt{var}_0$, heads 4 and 8 show strong response (left heatmap). Similarly, each `variable` position has its dedicated head group. Crucially, look at the $\mathtt{rhs}$ heatmap (rightmost): heads from all groups show activation, because the $\mathtt{rhs}$ position needs information from all `variable`s.*
 
 **Norm Amplification Analysis** — What type of information do these heads copy?
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_ov_operator_norm_mpl.png" alt="L0 OV Norm" caption="Operator norm amplification for different factored embedding types across all 16 attention heads." />
+<Figure caption="Operator norm amplification for different factored embedding types across all 16 attention heads.">
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L0_ov_operator_norm_mpl.pdf" alt="L0 OV Norm" invertInDarkMode />
+</Figure>
 
 The `variable` factor (orange) shows dramatically higher amplification than other factors, confirming that first-layer attention heads copy **`variable` identities** (not `value`s) to the $\mathtt{rhs}$ position.
 
@@ -441,7 +506,9 @@ The `variable` factor (orange) shows dramatically higher amplification than othe
 **Interpretation**: The model discovered an induction head mechanism for solving the task, where the role of the first layer is merely to copy variable identities via attention to be used as the *query* in the *next layer attention*. Thus, the first layer *MLP* does not need to carry out any computation, and is approximately the identity. The arithmetic computation will be carried out by the second layer MLP.
 </Callout>
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l2_relative_error.png" alt="L2 Relative Error" caption="Layer 1 MLP contributes minimally; most work happens in attention and the final MLP." />
+<Figure caption="Layer 1 MLP contributes minimally; most work happens in attention and the final MLP.">
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l2_relative_error.pdf" alt="L2 Relative Error" invertInDarkMode />
+</Figure>
 
 <Callout title="Layer 2 Attention: Value Retrieval (The Induction Head)" accent="accent">
 **What It Does**: Now that we know *which* variables we need, the second layer's attention heads retrieve their *values*.
@@ -465,16 +532,24 @@ The `variable` factor (orange) shows dramatically higher amplification than othe
 **Attention Head Statistics** — Quantifying head specialization through relative variance analysis
 
 <FigureGrid columns={3}>
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var0.png" alt="VAR_0_stats" caption="`var₀` relative variance" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var1.png" alt="VAR_1_stats" caption="`var₁` relative variance" />
-  <Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var2.png" alt="VAR_2_stats" caption="`var₂` relative variance" />
+  <Figure caption="`var₀` relative variance">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var0.pdf" alt="VAR_0_stats" invertInDarkMode />
+  </Figure>
+  <Figure caption="`var₁` relative variance">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var1.pdf" alt="VAR_1_stats" invertInDarkMode />
+  </Figure>
+  <Figure caption="`var₂` relative variance">
+    <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var2.pdf" alt="VAR_2_stats" invertInDarkMode />
+  </Figure>
 </FigureGrid>
 
 *Each subfigure shows the relative variance histogram for each attention head. High relative variance for specific heads indicates specialization. For example, heads 0, 8, and 15 show high relative variance for $\mathtt{var}_0$, confirming they specialize in retrieving that `variable`'s `value`.*
 
 **Norm Amplification Analysis** — What type of information is copied?
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L1_ov_operator_norm.png" alt="L1 OV Operator Norm" caption="Operator norm amplification for Layer 2 heads." />
+<Figure caption="Operator norm amplification for Layer 2 heads.">
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/L1_ov_operator_norm.pdf" alt="L1 OV Operator Norm" invertInDarkMode />
+</Figure>
 
 Unlike Layer 1 (which amplified `variable` embeddings), Layer 2 heads strongly amplify the `value` factor, confirming they copy **numerical `value`s** (not `variable` names) from previous equations. This reveals the head specialization: different heads focus on retrieving `value`s for different `variable` positions.
 
@@ -501,16 +576,22 @@ The periodic nature of trigonometric functions **automatically handles** the mod
 
 </Callout>
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-preact.png" alt="FFT MLP Preact" caption="Before MLP: Dominated by bias term (0,0,0 frequency)" />
+<Figure caption="Before MLP: Dominated by bias term (0,0,0 frequency)">
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-preact.pdf" alt="FFT MLP Preact" invertInDarkMode />
+</Figure>
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-postact.png" alt="FFT MLP Postact" caption="During MLP: Bias decreases, diagonal frequencies increase." />
+<Figure caption="During MLP: Bias decreases, diagonal frequencies increase.">
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-postact.pdf" alt="FFT MLP Postact" invertInDarkMode />
+</Figure>
 
 <Figure>
-  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-output.png" alt="FFT MLP Output" />
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-output.pdf" alt="FFT MLP Output" invertInDarkMode />
   <Fragment slot="caption">After MLP: Strong diagonal components encoding the sum. The frequency (a,a,a) represents $\cos(2\pi a(\mathtt{var}_0+\mathtt{var}_1+\mathtt{var}_2)/23)$.</Fragment>
 </Figure>
 
-<Figure src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_decoder-output.png" alt="FFT Decoder Output" caption="Final output maintains the frequency structure for decoding." />
+<Figure caption="Final output maintains the frequency structure for decoding.">
+  <Picture slot="figure" src="/writing/research/algorithmic-generalization-transformer-architectures/figures/fft_histograms_decoder-output.pdf" alt="FFT Decoder Output" invertInDarkMode />
+</Figure>
 
 **Interpreting the Frequency Analysis:** The progression through these figures reveals the MLP's computational strategy. At the output layer (third figure), we observe strong magnitudes for diagonal frequency components $(a,a,a)$ where $a \in \{1, \ldots, 22\}$. These diagonal frequencies are crucial because they encode the sum: a component with frequency $(a,a,a)$ corresponds to trigonometric functions of $\mathtt{var}_0 + \mathtt{var}_1 + \mathtt{var}_2$. The MLP essentially transforms the input into this frequency-based representation, where the final answer can be directly decoded from these sum-encoding components. This elegant mechanism allows modular arithmetic to emerge naturally from the periodic structure of sine and cosine functions.
 
