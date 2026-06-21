@@ -1036,10 +1036,10 @@ pre {
   }
 
   .site-nav__links {
-    display: grid;
-    grid-template-columns: repeat(2, max-content);
-    flex: 1 1 auto;
-    max-width: calc(100% - 44px);
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1 1 0;
+    max-width: none;
     justify-content: flex-start;
     gap: 10px 16px;
   }

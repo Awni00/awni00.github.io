@@ -41,6 +41,42 @@ test("main static routes render", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Research" })).toBeVisible();
 });
 
+test("mobile navbar uses available row width before wrapping", async ({
+  baseURL,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL,
+    viewport: { width: 800, height: 900 },
+  });
+  const page = await context.newPage();
+  try {
+    await page.goto("/");
+
+    const linkRects = await page
+      .locator(".site-nav__links a")
+      .evaluateAll((links) =>
+        links.map((link) => {
+          const rect = link.getBoundingClientRect();
+          return {
+            text: link.textContent?.trim(),
+            top: Math.round(rect.top),
+          };
+        }),
+      );
+    const home = linkRects.find((link) => link.text === "Home");
+    const publications = linkRects.find((link) => link.text === "Publications");
+    const rows = new Set(linkRects.map((link) => link.top));
+
+    expect(home).toBeDefined();
+    expect(publications).toBeDefined();
+    expect(publications!.top).toBe(home!.top);
+    expect(rows.size).toBe(1);
+  } finally {
+    await context.close();
+  }
+});
+
 test("publication abstracts open as configured popups", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".publication-abstract")).toHaveCount(0);
