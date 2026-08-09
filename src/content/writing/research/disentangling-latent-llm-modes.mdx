@@ -1,12 +1,18 @@
 ---
-title: "Learning Strategy-Aligned Latent-Variable Factorizations of Language Models"
+# todo: update filename and path (match github repo?)
+title: "Uncovering Latent Reasoning Strategies in Language Models"
 type: "paper"
+# update aliases
 aliases:
   - "Disentangling Latent LLM Modes"
   - "Strategy-Aligned Latent-Variable Factorizations"
-date: "2026-06-05"
+date: "2026-07-20"
+displayDates:
+  - label: "arXiv v1"
+    date: "2026-07-20"
+# update summary
 summary: "Recovering a disentangled, strategy-aligned latent-variable factorization of a pretrained language model, and the model-directed reconstruction objective that makes it possible despite posterior collapse at initialization."
-tags: ["large language models", "latent variable models", "variational inference", "disentanglement", "reasoning strategies"]
+tags: ["large language models", "reasoning"]
 links: ["research", "./cot-info"]
 authors:
   - name: "Awni Altabaa"
@@ -15,11 +21,15 @@ authors:
     affiliation: "Yale University"
 featured: false
 bibtex: |
-  @misc{altabaa2026strategyaligned,
-    title={Learning Strategy-Aligned Latent-Variable Factorizations of Language Models},
-    author={Awni Altabaa and John Lafferty},
-    year={2026}
-  }
+  @misc{altabaa2026uncoveringlatentreasoningstrategies,
+      title={Uncovering Latent Reasoning Strategies in Language Models}, 
+      author={Awni Altabaa and John Lafferty},
+      year={2026},
+      eprint={2607.17674},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2607.17674}, 
+}
 ---
 
 When used for reasoning tasks, a language model $p_\theta(y \mid x)$ defines a distribution over response sequences $y$ that implicitly use certain high-level *strategies* to solve an input problem $x$. A model asked to prove a theorem may produce a proof by contradiction, induction, or construction; a model asked to solve a programming problem may formulate it as dynamic programming, graph search, or a greedy algorithm. Such strategies recur across many input problems, but they are represented only implicitly: they are *entangled* in the model's hidden states rather than exposed as a separable variable that can be identified or intervened on during generation.
