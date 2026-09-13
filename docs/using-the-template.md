@@ -68,6 +68,7 @@ Common optional frontmatter:
 ```yaml
 aliases:
   - Alternative Name
+shortUrl: "/project-name"
 date: "2026-05-24"
 displayDates:
   - label: "Page"
@@ -77,18 +78,46 @@ venue: "Conference or Journal Name"
 tags:
   - learning-theory
 links:
-  - machine-learning-theory/bias-variance-refresher
+  - hub-1/entry-1
 draft: false
 external:
   arxiv: "https://arxiv.org/abs/..."
   code: "https://github.com/..."
-layout:
-  width: reading
+hero:
+  src: "/figures/teaser.svg"
+  alt: "Description of the figure"
+  caption: "Optional caption."
+article:
+  mode: article
   asides: margin
   toc:
     minDepth: 2
     maxDepth: 4
 ```
+
+`shortUrl` claims a second, shareable path that redirects to the entry. With
+`shortUrl: "/project-name"` on an entry at `src/content/writing/hub-1/project-name.mdx`,
+`yoursite.com/project-name` redirects to `/writing/hub-1/project-name`. Because
+the short URL lives in the entry's own frontmatter, it follows the file if you
+later reorganize the hub tree. Any lowercase, hyphen-separated path works, so
+`shortUrl: "/p/project-name"` is available if you would rather namespace short
+links than spend paths at the site root. A short URL that collides with another
+entry's, with a custom page, or with a built-in route is rejected — `npm run
+validate` fails and names the conflict, and the dev server drops that one link
+with a warning. Short URLs are read when the dev server starts, so restart it
+after adding or changing one.
+
+The `article` block holds per-entry presentation overrides and mirrors the
+`article` block in the entry type registry, so the same keys mean the same
+thing at both levels. Do not name this key `layout`: Astro reserves
+`frontmatter.layout` as a path to a layout component and will fail the build
+with a syntax error if it holds an object.
+
+`hero` renders an optional figure alongside the article body. It works in both
+presentation modes, but its position differs: in `article` mode it leads the
+page, above the body; in `abstract` mode it follows the abstract, so the
+paper's own words open the record and the figure illustrates what was just
+read.
 
 For paper-style writing entries, `venue` is intentionally stored in entry
 frontmatter even if the same paper also appears in `src/data/publications.bib`.
@@ -135,20 +164,52 @@ arXiv v1: May 21, 2025
 NeurIPS: Sep 18, 2025
 ```
 
-`layout.toc` controls which article heading depths appear in the table of
+`article.toc` controls which article heading depths appear in the table of
 contents for this entry. Depths map to Markdown heading levels `##` through
 `######`; `#` is reserved for the article title rendered by the layout. Omitted
 fields inherit from the type-level or global default, which includes `h2` and
 `h3`.
 
+### Abstract-Only Entries
+
+Use `article.mode: abstract` to record a paper that does not have its own
+explainer or post. The entry body *is* the paper's abstract, and the layout
+sets it off with hairline rules and an `ABSTRACT` label under the standard
+article header:
+
+```yaml
+title: "Latent structure in overparameterized models"
+type: "paper"
+venue: "Example Conference on Learning Representations, 2026"
+authors:
+  - name: "Your Name"
+    affiliation: "Your University"
+external:
+  arxiv: "https://arxiv.org/abs/..."
+  code: "https://github.com/..."
+hero:
+  src: "/figures/teaser.svg"
+  alt: "Model architecture"
+article:
+  mode: abstract
+```
+
+Mode is presentation only. Keep `type: "paper"` (or whichever type fits) so the
+entry keeps its usual graph shape and colour, its RSS inclusion, and its place
+in topic lists. An abstract entry is a full graph citizen: inbound links, related
+entries, and the local graph all render in the footer as usual.
+
+Because the body is the abstract, the article table of contents is suppressed
+in this mode regardless of placement config, and `<Aside>` blocks render inline.
+
 Routes mirror the content-relative path:
 
 ```txt
-src/content/writing/machine-learning-theory/index.mdx
-  -> /writing/machine-learning-theory
+src/content/writing/hub-1/index.mdx
+  -> /writing/hub-1
 
-src/content/writing/machine-learning-theory/bias-variance-refresher.mdx
-  -> /writing/machine-learning-theory/bias-variance-refresher
+src/content/writing/hub-1/entry-1.mdx
+  -> /writing/hub-1/entry-1
 ```
 
 Create entries with:
@@ -167,12 +228,12 @@ Ordinary Markdown links do not create graph edges.
 
 ```yaml
 links:
-  - machine-learning-theory
+  - hub-1
 ```
 
 ```md
-This entry links to [[machine-learning-theory]].
-This entry links with a label to [[machine-learning-theory|ML theory]].
+This entry links to [[hub-1]].
+This entry links with a label to [[hub-1|Hub 1]].
 This relative link points beside the current file: [[./neighbor-entry]].
 ```
 
@@ -364,6 +425,29 @@ use Markdown tables, `Figure`, `FigureGrid`, `TwoColumns`, `Callout`,
 `Statement`, and `Box` so the
 template owns the visual language.
 
+## Theming
+
+The site's colours come from a pair of named themes — one light, one dark. Ten
+ship with the template (Rosé Pine, Everforest, Catppuccin, GitHub, and the
+template's own Paper/Ink); pick two in `src/site/config.ts`:
+
+```ts
+theme: {
+  light: "dawn",
+  dark: "rose-pine",
+  defaultMode: "system",
+  allowToggle: true
+}
+```
+
+Run the dev server and open `/fixtures/themes` to see all ten against real
+type before choosing. To define your own, add it to `src/site/themes.ts` — only
+`bg`, `fg` and `accent` are required, and `npm run validate` checks whatever you
+write for contrast.
+
+[Theming](theming.md) covers the full token list, custom themes, the contrast
+rules, and code-block highlighting.
+
 ## Article Typography
 
 Article typography is controlled by semantic `--article-*` CSS custom
@@ -390,5 +474,7 @@ npm run validate
 ```
 
 Validation catches missing titles, invalid entry types, invalid dates, duplicate
-writing paths, duplicate aliases, reserved writing paths, unresolved wikilinks,
-unresolved frontmatter links, and BibTeX parse failures.
+writing paths, duplicate aliases, reserved writing paths, malformed or colliding
+short URLs, unreadable or malformed theme colours, unresolved wikilinks,
+unresolved frontmatter links, and BibTeX parse
+failures.

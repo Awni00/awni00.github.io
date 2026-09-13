@@ -4,9 +4,9 @@ import {
   canonicalizeWritingPath,
   dedupeSorted,
   createEntryResolver,
-  entryToRecord,
-  extractWikilinks
+  entryToRecord
 } from "./resolveLinks";
+import { extractWikilinks, isMdxPath } from "../wikilinks/wikilinks";
 import type { EntryRecord, GraphBuildResult, GraphEdge, GraphWarning, WritingEntryLike } from "./types";
 
 export function buildEntryRecords<TEntry extends WritingEntryLike>(
@@ -80,7 +80,7 @@ export function buildGraphIndex<TEntry extends WritingEntryLike>(
       addEdge(edgeKeys, edges, record.node.id, resolved.target.id);
     }
 
-    for (const wikilink of extractWikilinks(record.body)) {
+    for (const wikilink of entryWikilinks(record)) {
       const resolved = resolve(wikilink.target, record.node.path);
       if (!resolved.target) {
         if (resolved.reason === "ambiguous") {
@@ -105,15 +105,15 @@ export function buildGraphIndex<TEntry extends WritingEntryLike>(
   }
 
   const nodes = records.map((record) => record.node);
-  const backlinks: Record<string, string[]> = Object.fromEntries(nodes.map((node) => [node.id, []]));
-  const outgoing: Record<string, string[]> = Object.fromEntries(nodes.map((node) => [node.id, []]));
+  const linkedFrom: Record<string, string[]> = Object.fromEntries(nodes.map((node) => [node.id, []]));
+  const linksTo: Record<string, string[]> = Object.fromEntries(nodes.map((node) => [node.id, []]));
   for (const edge of edges) {
-    outgoing[edge.source].push(edge.target);
-    backlinks[edge.target].push(edge.source);
+    linksTo[edge.source].push(edge.target);
+    linkedFrom[edge.target].push(edge.source);
   }
   for (const node of nodes) {
-    outgoing[node.id] = dedupeSorted(outgoing[node.id]);
-    backlinks[node.id] = dedupeSorted(backlinks[node.id]);
+    linksTo[node.id] = dedupeSorted(linksTo[node.id]);
+    linkedFrom[node.id] = dedupeSorted(linkedFrom[node.id]);
   }
 
   if (nodes.length > 0 && edges.length === 0) {
@@ -127,8 +127,8 @@ export function buildGraphIndex<TEntry extends WritingEntryLike>(
     index: {
       nodes,
       edges,
-      backlinks,
-      outgoing,
+      linkedFrom,
+      linksTo,
       hubs: nodes.filter((node) => isHubType(node.type))
     },
     warnings: options.collectWarnings === false ? [] : warnings
@@ -246,4 +246,14 @@ function reservedWritingPaths(): Set<string> {
 
 function stripSlashes(value: string): string {
   return value.replace(/^\/+|\/+$/g, "");
+}
+
+/** The wikilinks an entry's page will render, naming the entry if it fails to parse. */
+function entryWikilinks(record: EntryRecord) {
+  try {
+    return extractWikilinks(record.body, { mdx: isMdxPath(record.entry.filePath) });
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    throw new Error(`Could not parse "${record.entry.id}" to find its wikilinks: ${reason}`);
+  }
 }

@@ -1,13 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import {
-  entryTypeDefinitions,
-  getEntryType,
-  graphConfig,
-  writingConfig,
-  type EntryType
-} from "../../config";
-import { graphNeighborhood, neighborhoodIds } from "../../lib/graph/neighborhoods";
+import { getEntryType, graphConfig, writingConfig, type EntryType } from "../../config";
 import type { EntryNode, GraphIndex, WritingBrowserState } from "../../lib/graph/types";
 import { searchWriting, toSearchDocuments } from "../../lib/search/writingSearch";
 import GraphCanvas from "./GraphCanvas";
@@ -22,15 +15,26 @@ const defaultState: WritingBrowserState = {
   view: "map"
 };
 
-// Focus mode + depth are config-only — see writingConfig.browser.focus.
-const FOCUS_MODE = writingConfig.browser.focus.mode;
-const FOCUS_DEPTH = writingConfig.browser.focus.depth;
+// Where graph.css stops laying the browser out in columns and stacks it.
+const STACK_BREAKPOINT = 980;
+// Stacked, the map shares the screen with the panel beneath it, so a desktop
+// canvas height would fill a phone on its own and push that panel out of sight.
+const CANVAS_HEIGHT = 660;
+const CANVAS_HEIGHT_NARROW = 420;
 
 const VIEWS = ["map", "topics", "list"] as const;
 type View = (typeof VIEWS)[number];
 
 export default function GraphBrowser({ graph }: GraphBrowserProps) {
-  const [state, setState] = useState<WritingBrowserState>(() => readStateFromUrl());
+  // Initialised to a constant, not to the URL. The server has no `window`, so
+  // reading the URL during render makes the first client render disagree with
+  // the markup the server sent on any non-default `?view=`. The URL is applied
+  // in a mount effect instead — same shape as ThemeToggle.
+  const [state, setState] = useState<WritingBrowserState>(defaultState);
+  const [urlApplied, setUrlApplied] = useState(false);
+  // The canvas needs a pixel height, so this one piece of layout cannot live in
+  // the stylesheet with the rest. Matches the grid's own breakpoint.
+  const [narrow, setNarrow] = useState(false);
   const nodeById = useMemo(() => new Map(graph.nodes.map((node) => [node.id, node])), [graph.nodes]);
   const tags = useMemo(() => [...new Set(graph.nodes.flatMap((node) => node.tags))].sort(), [graph.nodes]);
   const typeCounts = useMemo(() => {
@@ -48,13 +52,16 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
   //
   //   View    Applies                              Does NOT apply
   //   ----    -------                              --------------
-  //   map     query, types, tags, focus            —
-  //   list    query, types                         tags, focus
-  //   topics  query                                types, tags, focus
+  //   map     query, types, tags                   —
+  //   list    query, types                         tags
+  //   topics  query                                types, tags
   //
-  // `state.focus` flows through a separate path (focusIds / visibleGraph)
-  // and only affects the map canvas, so it stays out of the searchResults
-  // here.
+  // The map *applies* all four, but not by removing anything: on a map an
+  // attribute selection marks nodes, it does not delete them. Removal there
+  // severed the structure that gives the remaining nodes their meaning —
+  // node types are not connected subgraphs, so filtering to "paper" left
+  // three isolated dots — and it re-settled the layout on every click. The
+  // map's results therefore feed `emphasizedIds`, not the node set.
   const mapSearchResults = useMemo(
     () => searchWriting(docs, { query: state.query, types: state.types, tags: state.tags }),
     [docs, state.query, state.types, state.tags]
@@ -67,34 +74,38 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
     () => searchWriting(docs, { query: state.query }),
     [docs, state.query]
   );
-  const mapFilteredIds = useMemo(
+  const mapMatchIds = useMemo(
     () => new Set(mapSearchResults.map((doc) => doc.id)),
     [mapSearchResults]
   );
-  const focusIds = useMemo(() => {
-    if (!state.focus) return undefined;
-    return neighborhoodIds(graph, state.focus, FOCUS_DEPTH);
-  }, [graph, state.focus]);
-  const visibleGraph = useMemo(() => {
-    const base =
-      state.focus && FOCUS_MODE === "filter"
-        ? graphNeighborhood(graph, state.focus, FOCUS_DEPTH)
-        : graph;
-    const nodes = base.nodes.filter((node) => mapFilteredIds.has(node.id));
-    const allowed = new Set(nodes.map((node) => node.id));
-    return {
-      ...base,
-      nodes,
-      edges: base.edges.filter((edge) => allowed.has(edge.source) && allowed.has(edge.target))
-    };
-  }, [mapFilteredIds, graph, state.focus]);
+  // Nothing removes nodes from the map: an attribute selection marks them and
+  // leaves the graph object identical, which is what keeps the layout from
+  // re-settling. Handing `GraphCanvas` a new graph rebuilds every node from
+  // scratch and drops both the settled positions and any the reader dragged.
+  const hasSelection = Boolean(state.query || state.types?.length || state.tags?.length);
   const selected = state.selected ? nodeById.get(state.selected) : graph.hubs[0] ?? graph.nodes[0];
-  const focusNode = state.focus ? nodeById.get(state.focus) : undefined;
-  const view = (state.view ?? "map") as View;
+  const view = (state.view ?? defaultState.view) as View;
 
   useEffect(() => {
+    setState(readStateFromUrl());
+    setUrlApplied(true);
+  }, []);
+
+  useEffect(() => {
+    const query = window.matchMedia(`(max-width: ${STACK_BREAKPOINT}px)`);
+    const update = () => setNarrow(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    // Gated: `writeStateToUrl` omits the parameter whenever the view equals the
+    // default, so writing before the URL has been read would strip the very
+    // `?view=` this is about to honour.
+    if (!urlApplied) return;
     writeStateToUrl(state);
-  }, [state]);
+  }, [state, urlApplied]);
 
   function patch(patchState: Partial<WritingBrowserState>) {
     setState((current) => ({ ...current, ...patchState }));
@@ -122,12 +133,18 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
     .map((doc) => nodeById.get(doc.id))
     .filter((node): node is EntryNode => Boolean(node));
 
-  const entryCount =
+  // The map no longer removes anything, so a bare node count would read "14
+  // pages" forever. Matches-of-total is what carries the responsiveness a
+  // filter owes the reader once it has stopped changing the picture's size.
+  const mapMatchCount = mapMatchIds.size;
+  const countLabel =
     view === "map"
-      ? visibleGraph.nodes.length
+      ? hasSelection
+        ? `${mapMatchCount} of ${graph.nodes.length} pages`
+        : `${graph.nodes.length} pages`
       : view === "topics"
-      ? topicsEntries.length
-      : listEntries.length;
+      ? `${topicsEntries.length} pages`
+      : `${listEntries.length} pages`;
 
   const ViewSwitcher = (
     <div className="graph-seg" role="tablist" aria-label="Writing view">
@@ -150,12 +167,11 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
       <div className="graph-view-bar">
         <div className="graph-view-bar__left">
           <span style={{ color: "var(--color-fg)", fontWeight: 500 }}>Writing</span>
-          <span className="graph-view-bar__count">{entryCount} entries</span>
+          <span className="graph-view-bar__count">{countLabel}</span>
         </div>
         <div className="graph-view-bar__right">
           <input
             className="graph-input"
-            style={{ width: 240 }}
             value={state.query ?? ""}
             onChange={(event) => patch({ query: event.target.value || undefined })}
             placeholder="Search title, tag, type…"
@@ -165,123 +181,97 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
       </div>
       {view === "map" ? (
         <div className="graph-browser__grid">
-          <aside className="graph-panel graph-panel--left">
-            <div className="graph-control">
-              <label>Topics</label>
-              <ul className="topic-list">
-                {graph.hubs.map((hub) => (
-                  <li key={hub.id}>
-                    <button
-                      type="button"
-                      aria-pressed={state.focus === hub.id}
-                      onClick={() =>
-                        patch({
-                          focus: state.focus === hub.id ? undefined : hub.id,
-                          selected: hub.id
-                        })
-                      }
-                    >
-                      {hub.title}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="graph-control">
-              <label>Types</label>
-              <div className="graph-button-row">
-                {writingConfig.entryTypes.map((type) => {
-                  const entryType = getEntryType(type);
-                  const cfg = entryType.graph;
-                  const count = typeCounts[type] ?? 0;
-                  return (
-                    <button
-                      key={type}
-                      type="button"
-                      className="graph-button graph-button--type"
-                      style={{ ["--swatch" as any]: cfg?.color }}
-                      aria-pressed={(state.types ?? []).includes(type)}
-                      onClick={() => toggleType(type)}
-                    >
-                      {entryType.label}
-                      {count > 0 && <span style={{ color: "var(--color-muted-2)" }}>{count}</span>}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="graph-control">
-              <label>Tags</label>
-              <div className="graph-button-row">
-                {tags.slice(0, 12).map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    className="graph-button"
-                    aria-pressed={(state.tags ?? []).includes(tag)}
-                    onClick={() => toggleTag(tag)}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-          </aside>
-
           <div className="graph-panel graph-panel--center">
             <div className="graph-canvas-bar">
               <div className="graph-crumbs">
                 <span className="crumb">All writing</span>
-                {focusNode && (
-                  <>
-                    <span className="crumb-sep">›</span>
-                    <span className="crumb crumb--active">{focusNode.title}</span>
-                    <button
-                      type="button"
-                      aria-label="Clear focus"
-                      onClick={() => patch({ focus: undefined })}
-                    >
-                      ×
-                    </button>
-                  </>
+                {/* A map where everything is faded looks identical to one that
+                    failed to render, so the zero case has to be said in words
+                    rather than shown. */}
+                {hasSelection && mapMatchCount === 0 && (
+                  <span className="crumb crumb--empty">No pages match</span>
                 )}
+                {hasSelection && (
+                  <button
+                    type="button"
+                    className="graph-crumbs__reset"
+                    onClick={() =>
+                      patch({ query: undefined, types: undefined, tags: undefined })
+                    }
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+              <div className="graph-filters">
+                {/* Doubles as the canvas legend. Each chip carries the glyph
+                    its type is actually drawn with, so the vocabulary and the
+                    filter are one control rather than two that drift apart —
+                    and it sits in the chrome instead of overlaying the map. */}
+                <div className="graph-typefilter" role="group" aria-label="Filter by type">
+                  {writingConfig.entryTypes
+                    .filter((type) => (typeCounts[type] ?? 0) > 0)
+                    .map((type) => {
+                      const entryType = getEntryType(type);
+                      return (
+                        <button
+                          key={type}
+                          type="button"
+                          className="graph-button"
+                          aria-pressed={(state.types ?? []).includes(type)}
+                          onClick={() => toggleType(type)}
+                        >
+                          <NodeIcon
+                            shape={entryType.graph.shape as NodeShape}
+                            color={entryType.graph.color as string}
+                          />
+                          {entryType.label}
+                          <span className="graph-button__count">{typeCounts[type]}</span>
+                        </button>
+                      );
+                    })}
+                </div>
+                <TagFilter
+                  tags={tags}
+                  active={state.tags ?? []}
+                  onToggle={toggleTag}
+                  onClear={() => patch({ tags: undefined })}
+                />
               </div>
             </div>
             <div className="graph-canvas">
               <GraphCanvas
-                graph={visibleGraph}
-                height={620}
+                graph={graph}
+                height={narrow ? CANVAS_HEIGHT_NARROW : CANVAS_HEIGHT}
                 selected={state.selected}
                 selectedStyle="soft-glow"
-                highlighted={focusIds}
-                dimUnhighlighted={FOCUS_MODE === "dim"}
+                emphasized={hasSelection ? mapMatchIds : undefined}
+                drag={graphConfig.interaction.drag}
                 hubLayout={graphConfig.layout.hubs}
                 labelMode={graphConfig.layout.labels}
                 labelSide={graphConfig.layout.labelSide}
+                // One meaning for every node, hubs included. Clicking a hub
+                // used to also dim the map down to its immediate neighbours,
+                // which made the same gesture carry two very different
+                // consequences with nothing in the glyph to say so — and
+                // "immediate neighbours" was the wrong set anyway, since a
+                // hub's entries can sit a further hop down a nested hub.
                 onSelect={(id) => patch({ selected: id })}
               />
-              <div className="graph-legend" aria-hidden="true">
-                {entryTypeDefinitions.map((entryType) => {
-                  const cfg = entryType.graph;
-                  return (
-                    <span key={entryType.id}>
-                      <NodeIcon
-                        shape={cfg.shape as NodeShape}
-                        color={cfg.color as string}
-                      />
-                      {entryType.label}
-                    </span>
-                  );
-                })}
-              </div>
             </div>
           </div>
 
           <aside className="graph-panel graph-panel--right preview-pane">
-            {selected ? <Preview node={selected} graph={graph} /> : <p className="muted">Select a node.</p>}
+            {selected ? (
+              <Preview
+                node={selected}
+                graph={graph}
+                nodeById={nodeById}
+                onSelect={(id) => patch({ selected: id })}
+              />
+            ) : (
+              <p className="muted">Select a node.</p>
+            )}
           </aside>
         </div>
       ) : view === "topics" ? (
@@ -298,11 +288,142 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
   );
 }
 
-function Preview({ node, graph }: { node: EntryNode; graph: GraphIndex }) {
-  const backlinks = graph.backlinks[node.id] ?? [];
-  const outgoing = graph.outgoing[node.id] ?? [];
-  const byId = new Map(graph.nodes.map((item) => [item.id, item]));
+/**
+ * Tags behind a disclosure rather than spread across a permanent column.
+ * They are the weakest of the three filters — the search field already matches
+ * on tags — so they earn a button of chrome, not a third of the viewport.
+ */
+function TagFilter({
+  tags,
+  active,
+  onToggle,
+  onClear
+}: {
+  tags: string[];
+  active: string[];
+  onToggle: (tag: string) => void;
+  onClear: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    // `pointerdown`, not `click`: a press that starts outside should dismiss
+    // before the canvas underneath treats the release as a node selection.
+    const onPointerDown = (event: PointerEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  if (tags.length === 0) return null;
+
+  return (
+    <div className="graph-tagfilter" ref={ref}>
+      <button
+        type="button"
+        className="graph-button"
+        aria-expanded={open}
+        aria-pressed={active.length > 0}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <TagIcon />
+        tags
+        {active.length > 0 && <span className="graph-button__count">{active.length}</span>}
+        <span className="graph-button__caret" aria-hidden="true">
+          ▾
+        </span>
+      </button>
+      {open && (
+        <div className="graph-tagpop">
+          <div className="graph-tagpop__list">
+            {tags.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                className="graph-button"
+                aria-pressed={active.includes(tag)}
+                onClick={() => onToggle(tag)}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+          {active.length > 0 && (
+            <button type="button" className="graph-tagpop__clear" onClick={onClear}>
+              Clear tags
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+type Direction = "both" | "out" | "in";
+
+const DIRECTION_TEXT: Record<Direction, string> = {
+  both: "links both ways",
+  out: "links to",
+  in: "linked from"
+};
+// Reciprocal first: two pages that link to each other have the strongest
+// relationship on offer, and splitting the list by direction was precisely
+// what hid it — you had to notice the same title twice to see it at all.
+const DIRECTION_RANK: Record<Direction, number> = { both: 0, out: 1, in: 2 };
+
+/**
+ * Panel describing whatever node is selected on the map.
+ *
+ * Its rows *select*, they do not navigate — the same division of labour
+ * LocalGraphMap already documents. A reader following a chain of connections
+ * is inspecting the graph, not leaving it, and a row that silently changes
+ * the page costs them the map they were reading. Navigation stays the one
+ * explicit action: "Open page".
+ */
+function Preview({
+  node,
+  graph,
+  nodeById,
+  onSelect
+}: {
+  node: EntryNode;
+  graph: GraphIndex;
+  nodeById: Map<string, EntryNode>;
+  onSelect: (id: string) => void;
+}) {
   const entryType = getEntryType(node.type);
+  const connections = useMemo(() => {
+    const linksTo = new Set(graph.linksTo[node.id] ?? []);
+    const linkedFrom = new Set(graph.linkedFrom[node.id] ?? []);
+    // One row per connected page, not one per direction. A reciprocal link
+    // used to print twice — for the most connected entry in this corpus that
+    // meant ten rows carrying five relationships.
+    return [...new Set([...linksTo, ...linkedFrom])]
+      .map((id) => {
+        const item = nodeById.get(id);
+        if (!item) return undefined;
+        const direction: Direction =
+          linksTo.has(id) && linkedFrom.has(id) ? "both" : linksTo.has(id) ? "out" : "in";
+        return { item, direction };
+      })
+      .filter((entry): entry is { item: EntryNode; direction: Direction } => Boolean(entry))
+      .sort(
+        (a, b) =>
+          DIRECTION_RANK[a.direction] - DIRECTION_RANK[b.direction] ||
+          a.item.title.localeCompare(b.item.title)
+      );
+  }, [graph, node.id, nodeById]);
+
   return (
     <>
       <div className="preview-header">
@@ -311,7 +432,12 @@ function Preview({ node, graph }: { node: EntryNode; graph: GraphIndex }) {
         </span>
         {node.date && <span className="preview-date">{node.date}</span>}
       </div>
-      <h2>{node.title}</h2>
+      {/*
+        Not a heading: this is a panel label that changes on every click, not
+        page structure, and promoting it would put the same title in the
+        document outline twice. Same reasoning as LocalGraphMap's title.
+      */}
+      <p className="preview-title">{node.title}</p>
       {node.summary && <p className="preview-summary">{node.summary}</p>}
       {node.tags.length > 0 && (
         <div className="tag-list">
@@ -321,44 +447,32 @@ function Preview({ node, graph }: { node: EntryNode; graph: GraphIndex }) {
         </div>
       )}
       <a className="open-btn" href={node.url}>
-        Open entry →
+        Open page →
       </a>
-      {outgoing.length > 0 && (
+      {connections.length > 0 && (
         <div className="sidebar-section">
-          <h2>Outgoing</h2>
-          <ul>
-            {outgoing.map((id) => {
-              const item = byId.get(id);
+          <p className="sidebar-section__label">
+            Connections <span className="sidebar-section__count">{connections.length}</span>
+          </p>
+          <ul className="connection-list">
+            {connections.map(({ item, direction }) => {
+              const itemType = getEntryType(item.type);
               return (
-                <li key={id}>
-                  {item ? (
-                    <a href={item.url} style={{ color: "inherit", textDecoration: "none" }}>
-                      {item.title}
-                    </a>
-                  ) : (
-                    id
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
-      {backlinks.length > 0 && (
-        <div className="sidebar-section">
-          <h2>Backlinks</h2>
-          <ul>
-            {backlinks.map((id) => {
-              const item = byId.get(id);
-              return (
-                <li key={id}>
-                  {item ? (
-                    <a href={item.url} style={{ color: "inherit", textDecoration: "none" }}>
-                      {item.title}
-                    </a>
-                  ) : (
-                    id
-                  )}
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    className="preview-link"
+                    onClick={() => onSelect(item.id)}
+                    title={DIRECTION_TEXT[direction]}
+                    aria-label={`${item.title} — ${DIRECTION_TEXT[direction]}`}
+                  >
+                    <DirectionIcon direction={direction} />
+                    <NodeIcon
+                      shape={itemType.graph.shape as NodeShape}
+                      color={itemType.graph.color as string}
+                    />
+                    <span className="connection-title">{item.title}</span>
+                  </button>
                 </li>
               );
             })}
@@ -370,7 +484,7 @@ function Preview({ node, graph }: { node: EntryNode; graph: GraphIndex }) {
 }
 
 // Only the active view round-trips through the URL. All other state —
-// selection, query, types, tags, focus — is session-only by design so the
+// selection, query, types and tags — is session-only by design so the
 // URL stays clean and shareable without dragging along ephemeral UI state.
 function readStateFromUrl(): WritingBrowserState {
   if (typeof window === "undefined") return defaultState;
@@ -388,6 +502,79 @@ function writeStateToUrl(state: WritingBrowserState) {
   const query = params.toString();
   const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}`;
   window.history.replaceState(null, "", nextUrl);
+}
+
+/**
+ * Direction marker for a connection row.
+ *
+ * Drawn rather than typeset. The mono face renders its arrow glyphs as
+ * hairlines that barely respond to the weight axis, and a text glyph sits on a
+ * baseline while the node icon beside it is a box — so the two never lined up.
+ * A stroked path fixes the weight and the alignment at once.
+ */
+function DirectionIcon({ direction }: { direction: Direction }) {
+  const props = {
+    width: 16,
+    height: 12,
+    viewBox: "0 0 16 12",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true,
+    className: "connection-dir"
+  } as const;
+  switch (direction) {
+    case "both":
+      return (
+        <svg {...props}>
+          <path d="M3.4 6h9.2" />
+          <path d="M6.3 3.1 3.3 6l3 2.9" />
+          <path d="M9.7 3.1 12.7 6l-3 2.9" />
+        </svg>
+      );
+    case "out":
+      return (
+        <svg {...props}>
+          <path d="M2.6 6h9.9" />
+          <path d="M9.2 2.7 12.6 6l-3.4 3.3" />
+        </svg>
+      );
+    case "in":
+    default:
+      return (
+        <svg {...props}>
+          <path d="M13.4 6H3.5" />
+          <path d="M6.8 2.7 3.4 6l3.4 3.3" />
+        </svg>
+      );
+  }
+}
+
+/**
+ * Marks the tag filter, which is the one chip in the bar whose label is not
+ * accompanied by the glyph its subject is drawn with. Outlined rather than
+ * filled, so it reads as a control next to the solid node glyphs beside it.
+ */
+function TagIcon() {
+  return (
+    <svg
+      width={12}
+      height={12}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="graph-button__icon"
+    >
+      <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z" />
+      <circle cx={7} cy={7} r={1.3} fill="currentColor" stroke="none" />
+    </svg>
+  );
 }
 
 type NodeShape = "square" | "circle" | "diamond" | "hexagon";

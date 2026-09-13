@@ -1,5 +1,6 @@
 ---
-import LocalGraph from "../graph/LocalGraph";
+import { writingConfig } from "../../config";
+import LocalGraphMap from "../graph/LocalGraphMap";
 import {
   DEFAULT_TOC_CONFIG,
   filterHeadingsForToc,
@@ -19,7 +20,7 @@ type Props = {
   tocConfig?: TocConfig;
   tocInFoot?: boolean;
   showLocalGraph?: boolean;
-  backlinks?: LinkedItem[];
+  linkedFrom?: LinkedItem[];
   related?: LinkedItem[];
   bibtex?: string;
 };
@@ -31,23 +32,26 @@ const {
   tocConfig = DEFAULT_TOC_CONFIG,
   tocInFoot = false,
   showLocalGraph = false,
-  backlinks = [],
+  linkedFrom = [],
   related = [],
   bibtex
 } = Astro.props;
 
 const tocHeadings = tocInFoot ? filterHeadingsForToc(headings, tocConfig) : [];
+// The linked-from and related lists are suppressed when the map is shown: it already
+// draws those relationships, and `related` is the union of linksTo links and
+// linkedFrom, so the two lists also duplicated each other.
+const showLinkLists = !showLocalGraph;
 const hasAny =
   (tocInFoot && tocHeadings.length > 0) ||
   showLocalGraph ||
-  backlinks.length > 0 ||
-  related.length > 0 ||
+  (showLinkLists && (linkedFrom.length > 0 || related.length > 0)) ||
   Boolean(bibtex);
 ---
 
 {
   hasAny && (
-    <section class="entry-foot" aria-label="Entry navigation">
+    <section class="entry-foot" aria-label="Page navigation">
       {tocInFoot && tocHeadings.length > 0 && (
         <div class="entry-foot-section">
           <div class="entry-foot-label">On this page</div>
@@ -64,20 +68,24 @@ const hasAny =
       )}
       {showLocalGraph && (
         <div class="entry-foot-section">
-          <div class="entry-foot-label">Local graph</div>
+          <div class="entry-foot-label">Related</div>
           <div class="entry-foot-content">
-            <div class="entry-foot-graph">
-              <LocalGraph client:load graph={graph} currentId={currentId} />
-            </div>
+            <LocalGraphMap
+              client:load
+              graph={graph}
+              currentId={currentId}
+              depth={writingConfig.entryLayout.localGraph.defaultDepth as 1 | 2}
+              maxNodes={writingConfig.entryLayout.localGraph.maxNodes}
+            />
           </div>
         </div>
       )}
-      {backlinks.length > 0 && (
+      {showLinkLists && linkedFrom.length > 0 && (
         <div class="entry-foot-section">
-          <div class="entry-foot-label">Backlinks</div>
+          <div class="entry-foot-label">Linked from</div>
           <div class="entry-foot-content">
             <ul>
-              {backlinks.map((item) => (
+              {linkedFrom.map((item) => (
                 <li>
                   <a href={item.url}>{item.title}</a>
                 </li>
@@ -86,7 +94,7 @@ const hasAny =
           </div>
         </div>
       )}
-      {related.length > 0 && (
+      {showLinkLists && related.length > 0 && (
         <div class="entry-foot-section">
           <div class="entry-foot-label">Related</div>
           <div class="entry-foot-content">
@@ -119,7 +127,8 @@ const hasAny =
   for (const button of document.querySelectorAll<HTMLButtonElement>(".cite-body__copy")) {
     button.addEventListener("click", () => {
       const body = button.closest(".cite-body");
-      const text = body?.querySelector("code")?.textContent?.trim() ?? "";
+      const code = body?.querySelector("code");
+      const text = code?.textContent?.trim() ?? "";
       const original = button.textContent;
       const finish = (label: string) => {
         button.textContent = label;
@@ -127,10 +136,22 @@ const hasAny =
           button.textContent = original;
         }, 1200);
       };
+      // Select the citation so the "Press ⌘C" fallback has something to copy.
+      const fallBack = () => {
+        if (code) window.getSelection()?.selectAllChildren(code);
+        finish("Press ⌘C");
+      };
+      // `navigator.clipboard` is undefined outside a secure context (such as
+      // the dev server opened over a LAN address), so calling it directly
+      // would throw before the promise could reject.
+      if (!navigator.clipboard) {
+        fallBack();
+        return;
+      }
       navigator.clipboard
         .writeText(text)
         .then(() => finish("Copied"))
-        .catch(() => finish("Press ⌘C"));
+        .catch(fallBack);
     });
   }
 </script>

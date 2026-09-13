@@ -2,13 +2,21 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import matter from "gray-matter";
 
-import { publicationsConfig, siteConfig, writingConfig, type EntryType } from "../src/config";
+import {
+  publicationsConfig,
+  siteConfig,
+  themeRegistry,
+  writingConfig,
+  type EntryType
+} from "../src/config";
 import { findPlotlyFigureReferences, plotlyHtmlNeedsMathJax } from "../src/lib/article/plotlyValidation";
 import { resolveTocConfig } from "../src/lib/article/toc";
 import { buildGraphIndex, graphWarningSeverity } from "../src/lib/graph/buildGraph";
 import type { WritingEntryLike } from "../src/lib/graph/types";
-import { parseBibtex } from "../src/lib/publications/parseBibtex";
+import { parseBibtexWithIssues } from "../src/lib/publications/parseBibtex";
 import { stripSlashes } from "../src/lib/routes/paths";
+import { collectShortLinks } from "../src/lib/routes/shortLinksSource";
+import { checkThemes } from "../src/lib/theme/checkTheme";
 
 const errors: string[] = [];
 const warnings: string[] = [];
@@ -24,6 +32,8 @@ for (const warning of graphResult.warnings) {
 }
 
 validateRoutes();
+validateShortLinks();
+validateThemes();
 await validatePublications();
 await validatePlotlyFigures(["src/content/writing", "src/content/pages"]);
 
@@ -47,6 +57,7 @@ async function readWritingEntries(root: string): Promise<WritingEntryLike[]> {
         const parsed = matter(source);
         return {
           id: path.relative(root, file).replace(/\.[^.]+$/, ""),
+          filePath: file,
           body: parsed.content,
           data: {
             title: parsed.data.title,
@@ -60,7 +71,7 @@ async function readWritingEntries(root: string): Promise<WritingEntryLike[]> {
             tags: parsed.data.tags ?? [],
             links: parsed.data.links ?? [],
             draft: parsed.data.draft ?? false,
-            layout: parsed.data.layout
+            article: parsed.data.article
           }
         } as WritingEntryLike;
       })
@@ -104,6 +115,30 @@ function validateEntries(entries: WritingEntryLike[]): void {
   }
 }
 
+/**
+ * Check every registered theme — built-ins and anything in `src/site/themes.ts`
+ * — for structure and readability.
+ *
+ * This runs over the whole registry rather than only the two themes in use, so
+ * a site that switches `theme.dark` later does not discover the problem then.
+ * Contrast failures are errors: a token below its threshold is unreadable for
+ * some readers, which is a defect, not a preference. Tokens whose value is a
+ * derived `color-mix()` cannot be measured here and surface as warnings.
+ */
+function validateThemes() {
+  // An unknown or wrong-appearance `theme.light` / `theme.dark` id never
+  // reaches here: src/config/resolve.ts rejects it when this script imports
+  // the config, the same way it rejects a bad entry type. That throw is what
+  // also stops `astro build` and the dev server, which never run this script.
+  const report = checkThemes([...themeRegistry.values()]);
+  for (const issue of report.errors) {
+    errors.push(`Theme "${issue.theme}" token "${issue.token}": ${issue.message}`);
+  }
+  for (const issue of report.warnings) {
+    warnings.push(`Theme "${issue.theme}" token "${issue.token}": ${issue.message}`);
+  }
+}
+
 function validateRoutes(): void {
   const writingRoute = stripSlashes(writingConfig.route);
   const reserved = new Set(["", "publications", stripSlashes(writingConfig.rss.route)]);
@@ -113,16 +148,25 @@ function validateRoutes(): void {
   }
 }
 
+function validateShortLinks(): void {
+  for (const issue of collectShortLinks().issues) errors.push(issue.message);
+}
+
 async function validatePublications(): Promise<void> {
   try {
     const source = await fs.readFile(publicationsConfig.source, "utf8");
-    const publications = parseBibtex(source);
+    // The site build skips a malformed entry and keeps going; validation is
+    // where that has to fail, naming every bad entry rather than the first.
+    const { publications, issues } = parseBibtexWithIssues(source);
+    for (const issue of issues) {
+      errors.push(`BibTeX ${publicationsConfig.source}:${issue.line}: ${issue.message}`);
+    }
     if (publications.length === 0) warnings.push("No publications found.");
     if (siteConfig.homepage.selectedPublications.enabled && !publications.some((publication) => publication.selected)) {
       warnings.push("No selected publications found, but the homepage selected-publications section is enabled.");
     }
   } catch (error) {
-    errors.push(`BibTeX parse failure: ${error instanceof Error ? error.message : String(error)}`);
+    errors.push(`Could not read BibTeX ${publicationsConfig.source}: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 

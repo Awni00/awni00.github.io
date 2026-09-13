@@ -133,37 +133,18 @@
   padding: 0 0 1rem;
 }
 
+/* Two columns: the map, and the preview for whatever is selected in it.
+   There is no third column of controls — topic navigation happens on the
+   hub glyphs themselves and the filters live in the canvas bar, so nothing
+   here restates in text what the map already shows in ink. */
 .graph-browser__grid {
   display: grid;
-  grid-template-columns: 280px minmax(420px, 1fr) 340px;
+  grid-template-columns: minmax(0, 1fr) 340px;
   min-height: 720px;
   border: 1px solid var(--color-border);
   border-radius: 6px;
   background: var(--color-bg);
   overflow: hidden;
-}
-
-/* Left panel */
-.graph-panel--left {
-  border-right: 1px solid var(--color-border);
-  background: var(--color-bg-soft);
-  padding: 22px 22px 28px;
-  overflow-y: auto;
-  font-family: var(--font-ui);
-}
-
-.graph-control {
-  margin-bottom: 22px;
-}
-
-.graph-control > label {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--color-muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 9px;
 }
 
 /* Search */
@@ -187,53 +168,6 @@
 .graph-input:focus {
   border-color: var(--color-accent-line);
   box-shadow: 0 0 0 3px var(--color-accent-soft);
-}
-
-/* Topic tree (hubs) */
-.topic-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 2px;
-}
-
-.topic-list button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 8px;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--color-fg-soft);
-  font-family: var(--font-ui);
-  font-size: 13.5px;
-  text-align: left;
-  cursor: pointer;
-  transition: background var(--dur-fast) var(--ease-quiet);
-}
-
-.topic-list button::before {
-  content: "›";
-  color: var(--color-muted-2);
-  font-size: 11px;
-  flex: 0 0 auto;
-}
-
-.topic-list button:hover {
-  background: var(--color-bg-soft-2);
-}
-
-.topic-list button[aria-pressed="true"] {
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
-  font-weight: 500;
-}
-
-.topic-list button[aria-pressed="true"]::before {
-  color: var(--color-accent);
 }
 
 /* Type pills row */
@@ -282,6 +216,24 @@
   flex: 0 0 auto;
 }
 
+.graph-button__count {
+  color: var(--color-muted-2);
+}
+
+.graph-button[aria-pressed="true"] .graph-button__count {
+  color: inherit;
+}
+
+.graph-button__caret {
+  font-size: 8px;
+  line-height: 1;
+}
+
+.graph-button__icon {
+  display: block;
+  flex: 0 0 auto;
+}
+
 /* Segmented control (focus / view) */
 .graph-seg {
   display: inline-flex;
@@ -308,7 +260,7 @@
   background: var(--color-bg);
   color: var(--color-fg);
   font-weight: 500;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Center canvas */
@@ -323,10 +275,71 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  flex-wrap: wrap;
+  gap: 10px 14px;
   padding: 12px 22px;
   border-bottom: 1px solid var(--color-border-soft);
   background: var(--color-bg);
+}
+
+/* Filters live in the bar rather than a column beside the map, and the type
+   chips double as the legend — see the note in GraphBrowser's markup. */
+.graph-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  min-width: 0;
+}
+
+.graph-typefilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.graph-tagfilter {
+  position: relative;
+  display: flex;
+}
+
+.graph-tagpop {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 6px);
+  right: 0;
+  width: max-content;
+  max-width: min(320px, 70vw);
+  max-height: 260px;
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  box-shadow: var(--shadow-md);
+}
+
+.graph-tagpop__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.graph-tagpop__clear {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.graph-tagpop__clear:hover {
+  color: var(--color-fg);
 }
 
 .graph-crumbs {
@@ -368,6 +381,29 @@
   color: var(--color-fg);
 }
 
+.graph-crumbs .crumb--empty {
+  color: var(--color-muted-2);
+  font-style: italic;
+}
+
+.graph-crumbs__reset {
+  margin-left: 2px;
+  padding: 0 2px;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* d3-zoom calls preventDefault on touch, so without this a vertical swipe that
+   begins on the canvas pans the graph and the page underneath refuses to
+   scroll — several hundred pixels of dead end in the middle of a phone screen.
+   `pan-y` hands vertical scrolling back to the browser before the event is
+   ever dispatched, and leaves taps, horizontal panning and pinch to the graph.
+   Not scoped to a breakpoint: a large touchscreen has the same problem. */
+.graph-canvas__surface {
+  touch-action: pan-y;
+}
+
 .graph-canvas {
   flex: 1;
   position: relative;
@@ -382,43 +418,34 @@
   background-image: radial-gradient(circle, var(--color-border-soft) 0.6px, transparent 0.6px);
 }
 
+/* Floating label shown beside the cursor for `labelVisibility: "hover"` types.
+   Replaces react-force-graph's built-in tooltip (its hit detection is
+   unreliable under canvas fingerprinting protection — see nodeInteraction.ts),
+   and unlike that hardcoded black-on-grey box it follows the site theme. */
+.graph-tooltip {
+  position: absolute;
+  z-index: 2;
+  width: max-content;
+  max-width: max(50%, 150px);
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--color-bg);
+  background: color-mix(in srgb, var(--color-fg) 82%, transparent);
+  pointer-events: none;
+}
+
 .graph-loading {
   font-family: var(--font-ui);
   font-size: 13px;
   color: var(--color-muted);
 }
 
-.graph-legend {
-  position: absolute;
-  bottom: 14px;
-  left: 18px;
-  display: flex;
-  gap: 14px;
-  font-family: var(--font-ui);
-  font-size: 11.5px;
-  color: var(--color-muted);
-  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
-  padding: 6px 12px;
-  border-radius: 5px;
-  border: 0.5px solid var(--color-border);
-  backdrop-filter: blur(6px);
-}
-
-.graph-legend span {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.graph-legend .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
 .graph-legend-icon {
   display: inline-block;
+  flex: 0 0 auto;
   vertical-align: -2px;
 }
 
@@ -450,7 +477,7 @@
   color: var(--color-muted);
 }
 
-.preview-pane h2 {
+.preview-title {
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 22px;
@@ -470,7 +497,7 @@
 }
 
 .preview-summary,
-.preview-pane > p {
+.preview-pane > p.preview-body {
   font-family: var(--font-body);
   font-size: 14.5px;
   line-height: 1.55;
@@ -508,7 +535,7 @@
   margin-bottom: 18px;
 }
 
-.preview-pane .sidebar-section h2 {
+.preview-pane .sidebar-section__label {
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 500;
@@ -516,9 +543,6 @@
   text-transform: uppercase;
   color: var(--color-muted);
   margin: 0 0 8px;
-  border-bottom: 0;
-  padding-bottom: 0;
-  display: block;
 }
 
 .preview-pane .sidebar-section ul {
@@ -537,6 +561,72 @@
 
 .preview-pane .sidebar-section li + li {
   border-top: 0;
+}
+
+/* A row selects the node rather than navigating to it, so it is a button —
+   and it has to stop looking like the link it used to be, or the underline
+   promises a page change that no longer happens. */
+/* Padding sits on the button rather than the li so the whole row is the
+   target: at list spacing alone the tappable box came out at 21px, under the
+   24px minimum. */
+.connection-list li {
+  padding: 0;
+}
+
+.preview-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-quiet);
+}
+
+/* Fixed column so the arrows line up as a scannable strip: direction is read
+   down the list, not row by row. `display: block` is what puts them on the
+   node icon's centre line — as an inline element the glyph would sit on the
+   text baseline instead. */
+.connection-dir {
+  flex: 0 0 auto;
+  display: block;
+  /* The same token the canvas draws edges with: a row's marker *is* an edge,
+     so it should be the colour of one. Full opacity rather than the canvas's
+     0.35, which would leave a 1.6px stroke invisible. */
+  color: var(--graph-edge);
+}
+
+.preview-link:hover .connection-dir {
+  color: var(--color-accent);
+}
+
+.connection-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-section__count {
+  color: var(--color-muted-2);
+  margin-left: 2px;
+}
+
+
+
+.preview-link:hover {
+  color: var(--color-accent);
+}
+
+.preview-link:focus-visible {
+  outline: 2px solid var(--color-accent-line);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .open-btn {
@@ -562,13 +652,186 @@
   color: var(--color-bg);
 }
 
-/* Local graph (article sidebar) */
-.local-graph {
-  height: 200px;
+/* ── Local graph map (miniature of the writing map) ─────────────────── */
+
+/* Shown in the article header (hubs and sub-hubs) or the footer (everything
+   else) — never both, since a header map suppresses the footer's. Unlike the
+   surrounding prose it sits on a surface: the canvas is inset content, and
+   the panel beside it needs an edge to be read against. */
+
+/* Canvas on its own surface, beside a panel describing the selected node.
+   Clicking a node selects it; navigation is always the explicit action at the
+   foot of the panel. */
+.local-graph-map {
+  /* Padding around the canvas. The panel adds the same to its height, so both
+     columns end on the same line. */
+  --map-pad: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  font-family: var(--font-ui);
+}
+
+.local-graph-map__canvas {
+  min-width: 0;
+  padding: var(--map-pad);
   background: var(--color-bg-soft);
-  border: 0.5px solid var(--color-border);
   border-radius: 5px;
+}
+
+
+/* Sized to the framed canvas rather than the bare one, so the panel's contents
+   share the full height instead of bunching at the top. */
+.local-graph-map__side {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: calc(var(--map-height, 240px) + 2 * var(--map-pad));
   overflow: hidden;
+  /* Coloured by the selected node's type, so the panel is visibly about a
+     particular node rather than about the map in general. */
+  border-left: 2px solid var(--map-accent, var(--color-border));
+  padding-left: 14px;
+}
+
+.local-graph-map__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.local-graph-map__here {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.local-graph-map__title {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0 0 4px;
+  color: var(--color-fg);
+}
+
+/* One line, always: which tags fit is the browser's business, and the trailing
+   ellipsis appears only when it actually truncates. The separator belongs to
+   the tag that *follows* it — hung off the preceding tag it would become a
+   dangling mark wherever the line runs out. */
+.local-graph-map__tags {
+  flex: none;
+  margin-bottom: 10px;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+.local-graph-map__tags span + span::before {
+  content: " · ";
+}
+
+/* The only element that grows, which is what pins the action to the foot and
+   keeps everything above it still as the selection changes. */
+.local-graph-map__summary {
+  flex: 1;
+  min-height: 0;
+  margin: 0 0 10px;
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--color-fg-soft);
+  /* Whatever exceeds the space fades rather than ending on a hard cut. */
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 20px), transparent);
+}
+
+/* Scoped past `.entry-foot-content a`, which rules every link in an article
+   footer along the bottom — a hairline with no business under a filled button.
+   `margin-top: auto` keeps the action at the foot even when a page has no
+   summary to do the pushing. */
+.local-graph-map .local-graph-map__open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 5px;
+  background: var(--color-fg);
+  color: var(--color-bg);
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease;
+}
+
+.local-graph-map .local-graph-map__open:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.local-graph-map__open-arrow {
+  transition: transform 0.12s ease;
+}
+
+.local-graph-map__open:hover .local-graph-map__open-arrow {
+  transform: translateX(2px);
+}
+
+/* Stacked, the two columns have nothing left to align to, so the rules that
+   made them end on the same line become harmful: the height lock stretches the
+   summary and strands the action at a bottom the content never reaches. The
+   panel takes its content height instead. The breakpoint is well below the
+   side-by-side layout's comfortable minimum, so tablets keep the aligned
+   two-column form. */
+@media (max-width: 640px) {
+  .local-graph-map {
+    grid-template-columns: minmax(0, 1fr);
+    /* Close enough to read as one block. Stacked, proximity is the only
+       grouping cue left — side by side, a shared baseline did that work. */
+    gap: 4px;
+  }
+
+  /* Flat where the two meet, so the map and the panel read as two segments of
+     a single object rather than two cards that happen to be near each other.
+     Both start at the same left edge, and the panel's accent continues it. */
+  .local-graph-map__canvas {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .local-graph-map__side {
+    height: auto;
+    overflow: visible;
+    padding-top: 12px;
+  }
+
+  /* With no fixed height there is nothing to truncate, so the summary is shown
+     whole rather than clamped behind a fade. */
+  .local-graph-map__summary {
+    flex: none;
+    margin-bottom: 14px;
+    mask-image: none;
+  }
+
+  /* Nothing to push the action down to; it follows the text directly. */
+  .local-graph-map .local-graph-map__open {
+    margin-top: 0;
+  }
 }
 
 /* ── View switcher (Map / Topics / List) ────────────────────────────── */
@@ -604,6 +867,13 @@
   display: flex;
   gap: 14px;
   align-items: center;
+}
+
+/* Sized here rather than inline, so the mobile rule below can hand the field
+   the leftover width instead of holding it at a fixed 240px and pushing the
+   view switcher off the side of the screen. */
+.graph-view-bar__right .graph-input {
+  width: 240px;
 }
 
 /* ── Topics view ────────────────────────────────────────────────────── */
@@ -1127,15 +1397,68 @@
     min-height: 0;
   }
 
-  .graph-panel--left,
+  /* Stacked, the map comes first and the preview follows it — the reader
+     meets the graph immediately instead of scrolling past a column of
+     controls to reach it. */
   .graph-panel--right {
     border: 0;
-    border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border);
   }
 
   .graph-canvas {
-    min-height: 420px;
+    min-height: 0;
+    /* 24px each side costs a seventh of the width on a phone. */
+    padding: 10px;
   }
+
+  /* Crumbs above, filters below, each on its own line: side by side they
+     collapse into two cramped, wrapping halves. */
+  .graph-canvas-bar {
+    flex-direction: column;
+    align-items: stretch;
+    /* Explicitly not `wrap`, which it inherits from the row layout above: a
+       wrapping *column* takes its width from its content rather than its
+       container, which sized the filter row to the full width of the chips and
+       let the grid's overflow clip the tags button off the end. */
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+
+  /* One scrolling row rather than a wrapped block. Wrapped, six chips stood
+     three rows deep and pushed the map most of the way down the screen. */
+  .graph-filters {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .graph-typefilter {
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* Chips are small targets; let the strip settle on one. */
+    scroll-snap-type: x proximity;
+  }
+
+  .graph-typefilter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .graph-typefilter .graph-button {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .graph-tagfilter {
+    flex: 0 0 auto;
+  }
+
+  .graph-view-bar {
+    padding: 10px 14px;
+  }
+
 
   .hubsec-head {
     grid-template-columns: 28px 1fr;
@@ -1169,6 +1492,19 @@
 
   .graph-view-bar {
     flex-wrap: wrap;
+  }
+
+  /* Search and the view switcher drop to their own full-width line, with the
+     field taking whatever the switcher leaves. */
+  .graph-view-bar__right {
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+  }
+
+  .graph-view-bar__right .graph-input {
+    width: auto;
+    flex: 1 1 150px;
+    min-width: 0;
   }
 }
 

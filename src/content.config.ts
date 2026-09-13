@@ -2,6 +2,7 @@ import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
 import { entryTypeIds } from "./config";
+import { SHORT_URL_FORMAT_MESSAGE, SHORT_URL_PATTERN } from "./lib/routes/shortLinks";
 
 const entryTypes = entryTypeIds as [string, ...string[]];
 
@@ -52,6 +53,14 @@ const externalLinks = z
   .partial()
   .optional();
 
+const hero = z
+  .object({
+    src: z.string().url().or(z.string().startsWith("/")),
+    alt: z.string().default(""),
+    caption: z.string().optional()
+  })
+  .optional();
+
 const writing = defineCollection({
   loader: glob({
     base: "./src/content/writing",
@@ -62,6 +71,11 @@ const writing = defineCollection({
     title: z.string(),
     type: z.enum(entryTypes),
     slug: z.string().optional(),
+    // Optional second path that redirects to this entry's canonical URL, for
+    // sharing something like /project-name instead of /writing/hub/project-name.
+    // Collected at Astro config load, so a dev server restart is needed after
+    // adding or changing one.
+    shortUrl: z.string().regex(SHORT_URL_PATTERN, SHORT_URL_FORMAT_MESSAGE).optional(),
     aliases: z.array(z.string()).default([]),
     date: dateString,
     displayDates: z.array(displayDate).min(1).optional(),
@@ -89,10 +103,25 @@ const writing = defineCollection({
     math: mathConfig.optional(),
     external: externalLinks,
     bibtex: z.string().optional(),
-    layout: z
+    // Optional figure rendered alongside the article body. Available in
+    // both presentation modes; article mode leads with it, abstract mode
+    // places it after the abstract.
+    hero,
+    // Per-entry presentation overrides. Mirrors the entry-type registry's
+    // `article` block, so the same keys mean the same thing at both levels.
+    //
+    // NOTE: this must not be named `layout`. Astro reserves `frontmatter.layout`
+    // as a path to a layout component and emits
+    //   import __astro_layout_component__ from <value>
+    // which is a syntax error for any object value.
+    article: z
       .object({
-        // Override the article body width for this entry.
-        width: z.enum(["reading", "flex"]).optional(),
+        // Presentation mode. "abstract" renders a short paper-record page
+        // whose body is the abstract itself, emphasized as a block; the
+        // default "article" is the standard long-form layout. This only
+        // affects presentation — `type` still drives graph styling, RSS,
+        // and recent-writing inclusion.
+        mode: z.enum(["article", "abstract"]).optional(),
         // Override aside placement: "margin" floats <Aside> blocks into
         // the right gutter; "inline" renders them as left-bordered blocks.
         asides: z.enum(["margin", "inline"]).optional(),
@@ -110,7 +139,7 @@ const writing = defineCollection({
             localGraph: z
               .object({ where: z.enum(["header", "footer", "none"]).optional() })
               .optional(),
-            backlinks: z
+            linkedFrom: z
               .object({ where: z.enum(["left", "right", "footer", "sidebar", "none"]).optional() })
               .optional(),
             related: z

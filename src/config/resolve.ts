@@ -3,11 +3,14 @@ import { defaultGraphConfig } from "./defaults/graph";
 import { defaultPublicationsConfig } from "./defaults/publications";
 import { defaultSiteConfig } from "./defaults/site";
 import { defaultThemeConfig } from "./defaults/theme";
+import { builtInThemes } from "./defaults/themes";
 import { defaultWritingConfig } from "./defaults/writing";
 import { siteConfigOverrides } from "../site/config";
+import { customThemes } from "../site/themes";
+import { defineTheme } from "../lib/theme/defineTheme";
 import { normalizeTocConfig } from "../lib/article/toc";
 import type {
-  ArticleWidth,
+  ArticleMode,
   AsidePlacement,
   DeepPartial,
   EntryType,
@@ -17,6 +20,7 @@ import type {
   GraphConfigBase,
   PublicationsConfig,
   SiteConfig,
+  Theme,
   ThemeConfig,
   TocConfigOverride,
   WritingConfig
@@ -36,11 +40,7 @@ const fallbackEntryType: EntryTypeDefinition = {
   ownsFolder: false,
   includeInRss: true,
   includeInRecent: true,
-  graph: fallbackGraph,
-  article: {
-    width: "reading",
-    localGraph: true
-  }
+  graph: fallbackGraph
 };
 
 export const entryTypeDefinitions = validateEntryTypes(
@@ -53,6 +53,34 @@ export const entryTypeIds = entryTypeDefinitions.map((entryType) => entryType.id
 
 export const siteConfig = mergeConfig<SiteConfig>(defaultSiteConfig, siteConfigOverrides.site);
 export const themeConfig = mergeConfig<ThemeConfig>(defaultThemeConfig, siteConfigOverrides.theme);
+
+/**
+ * Every theme the site can use, built-ins first. A site theme sharing an id
+ * with a built-in replaces it, so `src/site/themes.ts` can retune a shipped
+ * theme without the site forking `src/config/defaults/themes.ts`.
+ */
+export const themeRegistry: ReadonlyMap<string, Theme> = new Map(
+  [...builtInThemes, ...customThemes.map(defineTheme)].map((theme) => [theme.id, theme])
+);
+
+export const lightTheme = resolveTheme(themeConfig.light, "light");
+export const darkTheme = resolveTheme(themeConfig.dark, "dark");
+
+function resolveTheme(id: string, slot: "light" | "dark"): Theme {
+  const theme = themeRegistry.get(id);
+  if (!theme) {
+    const available = [...themeRegistry.keys()].sort().join(", ");
+    throw new Error(
+      `theme.${slot} is "${id}", which is not a known theme. Available themes: ${available}.`
+    );
+  }
+  if (theme.appearance !== slot) {
+    throw new Error(
+      `theme.${slot} is "${id}", but that theme declares appearance "${theme.appearance}".`
+    );
+  }
+  return theme;
+}
 export const publicationsConfig = mergeConfig<PublicationsConfig>(
   defaultPublicationsConfig,
   siteConfigOverrides.publications
@@ -107,8 +135,7 @@ function resolveWritingConfig(): WritingConfig {
     defaultWritingConfig,
     siteConfigOverrides.writing as DeepPartial<WritingConfig> | undefined
   );
-  const articleWidthByType: Record<EntryType, ArticleWidth> = {};
-  const localGraphByType: Record<EntryType, boolean> = {};
+  const modeByType: Record<EntryType, ArticleMode> = {};
   const placementByType: WritingConfig["entryLayout"]["placement"]["byType"] = {};
   const asidesByType: Record<EntryType, AsidePlacement> = {};
   const tocByType: Record<EntryType, TocConfigOverride> = {};
@@ -116,9 +143,7 @@ function resolveWritingConfig(): WritingConfig {
   const rssExcludeTypes: EntryType[] = [];
 
   for (const entryType of entryTypeDefinitions) {
-    articleWidthByType[entryType.id] =
-      entryType.article?.width ?? base.entryLayout.articleWidth.default;
-    localGraphByType[entryType.id] = entryType.article?.localGraph ?? true;
+    modeByType[entryType.id] = entryType.article?.mode ?? base.entryLayout.mode.default;
     if (entryType.article?.placement) placementByType[entryType.id] = entryType.article.placement;
     asidesByType[entryType.id] = entryType.article?.asides ?? base.entryLayout.asides.default;
     if (entryType.article?.toc) tocByType[entryType.id] = entryType.article.toc;
@@ -145,20 +170,14 @@ function resolveWritingConfig(): WritingConfig {
     },
     entryLayout: {
       ...base.entryLayout,
-      articleWidth: {
-        ...base.entryLayout.articleWidth,
+      mode: {
+        ...base.entryLayout.mode,
         byType: {
-          ...articleWidthByType,
-          ...base.entryLayout.articleWidth.byType
+          ...modeByType,
+          ...base.entryLayout.mode.byType
         }
       },
-      localGraph: {
-        ...base.entryLayout.localGraph,
-        byType: {
-          ...localGraphByType,
-          ...base.entryLayout.localGraph.byType
-        }
-      },
+      localGraph: { ...base.entryLayout.localGraph },
       toc: {
         ...base.entryLayout.toc,
         default: normalizeTocConfig(

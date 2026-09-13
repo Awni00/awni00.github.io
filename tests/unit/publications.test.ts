@@ -1,10 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  groupPublications,
-  publicationLinks
-} from "../../src/lib/publications/formatPublication";
-import { parseBibtex } from "../../src/lib/publications/parseBibtex";
+import { groupPublications, publicationLinks } from "../../src/lib/publications/formatPublication";
+import { arxivUrl, doiUrl, externalLinkHref } from "../../src/lib/publications/identifierUrls";
+import { parseBibtex, parseBibtexWithIssues } from "../../src/lib/publications/parseBibtex";
 
 const bibtex = `@inproceedings{sample2026,
   title = {Sample Paper},
@@ -20,7 +18,6 @@ const bibtex = `@inproceedings{sample2026,
   preview = {sample.svg},
   pdf = {/publications/sample.pdf},
   arxiv = {2601.00000},
-  publisher_page = {https://publisher.example/sample},
   code = {https://github.com/example/sample}
 }
 
@@ -39,7 +36,6 @@ describe("publications", () => {
       title: "Sample Paper",
       selected: true,
       bibtexShow: true,
-      publisherPage: "https://publisher.example/sample",
       preview: "/publications/sample.svg"
     });
   });
@@ -61,19 +57,9 @@ describe("publications", () => {
     expect(publication.bibtex).not.toContain("preview");
     expect(publication.bibtex).not.toContain("pdf");
     expect(publication.bibtex).not.toContain("arxiv");
-    expect(publication.bibtex).not.toContain("publisher_page");
     expect(publication.bibtex).not.toContain("code");
     expect(publication.bibtex).not.toContain("abstract");
     expect(publication.bibtex).not.toContain("abbr");
-  });
-
-  it("labels publisher-page links as Publisher", () => {
-    const [publication] = parseBibtex(bibtex);
-
-    expect(publicationLinks(publication)).toContainEqual({
-      label: "Publisher",
-      href: "https://publisher.example/sample"
-    });
   });
 
   it("generates concise BibTeX for misc entries", () => {
@@ -86,7 +72,7 @@ describe("publications", () => {
       eprint = {2601.00000},
       archivePrefix = {arXiv},
       primaryClass = {cs.LG},
-      publisher_page = {https://example.com},
+      website = {https://example.com},
       selected = {true}
     }`);
 
@@ -100,11 +86,113 @@ describe("publications", () => {
   archiveprefix = {arXiv},
   primaryclass = {cs.LG}
 }`);
-    expect(publication.bibtex).not.toContain("publisher_page");
+    expect(publication.bibtex).not.toContain("website");
     expect(publication.bibtex).not.toContain("selected");
   });
 
   it("groups by year descending", () => {
     expect(groupPublications(parseBibtex(bibtex)).map((group) => group.label)).toEqual(["2026", "2025"]);
+  });
+
+  it("puts undated publications last in either order", () => {
+    const publications = parseBibtex(`${bibtex}
+@misc{undated, title = {Undated Note}, author = {Other Author}}`);
+    const labels = (order: "asc" | "desc") =>
+      groupPublications(publications, order).map((group) => group.label);
+
+    expect(labels("desc")).toEqual(["2026", "2025", "n.d."]);
+    expect(labels("asc")).toEqual(["2025", "2026", "n.d."]);
+  });
+});
+
+describe("identifier URLs", () => {
+  it("links bare DOIs and arXiv ids to their resolvers", () => {
+    expect(doiUrl("10.0000/sample")).toBe("https://doi.org/10.0000/sample");
+    expect(arxivUrl("2601.00000")).toBe("https://arxiv.org/abs/2601.00000");
+  });
+
+  it("leaves identifiers that are already URLs alone", () => {
+    expect(doiUrl("https://doi.org/10.0000/sample")).toBe("https://doi.org/10.0000/sample");
+    expect(arxivUrl("https://arxiv.org/abs/2601.00000")).toBe("https://arxiv.org/abs/2601.00000");
+  });
+
+  it("resolves a writing entry's external links by key", () => {
+    // A bare DOI used as an href resolved against the entry page and 404'd.
+    expect(externalLinkHref("doi", "10.0000/example.00001")).toBe("https://doi.org/10.0000/example.00001");
+    expect(externalLinkHref("arxiv", "0000.00000")).toBe("https://arxiv.org/abs/0000.00000");
+    expect(externalLinkHref("code", "https://github.com/example/code")).toBe("https://github.com/example/code");
+    expect(externalLinkHref("slides", "/publications/slides.pdf")).toBe("/publications/slides.pdf");
+  });
+
+  it("gives publication links the same resolver URLs", () => {
+    const links = publicationLinks(parseBibtex(bibtex)[0]);
+    expect(links).toContainEqual({ label: "DOI", href: "https://doi.org/10.0000/sample" });
+    expect(links).toContainEqual({ label: "arXiv", href: "https://arxiv.org/abs/2601.00000" });
+  });
+});
+
+describe("BibTeX that reference managers actually write", () => {
+  // These blocks used to be read as entries without a citation key, and the
+  // throw took the homepage and /publications down with it.
+  it("expands @string abbreviations, including # concatenation", () => {
+    const [publication] = parseBibtex(`@string{pami = "IEEE TPAMI"}
+@article{a, title = {T}, journal = pami # " (extended)", year = 2020}`);
+    expect(publication.venue).toBe("IEEE TPAMI (extended)");
+    expect(publication.bibtex).toContain("journal = {IEEE TPAMI (extended)}");
+  });
+
+  it("skips @comment and @preamble", () => {
+    const publications = parseBibtex(`@preamble{"\\newcommand{\\noopsort}[1]{}"}
+@article{a, title = {T}, year = 2020}
+@comment{jabref-meta: databaseType:bibtex;}`);
+    expect(publications.map((publication) => publication.id)).toEqual(["a"]);
+  });
+
+  it("leaves an unknown bare name as written", () => {
+    const [publication] = parseBibtex(`@article{a, title = {T}, month = jan, year = 2020}`);
+    expect(publication.fields.month).toBe("jan");
+  });
+
+  // Previously truncated silently to "A {", with no error at all.
+  it("does not end a quoted value at a quote inside braces", () => {
+    const [publication] = parseBibtex(`@article{a, title = "A {"}quoted{"} word", year = 2020}`);
+    expect(publication.title).toBe('A {"}quoted{"} word');
+  });
+
+  it("allows an unmatched parenthesis inside a value of a parenthesised entry", () => {
+    const [publication] = parseBibtex(`@article(a, title = {Results :)}, year = 2020)`);
+    expect(publication.title).toBe("Results :)");
+  });
+});
+
+describe("malformed BibTeX", () => {
+  const input = `@article{first, title = {First}, year = 2020}
+
+@article{nokey title = {No key}}
+
+@article{badfield, title {missing equals}, year = 2022}
+
+@article{unclosed, title = {Never closed, year = 2023
+
+@article{last, title = {Last}, year = 2024}
+`;
+
+  it("keeps every entry that parses and reports each one that does not, by line", () => {
+    const { publications, issues } = parseBibtexWithIssues(input);
+    expect(publications.map((publication) => publication.id)).toEqual(["first", "last"]);
+    expect(issues).toEqual([
+      { line: 3, message: expect.stringContaining("missing a citation key") },
+      { line: 5, message: expect.stringContaining('"badfield"') },
+      { line: 7, message: expect.stringContaining("never closed") }
+    ]);
+  });
+
+  it("still rejects unbalanced braces, which BibTeX itself does not accept", () => {
+    const { issues } = parseBibtexWithIssues(`@article{a, title = "A }weird{ title", year = 2020}`);
+    expect(issues).toHaveLength(1);
+  });
+
+  it("throws on the first problem when parsed strictly", () => {
+    expect(() => parseBibtex(input)).toThrow(/^Line 3: /);
   });
 });

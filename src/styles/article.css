@@ -238,33 +238,45 @@
   }
 }
 
-/* LocalGraph rendered in the article header as a contextual landmark
-   (default for hubs, opt-in via placement.localGraph.where = "header"). */
+/* The local map rendered in the article header as a contextual landmark
+   (default for hubs, opt-in via placement.localGraph.where = "header").
+   `min-height` reserves the slot before the force-graph chunk loads, so the
+   prose below it doesn't jump; it matches the map's default canvas height
+   plus its padding. */
 .article-header__graph {
   margin-top: 24px;
-  height: 220px;
-  background: var(--color-bg-soft);
-  border: 0.5px solid var(--color-border);
-  border-radius: 5px;
-  padding: 8px;
-  overflow: hidden;
+  min-height: 256px;
+}
+
+@media (max-width: 640px) {
+  /* The map stacks its panel under the canvas below this width, so the slot
+     no longer has a height worth reserving. */
+  .article-header__graph {
+    min-height: 0;
+  }
 }
 
 /* ── Article grid ───────────────────────────────────────────────────── */
 
 /*
- * Three-column conditional grid:
- *   [left gutter] [article body] [right gutter]
+ * Three-column grid with a constant track set:
+ *   [left rail] [article body] [right rail]
  *
- * Each gutter renders only when populated, controlled by data-attributes
- * set in WritingEntryLayout:
+ * Data-attributes set in WritingEntryLayout select what renders, never
+ * how wide the columns are:
  *   data-toc      = "left" | "right" | "none"   — which side hosts the TOC strip
  *   data-asides   = "margin" | "inline"        — whether <Aside> uses the right gutter
- *   data-has-left / data-has-right = "true" | "false" — sidebar element actually rendered
- *   data-width    = "reading" | "flex"          — body cap (720px vs 1fr)
+ *   data-mode     = "article" | "abstract"     — standard body vs abstract block
  *
- * The header spans all three columns so the title and meta stay centred
- * over the article body regardless of which gutters are rendering.
+ * The left rail is ALWAYS allocated, even on entries with no sidebar to
+ * put in it. That is deliberate: the track set stays the same width on
+ * every page, so the body column — and therefore the header, the prose
+ * and the footer — starts at the same x regardless of which optional
+ * pieces a given entry renders. An empty rail is just whitespace; a
+ * conditional one would slide the whole article sideways.
+ *
+ * Every entry uses the same body track (760 prose + 32 gap + 240 aside
+ * gutter). There is no per-entry width option.
  */
 .article-grid {
   display: grid;
@@ -274,7 +286,7 @@
      entries occupy the same horizontal real estate. Margin-aside
      entries use the full track via the sub-grid in .article-content. */
   grid-template-columns:
-    [left-start] var(--col-left, 0) [left-end body-start]
+    [left-start] var(--col-left, 200px) [left-end body-start]
     minmax(0, var(--col-body, 1032px)) [body-end right-start]
     var(--col-right, 0) [right-end];
   column-gap: var(--col-gap, 32px);
@@ -288,22 +300,17 @@
   justify-content: center;
 }
 
-/* Conditionally enable each gutter. The left/right gutters open only
-   when a sidebar is actually rendered there (TOC, backlinks, etc.).
-   Asides DO NOT live in the outer right column — they sit inside the
-   article-main as a sub-grid (see .article-content[data-asides=margin]).
-   Instead, when asides are in margin mode we widen the body track so
-   the sub-grid (760 body + 32 gap + 240 asides = 1032) fits. */
-.article-grid[data-has-left="true"]   { --col-left: 200px; }
+/* The right rail is the one gutter still opened on demand. It hosts a
+   right-placed TOC or nav strip, which competes for the same space as
+   margin asides — `effectiveAsides` already degrades those to inline
+   when the TOC sits right, so the two never claim the gutter at once. */
 .article-grid[data-has-right="true"]  { --col-right: 200px; }
 
-/* Flex-width entries fill all available room (up to the grid maximum). */
-.article-grid[data-width="flex"]      { --col-body: 1fr; }
-
-/* Header + footer span the whole grid. Body and gutters land in their
-   named columns automatically via grid-column. */
+/* Header, body and footer all land in the body column, so they share one
+   left edge. Rails land in their own tracks. */
 .article-header              { grid-column: body-start / body-end; }
 .article-main                { grid-column: body-start / body-end;  min-width: 0; }
+.entry-foot                  { grid-column: body-start / body-end;  min-width: 0; }
 .article-sidebar--left       { grid-column: left-start / left-end; }
 .article-sidebar--right      { grid-column: right-start / right-end; }
 
@@ -658,20 +665,14 @@
   border: 0;
 }
 
-/* Local graph block in sidebar */
-.local-graph {
-  background: var(--color-bg-soft);
-  border: 0.5px solid var(--color-border);
-  border-radius: 5px;
-  height: 200px;
-  overflow: hidden;
-  padding: 8px;
-}
-
 /* ── Callout ────────────────────────────────────────────────────────── */
 
 .callout {
+  /* Two slots: the rule and icon take the palette's real hue (a graphic
+     element, 3:1), the title takes the darkened text variant (4.5:1).
+     Callout.astro sets both from the type's semantic role. */
   --callout-accent: var(--color-muted);
+  --callout-accent-text: var(--callout-accent);
   border-left: 3px solid var(--callout-accent);
   padding: 4px 0 4px 20px;
   margin: 28px 0;
@@ -690,7 +691,7 @@
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: 0;
-  color: var(--callout-accent);
+  color: var(--callout-accent-text);
 }
 
 .callout__icon {
@@ -816,6 +817,83 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--box-accent, var(--color-fg-soft));
+}
+
+/* ── Abstract mode ──────────────────────────────────────────────────── */
+
+/* Lead figure for the article body. In article mode it leads the page; in
+   abstract mode it follows the abstract, so the paper's own words open the
+   record and the figure illustrates what was just read. */
+.article-hero.article-figure {
+  margin: 0 0 36px;
+  max-width: min(100%, var(--article-layout-max-width, 760px));
+}
+
+.article-grid[data-mode="abstract"] .article-hero.article-figure {
+  margin: 36px 0 0;
+}
+
+/* The abstract block. Abstract-mode entries put the paper's abstract in
+   the article body, bracketed by hairline rules with a mono eyebrow.
+   Deliberately unfilled: backgrounds in this stylesheet are for inset
+   content (code, figure frames, dialogs), never for primary prose. */
+.abstract-block {
+  max-width: 760px;
+  padding: 26px 0 28px;
+  border-top: 1px solid var(--color-rule);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.abstract-block__label {
+  /* Same spec as the byline and entry-footer labels, so the abstract
+     reads as one more labelled field of the record. Set explicitly so it
+     never picks up prose h2 sizing. */
+  font-family: var(--font-mono);
+  font-size: var(--article-label-size, 12px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin: 0 0 14px;
+}
+
+.abstract-block .article-content {
+  /* The block already caps the measure; let the prose fill it. */
+  max-width: none;
+}
+
+.abstract-block .article-content > :last-child {
+  margin-bottom: 0;
+}
+
+/* Abstract pages are short, so the standard header rhythm reads as too
+   airy. Tighten it, and drop the header's closing rule: it would land
+   about 50px above the abstract's opening rule, giving two hairlines in
+   quick succession. The abstract's top rule terminates the header. */
+.article-grid[data-mode="abstract"] .article-header {
+  padding-top: 40px;
+  padding-bottom: 0;
+  margin-bottom: 40px;
+  border-bottom: 0;
+}
+
+/* Same reasoning at the other end: the footer opens with its own rule,
+   which would sit just below the abstract's closing one. The abstract
+   block owns both its boundaries, so the footer drops its rule and the
+   section padding supplies the gap. Keeping the abstract's rule rather
+   than the footer's means the block still closes properly on entries
+   whose footer is empty. */
+.article-grid[data-mode="abstract"] .entry-foot {
+  border-top: 0;
+  margin-top: 0;
+}
+
+/* Unless a hero sits between them: then the abstract's closing rule is
+   already spoken for and the footer needs its own divider back. */
+.article-grid[data-mode="abstract"] .article-main:has(.article-hero) ~ .entry-foot {
+  border-top: 1px solid var(--color-rule);
+  margin-top: 48px;
 }
 
 /* ── Figure ─────────────────────────────────────────────────────────── */
@@ -1048,7 +1126,7 @@
   background: var(--color-bg);
   color: var(--color-fg);
   font-weight: 500;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .toggle-figure__panels {
@@ -1296,10 +1374,14 @@
 
 /* ── Narrow variant foot sections ───────────────────────────────────── */
 
+/* Lives in the grid's body column (see grid-column above), so it inherits
+   the article's left edge. Capped at the prose measure rather than the
+   full body track: margin asides are marginalia, not part of the column
+   the footer should match. */
 .entry-foot {
-  max-width: var(--content-narrow);
-  margin: 48px auto 80px;
-  padding: 0 1rem;
+  max-width: 760px;
+  margin: 48px 0 0;
+  padding: 0;
   border-top: 1px solid var(--color-rule);
 }
 
@@ -1358,14 +1440,6 @@
   border-bottom-color: var(--color-accent);
 }
 
-.entry-foot-graph {
-  background: var(--color-bg-soft);
-  border: 0.5px solid var(--color-border);
-  border-radius: 5px;
-  padding: 8px;
-  height: 200px;
-}
-
 /* When the article has no sidebar, centre its main column. */
 .article-grid[data-has-sidebar="false"] .article-main {
   max-width: var(--content-narrow);
@@ -1405,8 +1479,7 @@
 }
 
 @media (max-width: 980px) {
-  .article-grid,
-  .article-grid[data-width="flex"] {
+  .article-grid {
     display: block;
     padding: 32px 1rem 64px;
   }
@@ -1443,6 +1516,17 @@
   .article-summary {
     font-size: var(--article-summary-size-mobile, 17px);
   }
+
+  .abstract-block {
+    padding: 22px 0 24px;
+  }
+
+  .article-grid[data-mode="abstract"] .article-header {
+    /* Horizontal padding comes back at this breakpoint; keep the base
+       rule's zero bottom padding so the abstract's top rule still does
+       the work of closing the header. */
+    padding: 32px 1rem 0;
+  }
 }
 
 @media (max-width: 680px) {
@@ -1473,4 +1557,36 @@
   .figure-grid[data-columns="4"] .figure-grid__items {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* ── Code blocks ────────────────────────────────────────────────────── */
+
+/*
+ * Shiki runs in `defaultColor: false` mode (see astro.config.ts), so every
+ * token carries `--shiki-light` / `--shiki-dark` rather than a baked colour.
+ * These two rules are what turn those into the active theme's colours; without
+ * them code blocks render unstyled.
+ */
+[data-theme="light"] .astro-code,
+[data-theme="light"] .astro-code span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+  text-decoration: var(--shiki-light-text-decoration);
+}
+
+[data-theme="dark"] .astro-code,
+[data-theme="dark"] .astro-code span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
+}
+
+/* The theme's own editor background tends to fight the page; keep the
+   template's surface and let only the tokens carry the theme's colour. */
+.astro-code {
+  background-color: var(--color-bg-soft) !important;
 }

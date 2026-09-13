@@ -30,20 +30,28 @@ export function neighborhoodIds(index: GraphIndex, id: string, depth: 1 | 2 = 1)
 
 export function graphNeighborhood(index: GraphIndex, id: string, depth: 1 | 2 = 1, maxNodes?: number): GraphIndex {
   const ids = neighborhoodIds(index, id, depth);
-  const nodes = index.nodes.filter((node) => ids.has(node.id)).slice(0, maxNodes);
+  // The centre goes in first. `maxNodes` trims in collection order, so a page
+  // with more neighbours than the budget could otherwise have the very node
+  // the neighbourhood is built around trimmed away.
+  const found = index.nodes.filter((node) => ids.has(node.id));
+  const ordered = [
+    ...found.filter((node) => node.id === id),
+    ...found.filter((node) => node.id !== id)
+  ];
+  const nodes = ordered.slice(0, maxNodes);
   const allowed = new Set(nodes.map((node) => node.id));
   const edges = index.edges.filter((edge) => allowed.has(edge.source) && allowed.has(edge.target));
-  const backlinks: Record<string, string[]> = {};
-  const outgoing: Record<string, string[]> = {};
+  const linkedFrom: Record<string, string[]> = {};
+  const linksTo: Record<string, string[]> = {};
   for (const node of nodes) {
-    backlinks[node.id] = index.backlinks[node.id]?.filter((source) => allowed.has(source)) ?? [];
-    outgoing[node.id] = index.outgoing[node.id]?.filter((target) => allowed.has(target)) ?? [];
+    linkedFrom[node.id] = index.linkedFrom[node.id]?.filter((source) => allowed.has(source)) ?? [];
+    linksTo[node.id] = index.linksTo[node.id]?.filter((target) => allowed.has(target)) ?? [];
   }
   return {
     nodes,
     edges,
-    backlinks,
-    outgoing,
+    linkedFrom,
+    linksTo,
     hubs: nodes.filter((node) => isHubType(node.type))
   };
 }

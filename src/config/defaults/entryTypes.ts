@@ -15,8 +15,6 @@ export const defaultEntryTypes = [
       labelVisibility: "always"
     },
     article: {
-      width: "flex",
-      localGraph: true,
       placement: {
         toc: { where: "none" },
         localGraph: { where: "header" }
@@ -37,8 +35,6 @@ export const defaultEntryTypes = [
       labelVisibility: "hover"
     },
     article: {
-      width: "flex",
-      localGraph: true,
       placement: {
         toc: { where: "none" },
         localGraph: { where: "header" }
@@ -58,8 +54,6 @@ export const defaultEntryTypes = [
       labelVisibility: "hover"
     },
     article: {
-      width: "reading",
-      localGraph: true,
       asides: "margin"
     }
   },
@@ -76,8 +70,6 @@ export const defaultEntryTypes = [
       labelVisibility: "hover"
     },
     article: {
-      width: "reading",
-      localGraph: true,
       asides: "margin"
     }
   },
@@ -93,10 +85,6 @@ export const defaultEntryTypes = [
       color: "var(--graph-note)",
       labelVisibility: "hover"
     },
-    article: {
-      width: "reading",
-      localGraph: true
-    }
   },
   {
     id: "teaching",
@@ -111,10 +99,9 @@ export const defaultEntryTypes = [
       labelVisibility: "hover"
     },
     article: {
-      width: "reading",
-      localGraph: false,
       placement: {
-        toc: { where: "none" }
+        toc: { where: "none" },
+        localGraph: { where: "none" }
       }
     }
   },
@@ -130,9 +117,5 @@ export const defaultEntryTypes = [
       color: "var(--graph-project)",
       labelVisibility: "hover"
     },
-    article: {
-      width: "flex",
-      localGraph: true
-    }
   }
 ] as const satisfies readonly EntryTypeDefinition[];

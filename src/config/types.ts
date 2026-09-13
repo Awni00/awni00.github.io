@@ -1,3 +1,5 @@
+import type { BundledTheme } from "shiki";
+
 export type EntryType = string;
 
 export type EntryTypeRole = "hub" | "section" | "entry";
@@ -8,7 +10,13 @@ export type PlacementToc = "left" | "right" | "none";
 export type PlacementGraph = "header" | "footer" | "none";
 export type PlacementNav = "left" | "right" | "footer" | "none";
 export type AsidePlacement = "margin" | "inline";
-export type ArticleWidth = "reading" | "flex";
+/**
+ * Article presentation mode. "article" is the standard long-form layout;
+ * "abstract" renders a short paper-record page whose body is the abstract.
+ * This is a presentation axis only — the entry type still drives graph
+ * styling, RSS, and recent-writing inclusion.
+ */
+export type ArticleMode = "article" | "abstract";
 export type TocDepth = 2 | 3 | 4 | 5 | 6;
 export type TocConfig = {
   minDepth: TocDepth;
@@ -19,7 +27,7 @@ export type TocConfigOverride = Partial<TocConfig>;
 export type PlacementSpec = {
   toc: { where: PlacementToc };
   localGraph: { where: PlacementGraph };
-  backlinks: { where: PlacementNav };
+  linkedFrom: { where: PlacementNav };
   related: { where: PlacementNav };
 };
 
@@ -27,12 +35,19 @@ export type EntryTypeGraphConfig = {
   shape: GraphNodeShape;
   size: number;
   color: string;
+  /**
+   * How this type's title is shown.
+   *   "always" — painted on the canvas next to the node, permanently.
+   *   "hover"  — floating label beside the cursor while hovered.
+   *   "never"  — no label at all.
+   */
   labelVisibility: LabelVisibility;
+  /** Whether clicking a node of this type selects it. Defaults to true. */
+  interactive?: boolean;
 };
 
 export type EntryTypeArticleConfig = {
-  width?: ArticleWidth;
-  localGraph?: boolean;
+  mode?: ArticleMode;
   placement?: Partial<PlacementSpec>;
   asides?: AsidePlacement;
   toc?: TocConfigOverride;
@@ -94,33 +109,22 @@ export type WritingConfig = {
     excludeTypes: readonly EntryType[];
   };
   browser: {
-    defaultView: {
-      desktop: "map" | "topics" | "list";
-      mobile: "map" | "topics" | "list";
-    };
-    urlState: boolean;
-    focus: {
-      mode: "dim" | "filter";
-      depth: 1 | 2;
-    };
-    mobile: {
-      graphPlacement: "collapsed";
-      defaultPreviewMode: "cards";
-    };
     topics: TopicsConfig;
     list: ListConfig;
   };
   entryLayout: {
-    articleWidth: {
-      default: ArticleWidth;
-      byType: Record<EntryType, ArticleWidth>;
+    mode: {
+      default: ArticleMode;
+      byType: Record<EntryType, ArticleMode>;
     };
+    /**
+     * How much of the graph a per-entry local map shows. *Whether* and *where*
+     * it shows is `placement.localGraph.where`, which subsumed the boolean
+     * these used to sit beside.
+     */
     localGraph: {
-      enabled: boolean;
       defaultDepth: number;
       maxNodes: number;
-      mobile: "collapsed";
-      byType: Record<EntryType, boolean>;
     };
     hubPages: {
       autoRenderLinkedEntries: boolean;
@@ -197,7 +201,93 @@ export type SiteConfig = {
   };
 };
 
+export type ThemeAppearance = "light" | "dark";
+
+/**
+ * Every colour token a theme supplies, without the `--color-` / `--graph-`
+ * prefixes those become in CSS. Values may be any CSS colour; `defineTheme`
+ * fills omitted ones with `color-mix()` expressions derived from the core.
+ *
+ * The semantic colours come in pairs. The bare token (`warning`) is the
+ * palette's real hue and is only used for graphic elements — callout rules,
+ * icons, graph nodes — where WCAG asks for 3:1. The `-text` variant is
+ * darkened (or lightened) to clear 4.5:1 for the same colour used as text,
+ * such as a callout's title. Tuning a single value to satisfy both turns
+ * every gold in every palette into brown.
+ */
+export type ThemeColors = {
+  bg: string;
+  "bg-soft": string;
+  "bg-soft-2": string;
+  fg: string;
+  "fg-soft": string;
+  muted: string;
+  "muted-2": string;
+  border: string;
+  "border-soft": string;
+  rule: string;
+  accent: string;
+  "accent-soft": string;
+  "accent-line": string;
+  danger: string;
+  "danger-text": string;
+  warning: string;
+  "warning-text": string;
+  success: string;
+  "success-text": string;
+  info: string;
+  "info-text": string;
+  example: string;
+  "example-text": string;
+  quote: string;
+  "quote-text": string;
+  "graph-hub": string;
+  "graph-sub-hub": string;
+  "graph-paper": string;
+  "graph-post": string;
+  "graph-note": string;
+  "graph-teaching": string;
+  "graph-project": string;
+  "graph-edge": string;
+  "placeholder-a": string;
+  "placeholder-b": string;
+};
+
+/** The shadow stack, which differs between light and dark themes. */
+export type ThemeShadows = {
+  sm: string;
+  md: string;
+  soft: string;
+};
+
+export type Theme = {
+  id: string;
+  label: string;
+  appearance: ThemeAppearance;
+  /**
+   * Theme used for fenced code blocks. Shiki ships with Astro, so any of its
+   * bundled theme ids works — the type gives you the full list on autocomplete.
+   */
+  shiki: BundledTheme;
+  colors: ThemeColors;
+  shadows: ThemeShadows;
+};
+
+/** What a site author writes: the core three, plus anything else they want. */
+export type ThemeInput = {
+  id: string;
+  label: string;
+  appearance: ThemeAppearance;
+  shiki?: BundledTheme;
+  colors: Pick<ThemeColors, "bg" | "fg" | "accent"> & Partial<ThemeColors>;
+  shadows?: Partial<ThemeShadows>;
+};
+
 export type ThemeConfig = {
+  /** Theme id used when the resolved mode is light. */
+  light: string;
+  /** Theme id used when the resolved mode is dark. */
+  dark: string;
   defaultMode: "light" | "dark" | "system";
   allowToggle: boolean;
   typography: {
@@ -224,6 +314,21 @@ export type PublicationsConfig = {
   };
 };
 
+/**
+ * Whether readers can rearrange a graph by dragging its nodes, and what a drop
+ * does next.
+ *
+ *   "none"     — nodes are fixed. Panning and zooming still work.
+ *   "stays"    — a dropped node keeps where it was put, and nothing else moves.
+ *   "resettle" — as "stays", but the layout re-runs afterwards so the
+ *                neighbours make room. Livelier, at the cost of a whole-graph
+ *                recalculation on every drop.
+ *
+ * Both draggable modes pin on release: a mode that handed the node straight
+ * back to the forces would look like the drag had been refused.
+ */
+export type DragMode = "none" | "stays" | "resettle";
+
 export type GraphConfigBase = {
   colorBy: "type";
   links: {
@@ -242,6 +347,13 @@ export type GraphConfigBase = {
     hubs: "circle" | "row" | "force";
     labels: "config" | "all" | "none";
     labelSide: "top" | "bottom" | "auto";
+  };
+  interaction: {
+    /**
+     * Applies to the writing browser and the per-entry local maps. The
+     * homepage preview is decorative and never draggable.
+     */
+    drag: DragMode;
   };
 };
 

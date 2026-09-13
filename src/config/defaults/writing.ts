@@ -22,19 +22,6 @@ export const defaultWritingConfig = {
     excludeTypes: []
   },
   browser: {
-    defaultView: {
-      desktop: "map",
-      mobile: "topics"
-    },
-    urlState: true,
-    focus: {
-      mode: "dim",
-      depth: 1
-    },
-    mobile: {
-      graphPlacement: "collapsed",
-      defaultPreviewMode: "cards"
-    },
     topics: {
       showHubSummaries: true,
       density: "comfortable",
@@ -53,16 +40,13 @@ export const defaultWritingConfig = {
     }
   },
   entryLayout: {
-    articleWidth: {
-      default: "reading",
+    mode: {
+      default: "article",
       byType: {}
     },
     localGraph: {
-      enabled: true,
       defaultDepth: 1,
-      maxNodes: 20,
-      mobile: "collapsed",
-      byType: {}
+      maxNodes: 20
     },
     hubPages: {
       autoRenderLinkedEntries: true,
@@ -79,7 +63,7 @@ export const defaultWritingConfig = {
       default: {
         toc: { where: "left" },
         localGraph: { where: "footer" },
-        backlinks: { where: "footer" },
+        linkedFrom: { where: "footer" },
         related: { where: "footer" }
       },
       byType: {}

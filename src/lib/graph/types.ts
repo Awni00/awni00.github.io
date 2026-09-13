@@ -2,7 +2,6 @@ import type { EntryType } from "../../config";
 
 export type { EntryType };
 
-export type ArticleWidth = "reading" | "flex";
 
 export type EntryNode = {
   id: string;
@@ -26,8 +25,8 @@ export type GraphEdge = {
 export type GraphIndex = {
   nodes: EntryNode[];
   edges: GraphEdge[];
-  backlinks: Record<string, string[]>;
-  outgoing: Record<string, string[]>;
+  linkedFrom: Record<string, string[]>;
+  linksTo: Record<string, string[]>;
   hubs: EntryNode[];
 };
 
@@ -69,7 +68,6 @@ export type GraphBuildResult = {
 
 export type WritingBrowserState = {
   view: "map" | "topics" | "list";
-  focus?: string;
   selected?: string;
   query?: string;
   types?: EntryType[];
@@ -117,8 +115,13 @@ export type WritingEntryLike = {
     draft?: boolean;
     theme?: "global" | "system" | "light" | "dark";
     external?: Record<string, string | undefined>;
-    layout?: {
-      width?: "reading" | "flex";
+    hero?: {
+      src: string;
+      alt?: string;
+      caption?: string;
+    };
+    article?: {
+      mode?: "article" | "abstract";
       asides?: "margin" | "inline";
       toc?: {
         minDepth?: number;
@@ -127,7 +130,7 @@ export type WritingEntryLike = {
       placement?: {
         toc?: { where?: "left" | "right" | "sidebar" | "none" };
         localGraph?: { where?: "header" | "footer" | "none" };
-        backlinks?: { where?: "left" | "right" | "footer" | "sidebar" | "none" };
+        linkedFrom?: { where?: "left" | "right" | "footer" | "sidebar" | "none" };
         related?: { where?: "left" | "right" | "footer" | "sidebar" | "none" };
       };
     };

@@ -1,4 +1,37 @@
-import { expect, test, type Locator } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
+
+async function themeToggle(page: Page) {
+  await page.waitForFunction(
+    () =>
+      !document.querySelector('astro-island[component-url*="ThemeToggle"][ssr]'),
+  );
+  return page.getByRole("button", { name: /Theme:/ });
+}
+
+/**
+ * Click the toggle until it reports `preference`.
+ *
+ * Clicking a fixed number of times would assume where the cycle starts, which
+ * depends on the emulated OS scheme once defaultMode is "system". Three clicks
+ * is a full cycle, so this always terminates.
+ */
+async function setThemePreference(
+  page: Page,
+  preference: "light" | "dark" | "system",
+) {
+  const toggle = await themeToggle(page);
+  for (let click = 0; click < 3; click += 1) {
+    const current = await page
+      .locator("html")
+      .getAttribute("data-theme-preference");
+    if (current === preference) break;
+    await toggle.click();
+  }
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-theme-preference",
+    preference,
+  );
+}
 
 async function firstTextLineRect(locator: Locator) {
   return locator.evaluate((element) => {
@@ -81,28 +114,28 @@ test("publication abstracts open as configured popups", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".publication-abstract")).toHaveCount(0);
   await page
-    .locator('[data-dialog-open="abstract-example2026biasvariance"]')
+    .locator('[data-dialog-open="abstract-example2026paperone"]')
     .click();
   const homeDialog = page.getByRole("dialog", {
-    name: "Abstract for Bias and Variance: an Illustrated Refresher",
+    name: "Abstract for Example Paper 1",
   });
   await expect(homeDialog).toBeVisible();
   await expect(homeDialog).toContainText(
-    "A demo publication for the academic-graph template",
+    "This generic publication demonstrates",
   );
   await homeDialog.getByRole("button", { name: "Close" }).click();
 
   await page.goto("/publications");
   await expect(page.locator(".publication-abstract")).toHaveCount(0);
   await page
-    .locator('[data-dialog-open="abstract-example2026biasvariance"]')
+    .locator('[data-dialog-open="abstract-example2026paperone"]')
     .click();
   const publicationsDialog = page.getByRole("dialog", {
-    name: "Abstract for Bias and Variance: an Illustrated Refresher",
+    name: "Abstract for Example Paper 1",
   });
   await expect(publicationsDialog).toBeVisible();
   await expect(publicationsDialog).toContainText(
-    "A demo publication for the academic-graph template",
+    "This generic publication demonstrates",
   );
 });
 
@@ -112,28 +145,47 @@ test("writing browser supports URL state and preview", async ({ page }) => {
     "aria-pressed",
     "true",
   );
-  await expect(
-    page.getByRole("button", { name: /Machine Learning Theory/ }),
-  ).toBeVisible();
-  await expect(
-    page.locator(".preview-pane").getByRole("heading").first(),
-  ).toBeVisible();
-  await expect(page.getByRole("link", { name: "Open Entry" })).toHaveAttribute(
-    "href",
-    /\/writing\//,
+  // There is no topic list beside the map any more; hubs are navigated on the
+  // canvas itself, and the preview opens on the first hub before any click.
+  await expect(page.locator(".graph-canvas__surface")).toBeVisible();
+  const preview = page.locator(".preview-pane");
+  const title = preview.locator(".preview-title");
+  const openPage = preview.getByRole("link", { name: "Open page" });
+  await expect(title).toHaveText("Hub 1");
+  await expect(openPage).toHaveAttribute("href", /\/writing\/hub-1\/?$/);
+
+  // Connection rows select the node they name rather than navigating, and
+  // selection is session-only, so the URL keeps nothing but the view — and map
+  // is the default view, so not even that. The preview above is server-rendered,
+  // so wait for the island to hydrate before clicking into it.
+  await page.waitForFunction(
+    () =>
+      !document.querySelector('astro-island[component-url*="GraphBrowser"][ssr]'),
   );
+  const connection = preview.locator(".preview-link").first();
+  const connectionTitle = await connection
+    .locator(".connection-title")
+    .textContent();
+  expect(connectionTitle).toBeTruthy();
+  await connection.click();
+  await expect(title).toHaveText(connectionTitle!);
+  await expect(openPage).not.toHaveAttribute("href", /\/writing\/hub-1\/?$/);
+  await expect(page).toHaveURL(/\/writing$/);
+
+  await page.getByRole("tab", { name: "topics" }).click();
+  await expect(page).toHaveURL(/\/writing\?view=topics$/);
 });
 
 test("writing entry and RSS render", async ({ page }) => {
-  await page.goto("/writing/machine-learning-theory/bias-variance-refresher");
+  await page.goto("/writing/hub-1/entry-1");
   await expect(
     page.getByRole("heading", {
-      name: "Bias and Variance: an Illustrated Refresher",
+      name: "Entry 1",
     }),
   ).toBeVisible();
   await expect(page.locator(".article-byline")).toContainText("Venue");
   await expect(page.locator(".article-byline")).toContainText(
-    "Sample Conference on Learning Systems",
+    "Example Conference 1",
   );
   await expect(page.locator(".article-byline__col--date")).toContainText(
     "Date",
@@ -145,25 +197,25 @@ test("writing entry and RSS render", async ({ page }) => {
   await expect(page.locator(".katex").first()).toBeVisible();
   await expect(page.locator(".figure-grid[data-columns='2']")).toBeVisible();
   await expect(page.locator(".figure-grid")).toContainText(
-    "Two complementary views of the bias-variance trade-off",
+    "Two example figures arranged in a responsive grid",
   );
-  await page.goto("/writing/research-papers/vae-explainer");
+  await page.goto("/writing/hub-2/entry-4");
   await expect(
     page.getByRole("heading", {
-      name: "Variational autoencoders: a short explainer",
+      name: "Entry 4",
     }),
   ).toBeVisible();
   await expect(page.locator(".article-byline__col--date")).toContainText(
     "Page: May 18, 2026",
   );
   await expect(page.locator(".article-byline__col--date")).toContainText(
-    "arXiv v1: Apr 7, 2026",
+    "Example v1: Apr 7, 2026",
   );
   await expect(page.locator(".article-byline__col--date")).toContainText(
-    "Demo venue: May 12, 2026",
+    "Example venue: May 12, 2026",
   );
 
-  const wrapFigure = page.locator(".vae-model-wrap");
+  const wrapFigure = page.locator(".example-model-wrap");
   const wrapInnerFigure = wrapFigure.locator(".wrap-figure__figure");
   const wrapParagraphs = wrapFigure.locator(":scope > p");
   await expect(wrapFigure).toBeVisible();
@@ -180,7 +232,26 @@ test("writing entry and RSS render", async ({ page }) => {
   const viewport = page.viewportSize();
   if ((viewport?.width ?? 0) > 680) {
     await expect(wrapInnerFigure).toHaveCSS("float", "right");
-    expect(Math.abs(wrapFigureBox!.width - 340)).toBeLessThanOrEqual(1);
+    // Width is authored on the block (figureWidth="48%", figureMaxWidth="340px")
+    // and applied as `width: <pct>; max-width: min(100%, <cap>)`. Derive the
+    // expectation from those two rather than hardcoding a pixel: the cap binds
+    // only once the column is wide enough, so a literal quietly encodes
+    // whichever side happened to win on the day it was written — this one
+    // encoded the cap, which does not bind at the current column width.
+    const authored = await wrapInnerFigure.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return {
+        width: style.getPropertyValue("--wrap-figure-width").trim(),
+        maxWidth: style.getPropertyValue("--wrap-figure-max-width").trim(),
+      };
+    });
+    const expectedWidth = Math.min(
+      (Number.parseFloat(authored.width) / 100) * wrapBox!.width,
+      Number.parseFloat(authored.maxWidth),
+    );
+    expect(Math.abs(wrapFigureBox!.width - expectedWidth)).toBeLessThanOrEqual(
+      1,
+    );
     expect(firstLine!.y).toBeLessThan(wrapFigureBox!.y + 40);
     expect(firstLine!.right).toBeLessThanOrEqual(wrapFigureBox!.x - 8);
   } else {
@@ -195,6 +266,90 @@ test("writing entry and RSS render", async ({ page }) => {
 
   const response = await page.goto("/writing/rss.xml");
   expect(await response?.text()).toContain('<rss version="2.0">');
+});
+
+test("abstract-mode entry renders its record layout", async ({ page }) => {
+  await page.goto("/writing/hub-2/entry-5");
+  await expect(
+    page.getByRole("heading", {
+      name: "Entry 5",
+    }),
+  ).toBeVisible();
+
+  // The `article` frontmatter block must reach the layout. This also guards
+  // the key name itself: Astro reserves `layout`, so renaming it back would
+  // fail the build outright.
+  const grid = page.locator(".article-grid");
+  await expect(grid).toHaveAttribute("data-mode", "abstract");
+  await expect(grid).toHaveAttribute("data-toc", "none");
+
+  // The abstract owns the body, so no TOC rail is rendered.
+  await expect(page.locator(".sidebar-section--toc")).toHaveCount(0);
+
+  const block = page.locator(".abstract-block");
+  await expect(block).toBeVisible();
+  await expect(block.locator(".abstract-block__label")).toHaveText("Abstract");
+  await expect(block).toContainText("Lorem ipsum dolor sit amet");
+  await expect(block.locator(".katex").first()).toBeVisible();
+
+  // Header metadata still comes from the shared Distill-style header.
+  await expect(page.locator(".article-byline")).toContainText("Venue");
+  await expect(page.locator(".article-external")).toContainText("arXiv");
+
+  // No hero on this entry, so the abstract's own closing rule is the only
+  // divider before the footer — the footer drops its top border rather than
+  // stacking a second hairline just below.
+  await expect(page.locator(".article-hero")).toHaveCount(0);
+  await expect(page.locator(".entry-foot")).toHaveCSS("border-top-width", "0px");
+
+  // Abstract entries stay full graph citizens, and their footer is exactly any
+  // other entry's: EntryFooter takes no abstract-specific input, so the map
+  // shows and the linked-from/related lists stay suppressed, rather than the map
+  // sitting alongside lists that draw the same edges.
+  const entryNav = page.getByRole("region", { name: "Page navigation" });
+  await expect(entryNav).toContainText("Related");
+  await expect(entryNav.locator(".local-graph-map")).toBeVisible();
+  await expect(entryNav.getByText("Linked from", { exact: true })).toHaveCount(0);
+});
+
+test("article column and footer share one left edge across layouts", async ({
+  page,
+}) => {
+  const viewport = page.viewportSize();
+  // Below the 980px breakpoint the grid collapses to a single block column,
+  // where alignment is trivially satisfied; the invariant under test is the
+  // multi-column one.
+  if ((viewport?.width ?? 0) <= 980) return;
+
+  const routes = [
+    "/writing/hub-2", // hub, no rail rendered
+    "/writing/hub-2/entry-5", // abstract mode, no rail
+    "/writing/hub-3/entry-6", // toc: none
+    "/writing/hub-1/entry-2", // left toc
+    "/writing/hub-2/entry-4", // left toc + margin asides
+  ];
+
+  const edges: number[] = [];
+  for (const route of routes) {
+    await page.goto(route);
+    const header = await page.locator(".article-header").boundingBox();
+    const footer = await page.locator(".entry-foot").boundingBox();
+    expect(header, route).not.toBeNull();
+    expect(footer, route).not.toBeNull();
+
+    // The footer lives in the grid's body column, so it inherits both the
+    // header's left edge and the prose measure.
+    expect(Math.abs(header!.x - footer!.x), route).toBeLessThanOrEqual(1);
+    expect(Math.abs(header!.width - footer!.width), route).toBeLessThanOrEqual(1);
+    edges.push(header!.x);
+  }
+
+  // The left rail is reserved whether or not a sidebar renders into it, so
+  // every layout starts at the same x. Without that reservation these split
+  // into distinct groups depending on which rails each page happens to show.
+  for (const edge of edges) {
+    expect(Math.abs(edge - edges[0])).toBeLessThanOrEqual(1);
+  }
 });
 
 test("media layout controls size figures and embeds", async ({ page }) => {
@@ -278,11 +433,90 @@ test("media layout controls size figures and embeds", async ({ page }) => {
   await expect(page.locator(".fixture-image-comparison")).toBeVisible();
 });
 
-test("theme toggle changes preference", async ({ page }) => {
-  await page.goto("/");
-  await page.getByRole("button", { name: /Theme:/ }).click();
-  await expect(page.locator("html")).toHaveAttribute(
-    "data-theme-preference",
-    /light|dark|system/,
-  );
+/*
+ * The default mode is "system", so where the toggle starts depends on the
+ * emulated OS scheme. Pin it, and drive the toggle by target state rather than
+ * by a fixed number of clicks.
+ */
+test.describe("theming", () => {
+  test.use({ colorScheme: "light" });
+
+  test("theme toggle cycles light, dark and system, and repaints the page", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const html = page.locator("html");
+    const toggle = await themeToggle(page);
+
+    await expect(html).toHaveAttribute("data-theme-preference", "system");
+    await expect(html).toHaveAttribute("data-theme", "light");
+
+    await setThemePreference(page, "light");
+    const lightBackground = await page.evaluate(
+      () => getComputedStyle(document.body).backgroundColor,
+    );
+
+    await toggle.click();
+    await expect(html).toHaveAttribute("data-theme-preference", "dark");
+    await expect(html).toHaveAttribute("data-theme", "dark");
+    const darkBackground = await page.evaluate(
+      () => getComputedStyle(document.body).backgroundColor,
+    );
+    // The original version of this test only checked that the attribute matched
+    // /light|dark|system/, which passed even when nothing changed at all.
+    expect(darkBackground).not.toBe(lightBackground);
+
+    // "system" is reachable only because the toggle cycles through it.
+    await toggle.click();
+    await expect(html).toHaveAttribute("data-theme-preference", "system");
+    await expect(html).toHaveAttribute("data-theme", "light");
+
+    // The choice has to survive a navigation, or the toggle is decorative.
+    await setThemePreference(page, "dark");
+    await page.goto("/writing");
+    await expect(html).toHaveAttribute("data-theme-preference", "dark");
+    await expect(html).toHaveAttribute("data-theme", "dark");
+  });
+
+  test("code blocks recolour with the theme", async ({ page }) => {
+    await page.goto("/writing/hub-1/entry-1");
+    const token = page.locator(".astro-code span").first();
+    await expect(token).toBeVisible();
+
+    await setThemePreference(page, "light");
+    const lightColor = await token.evaluate(
+      (node) => getComputedStyle(node).color,
+    );
+    await setThemePreference(page, "dark");
+    const darkColor = await token.evaluate(
+      (node) => getComputedStyle(node).color,
+    );
+
+    // Shiki runs in `defaultColor: false` mode; if that regresses to a single
+    // baked theme these two are identical and code stays light-on-dark.
+    expect(darkColor).not.toBe(lightColor);
+  });
+
+  test("callout accents come from the theme", async ({ page }) => {
+    await page.goto("/writing/hub-1/entry-1");
+    const callout = page.locator(".callout").first();
+    await expect(callout).toBeVisible();
+
+    await setThemePreference(page, "light");
+    const light = await callout.evaluate(
+      (node) => getComputedStyle(node).borderLeftColor,
+    );
+    await setThemePreference(page, "dark");
+    const dark = await callout.evaluate(
+      (node) => getComputedStyle(node).borderLeftColor,
+    );
+
+    expect(dark).not.toBe(light);
+  });
+});
+
+test("shortUrl redirects to the entry's canonical URL", async ({ page }) => {
+  await page.goto("/hub-one");
+  await expect(page).toHaveURL(/\/writing\/hub-1\/?$/);
+  await expect(page.getByRole("heading", { name: "Hub 1" })).toBeVisible();
 });
