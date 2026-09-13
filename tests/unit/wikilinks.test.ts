@@ -6,7 +6,11 @@ import { describe, expect, it } from "vitest";
 import { buildGraphIndex } from "../../src/lib/graph/buildGraph";
 import type { WritingEntryLike } from "../../src/lib/graph/types";
 import { remarkWikilinks } from "../../src/lib/wikilinks/remarkWikilinks";
-import { extractWikilinks, markdownSyntaxPlugins } from "../../src/lib/wikilinks/wikilinks";
+import {
+  extractWikilinks,
+  markdownSyntaxPlugins,
+  splitWikilink
+} from "../../src/lib/wikilinks/wikilinks";
 
 /** Prose wikilinks surrounded by every construct that must not produce one. */
 const body = [
@@ -46,7 +50,7 @@ function renderedWikilinks(source: string): string[] {
       found.push(node.url.replace("/writing/", ""));
     }
     const unresolved = node.value?.match(/class="unresolved-wikilink">\[\[(.+?)\]\]/);
-    if (node.type === "html" && unresolved) found.push(unresolved[1]);
+    if (node.type === "html" && unresolved) found.push(splitWikilink(unresolved[1]).target);
     node.children?.forEach(walk);
   };
   walk(tree);

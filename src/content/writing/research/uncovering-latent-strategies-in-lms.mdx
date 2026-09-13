@@ -1,5 +1,8 @@
 ---
-
+title: "Uncovering Latent Strategies in Language Models"
+type: "paper"
+summary: "Draft notes on modeling language-model reasoning strategies as latent variables."
+draft: true
 ---
 
 Suppose we pose the following problem to a language model: "Prove that if n is even, then n^2 is even". The model can take multiple approaches to solving this problem. For example, it might attempt to solve it by induction: "Induct on $n$: assume that $(n-2)^2$ is even...". Or: it might attempt to derive a proof by contraposition: "Suppose $n$ is odd, $n=2k+1$. Then, ...". For each strategy, the model implicitly generates from a different distribution over responses $p( \text{response} | \text{input}, \text{strategy})$. The strategy does not determine the response (e.g., there are multiple ways to write a proof by contradiction), but it does guide it inside a subregion of output space.
