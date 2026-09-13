@@ -1,0 +1,20 @@
+---
+
+---
+
+Suppose we pose the following problem to a language model: "Prove that if n is even, then n^2 is even". The model can take multiple approaches to solving this problem. For example, it might attempt to solve it by induction: "Induct on $n$: assume that $(n-2)^2$ is even...". Or: it might attempt to derive a proof by contraposition: "Suppose $n$ is odd, $n=2k+1$. Then, ...". For each strategy, the model implicitly generates from a different distribution over responses $p( \text{response} | \text{input}, \text{strategy})$. The strategy does not determine the response (e.g., there are multiple ways to write a proof by contradiction), but it does guide it inside a subregion of output space.
+In that sense, we may think of different strategies as *distributional modes* inside the full response distribution.
+
+(Can use color for these kinds of "response" proofs. We can also color code x/input vs z/strategy vs y/response throughout both text and symbols)
+
+[Figure: Graphical model Input -> Strategy -> Response]
+
+When a language model is trained on large diverse datasets, the model must implicitly represent all of these strategies in its response distribution p(y|x). In a language model, this is implicit in the response distribution. Probabilistically, we can think of this as a mixture of strategy-conditioned distributions.
+
+$$\text{Receive Input: } x \\ \text{Sample a Strategy given the input: } z \sim r(z \mid x) \\ \text{Sample a response given the input and strategy: } y \sim g(y \mid x, z)$$
+
+The response distribution learned by the model is the mixture $p(y\vert{}x) = \int_z g(y\vert{}x,z) r(z\vert{}x) d\mu(z)$.
+
+...
+
+In this paper, we studied the problem of how to uncover these implicit latent strategies as explicit, intervenable, latent variables within the model's architecture and autoregressive generation process.

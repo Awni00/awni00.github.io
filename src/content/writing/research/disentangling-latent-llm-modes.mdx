@@ -29,8 +29,10 @@ bibtex: |
       archivePrefix={arXiv},
       primaryClass={cs.LG},
       url={https://arxiv.org/abs/2607.17674}, 
-}
+  }
 ---
+
+{/* Re-write from scratch */}
 
 When used for reasoning tasks, a language model $p_\theta(y \mid x)$ defines a distribution over response sequences $y$ that implicitly use certain high-level *strategies* to solve an input problem $x$. A model asked to prove a theorem may produce a proof by contradiction, induction, or construction; a model asked to solve a programming problem may formulate it as dynamic programming, graph search, or a greedy algorithm. Such strategies recur across many input problems, but they are represented only implicitly: they are *entangled* in the model's hidden states rather than exposed as a separable variable that can be identified or intervened on during generation.
 
