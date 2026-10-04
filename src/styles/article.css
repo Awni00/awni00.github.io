@@ -1341,6 +1341,227 @@
   line-height: 1.55;
 }
 
+/* ── Hover note (superscript popover) ───────────────────────────────── */
+
+/* Notes without an explicit `mark` number themselves, once per page. */
+body {
+  counter-reset: hovernote;
+}
+
+.hovernote__sup {
+  position: relative;
+  top: -0.5em;
+  margin-left: 0.06em;
+  font-family: var(--font-ui);
+  font-size: 0.68em;
+  font-variant-numeric: tabular-nums;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.hovernote[data-auto] .hovernote__mark::before {
+  counter-increment: hovernote;
+  content: counter(hovernote);
+}
+
+/* "mechanics¹,²" rather than "mechanics¹²". */
+.hovernote[data-grouped] .hovernote__sup {
+  margin-left: 0;
+}
+
+.hovernote[data-grouped] .hovernote__sup::before {
+  content: ",";
+  color: var(--color-muted);
+}
+
+/* Beats `.article-content a:not(.heading-anchor)` by source order. */
+.hovernote :is(a, button).hovernote__mark {
+  appearance: none;
+  margin: 0;
+  padding: 0 0.12em;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: var(--color-accent);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-quiet);
+}
+
+.hovernote[data-open] .hovernote__mark {
+  background: var(--color-accent-soft);
+}
+
+.hovernote :is(a, button).hovernote__mark:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* A top-layer popover, placed by the component script; these override the
+   user-agent `[popover]` defaults (centred, inset 0, Canvas colours). */
+.hovernote__pop {
+  position: fixed;
+  inset: auto;
+  width: max-content;
+  max-width: min(340px, calc(100vw - 24px));
+  margin: 0;
+  padding: 10px 12px;
+  overflow: visible;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-md);
+  color: var(--color-fg);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.5;
+  text-align: left;
+  text-indent: 0;
+  white-space: normal;
+  transition:
+    opacity var(--dur-fast) var(--ease-quiet),
+    translate var(--dur-fast) var(--ease-quiet);
+}
+
+@starting-style {
+  .hovernote__pop:popover-open {
+    opacity: 0;
+    translate: 0 3px;
+  }
+}
+
+/* Invisible bridge across the gap between mark and note. */
+.hovernote__pop::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: 8px;
+}
+
+.hovernote[data-side="bottom"] .hovernote__pop::after {
+  top: auto;
+  bottom: 100%;
+}
+
+.hovernote__body {
+  display: block;
+}
+
+.hovernote__title {
+  display: block;
+  font-weight: 600;
+}
+
+.hovernote__meta {
+  display: block;
+  margin-top: 1px;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.hovernote a.hovernote__link {
+  display: block;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--color-border-soft);
+  border-bottom: 0;
+  color: var(--color-accent);
+  font-size: 12px;
+}
+
+.hovernote a.hovernote__link:hover {
+  text-decoration: underline;
+}
+
+.hovernote__extra {
+  display: block;
+  margin-top: 6px;
+}
+
+/* appearance="inverted": the card in the reverse palette, with a pointer. */
+.hovernote[data-appearance="inverted"] .hovernote__pop {
+  border-color: transparent;
+  background: var(--color-fg);
+  box-shadow: var(--shadow-md);
+  color: var(--color-bg);
+}
+
+.hovernote[data-appearance="inverted"] .hovernote__pop::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: var(--hovernote-arrow, 50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-fg);
+  transform: translateX(-50%);
+}
+
+.hovernote[data-appearance="inverted"][data-side="bottom"] .hovernote__pop::before {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--color-fg);
+}
+
+/* The accent is tuned for the page background, not for this one. */
+.hovernote[data-appearance="inverted"] .hovernote__pop a {
+  color: inherit;
+  border-bottom-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+.hovernote[data-appearance="inverted"] .hovernote__meta {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.hovernote[data-appearance="inverted"] a.hovernote__link {
+  border-top-color: color-mix(in srgb, currentColor 20%, transparent);
+  border-bottom: 0;
+  opacity: 0.85;
+}
+
+/* marker="bracket": numeric-citation marks on the baseline. */
+.hovernote[data-marker="bracket"] .hovernote__sup {
+  top: 0;
+  margin-left: 0.18em;
+  font-size: 0.8em;
+  line-height: inherit;
+}
+
+.hovernote[data-marker="bracket"] .hovernote__sup::before {
+  content: "[";
+  color: var(--color-muted);
+}
+
+.hovernote[data-marker="bracket"] .hovernote__sup::after {
+  content: "]";
+  color: var(--color-muted);
+}
+
+.hovernote[data-marker="bracket"][data-grouped] .hovernote__sup {
+  margin-left: 0;
+}
+
+.hovernote[data-marker="bracket"][data-grouped] .hovernote__sup::before {
+  content: ", ";
+}
+
+.hovernote[data-marker="bracket"][data-continued] .hovernote__sup::after {
+  content: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hovernote__pop {
+    transition: none !important;
+  }
+}
+
 /* ── Two-columns / comparison utilities (article body) ──────────────── */
 
 .two-columns,

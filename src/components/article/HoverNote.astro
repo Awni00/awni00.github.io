@@ -1,0 +1,234 @@
+---
+/**
+ * Hover note: a mark in running prose that reveals a small popover on hover,
+ * focus, or tap. No footnote is emitted anywhere.
+ *
+ *   quantum mechanics<HoverNote href="https://arxiv.org/abs/…">*Paper title*, NeurIPS 2024</HoverNote>
+ *   attention<HoverNote cite="vaswani2017attention" />
+ *
+ * Props:
+ *   - `mark`       — the mark's text. In MDX, omit it and `remarkHoverNotes`
+ *                    numbers the note (per page; a repeated `cite` reuses its
+ *                    number).
+ *   - `href`       — makes the mark itself a link. On touch screens the first
+ *                    tap opens the note and the link sits in its footer.
+ *   - `cite`       — a BibTeX key, looked up in the page's `bibliography:`
+ *                    files and then the publications file. Fills in title,
+ *                    authors, venue and year, and the entry's first link as
+ *                    `href` unless one is given. Children, if any, follow it.
+ *   - `text`       — plain-text content, for when children are awkward.
+ *   - `marker`     — "superscript" or "bracket" (`[1]` on the line).
+ *   - `appearance` — "card" or "inverted".
+ *   - children     — the note content. Keep it on one line in MDX so it parses
+ *                    as inline markdown (italics, links, math); a blank line
+ *                    would make paragraphs, which cannot sit inside a sentence.
+ *
+ * `marker` and `appearance` cascade: `theme.hoverNotes` in the site config
+ * (superscript card by default), then a page's `hoverNotes:` frontmatter
+ * (applied by `remarkHoverNotes`), then the note's own props.
+ */
+import { themeConfig, type HoverNoteAppearance, type HoverNoteMarker } from "../../config/theme";
+import { resolveCitation } from "../../lib/citations/citations";
+
+type Props = {
+  mark?: string;
+  href?: string;
+  cite?: string;
+  text?: string;
+  marker?: HoverNoteMarker;
+  appearance?: HoverNoteAppearance;
+  /** Set by `remarkHoverNotes` from frontmatter: JSON array of absolute paths. */
+  bibliography?: string;
+};
+
+const {
+  mark,
+  cite,
+  text,
+  marker = themeConfig.hoverNotes.marker,
+  appearance = themeConfig.hoverNotes.appearance,
+  bibliography
+} = Astro.props;
+let { href } = Astro.props;
+
+const citation = cite ? await resolveCitation(cite, bibliography ? JSON.parse(bibliography) : []) : undefined;
+const citationLink = citation && !href ? citation.link : undefined;
+href ??= citationLink?.href;
+const hasChildren = Astro.slots.has("default");
+
+const hostname = (() => {
+  if (!href) return undefined;
+  try {
+    return new URL(href).hostname.replace(/^www\./, "");
+  } catch {
+    return undefined;
+  }
+})();
+const isExternal = Boolean(hostname);
+// A typed link reads better by its kind ("PDF", "arXiv", "DOI"); a bare URL by
+// where it goes.
+const linkLabel =
+  citationLink && !["URL", "Website"].includes(citationLink.label) ? citationLink.label : (hostname ?? "Open");
+const external = isExternal ? { target: "_blank", rel: "noopener" } : {};
+
+const id = `hovernote-${Math.random().toString(36).slice(2, 10)}`;
+const MarkTag = href ? "a" : "button";
+const markAttrs = href ? { href, ...external } : { type: "button" as const };
+---
+
+<span
+  class="hovernote"
+  data-hovernote
+  data-marker={marker}
+  data-appearance={appearance}
+  data-auto={mark ? undefined : "true"}
+  ><sup class="hovernote__sup"
+    ><MarkTag class="hovernote__mark" aria-describedby={id} {...markAttrs}>{mark}</MarkTag></sup
+  ><span class="hovernote__pop" id={id} role="tooltip" popover="manual"
+    ><span class="hovernote__body"
+      >{
+        citation && (
+          <>
+            <span class="hovernote__title">{citation.title}</span>
+            {citation.authors && <span class="hovernote__meta">{citation.authors}</span>}
+            {(citation.venue || citation.year) && (
+              <span class="hovernote__meta">{[citation.venue, citation.year].filter(Boolean).join(" · ")}</span>
+            )}
+          </>
+        )
+      }{
+        citation ? (
+          hasChildren && (
+            <span class="hovernote__extra">
+              <slot />
+            </span>
+          )
+        ) : text ? (
+          text
+        ) : (
+          <slot />
+        )
+      }</span
+    >{
+      href && (
+        <a class="hovernote__link" href={href} {...external}>
+          {linkLabel}
+          <span aria-hidden="true">{isExternal ? "↗" : "→"}</span>
+        </a>
+      )
+    }</span
+  ></span
+><script>
+  // The note renders in the top layer (Popover API) so that no `overflow`
+  // container — `.article-content` clips horizontally — can cut it off. That
+  // means hover, focus and placement are all handled here rather than in CSS.
+  const ROOT = "[data-hovernote]";
+  const EDGE = 12;
+  const GAP = 6;
+  const OPEN_DELAY = 60;
+  const CLOSE_DELAY = 150;
+
+  let openNote: HTMLElement | null = null;
+  let timer: number | undefined;
+
+  const popOf = (note: HTMLElement) => note.querySelector<HTMLElement>(".hovernote__pop");
+  const markOf = (note: HTMLElement) => note.querySelector<HTMLElement>(".hovernote__mark");
+
+  function place(note: HTMLElement) {
+    const pop = popOf(note);
+    const mark = markOf(note);
+    if (!pop || !mark) return;
+    const anchor = mark.getBoundingClientRect();
+    const { width, height } = pop.getBoundingClientRect();
+    const center = anchor.left + anchor.width / 2;
+    const left = Math.min(Math.max(center - width / 2, EDGE), window.innerWidth - EDGE - width);
+    const below = anchor.top - GAP - height < EDGE;
+    note.dataset.side = below ? "bottom" : "top";
+    pop.style.left = `${left}px`;
+    pop.style.top = `${below ? anchor.bottom + GAP : anchor.top - GAP - height}px`;
+    pop.style.setProperty("--hovernote-arrow", `${center - left}px`);
+  }
+
+  function open(note: HTMLElement) {
+    clearTimeout(timer);
+    if (openNote === note) return;
+    if (openNote) close(openNote);
+    popOf(note)?.showPopover();
+    note.dataset.open = "true";
+    openNote = note;
+    place(note);
+  }
+
+  function close(note: HTMLElement) {
+    if (popOf(note)?.matches(":popover-open")) popOf(note)?.hidePopover();
+    delete note.dataset.open;
+    if (openNote === note) openNote = null;
+  }
+
+  function later(action: () => void, delay: number) {
+    clearTimeout(timer);
+    timer = window.setTimeout(action, delay);
+  }
+
+  // Adjacent marks ("…mechanics¹,²") read as one number without a separator.
+  function previousNote(note: HTMLElement) {
+    let node = note.previousSibling;
+    // Skips whitespace, and the dev server's inline copy of this script.
+    while (node && (node.nodeName === "SCRIPT" || (node.nodeType === Node.TEXT_NODE && !node.textContent?.trim()))) {
+      node = node.previousSibling;
+    }
+    return node instanceof HTMLElement && node.matches(ROOT) ? node : null;
+  }
+
+  function wireHoverNotes() {
+    for (const note of document.querySelectorAll<HTMLElement>(ROOT)) {
+      if (note.dataset.hovernoteReady === "true") continue;
+      note.dataset.hovernoteReady = "true";
+
+      const previous = previousNote(note);
+      if (previous) {
+        note.dataset.grouped = "true";
+        previous.dataset.continued = "true";
+      }
+
+      // The popover stays a DOM child of `note`, so moving from the mark into
+      // the note does not count as leaving.
+      note.addEventListener("pointerenter", (event) => {
+        if (event.pointerType === "mouse") later(() => open(note), OPEN_DELAY);
+      });
+      note.addEventListener("pointerleave", (event) => {
+        if (event.pointerType === "mouse") later(() => close(note), CLOSE_DELAY);
+      });
+      note.addEventListener("focusin", (event) => {
+        if ((event.target as HTMLElement).matches(":focus-visible")) open(note);
+      });
+      note.addEventListener("focusout", (event) => {
+        if (!note.contains(event.relatedTarget as Node)) close(note);
+      });
+
+      const mark = markOf(note);
+      mark?.addEventListener("click", (event) => {
+        // A link mark follows its href on click, except the first tap on a
+        // touch screen, which opens the note so it can be read at all.
+        const touch = matchMedia("(hover: none)").matches;
+        if (mark instanceof HTMLAnchorElement && (!touch || openNote === note)) return;
+        event.preventDefault();
+        if (openNote === note && touch) close(note);
+        else open(note);
+      });
+    }
+  }
+
+  document.addEventListener("pointerdown", (event) => {
+    if (openNote && !openNote.contains(event.target as Node)) close(openNote);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && openNote) close(openNote);
+  });
+  for (const type of ["scroll", "resize"]) {
+    window.addEventListener(type, () => openNote && place(openNote), { capture: true, passive: true });
+  }
+
+  wireHoverNotes();
+  document.addEventListener("astro:page-load", wireHoverNotes);
+</script>

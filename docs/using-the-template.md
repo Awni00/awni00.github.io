@@ -274,6 +274,7 @@ MDX entries can use built-in technical writing components:
 - `FigureGrid`
 - `Picture`
 - `Aside`
+- `HoverNote`
 - `TableOfContents`
 - `Video`
 - `YouTubeVideo`
@@ -381,6 +382,55 @@ $$
 $$
 </Box>
 ```
+
+### Hover Notes
+
+`HoverNote` puts a small mark in running text that opens a note on hover,
+focus, or tap. Nothing is added to the bottom of the page.
+
+```mdx
+I work on quantum mechanics<HoverNote href="https://arxiv.org/abs/2301.00001">*Paper title*, NeurIPS 2024</HoverNote>.
+Equal contribution<HoverNote mark="†" text="Listed alphabetically." />.
+Attention<HoverNote cite="vaswani2017attention" /> replaced recurrence<HoverNote cite="vaswani2017attention">See §3.2.</HoverNote>.
+```
+
+- The note's content is the component body. Keep it on one line so it parses
+  as inline Markdown (emphasis, links, and math all work); `text="…"` is a
+  plain-text alternative.
+- Unmarked notes are numbered automatically, in order, once per page. Set
+  `mark="…"` to choose the mark yourself; explicit marks do not use up a
+  number.
+- `href` makes the mark a link. On touch screens the first tap opens the
+  note, which shows the link in its footer.
+- `cite` looks a BibTeX key up and shows the title, authors, venue, and year,
+  linking the entry's first link (PDF, arXiv, DOI, URL, …). Citing the same
+  key again reuses its number. A body, if given, is shown after the citation.
+  An unknown key fails the build.
+
+Keys are looked up in the page's own bibliography first and then in the
+publications file, so a post can cite outside work and your own papers
+together. Give a page its bibliography in frontmatter, with paths relative to
+the page file:
+
+```yaml
+bibliography: references.bib   # or a list: [references.bib, more.bib]
+```
+
+The look has two settings: `marker` is `superscript` (raised, `¹,²`) or
+`bracket` (on the line, `[1, 2]`), and `appearance` is `card` (page colours)
+or `inverted` (reversed colours with a pointer). Each is resolved from the
+most specific place that sets it:
+
+1. the note's own props: `<HoverNote marker="bracket" … />`;
+2. the page's frontmatter:
+   ```yaml
+   hoverNotes:
+     marker: bracket
+     appearance: inverted
+   ```
+3. `theme.hoverNotes` in `src/site/config.ts` (default: superscript card).
+
+Colours follow the active theme; there are no per-note colour settings.
 
 ### Plotly Figures
 

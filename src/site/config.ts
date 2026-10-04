@@ -56,7 +56,12 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   //   light: "dawn",          // paper | dawn | everforest-light | latte | github-light
   //   dark: "rose-pine",      // ink | rose-pine | everforest-dark | mocha | github-dark
   //   defaultMode: "system",  // "light" | "dark" | "system"
-  //   allowToggle: true
+  //   allowToggle: true,
+  //   // Default look of <HoverNote>; pages and notes can override it.
+  //   hoverNotes: {
+  //     marker: "superscript",  // "superscript" | "bracket"
+  //     appearance: "card"      // "card" | "inverted"
+  //   }
   // },
 
   // Your BibTeX file, and the name to highlight in author lists.
