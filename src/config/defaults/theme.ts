@@ -11,5 +11,9 @@ export const defaultThemeConfig = {
     body: "serif",
     ui: "sans",
     code: "mono"
+  },
+  hoverNotes: {
+    marker: "superscript",
+    appearance: "card"
   }
 } as const satisfies ThemeConfig;

@@ -39,6 +39,18 @@ const mathConfig = z.object({
   macros: z.array(z.string()).default([])
 });
 
+// `<HoverNote>` page settings, applied by remarkHoverNotes. `bibliography` is
+// one BibTeX path or several, relative to the page file; `cite` keys are looked
+// up there before the site's publications file.
+const bibliography = z.union([z.string(), z.array(z.string()).min(1)]).optional();
+
+const hoverNotes = z
+  .object({
+    marker: z.enum(["superscript", "bracket"]).optional(),
+    appearance: z.enum(["card", "inverted"]).optional()
+  })
+  .optional();
+
 const externalLinks = z
   .object({
     paper: z.string().url().or(z.string().startsWith("/")).optional(),
@@ -103,6 +115,8 @@ const writing = defineCollection({
     math: mathConfig.optional(),
     external: externalLinks,
     bibtex: z.string().optional(),
+    bibliography,
+    hoverNotes,
     // Optional figure rendered alongside the article body. Available in
     // both presentation modes; article mode leads with it, abstract mode
     // places it after the abstract.
@@ -163,7 +177,9 @@ const pages = defineCollection({
     description: z.string().optional(),
     draft: z.boolean().default(false),
     math: mathConfig.optional(),
-    navTitle: z.string().optional()
+    navTitle: z.string().optional(),
+    bibliography,
+    hoverNotes
   })
 });
 

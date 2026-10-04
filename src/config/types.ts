@@ -295,7 +295,17 @@ export type ThemeConfig = {
     ui: "sans" | "serif";
     code: "mono";
   };
+  /** Site-wide `<HoverNote>` look; a page's `hoverNotes` frontmatter and a note's own props override it. */
+  hoverNotes: {
+    marker: HoverNoteMarker;
+    appearance: HoverNoteAppearance;
+  };
 };
+
+/** "superscript" raises the mark; "bracket" sets it on the line as `[1]`. */
+export type HoverNoteMarker = "superscript" | "bracket";
+/** "card" uses the page palette; "inverted" reverses it. */
+export type HoverNoteAppearance = "card" | "inverted";
 
 export type PublicationsConfig = {
   source: string;

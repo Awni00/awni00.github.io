@@ -12,6 +12,7 @@ import rehypeSlug from "rehype-slug";
 import { siteConfig } from "./src/config/site";
 import { darkTheme, lightTheme } from "./src/config/theme";
 import { writingConfig } from "./src/config/writing";
+import { remarkHoverNotes } from "./src/lib/citations/remarkHoverNotes";
 import { defaultMathMacros } from "./src/lib/math/macros";
 import { rehypeKatexWithMacros } from "./src/lib/math/rehypeKatexWithMacros";
 import { collectShortLinks } from "./src/lib/routes/shortLinksSource";
@@ -47,7 +48,8 @@ const shortLinkPaths = new Set(Object.keys(shortLinks.redirects));
 // what renders as a wikilink and what draws an edge on the map cannot drift.
 const remarkPlugins: any[] = [
   ...markdownSyntaxPlugins,
-  [remarkWikilinks, { contentDir: "src/content/writing", writingRoute: writingConfig.route }]
+  [remarkWikilinks, { contentDir: "src/content/writing", writingRoute: writingConfig.route }],
+  remarkHoverNotes
 ];
 
 const rehypePlugins: any[] = [

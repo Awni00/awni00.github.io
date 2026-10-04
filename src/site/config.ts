@@ -65,4 +65,54 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   theme: {
     defaultMode: "system"
   }
+
+  // Reference: the template's documented options (commented out).
+  // Who the site is about. Shown in the header, the homepage hero, and page
+  // metadata. `url` is also what absolute links and the sitemap are built from.
+  // site: {
+  //   title: "Academic Website",
+  //   name: "Your Name",
+  //   role: "PhD Student",
+  //   affiliation: "Your University",
+  //   description: "Academic website and linked research writing.",
+  //   url: "https://example.com",
+  //   profileImage: "/profile.svg",
+  //   ogImage: "/og-image.svg",
+  //   links: {
+  //     email: "mailto:you@example.com",
+  //     cv: "/cv.pdf",
+  //     github: "https://github.com/example",
+  //     scholar: "https://scholar.google.com/"
+  //   },
+  //   // Replaces the default nav entirely — list every item you want.
+  //   nav: [
+  //     { label: "Home", href: "/" },
+  //     { label: "Writing", href: "/writing" },
+  //     { label: "Publications", href: "/publications" },
+  //     { label: "Research", href: "/research" },
+  //     { label: "Teaching", href: "/teaching" },
+  //     { label: "CV", href: "/cv.pdf" }
+  //   ]
+  // },
+
+  // Which of the registered themes the site uses. Ten ship with the template
+  // (see docs/theming.md, or run the dev server and open /fixtures/themes to
+  // compare them); `src/site/themes.ts` is where you define your own.
+  // theme: {
+  //   light: "dawn",          // paper | dawn | everforest-light | latte | github-light
+  //   dark: "rose-pine",      // ink | rose-pine | everforest-dark | mocha | github-dark
+  //   defaultMode: "system",  // "light" | "dark" | "system"
+  //   allowToggle: true,
+  //   // Default look of <HoverNote>; pages and notes can override it.
+  //   hoverNotes: {
+  //     marker: "superscript",  // "superscript" | "bracket"
+  //     appearance: "card"      // "card" | "inverted"
+  //   }
+  // },
+
+  // Your BibTeX file, and the name to highlight in author lists.
+  // publications: {
+  //   source: "src/data/publications.bib",
+  //   authorHighlight: ["Your Name"]
+  // }
 };
