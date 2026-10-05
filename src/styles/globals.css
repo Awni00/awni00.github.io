@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Static assets are served as-is; scanning large embedded HTML there can stall the dev server. */
+@source not "../../public";
 @import "./tokens.css";
 @import "./article.css";
 @import "./graph.css";

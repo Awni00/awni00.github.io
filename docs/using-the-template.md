@@ -469,6 +469,9 @@ Prefer valid TeX strings in Plotly labels and avoid nested dollar math such as
 `\text{$DAT$}`. Use a single math expression, for example `$\mathrm{DAT}$`, or
 move plain text outside the TeX delimiters.
 
+Files under `public/` are served as-is and are not scanned for Tailwind classes,
+so large exported figures there do not slow the dev server.
+
 Prefer these components over raw HTML for article structure. Avoid inline `style`,
 layout `<div>` wrappers, raw `<table>`, and raw `<img>` tags in authored MDX;
 use Markdown tables, `Figure`, `FigureGrid`, `TwoColumns`, `Callout`,
