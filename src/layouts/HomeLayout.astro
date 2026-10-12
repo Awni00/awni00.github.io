@@ -95,7 +95,7 @@ const showResearch = siteConfig.homepage.researchSummary.enabled;
   {
     (showPubs || showNews) && (
       <section class="section">
-        <div class="cols2">
+        <div class={showPubs && showNews ? "cols2" : "cols2 cols2--single"}>
           {showPubs && (
             <section>
               <h2 class="h2">Selected publications</h2>

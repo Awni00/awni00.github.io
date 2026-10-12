@@ -481,6 +481,11 @@ pre {
   min-width: 0;
 }
 
+/* Only one of publications and news is on: it takes the full row. */
+.cols2--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 /* ── News (definition list) ─────────────────────────────────────────── */
 
 .news {
