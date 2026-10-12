@@ -1,0 +1,30 @@
+---
+title: "Approximation of Relation Functions and Attention Mechanisms"
+type: "paper"
+date: "2024-02-13"
+displayDates:
+  - label: "arXiv v1"
+    date: "2024-02-13"
+summary: "This paper studies the expressive power of inner products of neural networks, and establishes universality. As an application, it shows universality of Transformer attention for selection based on approximating a preference relation-based selection."
+venue: "Information Theory, Probability and Statistical Learning: A Festschrift in Honor of Andrew Barron"
+tags: ["approximation theory", "relational reasoning", "attention", "learning theory"]
+links: ["./abstractor", "./relational-convolutions", "./dual-attention"]
+authors:
+  - name: "Awni Altabaa"
+    affiliation: "Yale University"
+  - name: "John Lafferty"
+    affiliation: "Yale University"
+external:
+  arxiv: "https://arxiv.org/abs/2402.08856"
+bibtex: |
+  @article{altabaa2024approximation,
+    title   = {Approximation of Relation Functions and Attention Mechanisms},
+    author  = {Altabaa, Awni and Lafferty, John},
+    year    = {2024},
+    journal = {arXiv preprint arXiv:2402.08856},
+  }
+article:
+  mode: abstract
+---
+
+Inner products of neural network feature maps arise in a wide variety of machine learning frameworks as a method of modeling relations between inputs. This work studies the approximation properties of inner products of neural networks. It is shown that the inner product of a multi-layer perceptron with itself is a universal approximator for symmetric positive-definite relation functions. In the case of asymmetric relation functions, it is shown that the inner product of two different multi-layer perceptrons is a universal approximator. In both cases, a bound is obtained on the number of neurons required to achieve a given accuracy of approximation. In the symmetric case, the function class can be identified with kernels of reproducing kernel Hilbert spaces, whereas in the asymmetric case the function class can be identified with kernels of reproducing kernel Banach spaces. Finally, these approximation results are applied to analyzing the attention mechanism underlying Transformers, showing that any retrieval mechanism defined by an abstract preorder can be approximated by attention through its inner product relations. This result uses the Debreu representation theorem in economics to represent preference relations in terms of utility functions.

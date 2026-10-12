@@ -1,6 +1,7 @@
 ---
 title: "Learning Hierarchical Relational Representations through Relational Convolutions"
 type: "paper"
+shortUrl: "/relational-convolutions"
 aliases:
   - "Relational Convolutional Networks"
   - "Relational Convolutions"
@@ -14,7 +15,7 @@ updated: "2026-05-24"
 summary: "Relational convolutional networks learn higher-order relational features by convolving graphlet filters against subsets of objects."
 venue: "Transactions on Machine Learning Research (TMLR)"
 tags: ["relational reasoning", "neural architectures", "representation learning", "inductive bias"]
-links: ["research", "./abstractor", "./dual-attention"]
+links: ["./abstractor", "./dual-attention"]
 authors:
   - name: "Awni Altabaa"
     affiliation: "Yale University"
@@ -39,7 +40,7 @@ bibtex: |
 
 
 
-<Figure src="/writing/research/relational-convolutions/figs/relconv_diagram.png" alt="Relational Convolutional Networks architecture diagram" caption="Figure: A depiction of the relational convolution operation." />
+<Figure src="/blog/relational-convolutions/figs/relconv_diagram.png" alt="Relational Convolutional Networks architecture diagram" caption="Figure: A depiction of the relational convolution operation." />
 
 ## Abstract
 
@@ -48,7 +49,7 @@ An evolving area of research in deep learning is the study of architectures and 
 ## Method Overview
 
 <WrapFigure
-  src="/writing/research/relational-convolutions/figs/relconv_architecture.png"
+  src="/blog/relational-convolutions/figs/relconv_architecture.png"
   alt="Relational Convolutional Networks architecture diagram"
   caption="Figure: A depiction of the compositional architecture of relational convolutional networks."
 >
@@ -71,15 +72,15 @@ We evaluate our proposed architecture on two sets of relational tasks: relationa
 
 **Relational games.** The relational games benchmark allows us to evaluate out-of-distribution generalization. The dataset consists of a series of classification tasks involving a set of objects. In the figure below, we show generalization performance on two sets of objects different from those used during training.
 
-<PlotlyFigure src="/writing/research/relational-convolutions/figs/relational_games_ood_gen.html" iframeTitle="Relational games out-of-distribution generalization" height="520px" width="100%" showOpenLink={false} />
+<PlotlyFigure src="/blog/relational-convolutions/figs/relational_games_ood_gen.html" iframeTitle="Relational games out-of-distribution generalization" height="520px" width="100%" showOpenLink={false} />
 
 ***SET*.** *SET* is a card game which forms a simple but challenging relational task. To solve the task, one must process the sensory information of individual cards to identify the values of each attribute, then somehow search over combinations of cards and reason about the relations between them. This is a task which tests a model's ability to represent and reason over relations among *subgroups* of objects. This is a capability built explicitly into relational convolutional networks, but is missing from other relational models.
 
-<PlotlyFigure src="/writing/research/relational-convolutions/figs/contains_set_acc.html" iframeTitle="SET accuracy" height="520px" width="100%" showOpenLink={false} />
+<PlotlyFigure src="/blog/relational-convolutions/figs/contains_set_acc.html" iframeTitle="SET accuracy" height="520px" width="100%" showOpenLink={false} />
 
 Finally, we explore the geometry of the learned representations in relational convolutional networks. As a preview, the figure below depicts the geometry of the relational convolution operation, demonstrating its ability to learn compositional features.
 
-<PlotlyFigure src="/writing/research/relational-convolutions/figs/contains_set_conv_rep.html" iframeTitle="SET convolution representation" height="520px" width="100%" showOpenLink={false} />
+<PlotlyFigure src="/blog/relational-convolutions/figs/contains_set_conv_rep.html" iframeTitle="SET convolution representation" height="520px" width="100%" showOpenLink={false} />
 
 {/* ## Experiment Logs
 

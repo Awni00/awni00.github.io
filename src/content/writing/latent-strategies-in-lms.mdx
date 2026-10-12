@@ -12,14 +12,18 @@ displayDates:
     date: "2026-07-20"
 # update summary
 summary: "Recovering a disentangled, strategy-aligned latent-variable factorization of a pretrained language model, and the model-directed reconstruction objective that makes it possible despite posterior collapse at initialization."
+venue: "arXiv preprint"
 tags: ["large language models", "reasoning"]
-links: ["research", "./cot-info"]
+links: ["./cot-info"]
 authors:
   - name: "Awni Altabaa"
     affiliation: "Yale University"
   - name: "John Lafferty"
     affiliation: "Yale University"
 featured: false
+external:
+  arxiv: "https://arxiv.org/abs/2607.17674"
+  code: "https://github.com/Awni00/latent-strategies-in-lms"
 bibtex: |
   @misc{altabaa2026uncoveringlatentreasoningstrategies,
       title={Uncovering Latent Reasoning Strategies in Language Models}, 
@@ -41,13 +45,13 @@ This work studies the problem of recovering a disentangled representation of the
 <Figure>
   <ToggleFigure slot="figure" ariaLabel="Concept figure states" defaultValue="implicit">
     <ToggleFigurePanel label="Implicit mixture" value="implicit">
-      <Picture src="/writing/research/disentangling-latent-llm-modes/figs/concept-1-implicit.png" alt="Output space of a pretrained LM showing an entangled gray distribution over responses, annotated with proof-opening callouts for different strategies." invertInDarkMode />
+      <Picture src="/blog/latent-strategies-in-lms/figs/concept-1-implicit.png" alt="Output space of a pretrained LM showing an entangled gray distribution over responses, annotated with proof-opening callouts for different strategies." invertInDarkMode />
     </ToggleFigurePanel>
     <ToggleFigurePanel label="Misaligned latent" value="misaligned">
-      <Picture src="/writing/research/disentangling-latent-llm-modes/figs/concept-2-misaligned.png" alt="The same output space colored by a latent that is informative but not aligned with strategies; colored regions overlap without separating into strategies." invertInDarkMode />
+      <Picture src="/blog/latent-strategies-in-lms/figs/concept-2-misaligned.png" alt="The same output space colored by a latent that is informative but not aligned with strategies; colored regions overlap without separating into strategies." invertInDarkMode />
     </ToggleFigurePanel>
     <ToggleFigurePanel label="Strategy-aligned" value="aligned">
-      <Picture src="/writing/research/disentangling-latent-llm-modes/figs/concept-3-aligned.png" alt="The same output space colored by a strategy-aligned latent; strategies separate into distinct regions labeled proof by induction, contradiction, contrapositive, and algebraic manipulation." invertInDarkMode />
+      <Picture src="/blog/latent-strategies-in-lms/figs/concept-3-aligned.png" alt="The same output space colored by a strategy-aligned latent; strategies separate into distinct regions labeled proof by induction, contradiction, contrapositive, and algebraic manipulation." invertInDarkMode />
     </ToggleFigurePanel>
   </ToggleFigure>
   <Fragment slot="caption">
@@ -78,7 +82,7 @@ $$
 Thus the standard variational objective asks the induced marginal to match the observed response law, and asks $q_\xi$ to match the posterior of whichever factorization produced that marginal. It does not ask whether $z$ explains variation in $y$ beyond $x$, nor whether the resulting latent is strategy-aligned. If the generator class can represent the base model while ignoring $z$, then setting $g_\phi(y \mid x, z) = p_\theta(y \mid x)$ for all $z$ and $q_\xi(z \mid x, y) = r_\phi(z \mid x)$ preserves the base marginal and attains the objective's optimum, leaving the latent inert even though $p_\phi(y \mid x) = p_\theta(y \mid x)$. With expressive generators built from pretrained language models, this $z$-ignoring factorization is not only available, but also close to initialization, making it a likely attractor for optimization.
 
 <EmbedFrame
-  src="/writing/research/disentangling-latent-llm-modes/interactive/elbo-failure.html?autoplay=1"
+  src="/blog/latent-strategies-in-lms/interactive/elbo-failure.html?autoplay=1"
   title="ELBO training can preserve fidelity while leaving the latent unused"
   height="400px"
   autoFit
@@ -97,7 +101,7 @@ The ELBO failure shows that marginal fidelity is not enough: a factorized model 
 We implement the factorization by *adapting* a pretrained Transformer into three roles. The router $r_\phi(z \mid x)$ reads the input and produces a distribution over latent strategy values; the strategy-conditioned generator $g_\phi(y \mid x, z)$ generates the response autoregressively while attending to an embedding $E(z)$ of the latent strategy, inserted as a pseudo-token; and a training-time posterior $q_\xi(z \mid x, y)$ reads the full input–response pair to provide variational training signal. The router and generator are a single autoregressive model with shared parameters $\phi$, adapted from the base parameters via LoRA-style low-rank updates so the generator inherits the base response law rather than relearning it.
 
 <EmbedFrame
-  src="/writing/research/disentangling-latent-llm-modes/interactive/architecture.html"
+  src="/blog/latent-strategies-in-lms/interactive/architecture.html"
   title="Autoregressive router–generator Transformer architecture"
   height="420px"
   autoFit
@@ -112,7 +116,7 @@ We implement the factorization by *adapting* a pretrained Transformer into three
 The core idea is to use the base model $p_\theta$ to *adaptively* rescale the reconstruction loss and direct reconstruction pressure toward tokens where the base model is uncertain. We instantiate this with token-level base model surprisal $b_{\theta,t}(x,y) = -\log p_\theta(y_t \mid x, y_{<t})$, which measures how much uncertainty remains about $y_t$ after conditioning on $x$ and $y_{<t}$, giving a local estimate of where $z$ can explain variation beyond the $z$-free prefix model. This token-level view matters because autoregressive responses quickly become partially self-predictable: after an early commitment, many later tokens may be determined by $x$ and $y_{<t}$, even if the commitment itself reflects a strategy choice. The reconstruction term therefore substitutes uniform token pressure with $p_\theta$-surprisal-directed pressure, assigning more weight to **branch points** where the base model leaves multiple continuations plausible.
 
 <Figure>
-  <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/token-weighting.png" alt="Left: a response path with high-surprisal branch points and determined positions, with next-token distribution glyphs above each node. Right: base model surprisal above each token and the corresponding reconstruction weight below it." invertInDarkMode />
+  <Picture slot="figure" src="/blog/latent-strategies-in-lms/figs/token-weighting.png" alt="Left: a response path with high-surprisal branch points and determined positions, with next-token distribution glyphs above each node. Right: base model surprisal above each token and the corresponding reconstruction weight below it." invertInDarkMode />
   <Fragment slot="caption">
     **Token-level $p_\theta$ surprisal weighting.** Left: a response path with *branch points*, where several next tokens remain plausible, and *determined positions*, where the next token is mostly fixed by $x$ and earlier response tokens. Right: $z$-free base model surprisal $b_{\theta,t}(x,y)$ above each token and the corresponding token weight below it; higher-surprisal positions receive more reconstruction pressure.
   </Fragment>
@@ -153,7 +157,7 @@ We evaluate on a controlled multi-strategy algorithmic benchmark designed to mak
 **Strategy information is already present in the base model.** For each task and token position, a lightweight linear probe on the base model's hidden states can predict the reference strategy annotation. Strategy information is broadly decodable across the benchmark, especially at positions where strategy-specific computation is expressed. This establishes the premise for factorization: the target structure is present in the base model, but is not exposed as a reusable latent variable that can be sampled, transferred, or compared across inputs.
 
 <Figure>
-  <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/entanglement-heatmap.png" alt="Heatmap with rows as benchmark tasks and columns as normalized token positions; color gives linear-probe accuracy for predicting the ground-truth strategy from the entangled base model's hidden states." invertInDarkMode />
+  <Picture slot="figure" src="/blog/latent-strategies-in-lms/figs/entanglement-heatmap.png" alt="Heatmap with rows as benchmark tasks and columns as normalized token positions; color gives linear-probe accuracy for predicting the ground-truth strategy from the entangled base model's hidden states." invertInDarkMode />
   <Fragment slot="caption">
     **Strategy labels are decodable from base model hidden states.** Rows are benchmark tasks, columns are normalized token positions, and color gives linear-probe accuracy for predicting the ground-truth strategy from hidden states of the entangled base model.
   </Fragment>
@@ -162,7 +166,7 @@ We evaluate on a controlled multi-strategy algorithmic benchmark designed to mak
 **The proposed objective recovers strategy-aligned latents; ELBO does not.** Across pretrained Qwen2.5 runs, ELBO-style baselines preserve Distributional Fidelity but leave the latent inert or strategy-unaligned, while the model-directed reconstruction objective and its variants recover strategy-aligned latents *and* preserve the base model response distribution. An ablation that weights reconstruction by *inverse* surprisal — emphasizing low-surprisal tokens — weakens Strategy Alignment, supporting the view that the gains come from pressuring $z$ to explain strategy-relevant residual surprisal.
 
 <Figure>
-  <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/method-comparison.png" alt="Bar chart over objective variants and two model sizes; bars show Distributional Fidelity and Strategy Alignment, with open points for per-task values and hatching marking baselines and ablations." invertInDarkMode />
+  <Picture slot="figure" src="/blog/latent-strategies-in-lms/figs/method-comparison.png" alt="Bar chart over objective variants and two model sizes; bars show Distributional Fidelity and Strategy Alignment, with open points for per-task values and hatching marking baselines and ablations." invertInDarkMode />
   <Fragment slot="caption">
     **Method comparison on pretrained Qwen2.5 runs.** For each objective variant and model size, bars show Distributional Fidelity and Strategy Alignment, with open points giving per-task values. Strategy Alignment denotes cross-input latent strategy alignment measured by Analogical Consistency. Hatching marks baselines and ablations.
   </Fragment>
@@ -171,7 +175,7 @@ We evaluate on a controlled multi-strategy algorithmic benchmark designed to mak
 The latent dynamics provide complementary geometric evidence: posterior latents that begin as an overlapping cloud separate into task- and strategy-structured regions over training. In the multi-task setting this organization is task-conditioned rather than a single global strategy codebook — the same latent regions can carry different strategy meanings for different task families, a multiplexing that is visible in linear diagnostics.
 
 <Figure>
-  <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/posterior-geometry.png" alt="Six PCA panels of posterior mean latents at increasing fractions of training; an initially overlapping cloud separates into task- and strategy-specific regions, colored by task and strategy." invertInDarkMode />
+  <Picture slot="figure" src="/blog/latent-strategies-in-lms/figs/posterior-geometry.png" alt="Six PCA panels of posterior mean latents at increasing fractions of training; an initially overlapping cloud separates into task- and strategy-specific regions, colored by task and strategy." invertInDarkMode />
   <Fragment slot="caption">
     **Posterior latent geometry over training.** Each panel is a PCA projection of posterior mean latents at the indicated fraction of training. Points are colored by task and strategy; the initially overlapping cloud separates into task- and strategy-specific regions over training.
   </Fragment>
@@ -183,13 +187,13 @@ The latent dynamics provide complementary geometric evidence: posterior latents 
 
 <TwoColumns>
   <Figure slot="left">
-    <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/fidelity-alignment-phase-space.png" alt="Training trajectories in fidelity-alignment phase space; proposed variants move up and to the right toward high alignment and high fidelity, while ELBO baselines and the inverse-surprisal ablation increase fidelity without gaining alignment." invertInDarkMode />
+    <Picture slot="figure" src="/blog/latent-strategies-in-lms/figs/fidelity-alignment-phase-space.png" alt="Training trajectories in fidelity-alignment phase space; proposed variants move up and to the right toward high alignment and high fidelity, while ELBO baselines and the inverse-surprisal ablation increase fidelity without gaining alignment." invertInDarkMode />
     <Fragment slot="caption">
       Training trajectories in fidelity–alignment phase space for different objective variants.
     </Fragment>
   </Figure>
   <Figure slot="right">
-    <Picture slot="figure" src="/writing/research/disentangling-latent-llm-modes/figs/token-recon-vs-alignment.png" alt="Scatter of token-weighted reconstruction loss versus Strategy Alignment at training endpoints; lower token-weighted reconstruction loss is associated with higher strategy alignment across all methods." invertInDarkMode />
+    <Picture slot="figure" src="/blog/latent-strategies-in-lms/figs/token-recon-vs-alignment.png" alt="Scatter of token-weighted reconstruction loss versus Strategy Alignment at training endpoints; lower token-weighted reconstruction loss is associated with higher strategy alignment across all methods." invertInDarkMode />
     <Fragment slot="caption">
       Token-weighted reconstruction loss versus Strategy Alignment at training endpoints; outlined points show method centroids and translucent points show individual runs.
     </Fragment>

@@ -20,10 +20,9 @@ export const siteConfigOverrides: SiteConfigOverrides = {
     },
     nav: [
       { label: "Home", href: "/" },
-      { label: "Writing", href: "/writing" },
-      { label: "Research", href: "/writing/research" },
+      { label: "Research", href: "/research" },
+      { label: "Blog", href: "/blog" },
       { label: "Publications", href: "/publications" },
-      { label: "Teaching", href: "/teaching" },
       { label: "CV", href: "/cv.pdf" }
     ],
     homepage: {
@@ -32,7 +31,7 @@ export const siteConfigOverrides: SiteConfigOverrides = {
         title: "Research Writing",
         description:
           "Paper pages and research notes organized as a linked map of ideas and projects.",
-        clickTarget: "/writing",
+        clickTarget: "/blog",
         previewHeight: 380
       },
       selectedPublications: {
@@ -53,6 +52,11 @@ export const siteConfigOverrides: SiteConfigOverrides = {
     }
   },
   writing: {
+    route: "/blog",
+    label: "Blog",
+    rss: {
+      route: "/blog/rss.xml"
+    },
     entryLayout: {
       toc: {
         default: {

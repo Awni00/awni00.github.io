@@ -1,6 +1,7 @@
 ---
 title: "Abstractors and Relational Cross-Attention: An Inductive Bias for Explicit Relational Reasoning in Transformers"
 type: "paper"
+shortUrl: "/abstractor"
 aliases:
   - "Abstractors"
   - "Relational Cross-Attention"
@@ -14,7 +15,7 @@ updated: "2026-05-24"
 summary: "Abstractors add relational cross-attention to Transformers as an inductive bias for explicit relational reasoning and abstraction."
 venue: "International Conference on Learning Representations (ICLR)"
 tags: ["transformers", "relational reasoning", "abstraction", "inductive bias"]
-links: ["research", "./relational-convolutions", "./dual-attention"]
+links: ["./relational-convolutions", "./dual-attention"]
 authors:
   - name: "Awni Altabaa"
     affiliation: "Yale University"
@@ -45,8 +46,8 @@ bibtex: |
 
 
 <TwoColumns>
-  <Figure slot="left" src="/writing/research/abstractor/figs/self_attn_fig.png" alt="depiction of self-attention" />
-  <Figure slot="right" src="/writing/research/abstractor/figs/rel_crossattn_fig.png" alt="depiction of relational cross-attention" />
+  <Figure slot="left" src="/blog/abstractor/figs/self_attn_fig.png" alt="depiction of self-attention" />
+  <Figure slot="right" src="/blog/abstractor/figs/rel_crossattn_fig.png" alt="depiction of relational cross-attention" />
 </TwoColumns>
 
 <Figure>
@@ -90,8 +91,8 @@ We evaluate our proposed architecture on a series of experiments involving both 
 **Discriminative Relational Tasks.** We begin our experimental evaluation with discriminative relational classification tasks---a setting where it is possible to compare to previously proposed relational architectures such as [PrediNet](https://arxiv.org/abs/1905.10307) and [CoRelNet](https://arxiv.org/abs/2206.05056). THe figure below compares sample-efficiency at two discriminative relational tasks: modeling transitive pairwise order in random objects and a task based on the [SET card game](https://www.wikiwand.com/en/Set_(card_game)). We find that explicitly relational architectures always outperform an MLP, with the Abstractor being the best-performing model on these tasks.
 
 <TwoColumns>
-  <Figure slot="left" src="/writing/research/abstractor/figs/pairwise_order_learning_curves.png" alt="learning curves of pairwise order discriminative task" />
-  <Figure slot="right" src="/writing/research/abstractor/figs/set_classification.png" alt="learning curves on SET game classification task" />
+  <Figure slot="left" src="/blog/abstractor/figs/pairwise_order_learning_curves.png" alt="learning curves of pairwise order discriminative task" />
+  <Figure slot="right" src="/blog/abstractor/figs/set_classification.png" alt="learning curves on SET game classification task" />
 </TwoColumns>
 
 <Figure>
@@ -101,8 +102,8 @@ We evaluate our proposed architecture on a series of experiments involving both 
 **Random Object Sorting.** Next, we evaluate a sequence-to-sequence relational task and compare to a standard Transformer. The task is to autoregressively predict the argsort of a sequence of randomly-generated objects. The underlying order relation must be learned from data in an end-to-end fashion. We observe the Abstractor-based model to be dramatically more sample-efficient at this task. Moreover, the Abstractor is able to generalize to new but similar tasks.
 
 <TwoColumns>
-  <Figure slot="left" src="/writing/research/abstractor/figs/random_object_sorting.png" alt="learning curves for object-sorting experiments" />
-  <Figure slot="right" src="/writing/research/abstractor/figs/random_object_sorting_generalization.png" alt="learning curves for object-sorting experiments after pre-training on related task" />
+  <Figure slot="left" src="/blog/abstractor/figs/random_object_sorting.png" alt="learning curves for object-sorting experiments" />
+  <Figure slot="right" src="/blog/abstractor/figs/random_object_sorting_generalization.png" alt="learning curves for object-sorting experiments after pre-training on related task" />
 </TwoColumns>
 
 <Figure>
@@ -111,7 +112,7 @@ We evaluate our proposed architecture on a series of experiments involving both 
 
 **Mathematical Problem-Solving.** Finally, we evaluate the Abstractor on a sequence-to-sequence task which is more representative of the complexity of real-world tasks: solving mathematical problems. The mathematical problems includes the following tasks: differentiation (calculus), predicting the next term in a sequence (algebra), solving linear equations (algebra), expanding products of polynomials, and adding polynomials. We observe a consistent and notable improvement in performance and sample efficiency.
 
-<Figure src="/writing/research/abstractor/figs/math_training_curves.png" alt="Learning Curves of Mathematical Problem-Solving Tasks" caption="Figure: Training curves on mathematical problem-solving tasks." />
+<Figure src="/blog/abstractor/figs/math_training_curves.png" alt="Learning Curves of Mathematical Problem-Solving Tasks" caption="Figure: Training curves on mathematical problem-solving tasks." />
 
 Please see the paper for details on these experiments.
 

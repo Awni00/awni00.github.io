@@ -1,6 +1,7 @@
 ---
 title: "CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision"
 type: "paper"
+shortUrl: "/cot-info"
 aliases:
   - "CoT Information"
   - "Chain-of-Thought Information"
@@ -14,7 +15,7 @@ updated: "2026-05-24"
 summary: "A statistical learning theory for chain-of-thought supervision, centered on a CoT information measure that governs sample complexity."
 venue: "Neural Information Processing Systems (NeurIPS), spotlight"
 tags: ["chain-of-thought", "statistical learning theory", "sample complexity", "large language models"]
-links: ["research", "./algorithmic-generalization-transformer-architectures"]
+links: ["./algorithmic-generalization-transformer-architectures"]
 authors:
   - name: "Awni Altabaa"
     affiliation: "Yale University"
@@ -56,10 +57,10 @@ We can see this difference in action when both models attempt the same problem.
 <Figure>
   <ToggleFigure slot="figure" ariaLabel="ChatGPT 5 response variants" defaultValue="instant">
     <ToggleFigurePanel label="ChatGPT 5 Instant" value="instant">
-      <Picture src="/writing/research/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-instant+.png" alt="ChatGPT 5 Instant answers the number comparison question incorrectly when forced to respond immediately." invertInDarkMode />
+      <Picture src="/blog/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-instant+.png" alt="ChatGPT 5 Instant answers the number comparison question incorrectly when forced to respond immediately." invertInDarkMode />
     </ToggleFigurePanel>
     <ToggleFigurePanel label="ChatGPT 5 Thinking" value="thinking">
-      <Picture src="/writing/research/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-thinking+.png" alt="ChatGPT 5 Thinking solves the number comparison question correctly by reasoning step-by-step." invertInDarkMode />
+      <Picture src="/blog/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-thinking+.png" alt="ChatGPT 5 Thinking solves the number comparison question correctly by reasoning step-by-step." invertInDarkMode />
     </ToggleFigurePanel>
   </ToggleFigure>
   <Fragment slot="caption">
@@ -72,10 +73,10 @@ We can see this difference in action when both models attempt the same problem.
 <Figure>
   <ToggleFigure slot="figure" ariaLabel="ChatGPT 5 response variants" defaultValue="instant">
     <ToggleFigurePanel label="ChatGPT 5 Instant" value="instant">
-      <Picture src="/writing/research/cot-info/figs/gpt_cot_examples/forest-no-cot.png" alt="ChatGPT 5 Instant fails on the forestry word problem without reasoning." invertInDarkMode />
+      <Picture src="/blog/cot-info/figs/gpt_cot_examples/forest-no-cot.png" alt="ChatGPT 5 Instant fails on the forestry word problem without reasoning." invertInDarkMode />
     </ToggleFigurePanel>
     <ToggleFigurePanel label="ChatGPT 5 Thinking" value="thinking">
-      <Picture src="/writing/research/cot-info/figs/gpt_cot_examples/forest-cot-gpt5-thinking.png" alt="ChatGPT 5 Thinking solves the forestry word problem with chain-of-thought supervision." invertInDarkMode />
+      <Picture src="/blog/cot-info/figs/gpt_cot_examples/forest-cot-gpt5-thinking.png" alt="ChatGPT 5 Thinking solves the forestry word problem with chain-of-thought supervision." invertInDarkMode />
     </ToggleFigurePanel>
   </ToggleFigure>
   <Fragment slot="caption">
@@ -88,10 +89,10 @@ We can see this difference in action when both models attempt the same problem.
 <Figure>
   <ToggleFigure slot="figure" ariaLabel="ChatGPT 5 response variants" defaultValue="instant">
     <ToggleFigurePanel label="ChatGPT 5 Instant" value="instant">
-      <Picture src="/writing/research/cot-info/figs/gpt_cot_examples/syseq-gpt5-instant.png" alt="ChatGPT 5 Instant fails to solve the linear system without reasoning." invertInDarkMode />
+      <Picture src="/blog/cot-info/figs/gpt_cot_examples/syseq-gpt5-instant.png" alt="ChatGPT 5 Instant fails to solve the linear system without reasoning." invertInDarkMode />
     </ToggleFigurePanel>
     <ToggleFigurePanel label="ChatGPT 5 Thinking" value="thinking">
-      <Picture src="/writing/research/cot-info/figs/gpt_cot_examples/syseq-gpt5-thinking.png" alt="ChatGPT 5 Thinking solves the linear system with a reasoning trace." invertInDarkMode />
+      <Picture src="/blog/cot-info/figs/gpt_cot_examples/syseq-gpt5-thinking.png" alt="ChatGPT 5 Thinking solves the linear system with a reasoning trace." invertInDarkMode />
     </ToggleFigurePanel>
   </ToggleFigure>
   <Fragment slot="caption">
@@ -113,7 +114,7 @@ In this work, we develop a learning-theoretic framework to formalize and quantif
 Before diving into theory, it's useful to recall where chain-of-thought supervision fits in the modern large language model training pipeline.
 
 <Figure>
-  <Picture slot="figure" src="/writing/research/cot-info/figs/building-llm.png" alt="Three-stage pipeline for building large language models." />
+  <Picture slot="figure" src="/blog/cot-info/figs/building-llm.png" alt="Three-stage pipeline for building large language models." />
   <Fragment slot="caption">A hitchhiker's guide to building an LLM.</Fragment>
 </Figure>
 
@@ -262,7 +263,7 @@ We will see that the CoT information characterizes the sample complexity of lear
 
 
 <Figure>
-  <Picture slot="figure" src="/writing/research/cot-info/figs/diagrams/cotcons_dynamic_diagram.pdf" alt="Multi-panel illustration comparing end-to-end and CoT consistency sets as sample size increases." />
+  <Picture slot="figure" src="/blog/cot-info/figs/diagrams/cotcons_dynamic_diagram.pdf" alt="Multi-panel illustration comparing end-to-end and CoT consistency sets as sample size increases." />
   <Fragment slot="caption">Geometry of CoT information: consistency sets shrink much faster under CoT supervision.</Fragment>
 </Figure>
 
@@ -367,19 +368,19 @@ The CoT trace corresponds to the full sequence of intermediate tokens, while the
 
 <FigureGrid columns={2} equalFrames mediaAspectRatio="3 / 2">
   <Figure>
-    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_E2EDiff.pdf" alt="Scatter plot comparing CoT information and end-to-end disagreement for the linear autoregressive class." invertInDarkMode />
+    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_E2EDiff.pdf" alt="Scatter plot comparing CoT information and end-to-end disagreement for the linear autoregressive class." invertInDarkMode />
     <Fragment slot="caption">Relative CoT information between pairs of hypotheses versus their end-to-end disagreement. Observing the CoT makes distinguishing hypotheses statistically easier.</Fragment>
   </Figure>
   <Figure>
-    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_Epsilon_log.pdf" alt="Plot of CoT information as a function of epsilon for the linear autoregressive class." invertInDarkMode />
+    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_Epsilon_log.pdf" alt="Plot of CoT information as a function of epsilon for the linear autoregressive class." invertInDarkMode />
     <Fragment slot="caption">The CoT information function $\cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H})$. The dashed line is the line $y = \epsilon$. The CoT information always dominates the $\epsilon$ baseline.</Fragment>
   </Figure>
   <Figure>
-    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/empirical_sample_complexity_legendin.pdf" alt="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class." invertInDarkMode />
+    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/empirical_sample_complexity_legendin.pdf" alt="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class." invertInDarkMode />
     <Fragment slot="caption">Empirical sample complexity for end-to-end versus CoT learning.</Fragment>
   </Figure>
   <Figure>
-    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/learning_curves_prob_success_eps0_log_legendin_e2eerr.pdf" alt="Empirical probability of zero error for end-to-end vs CoT learners in the linear autoregressive class." invertInDarkMode />
+    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/learning_curves_prob_success_eps0_log_legendin_e2eerr.pdf" alt="Empirical probability of zero error for end-to-end vs CoT learners in the linear autoregressive class." invertInDarkMode />
     <Fragment slot="caption">Probability that each learning rule achieves zero error as the sample size grows.</Fragment>
   </Figure>
 </FigureGrid>
@@ -395,22 +396,22 @@ Here, $h^{\text{e2e}}(x)$ indicates whether a string $x$ belongs to a regular la
   <Figure>
     <Picture
       slot="figure"
-      src="/writing/research/cot-info/figs/simulation_figs/DFA_transition_diagram.pdf"
+      src="/blog/cot-info/figs/simulation_figs/DFA_transition_diagram.pdf"
       alt="Deterministic finite automaton with four states used in the simulation."
       invertInDarkMode
     />
     <Fragment slot="caption">DFA whose state trajectory forms the chain-of-thought trace.</Fragment>
   </Figure>
   <Figure>
-    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/DFA_S4A2L10_varycotdetail/20250503-194523/figs/CoTInfoRatio_vs_Epsilon_by_detail_log.pdf" alt="CoT information ratio as a function of epsilon under varying detail levels of the DFA trace." invertInDarkMode />
+    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/DFA_S4A2L10_varycotdetail/20250503-194523/figs/CoTInfoRatio_vs_Epsilon_by_detail_log.pdf" alt="CoT information ratio as a function of epsilon under varying detail levels of the DFA trace." invertInDarkMode />
     <Fragment slot="caption">How CoT information scales with epsilon as trace detail varies.</Fragment>
   </Figure>
   <Figure>
-    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/empirical_sample_complexity_legendin.pdf" alt="Empirical sample complexity for DFA learning under end-to-end vs CoT supervision." invertInDarkMode />
+    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/empirical_sample_complexity_legendin.pdf" alt="Empirical sample complexity for DFA learning under end-to-end vs CoT supervision." invertInDarkMode />
     <Fragment slot="caption">Empirical sample complexity for end-to-end versus CoT learning.</Fragment>
   </Figure>
   <Figure>
-    <Picture slot="figure" src="/writing/research/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/learning_curves_prob_success_eps0_log_legendin.pdf" alt="Probability of zero error for DFA learning with and without CoT supervision." invertInDarkMode />
+    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/learning_curves_prob_success_eps0_log_legendin.pdf" alt="Probability of zero error for DFA learning with and without CoT supervision." invertInDarkMode />
     <Fragment slot="caption">Probability that each learning rule achieves zero error as the sample size grows.</Fragment>
   </Figure>
 </FigureGrid>
