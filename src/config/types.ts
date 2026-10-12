@@ -300,12 +300,18 @@ export type ThemeConfig = {
     marker: HoverNoteMarker;
     appearance: HoverNoteAppearance;
   };
+  /** Site-wide `<Term>` look; a page's `terms` frontmatter and a term's own props override it. */
+  terms: {
+    underline: TermUnderline;
+  };
 };
 
 /** "superscript" raises the mark; "bracket" sets it on the line as `[1]`. */
 export type HoverNoteMarker = "superscript" | "bracket";
 /** "card" uses the page palette; "inverted" reverses it. */
 export type HoverNoteAppearance = "card" | "inverted";
+/** "dotted" draws a soft dotted underline under a `<Term>`; "none" leaves just the accent colour. */
+export type TermUnderline = "dotted" | "none";
 
 export type PublicationsConfig = {
   source: string;

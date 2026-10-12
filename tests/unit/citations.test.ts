@@ -46,10 +46,10 @@ describe("formatCitation", () => {
 type Attribute = { type: string; name: string; value: string };
 type Note = { type: string; name: string; attributes: Attribute[] };
 
-function note(attributes: Record<string, string> = {}): Note {
+function note(attributes: Record<string, string> = {}, name = "HoverNote"): Note {
   return {
     type: "mdxJsxTextElement",
-    name: "HoverNote",
+    name,
     attributes: Object.entries(attributes).map(([name, value]) => ({ type: "mdxJsxAttribute", name, value }))
   };
 }
@@ -83,5 +83,15 @@ describe("remarkHoverNotes", () => {
 
   it("names a bibliography file that does not exist", () => {
     expect(() => run([note({ cite: "x" })], { bibliography: "missing.bib" })).toThrow(/missing\.bib/);
+  });
+
+  it("gives terms the page's underline and shared appearance, and never numbers them", () => {
+    const [first, term, second, own] = run(
+      [note(), note({ note: "x" }, "Term"), note(), note({ note: "y", underline: "dotted" }, "Term")],
+      { hoverNotes: { appearance: "inverted" }, terms: { underline: "none" } }
+    );
+    expect([first.mark, second.mark]).toEqual(["1", "2"]);
+    expect(term).toEqual({ note: "x", underline: "none", appearance: "inverted" });
+    expect(own).toMatchObject({ underline: "dotted", appearance: "inverted" });
   });
 });

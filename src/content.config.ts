@@ -39,7 +39,8 @@ const mathConfig = z.object({
   macros: z.array(z.string()).default([])
 });
 
-// `<HoverNote>` page settings, applied by remarkHoverNotes. `bibliography` is
+// `<HoverNote>` page settings, applied by remarkHoverNotes. `appearance` also
+// applies to `<Term>`. `bibliography` is
 // one BibTeX path or several, relative to the page file; `cite` keys are looked
 // up there before the site's publications file.
 const bibliography = z.union([z.string(), z.array(z.string()).min(1)]).optional();
@@ -48,6 +49,13 @@ const hoverNotes = z
   .object({
     marker: z.enum(["superscript", "bracket"]).optional(),
     appearance: z.enum(["card", "inverted"]).optional()
+  })
+  .optional();
+
+// `<Term>` page settings, applied by remarkHoverNotes.
+const terms = z
+  .object({
+    underline: z.enum(["dotted", "none"]).optional()
   })
   .optional();
 
@@ -117,6 +125,7 @@ const writing = defineCollection({
     bibtex: z.string().optional(),
     bibliography,
     hoverNotes,
+    terms,
     // Optional figure rendered alongside the article body. Available in
     // both presentation modes; article mode leads with it, abstract mode
     // places it after the abstract.
@@ -179,7 +188,8 @@ const pages = defineCollection({
     math: mathConfig.optional(),
     navTitle: z.string().optional(),
     bibliography,
-    hoverNotes
+    hoverNotes,
+    terms
   })
 });
 

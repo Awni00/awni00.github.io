@@ -51,9 +51,10 @@ Supported top-level sections:
 
 - `site`: identity, metadata, links, navigation, homepage sections.
 - `theme`: which light and dark theme the site uses, default color mode,
-  toggle behavior, typography choices, and the default `HoverNote` style
-  (`hoverNotes.marker`, `hoverNotes.appearance`). See [Theming](theming.md)
-  and [Hover Notes](using-the-template.md#hover-notes).
+  toggle behavior, typography choices, and the default `HoverNote` and `Term`
+  style (`hoverNotes.marker`, `hoverNotes.appearance`, `terms.underline`). See
+  [Theming](theming.md), [Hover Notes](using-the-template.md#hover-notes), and
+  [Terms](using-the-template.md#terms).
 - `publications`: BibTeX source, grouping, author highlighting, previews.
 - `graph`: global graph link, layout, and interaction settings.
 - `writing`: writing route, browser behavior, validation behavior.

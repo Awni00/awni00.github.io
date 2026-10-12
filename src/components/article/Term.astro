@@ -1,0 +1,61 @@
+---
+/**
+ * Term: words in running prose that explain themselves on hover, focus, or
+ * tap.
+ *
+ *   My interests lie in the <Term note="Rigorous experiments to understand phenomena in AI.">empirical science</Term> of AI.
+ *
+ * Props:
+ *   - `note`       — the explanation, plain text.
+ *   - `href`       — makes the term a link. On touch screens the first tap
+ *                    opens the note; the second follows the link.
+ *   - `underline`  — "dotted" or "none". The term is always in the theme's
+ *                    accent; the soft dotted underline is what tells it apart
+ *                    from a link, whose underline is solid.
+ *   - `appearance` — "card" or "inverted", shared with `HoverNote`.
+ *   - children     — the term itself, which stays in the sentence's flow.
+ *
+ * `underline` cascades from `theme.terms.underline` in the site config, then a
+ * page's `terms:` frontmatter, then this prop; `appearance` from
+ * `theme.hoverNotes` and a page's `hoverNotes:` frontmatter. The frontmatter
+ * steps are applied by `remarkHoverNotes`.
+ *
+ * The trigger is a `<span role="button">` rather than a `<button>` so a term
+ * can wrap across a line break like the words around it.
+ */
+import {
+  themeConfig,
+  type HoverNoteAppearance,
+  type TermUnderline
+} from "../../config/theme";
+
+type Props = {
+  note: string;
+  href?: string;
+  underline?: TermUnderline;
+  appearance?: HoverNoteAppearance;
+};
+
+const {
+  note,
+  href,
+  underline = themeConfig.terms.underline,
+  appearance = themeConfig.hoverNotes.appearance
+} = Astro.props;
+
+const isExternal = Boolean(href && /^[a-z]+:\/\//i.test(href));
+const external: Record<string, string> = isExternal ? { target: "_blank", rel: "noopener" } : {};
+const id = `term-${Math.random().toString(36).slice(2, 10)}`;
+const Trigger = href ? "a" : "span";
+const triggerAttrs: Record<string, string | number> = href ? { href, ...external } : { role: "button", tabindex: 0 };
+---
+
+<span class="term" data-hover-popover data-underline={underline} data-appearance={appearance}
+  ><Trigger class="term__text" data-hover-trigger aria-describedby={id} {...triggerAttrs}><slot /></Trigger
+  ><span class="term__pop hover-pop" id={id} role="tooltip" popover="manual">{note}</span></span
+><script>
+  import { wireHoverPopovers } from "../../lib/article/hoverPopover";
+
+  wireHoverPopovers();
+  document.addEventListener("astro:page-load", wireHoverPopovers);
+</script>

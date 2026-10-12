@@ -275,6 +275,7 @@ MDX entries can use built-in technical writing components:
 - `Picture`
 - `Aside`
 - `HoverNote`
+- `Term`
 - `TableOfContents`
 - `Video`
 - `YouTubeVideo`
@@ -431,6 +432,42 @@ most specific place that sets it:
 3. `theme.hoverNotes` in `src/site/config.ts` (default: superscript card).
 
 Colours follow the active theme; there are no per-note colour settings.
+
+### Terms
+
+`Term` makes words in a sentence explain themselves: the words stay in the
+text, in the theme's accent colour, and a short note opens on hover, focus, or
+tap.
+
+```mdx
+My research interests lie in the <Term note="Rigorous experiments to understand phenomena in AI.">empirical science</Term>,
+<Term note="Mathematical theories that explain phenomena in AI.">mathematical science</Term>, and
+<Term note="New methods and algorithms that make AI better.">methodology</Term> of artificial intelligence.
+```
+
+- `note` is plain text. The term itself is the component body and wraps across
+  lines like the words around it.
+- `href` makes the term a link. On touch screens the first tap opens the note
+  and the second follows the link.
+- `underline` is `dotted` (default) or `none`. The soft dotted underline is
+  what tells a term apart from a link, whose underline is solid; turn it off
+  where terms are sparse and already clear from context.
+- The note uses the same card as `HoverNote`, so `appearance` (`card` or
+  `inverted`) and its `hoverNotes:` settings apply to terms too.
+
+Like hover notes, the most specific setting wins: the term's own props, then
+the page's frontmatter, then `src/site/config.ts`:
+
+```yaml
+terms:
+  underline: none
+```
+
+```ts
+theme: {
+  terms: { underline: "dotted" }   // "dotted" | "none"
+}
+```
 
 ### Plotly Figures
 
