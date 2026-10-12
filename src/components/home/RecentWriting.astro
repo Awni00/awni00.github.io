@@ -2,21 +2,24 @@
 /**
  * Homepage "Recent writing" carousel: a horizontally scrolling row of entry
  * cards, three visible on desktop with the next one peeking in, swipeable on
- * touch. It ends in a card that links to the full writing browser.
+ * touch. It can end in a card that links to the full writing browser.
  *
  * Without JavaScript it is still a plain scroll-snap row; the script only adds
  * the previous/next buttons, and reveals them only when the row overflows.
  */
 import type { EntryNode } from "../../lib/graph/types";
+import type { SiteConfig } from "../../config/types";
 import { getEntryType, writingConfig } from "../../config";
 import { writingRoute } from "../../lib/routes/paths";
 
 type Props = {
   entries: EntryNode[];
   title: string;
+  viewAll: SiteConfig["homepage"]["recentWriting"]["viewAll"];
 };
 
-const { entries, title } = Astro.props;
+const { entries, title, viewAll } = Astro.props;
+const viewAllDescription = viewAll.description ?? `Browse ${writingConfig.label}`;
 const headingId = "recent-writing-heading";
 const trackId = "recent-writing-track";
 ---
@@ -46,10 +49,12 @@ const trackId = "recent-writing-track";
         {entry.summary && <p class="recent-summary">{entry.summary}</p>}
       </li>
     ))}
-    <li class="recent-card recent-card--all">
-      <a class="recent-title" href={writingRoute()}>View all →</a>
-      <p class="recent-summary">Browse everything in {writingConfig.label}.</p>
-    </li>
+    {viewAll.enabled && (
+      <li class="recent-card recent-card--all">
+        <a class="recent-title" href={writingRoute()}>{viewAll.label}</a>
+        {viewAllDescription && <p class="recent-summary">{viewAllDescription}</p>}
+      </li>
+    )}
   </ul>
 </section>
 

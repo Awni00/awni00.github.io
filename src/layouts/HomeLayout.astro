@@ -132,7 +132,11 @@ const showResearch = siteConfig.homepage.researchSummary.enabled;
 
   {
     showRecent && (
-      <RecentWriting entries={recentWriting} title={siteConfig.homepage.recentWriting.title} />
+      <RecentWriting
+        entries={recentWriting}
+        title={siteConfig.homepage.recentWriting.title}
+        viewAll={siteConfig.homepage.recentWriting.viewAll}
+      />
     )
   }
 </BaseLayout>

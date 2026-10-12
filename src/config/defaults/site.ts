@@ -52,7 +52,11 @@ export const defaultSiteConfig = {
     recentWriting: {
       enabled: true,
       title: "Recent writing",
-      maxItems: 6
+      maxItems: 6,
+      viewAll: {
+        enabled: true,
+        label: "View all →"
+      }
     },
     news: {
       enabled: true,

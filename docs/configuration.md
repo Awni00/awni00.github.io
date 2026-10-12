@@ -113,8 +113,8 @@ export const siteConfigOverrides = {
 
 The homepage shows the newest dated entries as a horizontally scrolling row of
 cards, three across on desktop with the next one peeking in, swipeable on
-touch. The row ends in a card linking to the full writing browser. An entry
-appears when it has a `date`, is not a draft, and its type has
+touch. By default the row ends in a card linking to the full writing browser.
+An entry appears when it has a `date`, is not a draft, and its type has
 `includeInRecent` enabled.
 
 ```ts
@@ -124,7 +124,12 @@ export const siteConfigOverrides = {
       recentWriting: {
         enabled: true,
         title: "Recent posts",
-        maxItems: 6
+        maxItems: 6,
+        viewAll: {
+          enabled: true,
+          label: "View all →",
+          description: "Browse every post"
+        }
       }
     }
   }
@@ -136,6 +141,10 @@ export const siteConfigOverrides = {
 - `title`: the section heading, default `"Recent writing"`. Set it alongside
   `writing.label` and `writing.route` if you rename the writing section.
 - `maxItems`: how many entries to show, default `6`.
+- `viewAll`: the card that ends the row. `enabled: false` drops it, leaving
+  only the recent entries. `label` is its link text, default `"View all →"`.
+  `description` is the line beneath, default `"Browse {writing.label}"`, so it
+  follows a renamed section; `""` hides it.
 
 ## Entry Type Registry
 

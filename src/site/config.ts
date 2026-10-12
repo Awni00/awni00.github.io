@@ -51,7 +51,10 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   //   homepage: {
   //     recentWriting: {
   //       title: "Recent writing",  // e.g. "Recent posts" if you rename Writing
-  //       maxItems: 6               // newest dated entries shown in the carousel
+  //       maxItems: 6,              // newest dated entries shown in the carousel
+  //       // The card that ends the row; `description` defaults to
+  //       // "Browse {writing.label}", and "" hides it.
+  //       viewAll: { enabled: true, label: "View all →" }
   //     }
   //   }
   // },
