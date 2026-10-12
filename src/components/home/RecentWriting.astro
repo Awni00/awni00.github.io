@@ -1,0 +1,90 @@
+---
+/**
+ * Homepage "Recent writing" carousel: a horizontally scrolling row of entry
+ * cards, three visible on desktop with the next one peeking in, swipeable on
+ * touch. It ends in a card that links to the full writing browser.
+ *
+ * Without JavaScript it is still a plain scroll-snap row; the script only adds
+ * the previous/next buttons, and reveals them only when the row overflows.
+ */
+import type { EntryNode } from "../../lib/graph/types";
+import { getEntryType, writingConfig } from "../../config";
+import { writingRoute } from "../../lib/routes/paths";
+
+type Props = {
+  entries: EntryNode[];
+  title: string;
+};
+
+const { entries, title } = Astro.props;
+const headingId = "recent-writing-heading";
+const trackId = "recent-writing-track";
+---
+
+<section class="section" aria-labelledby={headingId} data-recent-carousel>
+  <div class="sect-head">
+    <h2 class="h2" id={headingId}>{title}</h2>
+    <div class="recent-controls" hidden>
+      <button class="recent-arrow" type="button" data-dir="-1" aria-controls={trackId} aria-label="Scroll back">
+        ←
+      </button>
+      <button class="recent-arrow" type="button" data-dir="1" aria-controls={trackId} aria-label="Scroll forward">
+        →
+      </button>
+    </div>
+  </div>
+  <ul class="recent" id={trackId} aria-labelledby={headingId}>
+    {entries.map((entry) => (
+      <li class="recent-card">
+        <div class="recent-meta">
+          <span class="pill" style={`--pill-color: ${getEntryType(entry.type).graph.color}`}>
+            {getEntryType(entry.type).label}
+          </span>
+          <span class="recent-date">{entry.date}</span>
+        </div>
+        <a class="recent-title" href={entry.url}>{entry.title}</a>
+        {entry.summary && <p class="recent-summary">{entry.summary}</p>}
+      </li>
+    ))}
+    <li class="recent-card recent-card--all">
+      <a class="recent-title" href={writingRoute()}>View all →</a>
+      <p class="recent-summary">Browse everything in {writingConfig.label}.</p>
+    </li>
+  </ul>
+</section>
+
+<script>
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-recent-carousel]")) {
+    const track = root.querySelector<HTMLElement>(".recent");
+    const controls = root.querySelector<HTMLElement>(".recent-controls");
+    if (!track || !controls) continue;
+    const [back, forward] = controls.querySelectorAll<HTMLButtonElement>(".recent-arrow");
+
+    // Sub-pixel snap positions leave scrollLeft a few pixels off either end.
+    const slack = 4;
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      controls.hidden = max <= slack;
+      back.disabled = track.scrollLeft <= slack;
+      forward.disabled = track.scrollLeft >= max - slack;
+    };
+
+    for (const button of [back, forward]) {
+      button.addEventListener("click", () => {
+        const card = track.querySelector<HTMLElement>(".recent-card");
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        const step = card ? card.offsetWidth + gap : track.clientWidth;
+        track.scrollBy({
+          left: step * Number(button.dataset.dir),
+          behavior: reduceMotion.matches ? "auto" : "smooth"
+        });
+      });
+    }
+
+    track.addEventListener("scroll", update, { passive: true });
+    new ResizeObserver(update).observe(track);
+    update();
+  }
+</script>

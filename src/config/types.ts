@@ -192,6 +192,7 @@ export type SiteConfig = {
     };
     recentWriting: {
       enabled: boolean;
+      title: string;
       maxItems: number;
     };
     news: {

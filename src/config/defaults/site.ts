@@ -51,7 +51,8 @@ export const defaultSiteConfig = {
     },
     recentWriting: {
       enabled: true,
-      maxItems: 3
+      title: "Recent writing",
+      maxItems: 6
     },
     news: {
       enabled: true,
