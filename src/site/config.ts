@@ -106,7 +106,11 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   //   // Default look of <HoverNote>; pages and notes can override it.
   //   hoverNotes: {
   //     marker: "superscript",  // "superscript" | "bracket"
-  //     appearance: "card"      // "card" | "inverted"
+  //     appearance: "card"      // "card" | "inverted"; <Term> uses it too
+  //   },
+  //   // Default look of <Term>; pages and terms can override it.
+  //   terms: {
+  //     underline: "dotted"     // "dotted" | "none"
   //   }
   // },
 

@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HoverNote from "../components/article/HoverNote.astro";
+import Term from "../components/article/Term.astro";
+
+const title = "Hover Popovers Fixture";
+const description = "Internal fixture page for HoverNote and Term popovers.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="page-shell">
+    <header class="page-header">
+      <h1>{title}</h1>
+      <p class="page-description">{description}</p>
+    </header>
+    <div class="article-content">
+      <p>
+        The first line of the article, where .article-content would clip an in-flow
+        note<HoverNote mark="1" text="A note at the very top of the article." />.
+      </p>
+
+      <p>
+        My research interests lie in the <Term note="Rigorous experiments to understand phenomena in AI.">empirical science</Term
+        >, <Term note="Mathematical theories that explain phenomena in AI.">mathematical science</Term
+        >, and <Term underline="none" note="New methods and algorithms that make AI better.">methodology</Term
+        > of artificial intelligence.
+      </p>
+
+      <p class="fixture-narrow">
+        A narrow column that forces <Term
+          note="Anchored to its first line."
+          >a term long enough that it has to wrap onto the next line</Term
+        > here.
+      </p>
+
+      <p>
+        An <Term appearance="inverted" note="The reversed palette.">inverted term</Term> and a
+        <Term href="/publications" note="Opens on the first tap, follows on the second.">linked term</Term>.
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .fixture-narrow {
+    max-width: 14rem;
+  }
+</style>

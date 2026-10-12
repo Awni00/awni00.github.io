@@ -4,6 +4,7 @@ import Box from "../components/article/Box.astro";
 import Callout from "../components/article/Callout.astro";
 import Figure from "../components/article/Figure.astro";
 import HoverNote from "../components/article/HoverNote.astro";
+import Term from "../components/article/Term.astro";
 import type { GraphIndex, EntryNode } from "../lib/graph/types";
 import type { Publication } from "../lib/publications/types";
 import WritingPreview from "../components/graph/WritingPreview";
@@ -27,7 +28,7 @@ type Props = {
 
 const { graph, recentWriting, selectedPublications, news, Content } = Astro.props;
 const previewConfig = siteConfig.homepage.writingPreview;
-const components = { Box, Callout, Figure, HoverNote };
+const components = { Box, Callout, Figure, HoverNote, Term };
 const showPubs =
   siteConfig.homepage.selectedPublications.enabled && selectedPublications.length > 0;
 const showRecent = siteConfig.homepage.recentWriting.enabled && recentWriting.length > 0;

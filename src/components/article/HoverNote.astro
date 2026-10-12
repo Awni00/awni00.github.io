@@ -79,12 +79,13 @@ const markAttrs = href ? { href, ...external } : { type: "button" as const };
 <span
   class="hovernote"
   data-hovernote
+  data-hover-popover
   data-marker={marker}
   data-appearance={appearance}
   data-auto={mark ? undefined : "true"}
   ><sup class="hovernote__sup"
-    ><MarkTag class="hovernote__mark" aria-describedby={id} {...markAttrs}>{mark}</MarkTag></sup
-  ><span class="hovernote__pop" id={id} role="tooltip" popover="manual"
+    ><MarkTag class="hovernote__mark" data-hover-trigger aria-describedby={id} {...markAttrs}>{mark}</MarkTag></sup
+  ><span class="hovernote__pop hover-pop" id={id} role="tooltip" popover="manual"
     ><span class="hovernote__body"
       >{
         citation && (
@@ -119,56 +120,9 @@ const markAttrs = href ? { href, ...external } : { type: "button" as const };
     }</span
   ></span
 ><script>
-  // The note renders in the top layer (Popover API) so that no `overflow`
-  // container — `.article-content` clips horizontally — can cut it off. That
-  // means hover, focus and placement are all handled here rather than in CSS.
+  import { wireHoverPopovers } from "../../lib/article/hoverPopover";
+
   const ROOT = "[data-hovernote]";
-  const EDGE = 12;
-  const GAP = 6;
-  const OPEN_DELAY = 60;
-  const CLOSE_DELAY = 150;
-
-  let openNote: HTMLElement | null = null;
-  let timer: number | undefined;
-
-  const popOf = (note: HTMLElement) => note.querySelector<HTMLElement>(".hovernote__pop");
-  const markOf = (note: HTMLElement) => note.querySelector<HTMLElement>(".hovernote__mark");
-
-  function place(note: HTMLElement) {
-    const pop = popOf(note);
-    const mark = markOf(note);
-    if (!pop || !mark) return;
-    const anchor = mark.getBoundingClientRect();
-    const { width, height } = pop.getBoundingClientRect();
-    const center = anchor.left + anchor.width / 2;
-    const left = Math.min(Math.max(center - width / 2, EDGE), window.innerWidth - EDGE - width);
-    const below = anchor.top - GAP - height < EDGE;
-    note.dataset.side = below ? "bottom" : "top";
-    pop.style.left = `${left}px`;
-    pop.style.top = `${below ? anchor.bottom + GAP : anchor.top - GAP - height}px`;
-    pop.style.setProperty("--hovernote-arrow", `${center - left}px`);
-  }
-
-  function open(note: HTMLElement) {
-    clearTimeout(timer);
-    if (openNote === note) return;
-    if (openNote) close(openNote);
-    popOf(note)?.showPopover();
-    note.dataset.open = "true";
-    openNote = note;
-    place(note);
-  }
-
-  function close(note: HTMLElement) {
-    if (popOf(note)?.matches(":popover-open")) popOf(note)?.hidePopover();
-    delete note.dataset.open;
-    if (openNote === note) openNote = null;
-  }
-
-  function later(action: () => void, delay: number) {
-    clearTimeout(timer);
-    timer = window.setTimeout(action, delay);
-  }
 
   // Adjacent marks ("…mechanics¹,²") read as one number without a separator.
   function previousNote(note: HTMLElement) {
@@ -184,49 +138,13 @@ const markAttrs = href ? { href, ...external } : { type: "button" as const };
     for (const note of document.querySelectorAll<HTMLElement>(ROOT)) {
       if (note.dataset.hovernoteReady === "true") continue;
       note.dataset.hovernoteReady = "true";
-
       const previous = previousNote(note);
       if (previous) {
         note.dataset.grouped = "true";
         previous.dataset.continued = "true";
       }
-
-      // The popover stays a DOM child of `note`, so moving from the mark into
-      // the note does not count as leaving.
-      note.addEventListener("pointerenter", (event) => {
-        if (event.pointerType === "mouse") later(() => open(note), OPEN_DELAY);
-      });
-      note.addEventListener("pointerleave", (event) => {
-        if (event.pointerType === "mouse") later(() => close(note), CLOSE_DELAY);
-      });
-      note.addEventListener("focusin", (event) => {
-        if ((event.target as HTMLElement).matches(":focus-visible")) open(note);
-      });
-      note.addEventListener("focusout", (event) => {
-        if (!note.contains(event.relatedTarget as Node)) close(note);
-      });
-
-      const mark = markOf(note);
-      mark?.addEventListener("click", (event) => {
-        // A link mark follows its href on click, except the first tap on a
-        // touch screen, which opens the note so it can be read at all.
-        const touch = matchMedia("(hover: none)").matches;
-        if (mark instanceof HTMLAnchorElement && (!touch || openNote === note)) return;
-        event.preventDefault();
-        if (openNote === note && touch) close(note);
-        else open(note);
-      });
     }
-  }
-
-  document.addEventListener("pointerdown", (event) => {
-    if (openNote && !openNote.contains(event.target as Node)) close(openNote);
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && openNote) close(openNote);
-  });
-  for (const type of ["scroll", "resize"]) {
-    window.addEventListener(type, () => openNote && place(openNote), { capture: true, passive: true });
+    wireHoverPopovers();
   }
 
   wireHoverNotes();

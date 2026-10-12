@@ -15,5 +15,8 @@ export const defaultThemeConfig = {
   hoverNotes: {
     marker: "superscript",
     appearance: "card"
+  },
+  terms: {
+    underline: "dotted"
   }
 } as const satisfies ThemeConfig;
