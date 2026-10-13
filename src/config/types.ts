@@ -192,7 +192,18 @@ export type SiteConfig = {
     };
     recentWriting: {
       enabled: boolean;
+      title: string;
       maxItems: number;
+      /**
+       * The card that ends the row and links to the writing browser.
+       * `description` defaults to "Browse {writing.label}"; set it to ""
+       * to show the label alone.
+       */
+      viewAll: {
+        enabled: boolean;
+        label: string;
+        description?: string;
+      };
     };
     news: {
       enabled: boolean;

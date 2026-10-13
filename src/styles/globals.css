@@ -481,6 +481,11 @@ pre {
   min-width: 0;
 }
 
+/* Only one of publications and news is on: it takes the full row. */
+.cols2--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 /* ── News (definition list) ─────────────────────────────────────────── */
 
 .news {
@@ -832,16 +837,114 @@ pre {
   display: block;
 }
 
-/* ── Recent writing (3-col cards) ───────────────────────────────────── */
+/* ── Recent writing (card carousel) ─────────────────────────────────── */
 
-.entry-list,
-.recent {
+.entry-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+}
+
+/* Three cards across with a quarter of the fourth peeking in, so the row
+   reads as scrollable. The 4px padding keeps focus rings and hover borders
+   clear of the scroll container's clipping edge; the matching negative
+   margin puts the cards back on the section's content edge. */
+.recent {
+  --recent-gap: 18px;
+  --recent-inset: 4px;
+  list-style: none;
+  margin: 0 calc(-1 * var(--recent-inset));
+  padding: 4px var(--recent-inset) 12px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 3 * var(--recent-gap)) / 3.25);
+  gap: var(--recent-gap);
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--recent-inset);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.recent > .recent-card {
+  position: relative;
+  scroll-snap-align: start;
+}
+
+/* The title link covers the whole card, so the card is one click target. */
+.recent .recent-title {
+  display: block;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-quiet);
+}
+
+.recent .recent-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.recent-card:hover .recent-title {
+  color: var(--color-accent);
+}
+
+.recent .recent-title:focus-visible {
+  outline: none;
+}
+
+.recent-card:has(.recent-title:focus-visible) {
+  border-color: var(--color-accent-line);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.recent-card--all {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--color-bg-soft);
+  border-style: dashed;
+}
+
+.recent-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.recent-controls[hidden] {
+  display: none;
+}
+
+.recent-arrow {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-quiet),
+    border-color var(--dur-fast) var(--ease-quiet);
+}
+
+.recent-arrow:hover:not(:disabled) {
+  border-color: var(--color-accent-line);
+  color: var(--color-accent);
+}
+
+.recent-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 .entry-row,
@@ -1077,9 +1180,23 @@ pre {
     gap: 32px;
   }
 
-  .recent,
   .entry-list {
     grid-template-columns: 1fr;
+  }
+
+  /* On touch widths the row bleeds to the screen edges and is swiped. */
+  .recent {
+    --recent-inset: 1rem;
+    grid-auto-columns: 82%;
+    scrollbar-width: none;
+  }
+
+  .recent::-webkit-scrollbar {
+    display: none;
+  }
+
+  .recent-controls {
+    display: none;
   }
 
   .publication-item {

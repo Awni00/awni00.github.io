@@ -96,7 +96,17 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   //     { label: "Research", href: "/research" },
   //     { label: "Teaching", href: "/teaching" },
   //     { label: "CV", href: "/cv.pdf" }
-  //   ]
+  //   ],
+  //   // Homepage sections. Each can be switched off with `enabled: false`.
+  //   homepage: {
+  //     recentWriting: {
+  //       title: "Recent writing",  // e.g. "Recent posts" if you rename Writing
+  //       maxItems: 6,              // newest dated entries shown in the carousel
+  //       // The card that ends the row; `description` defaults to
+  //       // "Browse {writing.label}", and "" hides it.
+  //       viewAll: { enabled: true, label: "View all →" }
+  //     }
+  //   }
   // },
 
   // Which of the registered themes the site uses. Ten ship with the template

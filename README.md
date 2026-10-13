@@ -14,7 +14,7 @@ The template is designed to stay static-first and sync-friendly:
 
 ## Requirements
 
-- Node `>=20.19.5`
+- Node `>=22.12.0`
 - npm `>=10.8.2`
 
 ## Quickstart
