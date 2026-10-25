@@ -1,3 +1,18 @@
+TODO (transformer-theories): placeholders until the arXiv submission (submit/8270939) is announced.
+  - add: eprint, arxiv, url (arXiv ID); archiveprefix = arXiv; primaryclass = cs.LG
+  - add: blog = /blog/transformer-theories (once the page's draft flag is removed), preview image, tldr
+  - update: journal (venue) if accepted
+@article{altabaa2026transformertheories,
+  selected     = {true},
+  bibtex_show  = {true},
+  abbr         = {ML},
+  title        = {Putting Transformer Theories to the Test},
+  author       = {Awni Altabaa and Tobias Schnabel and Kiran Tomlinson},
+  year         = {2026},
+  journal      = {arXiv preprint},
+  abstract     = {Several formal theories have been developed to characterize the capabilities and limitations of the transformer architecture, each employing different abstractions that capture different features of the architecture. Due to the differences in their underlying assumptions and conceptual frameworks, these theories can disagree in their predictions about what tasks transformers find easy or hard. We map out seven theories of transformer capability (Star-free, AC0, TC0, C-RASP, MPC, BAPO, and Sensitivity) and translate their results into a common matrix of predictions across a suite of tasks covering different computational structures. We provide new theoretical results to complete this matrix. We then evaluate theoretical predictions through controlled experiments measuring in-distribution sample complexity, length generalization, and pretrained language model performance. We find that no single theory explains the observed pattern of successes and failures. When a theory does not capture the transformer behaviors relevant to a task, its predictions break down; for instance, we show that the k-hop induction task is predicted hard by C-RASP because it does not model content-dependent attention, but we train small transformers on this task that length-generalize. Similarly, theories assuming hard attention like AC0 and BAPO predict binary majority to be hard, for which we also find success in practice. Together, our results point to several specific features that a theory of transformers must capture: soft rather than hard attention, dynamic content-dependent retrieval, bounded computation at each position, an account of learnability and inductive biases, and a combination of upper and lower bounds.}
+}
+
 @article{altabaa2026uncoveringlatentreasoningstrategies,
   selected     = {true},
   bibtex_show  = {true},
