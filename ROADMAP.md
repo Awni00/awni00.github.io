@@ -8,17 +8,18 @@ Open decisions are marked **DECIDE**.
 
 **Launch scope:** sections 1–8 must land before cutover. Section 9 comes after launch.
 
+**Working principle for every session (this one and dispatched ones):** keep it visual. Use mockups for design work and before/after screenshots for changes, so each step is concrete and easy to review.
+
 ---
 
 ## 0. Decisions
 
-- [ ] **DECIDE: research areas.** Pick the hubs. Hub membership comes from links, not folders, so a paper can sit in several hubs. Candidates:
-  - Relational reasoning & architectural inductive biases: Abstractor, RelConvNet, DAT, Relational Bottleneck, Relation-function approximation
-  - Reasoning & OOD / algorithmic generalization: Recursive latent reasoning, CoT Information, Latent reasoning strategies
-  - Statistical / learning-theoretic foundations: CoT Information, Info-structure RL, Relation-function approximation
-  - (Multi-agent) reinforcement learning: Info-structure RL, Decentralized MARL
+- [x] Research areas (2026-10-25): three hubs, under `/blog/topics/<slug>` so they don't look like paper pages (e.g. `/blog/topics/abstraction` vs `/blog/abstractor`). Papers can belong to several hubs.
+  - `/blog/topics/abstraction`, **Inductive Biases for Abstraction**: Abstractors, RelConvNet, DAT, Relational Bottleneck, Relation-function approx., Recursive latent reasoning
+  - `/blog/topics/reasoning`, **Reasoning in Transformers & LLMs**: Recursive latent reasoning, CoT Information, Latent strategies, Transformer theories
+  - `/blog/topics/theory`, **Theoretical Foundations**: CoT Information, Relation-function approx., Info-structure RL, Decentralized MARL, Transformer theories
 - [ ] **DECIDE (near launch): News.** Keep it off, or turn it on?
-- [x] Blog URL layout: flat. Papers and posts at `/blog/<slug>`, hubs at `/blog/<area>`.
+- [x] Blog URL layout: flat. Papers and posts at `/blog/<slug>`, hubs at `/blog/topics/<slug>`.
 - [x] Teaching: page removed. TA roles go in the CV, which you'll update yourself (not tracked here).
 - [x] About page: deleted.
 - [x] geneDRAGNN: omitted (no page, and commented out of the bib).
@@ -39,9 +40,9 @@ Open decisions are marked **DECIDE**.
 
 - [x] (claude) Created `src/content/pages/research.mdx` → `/research` (placeholder body), with the nav pointing at it.
 - [x] (claude) Deleted the `writing/research/index.mdx` hub and removed `research` from every entry's `links`.
-- [ ] (claude) Scaffold one hub per area once the areas are decided (frontmatter, member-paper links, an empty body). Until then the blog has no hubs.
+- [x] (claude) Scaffolded the three hubs in `src/content/writing/topics/<slug>/index.mdx`, with two-way links between each hub and its papers. *Transformer theories* links to its hubs from its own page only; add it to the hubs' `links` when it's published.
 - [ ] (you) Write the Research page: overview of the areas, linking to each hub.
-- [ ] (you) Write each hub's intro.
+- [ ] (you) Draft the hub/topic pages: intro and `summary` for `abstraction`, `reasoning`, and `theory`. Validation warns until the summaries exist. Discuss or refine with Claude as needed.
 
 ## 3. Publications
 
@@ -49,21 +50,33 @@ Open decisions are marked **DECIDE**.
 - [x] Commented out geneDRAGNN (`@comment`).
 - [x] Fixed the *Relational Bottleneck* author list in the bib and on the page (added Segert, Giallanza, Dulberg, per arXiv).
 - [x] Added `blog` links for every paper that has a page, plus arXiv IDs for Decentralized MARL and Relational Bottleneck.
-- [ ] Preview image (`preview = {...}`) and `tldr` for the new paper. **(you)** write the tldr; supply or pick the image.
+- [x] Added *Putting Transformer Theories to the Test* to the bib, with placeholders listed in a note above the entry: arXiv ID, `blog` link, preview, tldr.
+- [ ] **Launch check:** that paper now renders on `/publications`. If launch happens before the arXiv announcement, decide whether to show it.
+- [ ] `tldr` for the two new papers (latent strategies, transformer theories). **(you)**
+- [ ] **Preview-image redesign (separate session, in this repo).** Replace every publication preview, now year-old generative-model images, with a consistent minimalist style:
+  - Sonnet sub-agents, one per paper. Each reads the paper and produces 3–5 algorithmic-art options (`algorithmic-art` skill), optionally drawing on the paper's figures.
+  - Set a shared style guide and run a 2-paper pilot first, so all the options look consistent.
+  - Output a gallery page showing every option at its real display sizes (96×72 thumbnail, ~220×140 on small screens), on light and dark backgrounds. You pick.
+  - Constraints: 4:3 aspect ratio; readable at 96×72; palette parameterised, so the art can be re-rendered when the site theme is chosen; files ≲200 KB (the current PNGs are up to 6.6 MB each).
+  - Finish: export the picks, update the `preview` fields, and remove the old images.
 - [ ] Choose which papers are `selected`. All 10 currently are, and the homepage shows 6.
 - [ ] Optional: several bib `abstract` fields are shortened versions of the paper abstracts. Keep them short, or use the full text?
 - [ ] Sync each page's frontmatter `bibtex:` with the canonical citation (also see the CITE item in the backlog).
 
 ## 4. Abstract-only paper pages ✅ (2026-10-12)
 
-- [x] New: `/blog/relation-function-approximation`, with the full arXiv abstract. **(you) Review** its `summary` and `tags`, which I drafted from the abstract.
+- [x] New: `/blog/relation-function-approximation`, with the full arXiv abstract. Summary finalized. **(you) Review** the `tags` I drafted.
 - [x] Switched to `article.mode: abstract` with full arXiv abstracts (the old ones were truncated): Decentralized MARL, Info-structure RL, Relational Bottleneck.
-- [ ] Add hub links to these pages once the areas are settled (see section 2).
+- [ ] *Putting Transformer Theories to the Test*: draft page created (`transformer-theories.mdx`, abstract-only, `draft: true`). Not yet announced on arXiv (`submit/8270939`). Authors filled in. **(you)** still need the date and summary. Once the arXiv ID exists, add a bib entry and remove `draft`.
+- [x] Hub links added to all paper pages.
 
 ## 5. Homepage
 
-- [ ] (you) Rewrite the bio/intro in `home.mdx`: shorter, current, and pointing to `/research`. Strip the scratch notes and TODOs.
-- [ ] (claude) Profile-picture layout and spacing in the hero.
+- [ ] (you) Draft the updated bio and summary of research interests in `home.mdx`: shorter, current, and pointing to `/research`. Strip the scratch notes and TODOs.
+- [ ] **Homepage layout redesign** (the profile-picture placement looks awkward). It's a template change, so it's implemented upstream in `academic-map-template`:
+  1. Discuss, then survey reference academic homepages: how they lay out the photo against the bio, and how that adapts across screen sizes.
+  2. Mock up several designs (sub-agents allowed) at phone, tablet, and desktop widths, using sample texts of representative lengths (short, medium, long bio). Iterate.
+  3. Hand the chosen mockup to a session in `academic-map-template` to implement responsively, with before/after screenshots. Then sync the template downstream.
 - [ ] (claude) Check section layout and length once the bio is final. Possibly retitle the homepage preview ("Research Writing") to fit "Blog".
 - [ ] Affiliation display (from `TODO.md`). Clarify what's missing.
 
@@ -93,7 +106,6 @@ The `deploy` workflow on `main` builds fine, but the `github-pages` environment'
 
 - [ ] Finish the blog post for the latent-reasoning-strategies paper.
 - [ ] Misc-project posts (dot-tasks, slurmkit, …) and maybe a "Projects" hub.
-- [ ] Optional: alternative abstract preview images for papers.
 
 ## Template backlog (fix upstream in academic-map-template, then sync)
 
@@ -110,4 +122,7 @@ Being triaged in the separate session (see section 0). Items:
 - [ ] Performance pass.
 - [ ] **New (2026-10-12, not in the triage session's list):** `tests/unit/routes.test.ts` and `tests/unit/shortLinks.test.ts` hardcode `/writing` but read the site config. Any downstream site that sets `writing.route` fails 9 tests. The tests should run against template defaults.
 - [ ] **New:** the publications list doesn't render math in abstracts, so the bib abstract for the latent-strategies paper uses plain-text formulas.
+- [ ] **New (2026-10-25):** the blog browser hardcodes "Writing" / "All writing" (`src/components/graph/GraphBrowser.tsx:169,187`) instead of using `writing.label`, so it shows "Writing" even with the label set to "Blog".
+- [ ] **New (2026-10-25):** `/blog/topics` (the parent of the hub URLs) returns a 404. Make it redirect to the browser's topics view, `/blog?view=topics`.
+- [ ] **New (2026-10-25), separate session:** the blog map opens with a hub pre-selected in the info sidebar, but the graph shows no selection (no halo). It should open with nothing selected.
 - [ ] `dot-tasks` setup for this repo (`.tasks/` exists, with one stale todo about theming support).
