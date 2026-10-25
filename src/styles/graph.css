@@ -487,6 +487,16 @@
   color: var(--color-fg);
 }
 
+/* The no-selection state. Muted and set in the UI face: an instruction about
+   the panel, not content, so it should not compete with a title once one
+   arrives. */
+.preview-prompt {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--color-muted);
+  margin: 0 0 20px;
+}
+
 .preview-pane .entry-meta {
   font-family: var(--font-mono);
   font-size: 11px;

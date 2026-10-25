@@ -145,23 +145,27 @@ test("writing browser supports URL state and preview", async ({ page }) => {
     "aria-pressed",
     "true",
   );
-  // There is no topic list beside the map any more; hubs are navigated on the
-  // canvas itself, and the preview opens on the first hub before any click.
+  // The map opens with nothing selected (graph-selection.spec.ts holds the
+  // canvas to that too); the panel offers the hubs as a way in instead.
   await expect(page.locator(".graph-canvas__surface")).toBeVisible();
   const preview = page.locator(".preview-pane");
   const title = preview.locator(".preview-title");
   const openPage = preview.getByRole("link", { name: "Open page" });
-  await expect(title).toHaveText("Hub 1");
-  await expect(openPage).toHaveAttribute("href", /\/writing\/hub-1\/?$/);
+  await expect(preview).toContainText("Select a node on the map");
+  await expect(title).toHaveCount(0);
 
-  // Connection rows select the node they name rather than navigating, and
-  // selection is session-only, so the URL keeps nothing but the view — and map
-  // is the default view, so not even that. The preview above is server-rendered,
-  // so wait for the island to hydrate before clicking into it.
+  // Rows — hubs here, connections below — select the node they name rather
+  // than navigating, and selection is session-only, so the URL keeps nothing
+  // but the view — and map is the default view, so not even that. The panel
+  // is server-rendered, so wait for the island to hydrate before clicking.
   await page.waitForFunction(
     () =>
       !document.querySelector('astro-island[component-url*="GraphBrowser"][ssr]'),
   );
+  await preview.locator(".preview-link", { hasText: "Hub 1" }).click();
+  await expect(title).toHaveText("Hub 1");
+  await expect(openPage).toHaveAttribute("href", /\/writing\/hub-1\/?$/);
+
   const connection = preview.locator(".preview-link").first();
   const connectionTitle = await connection
     .locator(".connection-title")
