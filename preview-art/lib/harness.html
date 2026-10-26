@@ -1,0 +1,15 @@
+<!doctype html>
+<meta charset="utf-8" />
+<style>html,body{margin:0;background:#888}canvas{display:block}</style>
+<script src="p5.min.js"></script>
+<script src="preview-art.js"></script>
+<body>
+<script>
+  // harness.html?sketch=../sketches/cot-info-A.js&theme=paper[&seed=7][&t=0.25 → loop frame instead of the still]
+  const q = new URLSearchParams(location.search);
+  PreviewArt.load(q.get("sketch"))
+    .then((art) => { const { draw, ...info } = art; window.__art = info; return PreviewArt.render(art, { theme: q.get("theme") || "paper", seed: q.get("seed"), t: q.get("t") }); })
+    .catch((e) => { window.__error = String(e); window.__done = true; });
+  window.addEventListener("error", (e) => { window.__error = e.message; window.__done = true; });
+</script>
+</body>

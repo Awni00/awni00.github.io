@@ -1,6 +1,6 @@
 TODO (transformer-theories): placeholders until the arXiv submission (submit/8270939) is announced.
   - add: eprint, arxiv, url (arXiv ID); archiveprefix = arXiv; primaryclass = cs.LG
-  - add: blog = /blog/transformer-theories (once the page's draft flag is removed), preview image, tldr
+  - add: blog = /blog/transformer-theories (once the page's draft flag is removed), tldr
   - update: journal (venue) if accepted
 @article{altabaa2026transformertheories,
   selected     = {true},
@@ -10,6 +10,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   author       = {Awni Altabaa and Tobias Schnabel and Kiran Tomlinson},
   year         = {2026},
   journal      = {arXiv preprint},
+  preview      = {transformer-theories.webp},
   abstract     = {Several formal theories have been developed to characterize the capabilities and limitations of the transformer architecture, each employing different abstractions that capture different features of the architecture. Due to the differences in their underlying assumptions and conceptual frameworks, these theories can disagree in their predictions about what tasks transformers find easy or hard. We map out seven theories of transformer capability (Star-free, AC0, TC0, C-RASP, MPC, BAPO, and Sensitivity) and translate their results into a common matrix of predictions across a suite of tasks covering different computational structures. We provide new theoretical results to complete this matrix. We then evaluate theoretical predictions through controlled experiments measuring in-distribution sample complexity, length generalization, and pretrained language model performance. We find that no single theory explains the observed pattern of successes and failures. When a theory does not capture the transformer behaviors relevant to a task, its predictions break down; for instance, we show that the k-hop induction task is predicted hard by C-RASP because it does not model content-dependent attention, but we train small transformers on this task that length-generalize. Similarly, theories assuming hard attention like AC0 and BAPO predict binary majority to be hard, for which we also find success in practice. Together, our results point to several specific features that a theory of transformers must capture: soft rather than hard attention, dynamic content-dependent retrieval, bounded computation at each position, an account of learnability and inductive biases, and a combination of upper and lower bounds.}
 }
 
@@ -28,6 +29,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   url          = {https://arxiv.org/abs/2607.17674},
   code         = {https://github.com/Awni00/latent-strategies-in-lms},
   blog         = {/blog/latent-strategies-in-lms},
+  preview      = {latent-strategies-in-lms.webp},
   abstract     = {A language model p(y | x) trained on reasoning tasks learns to solve problems via multiple distinct strategies, yet these strategies are implicit and entangled within the model's response distribution. We study the problem of decomposing the response distribution of a given pretrained language model into a structured, strategy-conditioned representation. Specifically, we learn a latent-variable factorization p(y | x) ⇝ (r(z | x), g(y | x, z)), where a router r maps each input to a distribution over latent strategies z and a generator g produces the response conditioned on that strategy. A key challenge is that the generator, initialized from the base model, already represents p(y | x) without using z. Standard variational inference therefore gives the model no incentive to route information through z and can yield a severe form of posterior collapse. To address this, we propose a variational objective that measures fractional information gain relative to the base model's response loss and concentrates reconstruction pressure on tokens with high base model surprisal, encouraging z to encode strategy-relevant response variation. We introduce a benchmark of multi-strategy algorithmic tasks and show that this objective recovers latent codes aligned with distinct reference strategies while preserving the base model's response distribution.}
 }
 
@@ -46,7 +48,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   url          = {https://arxiv.org/abs/2510.14095},
   code         = {https://github.com/Awni00/algorithmic-generalization-transformer-architectures},
   blog         = {/blog/algorithmic-generalization-transformer-architectures},
-  preview      = {mechanisms-generalization.png},
+  preview      = {algorithmic-generalization-transformer-architectures.webp},
   tldr         = {We introduce and explore a set of four architectural mechanisms aimed at enhancing out-of-distribution algorithmic generalization: input-adaptive recurrence, algorithmic supervision, anchored latent representations via a discrete bottleneck, and an explicit error-correction mechanism.},
   abstract     = {Systematic, compositional generalization beyond the training distribution remains a core challenge in machine learning -- and a critical bottleneck for the emergent reasoning abilities of modern language models. This work investigates out-of-distribution (OOD) generalization in Transformer networks using a GSM8K-style modular arithmetic on computational graphs task as a testbed. We introduce and explore a set of four architectural mechanisms aimed at enhancing OOD generalization: (i) input-adaptive recurrence; (ii) algorithmic supervision; (iii) anchored latent representations via a discrete bottleneck; and (iv) an explicit error-correction mechanism. Collectively, these mechanisms yield an architectural approach for native and scalable latent space reasoning in Transformer networks with robust algorithmic generalization capabilities. We complement these empirical results with a detailed mechanistic interpretability analysis that reveals how these mechanisms give rise to robust OOD generalization abilities.}
 }
@@ -68,7 +70,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   blog         = {/blog/cot-info},
   poster       = {/publications/posters/cotinfo-poster.pdf},
   slides       = {/publications/slides/cotinfo-slides.pdf},
-  preview      = {cot-information.png},
+  preview      = {cot-info.webp},
   tldr         = {We develop a statistical theory of learning under chain-of-thought supervision, introducing the CoT information measure to quantify the additional discriminative power gained from observing the reasoning process.},
   abstract     = {Learning complex functions that involve multi-step reasoning poses a significant challenge for standard supervised learning from input-output examples. Chain-of-thought (CoT) supervision, which provides intermediate reasoning steps together with the final output, has emerged as a powerful empirical technique, underpinning much of the recent progress in the reasoning capabilities of large language models. This paper develops a statistical theory of learning under CoT supervision. A key characteristic of the CoT setting, in contrast to standard supervision, is the mismatch between the training objective (CoT risk) and the test objective (end-to-end risk). A central part of our analysis, distinguished from prior work, is explicitly linking those two types of risk to achieve sharper sample complexity bounds. This is achieved via the CoT information measure, which quantifies the additional discriminative power gained from observing the reasoning process. The main theoretical results demonstrate how CoT supervision can yield significantly faster learning rates compared to standard E2E supervision.}
 }
@@ -91,7 +93,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   code         = {https://github.com/awni00/dual-attention},
   slides       = {/publications/slides/dat-slides.pdf},
   poster       = {/publications/posters/dat-poster.pdf},
-  preview      = {disentangling-sensory-relational.png},
+  preview      = {dual-attention.webp},
   tldr         = {We introduce the Dual Attention Transformer, an architectural extension of the Transformer framework that incorporates distinct sensory and relational attention mechanisms.},
   abstract     = {Relational reasoning is a central component of generally intelligent systems, enabling robust and data-efficient inductive generalization. Recent empirical evidence shows that many existing neural architectures, including Transformers, struggle with tasks requiring relational reasoning. In this work, we distinguish between two types of information: sensory information about the properties of individual objects, and relational information about the relationships between objects. While neural attention provides a powerful mechanism for controlling the flow of sensory information between objects, the Transformer lacks an explicit computational mechanism for routing and processing relational information. To address this limitation, we propose an architectural extension of the Transformer framework that we call the Dual Attention Transformer (DAT), featuring two distinct attention mechanisms: sensory attention for directing the flow of sensory information, and a novel relational attention mechanism for directing the flow of relational information.}
 }
@@ -114,7 +116,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   publisher_page = {https://neurips.cc/virtual/2024/poster/95220},
   slides       = {/publications/slides/rl-info-struct-slides.pdf},
   poster       = {/publications/posters/rl-info-struct-poster.pdf},
-  preview      = {info-structure.png},
+  preview      = {information-structure-rl.webp},
   tldr         = {We introduce a reinforcement learning model that explicitly represents information structure in sequential decision-making problems.},
   abstract     = {In sequential decision-making problems, the information structure describes the causal dependencies between system variables, encompassing the dynamics of the environment and the agents' actions. Classical models of reinforcement learning assume a restricted and highly regular information structure, while more general models like predictive state representations do not explicitly model the information structure. By contrast, real-world sequential decision-making problems typically involve a complex and time-varying interdependence of system variables, requiring a rich and flexible representation of information structure. In this paper, we formalize a novel reinforcement learning model which explicitly represents the information structure.}
 }
@@ -134,7 +136,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   doi          = {10.48550/arXiv.2402.08856},
   url          = {https://arxiv.org/abs/2402.08856},
   blog         = {/blog/relation-function-approximation},
-  preview      = {rel-approx.png},
+  preview      = {relation-function-approximation.webp},
   tldr         = {We show that inner products of neural network feature maps can approximate symmetric and asymmetric relation functions, with applications to attention.},
   abstract     = {Inner products of neural network feature maps arises in a wide variety of machine learning frameworks as a method of modeling relations between inputs. This work studies the approximation properties of inner products of neural networks. It is shown that the inner product of a multi-layer perceptron with itself is a universal approximator for symmetric positive-definite relation functions. In the case of asymmetric relation functions, it is shown that the inner product of two different multi-layer perceptrons is a universal approximator. Finally, these approximation results are applied to analyzing the attention mechanism underlying Transformers.}
 }
@@ -155,7 +157,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   publisher_page = {https://openreview.net/forum?id=vNZlnznmV2},
   blog         = {/blog/relational-convolutions},
   code         = {https://github.com/awni00/relational-convolutions},
-  preview      = {relconv-genai.png},
+  preview      = {relational-convolutions.webp},
   tldr         = {We introduce relational convolutional networks, a neural architecture for hierarchical relational feature representations.},
   abstract     = {An evolving area of research in deep learning is the study of architectures and inductive biases that support the learning of relational feature representations. In this paper, we address the challenge of learning representations of hierarchical relations--that is, higher-order relational patterns among groups of objects. We introduce relational convolutional networks, a neural architecture equipped with computational mechanisms that capture progressively more complex relational features through the composition of simple modules.}
 }
@@ -172,7 +174,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   arxiv        = {2309.06629},
   blog         = {/blog/relational-bottleneck},
   publisher_page = {https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(24)00080-9},
-  preview      = {relational-bottleneck.png},
+  preview      = {relational-bottleneck.webp},
   tldr         = {We review relational bottleneck models as an inductive bias for data-efficient abstraction in minds and machines.},
   abstract     = {A central challenge for cognitive science is to explain how abstract concepts are acquired from limited experience. Here, we highlight a recently emerging line of work that suggests a novel reconciliation of empiricist and nativist approaches, by exploiting an inductive bias that we term the relational bottleneck. We review a family of models that employ this approach to induce abstractions in a data-efficient manner, emphasizing their potential as candidate models for the acquisition of abstract concepts in the human mind and brain.}
 }
@@ -195,7 +197,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   code         = {https://github.com/awni00/abstractor},
   slides       = {/publications/slides/abstractor-slides.pdf},
   poster       = {/publications/posters/abstractor-poster.pdf},
-  preview      = {abstraction-relational-reasoning.png},
+  preview      = {abstractor.webp},
   tldr         = {We introduce the Abstractor, a neural module using relational cross-attention for explicit relational reasoning in Transformers.},
   abstract     = {An extension of Transformers is proposed that enables explicit relational reasoning through a novel module called the Abstractor. At the core of the Abstractor is a variant of attention called relational cross-attention. The approach is motivated by an architectural inductive bias for relational learning that disentangles relational information from extraneous features about individual objects. This enables explicit relational reasoning, supporting abstraction and generalization from limited data.}
 }
@@ -214,7 +216,7 @@ TODO (transformer-theories): placeholders until the arXiv submission (submit/827
   publisher_page = {https://ieeexplore.ieee.org/abstract/document/10155828},
   code         = {https://github.com/awni00/decentralized-MARL-general-cts-spaces},
   slides       = {/publications/slides/cts-dec-rl-slides.pdf},
-  preview      = {dec-marl-genai-2.png},
+  preview      = {decentralized-marl-continuous-spaces.webp},
   tldr         = {We propose a decentralized multi-agent reinforcement learning algorithm for stochastic games with continuous state spaces.},
   abstract     = {Stochastic games are a popular framework for studying multi-agent reinforcement learning. Recent advances in MARL have focused primarily on games with finitely many states. In this work, we study multi-agent learning in stochastic games with general state spaces and an information structure in which agents do not observe each other's actions.}
 }
