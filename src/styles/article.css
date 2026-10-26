@@ -1,7 +1,7 @@
 /* ── Page + writing shells ──────────────────────────────────────────── */
 
 .page-shell {
-  width: min(100% - 2rem, var(--content-narrow));
+  width: min(100% - 2 * var(--page-gutter), var(--content-narrow));
   margin: 0 auto;
   padding: 56px 0 72px;
 }

@@ -128,7 +128,7 @@
 /* ── Writing browser shell ──────────────────────────────────────────── */
 
 .graph-browser {
-  width: min(100% - 2rem, 1440px);
+  width: min(100% - 2 * var(--page-gutter), 1440px);
   margin: 0 auto;
   padding: 0 0 1rem;
 }
@@ -894,7 +894,7 @@
 }
 
 .topicspage-body {
-  width: min(100% - 2rem, 1100px);
+  width: min(100% - 2 * var(--page-gutter), var(--content-wide));
   margin: 0 auto;
   padding: 22px 0 0;
 }
@@ -1216,7 +1216,7 @@
 }
 
 .listpage-table {
-  width: min(100% - 2rem, 1180px);
+  width: min(100% - 2 * var(--page-gutter), 1180px);
   margin: 18px auto 0;
   font-family: var(--font-ui);
 }
@@ -1328,7 +1328,7 @@
 /* ── List toolbar (type filter + density) ───────────────────────────── */
 
 .list-toolbar {
-  width: min(100% - 2rem, 1180px);
+  width: min(100% - 2 * var(--page-gutter), 1180px);
   margin: 14px auto 0;
   display: flex;
   align-items: center;

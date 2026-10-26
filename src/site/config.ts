@@ -49,6 +49,16 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   //   ],
   //   // Homepage sections. Each can be switched off with `enabled: false`.
   //   homepage: {
+  //     // Photo, caption, and links in a card beside the bio. Every option is
+  //     // in docs/configuration.md#homepage-hero.
+  //     hero: {
+  //       photo: { side: "left", width: 240, position: "50% 22%" },
+  //       links: {
+  //         show: ["email", "cv", "scholar", "github", "x", "linkedin"],
+  //         style: { desktop: "pills", mobile: "pills" }  // pills | icons | list | text
+  //       },
+  //       phone: { layout: "centered" }                   // "centered" | "compact"
+  //     },
   //     recentWriting: {
   //       title: "Recent writing",  // e.g. "Recent posts" if you rename Writing
   //       maxItems: 6,              // newest dated entries shown in the carousel
@@ -67,6 +77,12 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   //   dark: "rose-pine",      // ink | rose-pine | everforest-dark | mocha | github-dark
   //   defaultMode: "system",  // "light" | "dark" | "system"
   //   allowToggle: true,
+  //   // Justified prose (default off); a page's `article.justify` overrides it.
+  //   typography: {
+  //     justify: { enabled: false, hyphenate: true, minWidth: "all" }
+  //   },
+  //   // Page width including gutters; the header, footer, and homepage share it.
+  //   layout: { contentWidth: 1020 },
   //   // Default look of <HoverNote>; pages and notes can override it.
   //   hoverNotes: {
   //     marker: "superscript",  // "superscript" | "bracket"

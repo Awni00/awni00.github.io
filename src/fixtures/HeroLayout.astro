@@ -1,0 +1,94 @@
+---
+/**
+ * The homepage hero at a given setting, so the e2e suite can check every
+ * side, width, and link style without rebuilding the site config. Dev only,
+ * like every fixture (see src/pages/fixtures). The variant syntax and the
+ * list of variants are in ./heroVariants.ts; anything a variant leaves out
+ * uses the site's resolved hero config.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/home/Hero.astro";
+import { siteConfig, themeConfig } from "../config";
+import type { CustomLink, HeroConfig } from "../config/types";
+import { justifyClasses } from "../lib/article/justify";
+import { normalizeHeroConfig, resolveHeroLinks } from "../lib/home/hero";
+import { parseHeroVariant } from "./heroVariants";
+
+type Props = { variant: string };
+
+const params = parseHeroVariant(Astro.props.variant);
+const q = {
+  get: (key: string): string | null => params[key] ?? (key.endsWith("links") ? (params.links ?? null) : null),
+  has: (key: string): boolean => key in params
+};
+const base = siteConfig.homepage.hero;
+const { hero } = normalizeHeroConfig({
+  ...base,
+  photo: {
+    ...base.photo,
+    side: (q.get("side") as HeroConfig["photo"]["side"]) ?? base.photo.side,
+    width: q.has("w") ? Number(q.get("w")) : base.photo.width,
+    shape: (q.get("shape") as HeroConfig["photo"]["shape"]) ?? base.photo.shape,
+    sticky: q.has("sticky") ? q.get("sticky") === "1" : base.photo.sticky
+  },
+  caption: {
+    showName: q.get("name") !== "hide",
+    extra: q.get("extra") === "1" ? ["she/her", "On the academic job market, 2027"] : []
+  },
+  links: {
+    show: [...base.links.show, ...(q.get("custom") === "1" ? ["orcid", "bluesky", "lab"] : [])],
+    style: {
+      desktop: (q.get("dlinks") as HeroConfig["links"]["style"]["desktop"]) ?? base.links.style.desktop,
+      mobile: (q.get("mlinks") as HeroConfig["links"]["style"]["mobile"]) ?? base.links.style.mobile
+    }
+  },
+  phone: { layout: (q.get("phone") as HeroConfig["phone"]["layout"]) ?? base.phone.layout }
+});
+
+const links: Record<string, string | CustomLink> = {
+  email: "mailto:you@example.com",
+  cv: "/cv.pdf",
+  scholar: "https://scholar.google.com/",
+  github: "https://github.com/example",
+  x: "https://x.com/example",
+  linkedin: "https://www.linkedin.com/in/example",
+  orcid: { label: "ORCID", href: "https://orcid.org/0000-0000-0000-0000", icon: "orcid" },
+  bluesky: { label: "Bluesky", href: "https://bsky.app/profile/example", icon: "bluesky" },
+  lab: { label: "Lab", href: "https://example.edu/lab" }
+};
+
+const justify = q.get("justify");
+const bioClass = justifyClasses(
+  { ...themeConfig.typography.justify, minWidth: justify === "tablet" ? "tablet" : "all" },
+  justify ? true : undefined
+);
+
+const intro = `<p>I'm a PhD student in the <a href="#">Department of Statistics &amp; Data Science</a>. My research studies the foundations of machine intelligence, with an emphasis on generalization, representation, and learning.</p>`;
+const start = `<p><strong>Where to start:</strong> If you're interested in neural network architectures, start with <a href="#">Dual Attention Transformers</a>, an extension of the Transformer architecture with explicit relational mechanisms and inductive biases. For theoretical analysis of modern machine learning methods, see <a href="#">CoT Information</a>, our statistical learning theory framework for chain-of-thought supervised learning.</p>`;
+const themes = `<p>I explore these themes through complementary theoretical analysis and empirical investigation:</p><ul><li><strong>Deep learning, representation learning, and inductive structure:</strong> Developing novel methods and architectures to improve systematic compositional generalization and data efficiency, sometimes drawing inspiration from biological intelligence to achieve human-like reasoning and out-of-distribution generalization.</li><li><strong>Theory &amp; science of machine learning:</strong> Developing frameworks that explain empirical phenomena in contemporary machine learning through unified <em>statistical</em> and <em>computational</em> principles, aiming to develop a foundation for future progress in artificial intelligence.</li></ul>`;
+const outro = `<p>See the <a href="#">research page</a> for an overview, or browse the <a href="#">blog</a>.</p>`;
+const bios: Record<string, string> = {
+  s: intro + outro,
+  m: intro + start + outro,
+  l: intro + themes + start + themes.replace("I explore", "Beyond that, I explore") + outro
+};
+const bio = bios[q.get("len") ?? "m"] ?? bios.m;
+---
+
+<BaseLayout title="Hero Fixture" description="Internal fixture page for the homepage hero.">
+  <Hero
+    hero={hero}
+    name={siteConfig.name}
+    role={siteConfig.role}
+    affiliation={siteConfig.affiliation}
+    photo={q.get("photo") === "none" ? "" : siteConfig.profileImage}
+    links={resolveHeroLinks(hero.links.show, links)}
+    bioClass={bioClass}
+  >
+    <Fragment set:html={bio} />
+  </Hero>
+  <section class="section">
+    <h2 class="h2">Following section</h2>
+    <p class="lede">Shares the hero's edges.</p>
+  </section>
+</BaseLayout>

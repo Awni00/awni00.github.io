@@ -9,6 +9,14 @@ import { siteConfigOverrides } from "../site/config";
 import { customThemes } from "../site/themes";
 import { defineTheme } from "../lib/theme/defineTheme";
 import { normalizeTocConfig } from "../lib/article/toc";
+import { validateJustifyConfig } from "../lib/article/justify";
+import {
+  missingHeroLinkKeys,
+  normalizeHeroConfig,
+  textMeasureWarning,
+  validateLayoutConfig,
+  validateSiteLinks
+} from "../lib/home/hero";
 import type {
   ArticleMode,
   AsidePlacement,
@@ -51,8 +59,47 @@ const entryTypeById = new Map(entryTypeDefinitions.map((entryType) => [entryType
 
 export const entryTypeIds = entryTypeDefinitions.map((entryType) => entryType.id);
 
-export const siteConfig = mergeConfig<SiteConfig>(defaultSiteConfig, siteConfigOverrides.site);
+const mergedSiteConfig = mergeConfig<SiteConfig>(defaultSiteConfig, siteConfigOverrides.site);
+const heroResult = normalizeHeroConfig(mergedSiteConfig.homepage.hero);
+
+export const siteConfig: SiteConfig = {
+  ...mergedSiteConfig,
+  homepage: { ...mergedSiteConfig.homepage, hero: heroResult.hero }
+};
 export const themeConfig = mergeConfig<ThemeConfig>(defaultThemeConfig, siteConfigOverrides.theme);
+
+/**
+ * Non-fatal config problems, reported by `npm run validate`. Fatal ones throw
+ * here instead, so `astro build` and the dev server stop on them too.
+ */
+export const configWarnings: readonly string[] = checkPresentationConfig();
+
+function checkPresentationConfig(): string[] {
+  const links = siteConfig.links as Record<string, unknown>;
+  const issues = [
+    heroResult,
+    validateSiteLinks(links),
+    validateLayoutConfig(themeConfig.layout),
+    validateJustifyConfig(themeConfig.typography.justify)
+  ];
+  const errors = issues.flatMap((issue) => issue.errors);
+  if (errors.length > 0) {
+    throw new Error(`Invalid site config:\n  - ${errors.join("\n  - ")}`);
+  }
+
+  const warnings = issues.flatMap((issue) => issue.warnings);
+  const hero = siteConfig.homepage.hero;
+  if (siteConfigOverrides.site?.homepage?.hero?.links?.show) {
+    for (const key of missingHeroLinkKeys(hero.links.show, links)) {
+      warnings.push(`site.homepage.hero.links.show lists "${key}", but site.links has no "${key}" entry; it is skipped.`);
+    }
+  }
+  if (hero.enabled) {
+    const measure = textMeasureWarning(themeConfig.layout.contentWidth, hero.photo.width);
+    if (measure) warnings.push(measure);
+  }
+  return warnings;
+}
 
 /**
  * Every theme the site can use, built-ins first. A site theme sharing an id

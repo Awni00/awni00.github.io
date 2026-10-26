@@ -1,0 +1,26 @@
+---
+/** One icon from the hero icon registry, inline, sized by the surrounding font. */
+import { getHeroIcon } from "../../lib/home/heroIcons";
+
+type Props = { name: string };
+
+const icon = getHeroIcon(Astro.props.name);
+const paint =
+  icon.mode === "fill"
+    ? { fill: "currentColor" }
+    : {
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2",
+        "stroke-linecap": "round" as const,
+        "stroke-linejoin": "round" as const
+      };
+---
+
+<svg class="hero-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...paint}>
+  {
+    icon.nodes.map(([tag, attrs]) =>
+      tag === "path" ? <path {...attrs} /> : tag === "rect" ? <rect {...attrs} /> : <circle {...attrs} />
+    )
+  }
+</svg>

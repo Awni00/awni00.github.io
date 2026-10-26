@@ -145,6 +145,9 @@ const writing = defineCollection({
         // affects presentation — `type` still drives graph styling, RSS,
         // and recent-writing inclusion.
         mode: z.enum(["article", "abstract"]).optional(),
+        // Justify this entry's prose, overriding
+        // theme.typography.justify.enabled.
+        justify: z.boolean().optional(),
         // Override aside placement: "margin" floats <Aside> blocks into
         // the right gutter; "inline" renders them as left-bordered blocks.
         asides: z.enum(["margin", "inline"]).optional(),
@@ -189,7 +192,15 @@ const pages = defineCollection({
     navTitle: z.string().optional(),
     bibliography,
     hoverNotes,
-    terms
+    terms,
+    // Per-page presentation overrides, named like a writing entry's `article`
+    // block so the same key means the same thing on both.
+    article: z
+      .object({
+        // Justify this page's prose, overriding theme.typography.justify.enabled.
+        justify: z.boolean().optional()
+      })
+      .optional()
   })
 });
 

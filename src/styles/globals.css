@@ -73,15 +73,48 @@ pre {
 
 /* Width helpers */
 .container {
-  width: calc(100% - 2rem);
+  width: calc(100% - 2 * var(--page-gutter));
   max-width: var(--content-wide);
   margin-inline: auto;
 }
 
 .container--narrow {
-  width: calc(100% - 2rem);
+  width: calc(100% - 2 * var(--page-gutter));
   max-width: var(--content-narrow);
   margin-inline: auto;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Justified prose, from `theme.typography.justify` or a page's
+   `article.justify` (see src/lib/article/justify.ts). Only the container's own
+   paragraphs and list items: headings, asides, callouts, figures, tables, and
+   code are not direct paragraphs and stay left-aligned. */
+.prose-justify > p,
+.prose-justify > :is(ul, ol) li {
+  text-align: justify;
+}
+
+.prose-justify--hyphenate > p,
+.prose-justify--hyphenate > :is(ul, ol) li {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+@media (max-width: 560px) {
+  .prose-justify--tablet > p,
+  .prose-justify--tablet > :is(ul, ol) li {
+    text-align: start;
+    -webkit-hyphens: manual;
+    hyphens: manual;
+  }
 }
 
 .skip-link {
@@ -114,7 +147,7 @@ pre {
 }
 
 .site-header__inner {
-  width: calc(100% - 2rem);
+  width: calc(100% - 2 * var(--page-gutter));
   max-width: var(--content-wide);
   margin-inline: auto;
   display: flex;
@@ -217,7 +250,7 @@ pre {
 }
 
 .site-footer__inner {
-  width: calc(100% - 2rem);
+  width: calc(100% - 2 * var(--page-gutter));
   max-width: var(--content-wide);
   margin-inline: auto;
   display: flex;
@@ -367,90 +400,518 @@ pre {
   display: none;
 }
 
-/* ── Social bar (inline middle-dot separator) ───────────────────────── */
+/* ── Hero — "margin card" ────────────────────────────────────────────
+   The photo, caption, and links sit in a card beside the bio; the bio never
+   wraps around it. Markup: src/components/home/Hero.astro.
 
-.sociallinks {
-  font-family: var(--font-ui);
-  font-size: 14px;
-  color: var(--color-muted);
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+   Three layouts, at fixed breakpoints:
+     desktop > 900px   grid  [card 240] 56 [bio 1fr]
+     tablet  561–900   grid  [card 0.75×] 32 [bio 1fr]
+     phone   ≤ 560     block, card stacked above the bio
 
-.sociallinks-link {
-  color: var(--color-fg-soft);
-  text-decoration: none;
-  border-bottom: 1px solid var(--color-rule);
-  cursor: pointer;
-  padding-bottom: 1px;
-  transition: color var(--dur-fast) var(--ease-quiet),
-    border-color var(--dur-fast) var(--ease-quiet);
-}
-
-.sociallinks-link:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
-}
-
-.sociallinks-sep {
-  color: var(--color-muted-2);
-}
-
-/* ── Hero A — classic two-column ────────────────────────────────────── */
+   The card is first in the source, so the phone layout needs no reordering.
+   `photo.side` mirrors the grid by explicit `grid-column`, and every
+   side-specific rule lives inside the ≥561px query below. Keep it that way:
+   a side rule that applies on phone can out-specify the phone rules (a
+   two-class side selector beats a one-class phone selector), which is how
+   one side once kept the desktop layout on a phone while the other did not. */
 
 .hero {
-  width: calc(100% - 2rem);
+  --hero-gap: 56px;
+  --hero-card-w: var(--hero-photo-w, 240px);
+  width: calc(100% - 2 * var(--page-gutter));
   max-width: var(--content-wide);
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 168px;
-  column-gap: 48px;
-  align-items: start;
-  padding: 36px 0 48px;
+  padding: 48px 0 40px;
 }
 
-.hero__left {
+.hero-card {
   min-width: 0;
-  max-width: 70ch;
+  font-family: var(--font-ui);
 }
 
-.hero__left .bio {
-  max-width: none;
-}
-
-.hero__right {
-  display: flex;
-  justify-content: flex-start;
-  padding-top: 6px;
-}
-
-.profile-card {
-  width: 168px;
-  height: 168px;
-  border-radius: var(--radius-pill);
-  border: 0.5px solid var(--color-border);
-  background: var(--color-bg-soft);
-  overflow: hidden;
-  display: block;
-}
-
-.profile-card img {
+.hero-photo {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
+  object-position: var(--hero-photo-position, 50% 22%);
+  border-radius: var(--hero-photo-radius, 12px);
+  background: var(--color-bg-soft);
 }
 
-.profile-card[data-shape="square"] {
-  border-radius: var(--radius);
+.hero-meta {
+  min-width: 0;
+}
+
+.hero-caption {
+  margin-top: 12px;
+  line-height: 1.35;
+}
+
+.hero--no-photo .hero-caption {
+  margin-top: 0;
+}
+
+.hero-caption p,
+.hero-name {
+  margin: 0;
+}
+
+.hero-name {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--color-fg);
+}
+
+.hero-role {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--color-fg-soft);
+}
+
+.hero-affiliation,
+.hero-extra {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.hero-bio {
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.hero-bio ul,
+.hero-bio ol {
+  margin: 0.85em 0 0;
+  padding-left: 1.2em;
+}
+
+.hero-bio ul {
+  list-style: disc;
+}
+
+.hero-bio ol {
+  list-style: decimal;
+}
+
+.hero-bio li + li {
+  margin-top: 0.3em;
+}
+
+.hero-bio :is(ul, ol) + p {
+  margin-top: 0.85em;
+}
+
+.hero-bio strong,
+.hero-bio b {
+  color: var(--color-fg);
+  font-weight: 600;
+}
+
+.hero-bio a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.hero-bio a:hover {
+  text-decoration: underline;
+}
+
+/* Links. One style applies above 900px (`links.style.desktop`) and another at
+   and below (`links.style.mobile`); the label stays in the DOM for every
+   style, and is only visually hidden for "icons". */
+
+.hero-links {
+  margin-top: 14px;
+  font-family: var(--font-ui);
+}
+
+.hero-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-quiet),
+    border-color var(--dur-fast) var(--ease-quiet),
+    background-color var(--dur-fast) var(--ease-quiet);
+}
+
+.hero-link:hover {
+  color: var(--color-accent);
+}
+
+.hero-icon {
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+}
+
+/* ── Two columns: tablet and desktop ── */
+
+@media (min-width: 561px) {
+  .hero {
+    display: grid;
+    grid-template-columns: var(--hero-card-w) minmax(0, 1fr);
+    column-gap: var(--hero-gap);
+    align-items: start;
+  }
+
+  .hero-card {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .hero-bio {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .hero--side-right {
+    grid-template-columns: minmax(0, 1fr) var(--hero-card-w);
+  }
+
+  .hero--side-right .hero-card {
+    grid-column: 2;
+  }
+
+  .hero--side-right .hero-bio {
+    grid-column: 1;
+  }
+
+  .hero--sticky .hero-card {
+    position: sticky;
+    top: calc(var(--site-header-height, 0px) + 24px);
+  }
+
+  /* Without a photo there is no card column: caption and links lead the bio. */
+  .hero.hero--no-photo {
+    display: block;
+  }
+
+  .hero--no-photo .hero-card {
+    margin-bottom: 22px;
+  }
+
+  /* The bio keeps the measure it would have beside a photo. */
+  .hero--no-photo .hero-bio {
+    max-width: calc(var(--content-wide) - var(--hero-gap) - var(--hero-card-w));
+  }
+}
+
+/* ── Desktop link styles ── */
+
+@media (min-width: 901px) {
+  .hero--links-desktop-pills .hero-links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .hero--links-desktop-pills .hero-link {
+    justify-content: center;
+    gap: 6px;
+    min-width: 0;
+    padding: 6px 4px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 12.5px;
+    line-height: 1;
+    color: var(--color-fg-soft);
+  }
+
+  .hero--links-desktop-pills .hero-icon {
+    width: 12px;
+    height: 12px;
+    color: var(--color-muted);
+  }
+
+  .hero--links-desktop-pills .hero-link:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .hero--links-desktop-pills .hero-link:hover .hero-icon {
+    color: var(--color-accent);
+  }
+
+  .hero--links-desktop-icons .hero-links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16.5px;
+  }
+
+  .hero--links-desktop-icons .hero-link {
+    padding: 4px 2px;
+  }
+
+  .hero--links-desktop-list .hero-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 14px;
+    font-size: 13px;
+  }
+
+  .hero--links-desktop-list .hero-link {
+    padding: 3px 0;
+    color: var(--color-fg-soft);
+  }
+
+  .hero--links-desktop-list .hero-icon {
+    color: var(--color-muted);
+  }
+
+  .hero--links-desktop-list .hero-link:hover,
+  .hero--links-desktop-list .hero-link:hover .hero-icon {
+    color: var(--color-accent);
+  }
+
+  .hero--links-desktop-text .hero-links {
+    display: block;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .hero--links-desktop-text .hero-link:not(:last-child)::after {
+    content: "·";
+    margin: 0 7px;
+    color: var(--color-muted-2);
+  }
+
+  /* Without a photo, pills size to their labels instead of filling a grid
+     the width of a photo that is not there. */
+  .hero--no-photo.hero--links-desktop-pills .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .hero--no-photo.hero--links-desktop-pills .hero-link {
+    padding-inline: 12px;
+  }
+
+  .hero--no-photo.hero--links-desktop-icons .hero-links {
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .hero--no-photo.hero--links-desktop-list .hero-links {
+    grid-template-columns: repeat(3, max-content);
+    column-gap: 22px;
+  }
+
+  .hero--links-desktop-icons .hero-link__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .hero--links-desktop-text .hero-icon {
+    display: none;
+  }
+
+  /* A wide touch screen (a tablet in landscape) still gets 44px targets. */
+  @media (pointer: coarse) {
+    .hero .hero-link {
+      min-height: 44px;
+      min-width: 44px;
+      justify-content: center;
+    }
+
+    .hero--links-desktop-text .hero-link,
+    .hero--links-desktop-list .hero-link {
+      justify-content: flex-start;
+    }
+  }
+}
+
+/* ── Tablet and phone ── */
+
+@media (max-width: 900px) {
+  .hero {
+    --hero-gap: 32px;
+    --hero-card-w: calc(var(--hero-photo-w, 240px) * 0.75);
+    padding-top: 36px;
+  }
+
+  .hero-name {
+    font-size: 14px;
+  }
+
+  .hero-role,
+  .hero-affiliation,
+  .hero-extra {
+    font-size: 12.5px;
+  }
+
+  /* Touch sizes: every style gives each link a target of at least 44×44px.
+     Pills draw 40px tall and reach 44 through a 2px invisible margin, which
+     their 8px gaps leave room for. */
+  .hero--links-mobile-pills .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .hero--links-mobile-pills .hero-link {
+    min-height: 40px;
+    min-width: 44px;
+    padding: 0 14px 0 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    color: var(--color-fg-soft);
+  }
+
+  /* 1px border + 2px: insets count from the padding box. */
+  .hero--links-mobile-pills .hero-link::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+  }
+
+  .hero--links-mobile-pills .hero-link:active {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .hero--links-mobile-icons .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 8px 0 0 -12px;
+    font-size: 18px;
+  }
+
+  .hero--links-mobile-icons .hero-link {
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+    border-radius: 10px;
+  }
+
+  .hero--links-mobile-icons .hero-link:active {
+    background: var(--color-bg-soft-2);
+  }
+
+  .hero--links-mobile-icons .hero-link__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .hero--links-mobile-list .hero-links {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    column-gap: 22px;
+    margin-top: 6px;
+    font-size: 15px;
+  }
+
+  .hero--links-mobile-list .hero-link {
+    min-height: 44px;
+    min-width: 44px;
+    color: var(--color-fg-soft);
+  }
+
+  .hero--links-mobile-text .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 15px;
+  }
+
+  .hero--links-mobile-text .hero-link {
+    min-height: 44px;
+    min-width: 44px;
+    color: var(--color-fg-soft);
+  }
+
+  .hero--links-mobile-text .hero-link:not(:last-child)::after {
+    content: "·";
+    margin: 0 8px;
+    color: var(--color-muted-2);
+  }
+
+  .hero--links-mobile-text .hero-icon {
+    display: none;
+  }
+}
+
+/* ── Phone: one column, card above the bio ── */
+
+@media (max-width: 560px) {
+  .hero {
+    padding-top: 24px;
+  }
+
+  .hero-card {
+    margin-bottom: 22px;
+  }
+
+  .hero--phone-centered .hero-card {
+    text-align: center;
+  }
+
+  .hero--phone-centered .hero-photo {
+    width: 160px;
+    margin: 0 auto;
+  }
+
+  .hero--phone-centered .hero-links {
+    justify-content: center;
+  }
+
+  .hero--phone-centered.hero--links-mobile-icons .hero-links {
+    margin-left: 0;
+  }
+
+  .hero--phone-centered.hero--links-mobile-list .hero-links {
+    width: max-content;
+    max-width: 100%;
+    margin-inline: auto;
+    text-align: left;
+  }
+
+  .hero--phone-compact .hero-card {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+
+  .hero--phone-compact.hero--no-photo .hero-card {
+    display: block;
+  }
+
+  .hero--phone-compact .hero-photo {
+    width: 76px;
+    border-radius: calc(var(--hero-photo-radius, 12px) * 0.7);
+  }
+
+  .hero--phone-compact .hero-caption {
+    margin-top: 0;
+  }
+
+  .hero--phone-compact .hero-links {
+    margin-top: 8px;
+  }
 }
 
 /* ── Sections ───────────────────────────────────────────────────────── */
 
 .section {
-  width: calc(100% - 2rem);
+  width: calc(100% - 2 * var(--page-gutter));
   max-width: var(--content-wide);
   margin: 0 auto;
   padding: 24px 0 32px;
@@ -1151,24 +1612,6 @@ pre {
   .theme-toggle {
     order: -1;
     margin-top: -1px;
-  }
-
-  .hero {
-    grid-template-columns: 1fr;
-    column-gap: 0;
-    row-gap: 24px;
-    padding: 24px 0 32px;
-  }
-
-  .hero__right {
-    order: -1;
-    justify-content: flex-start;
-    padding-top: 0;
-  }
-
-  .profile-card {
-    width: 96px;
-    height: 96px;
   }
 
   .h1 {

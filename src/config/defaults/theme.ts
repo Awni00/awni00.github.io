@@ -10,7 +10,15 @@ export const defaultThemeConfig = {
   typography: {
     body: "serif",
     ui: "sans",
-    code: "mono"
+    code: "mono",
+    justify: {
+      enabled: false,
+      hyphenate: true,
+      minWidth: "all"
+    }
+  },
+  layout: {
+    contentWidth: 1020
   },
   hoverNotes: {
     marker: "superscript",

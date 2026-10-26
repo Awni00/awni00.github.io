@@ -151,6 +151,52 @@ export type WritingConfig = {
   };
 };
 
+export type HeroPhotoSide = "left" | "right";
+export type HeroPhotoShape = "rounded" | "circle" | "square";
+export type HeroLinkStyle = "pills" | "icons" | "list" | "text";
+export type HeroPhoneLayout = "centered" | "compact";
+
+/**
+ * The homepage hero: a card with the photo, a short caption, and links beside
+ * the bio column ("margin card"). Structure, breakpoints, gaps, the reading
+ * measure, caption typography, and tap-target sizes are fixed by the template;
+ * these are the parts a site can choose.
+ */
+export type HeroConfig = {
+  enabled: boolean;
+  photo: {
+    side: HeroPhotoSide;
+    /** Desktop card width in px, clamped to 180–300. Tablet uses 0.75×; phone a fixed 160px. */
+    width: number;
+    shape: HeroPhotoShape;
+    /** Corner radius in px, used by `shape: "rounded"`. */
+    radius: number;
+    /** CSS `object-position` for the square crop, e.g. "50% 22%". */
+    position: string;
+    /** Keep the card in view while a long bio scrolls (desktop and tablet). */
+    sticky: boolean;
+  };
+  caption: {
+    showName: boolean;
+    /** Extra lines under the affiliation, e.g. pronouns or a job-market note. */
+    extra: readonly string[];
+  };
+  links: {
+    /** Keys of `site.links` to show, in order. Keys with no link are skipped. */
+    show: readonly string[];
+    style: { desktop: HeroLinkStyle; mobile: HeroLinkStyle };
+  };
+  phone: { layout: HeroPhoneLayout };
+};
+
+/** A `site.links` entry beyond the known keys, e.g. ORCID or Bluesky. */
+export type CustomLink = {
+  label: string;
+  href: string;
+  /** A name from the hero icon registry (`src/lib/home/heroIcons.ts`); defaults to a generic link icon. */
+  icon?: string;
+};
+
 export type SiteConfig = {
   title: string;
   name: string;
@@ -160,10 +206,14 @@ export type SiteConfig = {
   url: string;
   profileImage: string;
   ogImage: string;
-  links: Record<string, string>;
+  /**
+   * Profile links by key. Known keys (`email`, `cv`, `scholar`, `github`, `x`,
+   * `linkedin`, `orcid`, …) take a URL; anything else may be a `CustomLink`.
+   */
+  links: Record<string, string | CustomLink>;
   nav: readonly { label: string; href: string }[];
   homepage: {
-    hero: { enabled: boolean };
+    hero: HeroConfig;
     researchSummary: { enabled: boolean; source: string };
     writingPreview: {
       enabled: boolean;
@@ -305,6 +355,27 @@ export type ThemeConfig = {
     body: "serif" | "sans";
     ui: "sans" | "serif";
     code: "mono";
+    /**
+     * Justified prose. Applies to paragraphs and list items in the homepage
+     * bio, custom pages, and article bodies only; a page's `article.justify`
+     * frontmatter overrides `enabled`.
+     */
+    justify: {
+      enabled: boolean;
+      /** Add `hyphens: auto`, which keeps justified lines from opening rivers. */
+      hyphenate: boolean;
+      /** "all" justifies at every width; "tablet" leaves phones ragged-right. */
+      minWidth: JustifyMinWidth;
+    };
+  };
+  layout: {
+    /**
+     * Site-wide page width in px, including the 32px desktop gutters. The
+     * header, footer, homepage, and topic list share it, so every page has the
+     * same edges. The default 1020 is 660 (bio measure) + 56 (gap) + 240
+     * (hero photo) + 2 × 32.
+     */
+    contentWidth: number;
   };
   /** Site-wide `<HoverNote>` look; a page's `hoverNotes` frontmatter and a note's own props override it. */
   hoverNotes: {
@@ -316,6 +387,8 @@ export type ThemeConfig = {
     underline: TermUnderline;
   };
 };
+
+export type JustifyMinWidth = "all" | "tablet";
 
 /** "superscript" raises the mark; "bracket" sets it on the line as `[1]`. */
 export type HoverNoteMarker = "superscript" | "bracket";

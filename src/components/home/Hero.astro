@@ -1,0 +1,78 @@
+---
+/**
+ * Homepage hero, "margin card": the photo, a short caption, and the profile
+ * links sit in a card beside the bio column. The bio never wraps around it.
+ *
+ * The card comes first in the source so that on a phone, where the hero is a
+ * plain block, it stacks above the bio. On tablet and desktop the hero is a
+ * two-column grid and each child is placed by explicit `grid-column`, which is
+ * how `photo.side` mirrors the layout — not `order`, and not floats. See the
+ * `.hero` rules in globals.css.
+ *
+ * Without a photo the card keeps its caption and links and sits above the bio.
+ */
+import HeroIcon from "./HeroIcon.astro";
+import type { HeroConfig } from "../../config/types";
+import type { HeroLink } from "../../lib/home/hero";
+
+type Props = {
+  hero: HeroConfig;
+  name: string;
+  role: string;
+  affiliation: string;
+  /** Path or URL of the photo; empty for none. */
+  photo: string;
+  links: HeroLink[];
+  /** Extra classes for the bio column, e.g. from `justifyClasses`. */
+  bioClass?: string[];
+};
+
+const { hero, name, role, affiliation, photo, links, bioClass = [] } = Astro.props;
+const { side, width, shape, radius, position, sticky } = hero.photo;
+const photoRadius = shape === "circle" ? "50%" : shape === "square" ? "0px" : `${radius}px`;
+const style = [
+  `--hero-photo-w: ${width}px`,
+  `--hero-photo-radius: ${photoRadius}`,
+  `--hero-photo-position: ${position}`
+].join("; ");
+---
+
+<section
+  class:list={[
+    "hero",
+    `hero--side-${side}`,
+    `hero--phone-${hero.phone.layout}`,
+    `hero--links-desktop-${hero.links.style.desktop}`,
+    `hero--links-mobile-${hero.links.style.mobile}`,
+    { "hero--sticky": sticky, "hero--no-photo": !photo }
+  ]}
+  style={style}
+  data-hero-side={side}
+>
+  <div class="hero-card">
+    {photo && <img class="hero-photo" src={photo} alt={name} width={width} height={width} />}
+    <div class="hero-meta">
+      <div class="hero-caption">
+        <h1 class:list={["hero-name", { "visually-hidden": !hero.caption.showName }]}>{name}</h1>
+        {role && <p class="hero-role">{role}</p>}
+        {affiliation && <p class="hero-affiliation">{affiliation}</p>}
+        {hero.caption.extra.map((line) => <p class="hero-extra">{line}</p>)}
+      </div>
+      {
+        links.length > 0 && (
+          <nav class="hero-links" aria-label="Profile links">
+            {links.map((link) => (
+              <a class="hero-link" href={link.href} title={link.label} data-link-key={link.key}>
+                <HeroIcon name={link.icon} />
+                <span class="hero-link__label">{link.label}</span>
+              </a>
+            ))}
+          </nav>
+        )
+      }
+    </div>
+  </div>
+  <div class:list={["hero-bio", "bio", ...bioClass]}>
+    <slot />
+  </div>
+</section>

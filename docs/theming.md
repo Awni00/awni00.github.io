@@ -148,6 +148,41 @@ theme: {
 }
 ```
 
+### Justified text
+
+Prose is set ragged-right by default, with `text-wrap: pretty` evening out
+the line ends. To justify it instead:
+
+```ts
+theme: {
+  typography: {
+    justify: {
+      enabled: true,      // default false
+      hyphenate: true,    // hyphens: auto, so justified lines don't open wide gaps
+      minWidth: "all"     // "all" | "tablet": "tablet" leaves phones ragged-right
+    }
+  }
+}
+```
+
+Justification applies to paragraphs and list items in the homepage bio, custom
+pages, and article bodies. Headings, captions, figures and tables, code,
+callouts, asides and margin notes, the publication list, and the writing
+browser stay left-aligned. Hyphenation uses the page language, which the
+layout sets with `<html lang="en">`.
+
+On a narrow phone column even hyphenated justified text spaces unevenly, which
+is what `minWidth: "tablet"` is for.
+
+A page can switch it on or off for itself, keeping the site's `hyphenate` and
+`minWidth`, in its frontmatter. This works for custom pages (including
+`home.mdx`) and writing entries:
+
+```yaml
+article:
+  justify: true
+```
+
 Article-level sizes and line heights are a separate concern again — they live
 in the `--article-*` tokens in `src/styles/article.css`, documented under
 [Article Typography](using-the-template.md#article-typography).

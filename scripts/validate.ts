@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 
 import {
+  configWarnings,
   publicationsConfig,
   siteConfig,
   themeRegistry,
@@ -31,6 +32,7 @@ for (const warning of graphResult.warnings) {
   if (severity === "warn") warnings.push(warning.message);
 }
 
+warnings.push(...configWarnings);
 validateRoutes();
 validateShortLinks();
 validateThemes();
