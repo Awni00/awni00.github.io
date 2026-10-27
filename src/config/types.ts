@@ -153,7 +153,7 @@ export type WritingConfig = {
 
 export type HeroPhotoSide = "left" | "right";
 export type HeroPhotoShape = "rounded" | "circle" | "square";
-export type HeroLinkStyle = "pills" | "icons" | "list" | "text";
+export type HeroLinkStyle = "pills" | "icons" | "list" | "text" | "text-icons";
 export type HeroPhoneLayout = "centered" | "compact";
 
 /**

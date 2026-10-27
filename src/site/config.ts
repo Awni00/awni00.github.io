@@ -55,7 +55,7 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   //       photo: { side: "left", width: 240, position: "50% 22%" },
   //       links: {
   //         show: ["email", "cv", "scholar", "github", "x", "linkedin"],
-  //         style: { desktop: "pills", mobile: "pills" }  // pills | icons | list | text
+  //         style: { desktop: "pills", mobile: "pills" }  // pills | icons | list | text | text-icons
   //       },
   //       phone: { layout: "centered" }                   // "centered" | "compact"
   //     },

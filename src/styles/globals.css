@@ -528,8 +528,13 @@ pre {
    style, and is only visually hidden for "icons". */
 
 .hero-links {
-  /* Pill sizing, shared by every width; see the pill grid below. */
+  /* Pill sizing, shared by every width; see the pill grid below. The icon
+     sits --hero-pill-pad-start from the pill's left edge; the label keeps at
+     least --hero-pill-gap-min from the icon and --hero-pill-pad-min from the
+     right edge. */
   --hero-pill-max: 104px;
+  --hero-pill-pad-start: 6px;
+  --hero-pill-gap-min: 2px;
   --hero-pill-pad-min: 2px;
   margin-top: 14px;
   font-family: var(--font-ui);
@@ -574,10 +579,26 @@ pre {
   );
 }
 
+/* In each pill the icon holds the left edge and the label centers in the
+   space after it. Every pill has the same icon width, so the labels in a
+   column share one center line. */
 .hero .hero-links[data-cols] .hero-link {
-  justify-content: center;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--hero-pill-gap-min);
   min-width: 0;
-  padding-inline: var(--hero-pill-pad-min);
+  padding-inline: var(--hero-pill-pad-start) var(--hero-pill-pad-min);
+}
+
+.hero .hero-links[data-cols] .hero-link__label {
+  text-align: center;
+}
+
+/* "text" and "text-icons", at every width: an "Email · CV · …" row. The
+   script in Hero.astro breaks it into rows by the same rule as the pills,
+   and drops the dot after each row's last link. */
+.hero .hero-links .hero-link[data-line-end]::after {
+  display: none;
 }
 
 /* ── Two columns: tablet and desktop ── */
@@ -704,15 +725,23 @@ pre {
     color: var(--color-accent);
   }
 
-  .hero--links-desktop-text .hero-links {
+  /* The dot's left space is the link's own 5px gap plus 2px, matching the
+     7px after it. */
+  :is(.hero--links-desktop-text, .hero--links-desktop-text-icons) .hero-links {
+    --hero-links-layout: text;
     display: block;
     font-size: 13px;
     line-height: 1.7;
   }
 
-  .hero--links-desktop-text .hero-link:not(:last-child)::after {
+  :is(.hero--links-desktop-text, .hero--links-desktop-text-icons) .hero-link {
+    gap: 5px;
+    vertical-align: middle;
+  }
+
+  :is(.hero--links-desktop-text, .hero--links-desktop-text-icons) .hero-link:not(:last-child)::after {
     content: "·";
-    margin: 0 7px;
+    margin: 0 7px 0 2px;
     color: var(--color-muted-2);
   }
 
@@ -748,6 +777,7 @@ pre {
     }
 
     .hero--links-desktop-text .hero-link,
+    .hero--links-desktop-text-icons .hero-link,
     .hero--links-desktop-list .hero-link {
       justify-content: flex-start;
     }
@@ -848,23 +878,30 @@ pre {
     color: var(--color-fg-soft);
   }
 
-  .hero--links-mobile-text .hero-links {
-    display: flex;
-    flex-wrap: wrap;
+  :is(.hero--links-mobile-text, .hero--links-mobile-text-icons) .hero-links {
+    --hero-links-layout: text;
+    display: block;
     font-size: 15px;
   }
 
-  .hero--links-mobile-text .hero-link {
+  :is(.hero--links-mobile-text, .hero--links-mobile-text-icons) .hero-link {
+    gap: 5px;
     min-height: 44px;
     min-width: 44px;
+    vertical-align: middle;
     color: var(--color-fg-soft);
   }
 
-  .hero--links-mobile-text .hero-link:not(:last-child)::after {
+  :is(.hero--links-mobile-text, .hero--links-mobile-text-icons) .hero-link:not(:last-child)::after {
     content: "·";
-    margin: 0 8px;
+    margin: 0 7px 0 2px;
     color: var(--color-muted-2);
   }
+
+  .hero--links-mobile-text-icons .hero-icon {
+    color: var(--color-muted);
+  }
+
 
   .hero--links-mobile-text .hero-icon {
     display: none;

@@ -78,53 +78,94 @@ const style = [
 </section>
 
 <script is:inline>
-  // Pill links: equal-width cells, as many columns as the widest pill allows
-  // in the card, but only counts that leave no short last row. Measured, not
-  // hard-coded per breakpoint, so it holds for any labels, sizes, or card
-  // width. Inline so the grid is in place before the first paint; the CSS
-  // falls back to wrapping pills without it. See `.hero-links[data-cols]`.
+  // Lays out the profile links in rows that hold the same number of links,
+  // with at most one fewer in the last, and as many per row as fit the card:
+  // six links go 3 + 3 or 2 + 2 + 2, never 4 + 2 or 2, 1, 2, 1.
+  //   pills: equal-width cells in a grid of that many columns.
+  //   text, text-icons: rows at their natural widths, with each break pinned
+  //     by a <br> and the "·" that would end a line dropped.
+  // Measured, not hard-coded per breakpoint, so it holds for any labels,
+  // sizes, or card width. Inline so the layout is in place before the first
+  // paint; without it, links wrap where they fall and every dot shows.
   (() => {
     const navs = document.querySelectorAll(".hero-links");
 
     const layout = (nav) => {
       const style = getComputedStyle(nav);
-      if (style.getPropertyValue("--hero-links-layout").trim() !== "pills") {
-        delete nav.dataset.cols;
-        return;
+      const kind = style.getPropertyValue("--hero-links-layout").trim();
+      if (kind !== "pills") delete nav.dataset.cols;
+      nav.querySelectorAll("br[data-hero-break]").forEach((br) => br.remove());
+      nav.querySelectorAll("[data-line-end]").forEach((link) => link.removeAttribute("data-line-end"));
+      const links = [...nav.querySelectorAll(".hero-link")];
+      if (kind === "pills") layoutPills(nav, style, links);
+      if (kind === "text") layoutText(nav, links);
+    };
+
+    // The most links per row such that rows are balanced and `fits` holds.
+    const perRow = (count, fits) => {
+      for (let c = count; c > 1; c -= 1) {
+        const balanced = count % c === 0 || count % c >= c - 1;
+        if (balanced && fits(c)) return c;
       }
+      return 1;
+    };
+
+    const layoutPills = (nav, style, links) => {
+      const px = (name) => parseFloat(style.getPropertyValue(name)) || 0;
       const gap = parseFloat(style.columnGap) || 0;
-      const pad = parseFloat(style.getPropertyValue("--hero-pill-pad-min")) || 0;
-      const links = [...nav.children];
+      const spacing = px("--hero-pill-pad-start") + px("--hero-pill-gap-min") + px("--hero-pill-pad-min");
+      const text = document.createRange();
       let need = 0;
       for (const link of links) {
-        // Icon to label, at natural width: labels don't wrap, so this holds
-        // whether the pill is currently roomy or tight.
-        const content =
-          link.lastElementChild.getBoundingClientRect().right -
-          link.firstElementChild.getBoundingClientRect().left;
+        // The label's text at its natural width (labels don't wrap), not its
+        // box, which in the grid is whatever space the pill leaves it.
+        text.selectNodeContents(link.lastElementChild);
+        const content = link.firstElementChild.getBoundingClientRect().width + text.getBoundingClientRect().width;
         const linkStyle = getComputedStyle(link);
         const borders = parseFloat(linkStyle.borderLeftWidth) + parseFloat(linkStyle.borderRightWidth);
-        need = Math.max(need, content + borders + 2 * pad);
+        need = Math.max(need, content + borders + spacing);
       }
       const room = nav.parentElement.clientWidth;
-      const count = links.length;
-      let cols = 1;
-      for (let c = count; c > 1; c -= 1) {
-        const fits = c * need + (c - 1) * gap <= room;
-        const balanced = count % c === 0 || count % c >= c - 1;
-        if (fits && balanced) {
-          cols = c;
-          break;
-        }
-      }
+      const cols = perRow(links.length, (c) => c * need + (c - 1) * gap <= room);
       nav.style.setProperty("--hero-link-cols", String(cols));
       nav.dataset.cols = String(cols);
+    };
+
+    const layoutText = (nav, links) => {
+      if (links.length < 2) return;
+      const widths = links.map((link) => link.getBoundingClientRect().width);
+      // How much a link narrows when its trailing dot is dropped.
+      links[0].setAttribute("data-line-end", "");
+      const dot = widths[0] - links[0].getBoundingClientRect().width;
+      links[0].removeAttribute("data-line-end");
+      const rowWidth = (start, end) => {
+        let width = 0;
+        for (let i = start; i < end; i += 1) {
+          const endsLine = i === end - 1 && i < links.length - 1;
+          const min = parseFloat(getComputedStyle(links[i]).minWidth) || 0;
+          width += endsLine ? Math.max(min, widths[i] - dot) : widths[i];
+        }
+        return width;
+      };
+      const room = nav.clientWidth;
+      const cols = perRow(links.length, (c) => {
+        for (let i = 0; i < links.length; i += c) {
+          if (rowWidth(i, Math.min(i + c, links.length)) > room) return false;
+        }
+        return true;
+      });
+      for (let i = cols - 1; i < links.length - 1; i += cols) {
+        links[i].setAttribute("data-line-end", "");
+        const br = document.createElement("br");
+        br.dataset.heroBreak = "";
+        links[i].after(br);
+      }
     };
 
     const layoutAll = () => navs.forEach(layout);
     layoutAll();
     // Web fonts change label widths; the card's width changes across
-    // breakpoints, which also switch link styles and pill sizes.
+    // breakpoints, which also switch link styles and sizes.
     document.fonts?.ready.then(layoutAll);
     if ("ResizeObserver" in window) {
       const observer = new ResizeObserver(layoutAll);

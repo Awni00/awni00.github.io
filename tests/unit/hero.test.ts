@@ -103,7 +103,7 @@ describe("normalizeHeroConfig", () => {
     );
     expect(result.errors).toHaveLength(3);
     expect(result.errors.join("\n")).toMatch(/photo\.shape is "oval"/);
-    expect(result.errors.join("\n")).toMatch(/links\.style\.desktop is "buttons"; expected one of "pills", "icons", "list", "text"/);
+    expect(result.errors.join("\n")).toMatch(/links\.style\.desktop is "buttons"; expected one of "pills", "icons", "list", "text", "text-icons"/);
     expect(result.errors.join("\n")).toMatch(/phone\.layout is "stacked"; expected one of "centered", "compact"/);
   });
 
@@ -139,6 +139,14 @@ describe("hero links", () => {
     expect(resolved.map((link) => link.key)).toEqual(["github", "email", "cv"]);
     expect(resolved[0]).toEqual({ key: "github", label: "GitHub", href: "https://github.com/me", icon: "github" });
     expect(resolved[2].label).toBe("CV");
+  });
+
+  it('labels the x and twitter keys "Twitter"', () => {
+    const resolved = resolveHeroLinks(["x", "twitter"], { x: "https://x.com/me", twitter: "https://twitter.com/me" });
+    expect(resolved.map((link) => [link.label, link.icon])).toEqual([
+      ["Twitter", "x"],
+      ["Twitter", "twitter"]
+    ]);
   });
 
   it("resolves custom links and title-cases unknown string keys", () => {

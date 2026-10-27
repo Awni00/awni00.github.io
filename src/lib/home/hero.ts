@@ -30,7 +30,7 @@ export const CONTENT_WIDTH = { min: 640, max: 1600 } as const;
 
 const PHOTO_SIDES: readonly HeroPhotoSide[] = ["left", "right"];
 const PHOTO_SHAPES: readonly HeroPhotoShape[] = ["rounded", "circle", "square"];
-const LINK_STYLES: readonly HeroLinkStyle[] = ["pills", "icons", "list", "text"];
+const LINK_STYLES: readonly HeroLinkStyle[] = ["pills", "icons", "list", "text", "text-icons"];
 const PHONE_LAYOUTS: readonly HeroPhoneLayout[] = ["centered", "compact"];
 
 export type ConfigIssues = { errors: string[]; warnings: string[] };
@@ -49,8 +49,8 @@ const KNOWN_LINK_LABELS: Record<string, string> = {
   scholar: "Scholar",
   github: "GitHub",
   gitlab: "GitLab",
-  x: "X",
-  twitter: "X",
+  x: "Twitter",
+  twitter: "Twitter",
   linkedin: "LinkedIn",
   orcid: "ORCID",
   bluesky: "Bluesky",

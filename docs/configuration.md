@@ -176,8 +176,9 @@ export const siteConfigOverrides = {
   warns about keys with no link.
 - `links.style`: how the links look, with one style for desktop and one for
   tablet and phone:
-  - `pills`: outlined chips with an icon and a label, all the same width,
-    in rows that are full except perhaps one pill short at the end. The number of columns is
+  - `pills`: outlined chips, all the same width, each with its icon at the
+    left and its label centered in the rest. Rows are full except perhaps
+    one pill short at the end. The number of columns is
     the most the widest label allows across the card, so it adapts to your
     labels and to each layout: six links come out three across on desktop
     and phone and two across in the narrower tablet card. Beside the bio
@@ -186,7 +187,11 @@ export const siteConfigOverrides = {
   - `icons`: icons only, spread across the photo width on desktop. The labels
     stay available to screen readers and as tooltips.
   - `list`: two columns of icon and label, no outlines.
-  - `text`: a plain "Email · CV · Scholar" row.
+  - `text`: a plain "Email · CV · Scholar" row, without outlines or icons.
+  - `text-icons`: the same row, with each link's icon before its label.
+
+  The text styles wrap by the same rule as pills: every row holds the same
+  number of links, the last at most one fewer, and no row ends on a "·".
 
   On touch screens every style gives each link a tap target of at least
   44×44px.
@@ -202,7 +207,8 @@ measure, caption typography and order, and tap-target sizes.
 ### Profile links
 
 `site.links` maps a key to a URL. These keys come with a label and an icon:
-`email`, `cv`, `scholar`, `github`, `gitlab`, `x` (or `twitter`), `linkedin`,
+`email`, `cv`, `scholar`, `github`, `gitlab`, `x` or `twitter` (labelled
+"Twitter"), `linkedin`,
 `orcid`, `bluesky`, `mastodon`, `threads`, `semantic-scholar`, `researchgate`,
 `arxiv`, `youtube`, `website`, and `rss`. For anything else, give a label and
 optionally an icon:

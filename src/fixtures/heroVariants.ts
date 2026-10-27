@@ -10,7 +10,7 @@
  *   len-s|m|l (bio length)   justify-all|tablet
  */
 const sides = ["left", "right"];
-const styles = ["pills", "icons", "list", "text"];
+const styles = ["pills", "icons", "list", "text", "text-icons"];
 
 export const HERO_FIXTURE_VARIANTS: string[] = [
   "default",

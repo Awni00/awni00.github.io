@@ -19,7 +19,7 @@ const WIDTHS: Width[] = [
   { name: "phone", width: 390, height: 844, touch: true }
 ];
 const SIDES = ["left", "right"] as const;
-const LINK_STYLES = ["pills", "icons", "list", "text"] as const;
+const LINK_STYLES = ["pills", "icons", "list", "text", "text-icons"] as const;
 
 test.skip(({ isMobile }) => isMobile, "each test sets its own viewport");
 
@@ -251,6 +251,43 @@ test("without a photo, desktop pills share one row within the bio's measure", as
   expectBalanced(grid, 6);
   expect((await box(page, ".hero-links")).width).toBeLessThanOrEqual(661);
 });
+
+// The text styles follow the same rule as the pills, at their natural widths:
+// rows hold the same number of links (the last at most one short), and no
+// row ends on a separator.
+for (const width of WIDTHS) {
+  for (const style of ["text", "text-icons"] as const) {
+    test(`${width.name} ${width.width}px, ${style} links: balanced rows that never end on a dot`, async ({ browser }) => {
+      const page = await open(browser, width, `/fixtures/hero/side-left_links-${style}`);
+      const rows = await page.locator(".hero-links").evaluate((nav) => {
+        const links = [...nav.querySelectorAll(".hero-link")] as HTMLElement[];
+        const out: { dots: boolean[]; overflow: boolean }[] = [];
+        let top = -Infinity;
+        for (const link of links) {
+          const box = link.getBoundingClientRect();
+          if (box.top > top + box.height / 2) {
+            out.push({ dots: [], overflow: false });
+            top = box.top;
+          }
+          const row = out.at(-1)!;
+          row.dots.push(getComputedStyle(link, "::after").display !== "none" && getComputedStyle(link, "::after").content !== "none");
+          if (box.right > nav.getBoundingClientRect().right + 0.5) row.overflow = true;
+        }
+        return out;
+      });
+      const counts = rows.map((row) => row.dots.length);
+      for (const count of counts.slice(0, -1)) expect(count).toBe(counts[0]);
+      expect(counts.at(-1)!).toBeGreaterThanOrEqual(Math.max(1, counts[0] - 1));
+      for (const row of rows) {
+        expect(row.overflow).toBe(false);
+        expect(row.dots.at(-1), "a row ends on a separator").toBe(false);
+        expect(row.dots.slice(0, -1).every(Boolean), "a separator is missing inside a row").toBe(true);
+      }
+      if (style === "text-icons") await expect(page.locator(".hero-link .hero-icon").first()).toBeVisible();
+      else await expect(page.locator(".hero-link .hero-icon").first()).toBeHidden();
+    });
+  }
+}
 
 test("without JavaScript, pills fall back to wrapping at their own widths", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 768, height: 1024 }, javaScriptEnabled: false });
