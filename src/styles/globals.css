@@ -744,17 +744,17 @@ pre {
   }
 
   .hero-name {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .hero-role,
   .hero-affiliation,
   .hero-extra {
-    font-size: 12.5px;
+    font-size: 13px;
   }
 
   /* Touch sizes: every style gives each link a target of at least 44×44px.
-     Pills draw 40px tall and reach 44 through a 2px invisible margin, which
+     Pills draw 36px tall and reach 44 through a 4px invisible margin, which
      their 8px gaps leave room for. */
   .hero--links-mobile-pills .hero-links {
     display: flex;
@@ -763,20 +763,20 @@ pre {
   }
 
   .hero--links-mobile-pills .hero-link {
-    min-height: 40px;
+    min-height: 36px;
     min-width: 44px;
-    padding: 0 14px 0 12px;
+    padding: 0 12px 0 10px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-pill);
-    font-size: 14px;
+    font-size: 13px;
     color: var(--color-fg-soft);
   }
 
-  /* 1px border + 2px: insets count from the padding box. */
+  /* 1px border + 4px: insets count from the padding box. */
   .hero--links-mobile-pills .hero-link::before {
     content: "";
     position: absolute;
-    inset: -3px;
+    inset: -5px;
   }
 
   .hero--links-mobile-pills .hero-link:active {
