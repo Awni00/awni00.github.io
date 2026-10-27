@@ -76,3 +76,61 @@ const style = [
     <slot />
   </div>
 </section>
+
+<script is:inline>
+  // Pill links: equal-width cells, as many columns as the widest pill allows
+  // in the card, but only counts that leave no short last row. Measured, not
+  // hard-coded per breakpoint, so it holds for any labels, sizes, or card
+  // width. Inline so the grid is in place before the first paint; the CSS
+  // falls back to wrapping pills without it. See `.hero-links[data-cols]`.
+  (() => {
+    const navs = document.querySelectorAll(".hero-links");
+
+    const layout = (nav) => {
+      const style = getComputedStyle(nav);
+      if (style.getPropertyValue("--hero-links-layout").trim() !== "pills") {
+        delete nav.dataset.cols;
+        return;
+      }
+      const gap = parseFloat(style.columnGap) || 0;
+      const pad = parseFloat(style.getPropertyValue("--hero-pill-pad-min")) || 0;
+      const links = [...nav.children];
+      let need = 0;
+      for (const link of links) {
+        // Icon to label, at natural width: labels don't wrap, so this holds
+        // whether the pill is currently roomy or tight.
+        const content =
+          link.lastElementChild.getBoundingClientRect().right -
+          link.firstElementChild.getBoundingClientRect().left;
+        const linkStyle = getComputedStyle(link);
+        const borders = parseFloat(linkStyle.borderLeftWidth) + parseFloat(linkStyle.borderRightWidth);
+        need = Math.max(need, content + borders + 2 * pad);
+      }
+      const room = nav.parentElement.clientWidth;
+      const count = links.length;
+      let cols = 1;
+      for (let c = count; c > 1; c -= 1) {
+        const fits = c * need + (c - 1) * gap <= room;
+        const balanced = count % c === 0 || count % c >= c - 1;
+        if (fits && balanced) {
+          cols = c;
+          break;
+        }
+      }
+      nav.style.setProperty("--hero-link-cols", String(cols));
+      nav.dataset.cols = String(cols);
+    };
+
+    const layoutAll = () => navs.forEach(layout);
+    layoutAll();
+    // Web fonts change label widths; the card's width changes across
+    // breakpoints, which also switch link styles and pill sizes.
+    document.fonts?.ready.then(layoutAll);
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver(layoutAll);
+      navs.forEach((nav) => observer.observe(nav.parentElement));
+    } else {
+      window.addEventListener("resize", layoutAll, { passive: true });
+    }
+  })();
+</script>

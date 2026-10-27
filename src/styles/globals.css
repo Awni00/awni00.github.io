@@ -528,6 +528,9 @@ pre {
    style, and is only visually hidden for "icons". */
 
 .hero-links {
+  /* Pill sizing, shared by every width; see the pill grid below. */
+  --hero-pill-max: 104px;
+  --hero-pill-pad-min: 2px;
   margin-top: 14px;
   font-family: var(--font-ui);
 }
@@ -552,6 +555,29 @@ pre {
   flex: none;
   width: 1.05em;
   height: 1.05em;
+}
+
+/* Pills, at every width: equal-width cells in balanced rows. The script in
+   Hero.astro measures the widest pill and sets --hero-link-cols to the most
+   columns that fit the card without a short last row (six links get three
+   or two columns, never four and two). Cells stop growing at
+   --hero-pill-max, so a wide card (stacked on a phone, or with no photo)
+   does not stretch them; beside the bio the card has the photo's width, and
+   the pills span it. The breakpoint rules below set only sizes (`.hero`
+   lets these rules outrank them), and without JavaScript the pills wrap at
+   their own widths. */
+.hero .hero-links[data-cols] {
+  display: grid;
+  grid-template-columns: repeat(var(--hero-link-cols), minmax(0, 1fr));
+  max-width: calc(
+    var(--hero-link-cols) * var(--hero-pill-max) + (var(--hero-link-cols) - 1) * var(--hero-links-gap)
+  );
+}
+
+.hero .hero-links[data-cols] .hero-link {
+  justify-content: center;
+  min-width: 0;
+  padding-inline: var(--hero-pill-pad-min);
 }
 
 /* ── Two columns: tablet and desktop ── */
@@ -586,6 +612,10 @@ pre {
     grid-column: 1;
   }
 
+  .hero:not(.hero--no-photo) .hero-links[data-cols] {
+    max-width: none;
+  }
+
   .hero--sticky .hero-card {
     position: sticky;
     top: calc(var(--site-header-height, 0px) + 24px);
@@ -610,16 +640,17 @@ pre {
 
 @media (min-width: 901px) {
   .hero--links-desktop-pills .hero-links {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 6px;
+    --hero-links-layout: pills;
+    --hero-links-gap: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--hero-links-gap);
   }
 
   .hero--links-desktop-pills .hero-link {
-    justify-content: center;
     gap: 6px;
-    min-width: 0;
-    padding: 6px 4px;
+    padding: 6px 10px;
+    white-space: nowrap;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-pill);
     font-size: 12.5px;
@@ -685,17 +716,6 @@ pre {
     color: var(--color-muted-2);
   }
 
-  /* Without a photo, pills size to their labels instead of filling a grid
-     the width of a photo that is not there. */
-  .hero--no-photo.hero--links-desktop-pills .hero-links {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .hero--no-photo.hero--links-desktop-pills .hero-link {
-    padding-inline: 12px;
-  }
-
   .hero--no-photo.hero--links-desktop-icons .hero-links {
     justify-content: flex-start;
     gap: 12px;
@@ -757,9 +777,11 @@ pre {
      Pills draw 36px tall and reach 44 through a 4px invisible margin, which
      their 8px gaps leave room for. */
   .hero--links-mobile-pills .hero-links {
+    --hero-links-layout: pills;
+    --hero-links-gap: 8px;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--hero-links-gap);
   }
 
   .hero--links-mobile-pills .hero-link {
@@ -769,6 +791,7 @@ pre {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-pill);
     font-size: 13px;
+    white-space: nowrap;
     color: var(--color-fg-soft);
   }
 
@@ -870,6 +893,10 @@ pre {
 
   .hero--phone-centered .hero-links {
     justify-content: center;
+  }
+
+  .hero--phone-centered .hero-links[data-cols] {
+    margin-inline: auto;
   }
 
   .hero--phone-centered.hero--links-mobile-icons .hero-links {

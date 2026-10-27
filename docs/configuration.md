@@ -176,8 +176,13 @@ export const siteConfigOverrides = {
   warns about keys with no link.
 - `links.style`: how the links look, with one style for desktop and one for
   tablet and phone:
-  - `pills`: outlined chips with an icon and a label. On desktop they fill a
-    three-column grid exactly the photo's width.
+  - `pills`: outlined chips with an icon and a label, all the same width,
+    in rows that are full except perhaps one pill short at the end. The number of columns is
+    the most the widest label allows across the card, so it adapts to your
+    labels and to each layout: six links come out three across on desktop
+    and phone and two across in the narrower tablet card. Beside the bio
+    the pills span the photo's width. Without JavaScript they wrap at their
+    own widths.
   - `icons`: icons only, spread across the photo width on desktop. The labels
     stay available to screen readers and as tooltips.
   - `list`: two columns of icon and label, no outlines.

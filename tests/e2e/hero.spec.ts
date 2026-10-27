@@ -174,17 +174,91 @@ async function expectTapTargets(page: Page) {
   expect(misses).toEqual([]);
 }
 
-test("desktop pills span exactly the photo width", async ({ browser }) => {
-  const page = await open(browser, WIDTHS[0], "/fixtures/hero/default");
-  const photo = await box(page, ".hero-photo");
-  const links = await box(page, ".hero-links");
-  expect(links.left).toBeCloseTo(photo.left, 0);
-  expect(links.right).toBeCloseTo(photo.right, 0);
-  const pills = page.locator(".hero-link");
-  await expect(pills).toHaveCount(6);
-  const first = await pills.first().boundingBox();
-  const third = await pills.nth(2).boundingBox();
-  expect(first!.width).toBeCloseTo(third!.width, 0);
+type PillGrid = { cols: number; rows: number[]; widths: number[]; clipped: string[] };
+
+async function pillGrid(page: Page): Promise<PillGrid> {
+  return page.locator(".hero-links").evaluate((nav) => {
+    const links = [...nav.children] as HTMLElement[];
+    const rows = new Map<number, number>();
+    for (const link of links) {
+      const top = Math.round(link.getBoundingClientRect().top);
+      rows.set(top, (rows.get(top) ?? 0) + 1);
+    }
+    return {
+      cols: Number((nav as HTMLElement).dataset.cols),
+      rows: [...rows.values()],
+      widths: links.map((link) => Math.round(link.getBoundingClientRect().width * 10) / 10),
+      // A pill whose icon or label reaches past its border.
+      clipped: links
+        .filter((link) => {
+          const box = link.getBoundingClientRect();
+          return (
+            link.firstElementChild!.getBoundingClientRect().left < box.left + 1 ||
+            link.lastElementChild!.getBoundingClientRect().right > box.right - 1
+          );
+        })
+        .map((link) => link.textContent!.trim())
+    };
+  });
+}
+
+/** Rows hold `cols` pills each, except a last row that is at most one short. */
+function expectBalanced(grid: PillGrid, count: number) {
+  expect(grid.rows.reduce((a, b) => a + b, 0)).toBe(count);
+  for (const row of grid.rows.slice(0, -1)) expect(row).toBe(grid.cols);
+  expect(grid.rows.at(-1)!).toBeGreaterThanOrEqual(Math.max(1, grid.cols - 1));
+  expect(new Set(grid.widths).size, `pill widths ${grid.widths}`).toBe(1);
+  expect(grid.clipped).toEqual([]);
+}
+
+// One rule at every width: equal-width pills, as many columns as fit, and no
+// short last row. Six links come out 3 + 3 on desktop and phone and 2 + 2 + 2
+// in the 180px tablet card, rather than wrapping 2, 1, 2, 1.
+const EXPECTED_COLS = { desktop: 3, tablet: 2, phone: 3 } as const;
+
+for (const width of WIDTHS) {
+  for (const side of SIDES) {
+    test(`${width.name} ${width.width}px, photo ${side}: pills form equal-width, balanced rows`, async ({ browser }) => {
+      const page = await open(browser, width, `/fixtures/hero/side-${side}`);
+      const grid = await pillGrid(page);
+      expect(grid.cols).toBe(EXPECTED_COLS[width.name]);
+      expectBalanced(grid, 6);
+      const links = await box(page, ".hero-links");
+      if (width.name === "phone") {
+        expect(Math.abs((links.left + links.right) / 2 - width.width / 2)).toBeLessThan(1.5);
+      } else {
+        // Beside the bio, the pills span exactly the photo's width.
+        const photo = await box(page, ".hero-photo");
+        expect(links.left).toBeCloseTo(photo.left, 0);
+        expect(links.right).toBeCloseTo(photo.right, 0);
+      }
+    });
+  }
+
+  test(`${width.name} ${width.width}px: other link counts stay balanced`, async ({ browser }) => {
+    // Nine links (with custom ones) and the template's default four.
+    const custom = await open(browser, width, "/fixtures/hero/custom-1");
+    expectBalanced(await pillGrid(custom), 9);
+    const home = await open(browser, width, "/");
+    expectBalanced(await pillGrid(home), await home.locator(".hero-link").count());
+  });
+}
+
+test("without a photo, desktop pills share one row within the bio's measure", async ({ browser }) => {
+  const page = await open(browser, WIDTHS[0], "/fixtures/hero/side-left_photo-none");
+  const grid = await pillGrid(page);
+  expect(grid.rows).toEqual([6]);
+  expectBalanced(grid, 6);
+  expect((await box(page, ".hero-links")).width).toBeLessThanOrEqual(661);
+});
+
+test("without JavaScript, pills fall back to wrapping at their own widths", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 768, height: 1024 }, javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto("/fixtures/hero/default");
+  await expect(page.locator(".hero-links")).not.toHaveAttribute("data-cols");
+  await noHorizontalScroll(page);
+  expect((await pillGrid(page)).clipped).toEqual([]);
 });
 
 for (const side of SIDES) {
