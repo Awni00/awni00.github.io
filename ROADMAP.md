@@ -86,7 +86,7 @@ Open decisions are marked **DECIDE**.
   - [x] Decided: equal margins via a **site-wide** narrower content width (about 1020px). **Text justification** becomes a new site-wide, configurable feature (off by default).
   - [x] Handoff written: `.scratch/home-hero-handoff/SPEC.md`, with before/final/variant screenshots and the reference mockup. Config: photo side/width/shape/focal point/sticky, caption options, link set/order/style per breakpoint, custom links, phone layout.
   - [x] Implemented and **merged into template `main`** (`3225fa1`…`fbe049e`, 2026-10-27). It goes beyond the spec: a balanced adaptive pill grid, a text-icons link style, and the Twitter bird icon.
-  - [ ] Sync the template into this site (not done yet; `main..template/main` has 7 commits). Then set `photo.side: "left"` and the other hero config, and check it with before/after screenshots.
+  - [x] Synced into this site (2026-10-27, `sync/template-2026-10-27`). Hero config set explicitly in `src/site/config.ts`: left, 240px, rounded, pills, centered on phone. Before/after screenshots are in `.scratch/sync-2026-10-27/`. Validation and build pass. The only failing unit tests are the 9 known `/writing` route tests (backlog).
 - [ ] (claude) Check section layout and length once the bio is final. Possibly retitle the homepage preview ("Research Writing") to fit "Blog".
 - [ ] Affiliation display (from `TODO.md`). Clarify what's missing.
 
@@ -134,7 +134,7 @@ Being triaged in the separate session (see section 0). Items:
 - [ ] **New:** the publications list doesn't render math in abstracts, so the bib abstract for the latent-strategies paper uses plain-text formulas.
 - [ ] **New (2026-10-25):** the blog browser hardcodes "Writing" / "All writing" (`src/components/graph/GraphBrowser.tsx:169,187`) instead of using `writing.label`, so it shows "Writing" even with the label set to "Blog".
 - [ ] **New (2026-10-25):** `/blog/topics` (the parent of the hub URLs) returns a 404. Make it redirect to the browser's topics view, `/blog?view=topics`.
-- [x] The blog map opens with nothing selected (`b23d065` on template `main`; arrives with the next sync).
+- [x] The blog map opens with nothing selected (`b23d065`, synced 2026-10-27).
 - [ ] **New (2026-10-26):** publication previews render at only about 74×55 px on desktop, too small for the new preview art to read. A larger desktop tile, or an enlarge-on-hover, would help. On mobile they are fine (about 220×165).
 - [ ] **New (2026-10-26):** animated previews (an animated WebP in the `preview` field) can't respect `prefers-reduced-motion`. Add an optional still field (e.g. `preview_still`), rendered with `<picture>` and a `(prefers-reduced-motion: reduce)` source. The stills already exist in `preview-art/`.
 - [ ] **New (2026-10-26):** previews are light tiles only. Add an optional dark-mode variant field (e.g. `preview_dark`). `preview-art/` already renders a dark (`ink`) version of every pick.

@@ -26,6 +26,11 @@ export const siteConfigOverrides: SiteConfigOverrides = {
       { label: "CV", href: "/cv.pdf" }
     ],
     homepage: {
+      hero: {
+        photo: { side: "left", width: 240, shape: "rounded", position: "50% 22%" },
+        links: { style: { desktop: "pills", mobile: "pills" } },
+        phone: { layout: "centered" }
+      },
       researchSummary: { enabled: true, source: "home" },
       writingPreview: {
         title: "Research Writing",
