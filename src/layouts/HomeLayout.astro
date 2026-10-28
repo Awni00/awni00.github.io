@@ -9,8 +9,11 @@ import type { GraphIndex, EntryNode } from "../lib/graph/types";
 import type { Publication } from "../lib/publications/types";
 import WritingPreview from "../components/graph/WritingPreview";
 import PublicationItem from "../components/publications/PublicationItem.astro";
+import Hero from "../components/home/Hero.astro";
 import RecentWriting from "../components/home/RecentWriting.astro";
-import { siteConfig } from "../config";
+import { siteConfig, themeConfig } from "../config";
+import { justifyClasses } from "../lib/article/justify";
+import { resolveHeroLinks } from "../lib/home/hero";
 
 type NewsItem = {
   date: string;
@@ -24,9 +27,13 @@ type Props = {
   selectedPublications: Publication[];
   news: NewsItem[];
   Content: any;
+  /** The home page's `article.justify` frontmatter, if set. */
+  justify?: boolean;
 };
 
-const { graph, recentWriting, selectedPublications, news, Content } = Astro.props;
+const { graph, recentWriting, selectedPublications, news, Content, justify } = Astro.props;
+const heroConfig = siteConfig.homepage.hero;
+const heroLinks = resolveHeroLinks(heroConfig.links.show, siteConfig.links);
 const previewConfig = siteConfig.homepage.writingPreview;
 const components = { Box, Callout, Figure, HoverNote, Term };
 const showPubs =
@@ -37,41 +44,21 @@ const showResearch = siteConfig.homepage.researchSummary.enabled;
 ---
 
 <BaseLayout title={siteConfig.name} description={siteConfig.description}>
-  <section class="hero">
-    <div class="hero__left">
-      <h1 class="h1">{siteConfig.name}</h1>
-      <div class="role">
-        {siteConfig.role}, {siteConfig.affiliation}
-      </div>
-      {
-        showResearch && (
-          <div class="bio">
-            <Content components={components} />
-          </div>
-        )
-      }
-      <div class="sociallinks">
-        {
-          [
-            { label: "Email", href: siteConfig.links.email },
-            { label: "CV", href: siteConfig.links.cv },
-            { label: "Scholar", href: siteConfig.links.scholar },
-            { label: "GitHub", href: siteConfig.links.github }
-          ].map((link, i) => (
-            <>
-              {i > 0 && <span class="sociallinks-sep">·</span>}
-              <a class="sociallinks-link" href={link.href}>{link.label}</a>
-            </>
-          ))
-        }
-      </div>
-    </div>
-    <div class="hero__right">
-      <div class="profile-card">
-        <img src={siteConfig.profileImage} alt={`${siteConfig.name} profile`} />
-      </div>
-    </div>
-  </section>
+  {
+    heroConfig.enabled && (
+      <Hero
+        hero={heroConfig}
+        name={siteConfig.name}
+        role={siteConfig.role}
+        affiliation={siteConfig.affiliation}
+        photo={siteConfig.profileImage}
+        links={heroLinks}
+        bioClass={justifyClasses(themeConfig.typography.justify, justify)}
+      >
+        {showResearch && <Content components={components} />}
+      </Hero>
+    )
+  }
 
   {
     previewConfig.enabled && (

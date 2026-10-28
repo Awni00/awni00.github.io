@@ -1,6 +1,6 @@
 ---
 import { darkTheme, lightTheme, themeConfig } from "../../config/theme";
-import { siteThemeCss, typographyCss } from "../../lib/theme/themeCss";
+import { layoutCss, siteThemeCss, typographyCss } from "../../lib/theme/themeCss";
 
 /**
  * The site's colour tokens, emitted inline in <head>.
@@ -13,9 +13,11 @@ import { siteThemeCss, typographyCss } from "../../lib/theme/themeCss";
  * It must come before any stylesheet that consumes the tokens, and before the
  * first paint, or the page flashes unstyled colour.
  */
-const css = [typographyCss(themeConfig.typography), siteThemeCss(lightTheme, darkTheme)].join(
-  "\n\n"
-);
+const css = [
+  typographyCss(themeConfig.typography),
+  layoutCss(themeConfig.layout),
+  siteThemeCss(lightTheme, darkTheme)
+].join("\n\n");
 ---
 
 <style is:global set:html={css}></style>

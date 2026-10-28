@@ -1,0 +1,18 @@
+---
+/**
+ * Routes the hero fixture's variants — in development only. The PROD guard
+ * is load-bearing for the same reason as in ../[fixture].astro: without it,
+ * every site built from the template would publish these pages.
+ */
+import HeroLayout from "../../../fixtures/HeroLayout.astro";
+import { HERO_FIXTURE_VARIANTS } from "../../../fixtures/heroVariants";
+
+export function getStaticPaths() {
+  if (import.meta.env.PROD) return [];
+  return HERO_FIXTURE_VARIANTS.map((variant) => ({ params: { variant } }));
+}
+
+const { variant } = Astro.params;
+---
+
+<HeroLayout variant={variant ?? "default"} />

@@ -1,4 +1,5 @@
 export {
+  configWarnings,
   entryTypeDefinitions,
   entryTypeIds,
   entryTypeIncludedInRecent,
@@ -20,6 +21,7 @@ export {
 export type {
   ArticleMode,
   AsidePlacement,
+  CustomLink,
   DeepPartial,
   DragMode,
   EntryType,
@@ -30,6 +32,12 @@ export type {
   GraphConfig,
   GraphConfigBase,
   GraphNodeShape,
+  HeroConfig,
+  HeroLinkStyle,
+  HeroPhoneLayout,
+  HeroPhotoShape,
+  HeroPhotoSide,
+  JustifyMinWidth,
   LabelVisibility,
   ListConfig,
   PlacementGraph,

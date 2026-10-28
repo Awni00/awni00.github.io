@@ -12,12 +12,22 @@
      named in `theme.light` / `theme.dark`. See src/config/defaults/themes.ts
      and docs/theming.md. */
 
-  /* Layout widths */
+  /* Layout widths.
+     --page-width is `theme.layout.contentWidth`, emitted by ThemeStyles.astro;
+     the value here is only the fallback. It includes the 32px desktop
+     gutters, so --content-wide is the box the header, footer, and homepage
+     sections actually fill: 1020 − 64 = 956 = 660 bio + 56 gap + 240 photo. */
+  --page-width: 1020px;
+  --page-gutter-max: 32px;
   --content-narrow: 720px;
   --content-distill: 860px;
-  --content-wide: 1100px;
+  --content-wide: calc(var(--page-width) - 2 * var(--page-gutter-max));
   --sidebar-width: 280px;
   --margin-width: 260px;
+
+  /* Side gutter between the page edge and content: phone, tablet, desktop.
+     Every page-width container uses it, so edges line up across pages. */
+  --page-gutter: 16px;
 
   /* Breakpoints */
   --bp-sm: 640px;
@@ -57,4 +67,16 @@
   --ease-quiet: cubic-bezier(0.2, 0.6, 0.2, 1);
   --dur-fast: 120ms;
   --dur-base: 200ms;
+}
+
+@media (min-width: 561px) {
+  :root {
+    --page-gutter: 24px;
+  }
+}
+
+@media (min-width: 901px) {
+  :root {
+    --page-gutter: var(--page-gutter-max);
+  }
 }

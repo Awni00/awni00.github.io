@@ -24,7 +24,7 @@ import Video from "../components/article/Video.astro";
 import WrapFigure from "../components/article/WrapFigure.astro";
 import YouTubeVideo from "../components/article/YouTubeVideo.astro";
 import LocalGraphMap from "../components/graph/LocalGraphMap";
-import { getEntryType, writingConfig } from "../config";
+import { getEntryType, themeConfig, writingConfig } from "../config";
 import {
   Code2,
   FileText,
@@ -42,6 +42,7 @@ import {
   resolveAsides,
   resolvePlacement
 } from "../lib/article/placement";
+import { justifyClasses } from "../lib/article/justify";
 import { filterHeadingsForToc, resolveTocConfig } from "../lib/article/toc";
 import { externalLinkHref } from "../lib/publications/identifierUrls";
 import type { GraphIndex, WritingEntryLike } from "../lib/graph/types";
@@ -71,6 +72,8 @@ const asidesRequested = resolveAsides(entry);
 const asidesEffective = isAbstract
   ? "inline"
   : effectiveAsides(asidesRequested, placement.toc.where);
+
+const justifyClass = justifyClasses(themeConfig.typography.justify, entry.data.article?.justify);
 
 const linksTo = graph.linksTo[node.id] ?? [];
 const linkedFromIds = graph.linkedFrom[node.id] ?? [];
@@ -344,12 +347,12 @@ const right = renderSide("right");
           isAbstract ? (
             <section class="abstract-block" aria-label="Abstract">
               <h2 class="abstract-block__label">Abstract</h2>
-              <div class="article-content" data-asides={asidesEffective}>
+              <div class:list={["article-content", ...justifyClass]} data-asides={asidesEffective}>
                 <Content components={components} />
               </div>
             </section>
           ) : (
-            <div class="article-content" data-asides={asidesEffective}>
+            <div class:list={["article-content", ...justifyClass]} data-asides={asidesEffective}>
               <Content components={components} />
             </div>
           )

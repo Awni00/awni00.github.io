@@ -24,7 +24,26 @@ export const defaultSiteConfig = {
     { label: "CV", href: "/cv.pdf" }
   ],
   homepage: {
-    hero: { enabled: true },
+    hero: {
+      enabled: true,
+      photo: {
+        side: "left",
+        width: 240,
+        shape: "rounded",
+        radius: 12,
+        position: "50% 22%",
+        sticky: false
+      },
+      caption: {
+        showName: true,
+        extra: []
+      },
+      links: {
+        show: ["email", "cv", "scholar", "github", "x", "linkedin"],
+        style: { desktop: "pills", mobile: "pills" }
+      },
+      phone: { layout: "centered" }
+    },
     researchSummary: { enabled: true, source: "home" },
     writingPreview: {
       enabled: true,

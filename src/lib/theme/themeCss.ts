@@ -65,3 +65,11 @@ export function typographyCss(typography: ThemeConfig["typography"]): string {
     "}"
   ].join("\n");
 }
+
+/**
+ * The site-wide page width from `theme.layout`, as CSS. `tokens.css` derives
+ * `--content-wide` from it, so the header, footer, and homepage share one edge.
+ */
+export function layoutCss(layout: ThemeConfig["layout"]): string {
+  return [":root {", `  --page-width: ${layout.contentWidth}px;`, "}"].join("\n");
+}

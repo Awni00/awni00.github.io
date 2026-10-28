@@ -83,7 +83,12 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
   // re-settling. Handing `GraphCanvas` a new graph rebuilds every node from
   // scratch and drops both the settled positions and any the reader dragged.
   const hasSelection = Boolean(state.query || state.types?.length || state.tags?.length);
-  const selected = state.selected ? nodeById.get(state.selected) : graph.hubs[0] ?? graph.nodes[0];
+  // No fallback: nothing is selected until the reader picks something. This
+  // used to default to the first hub, which put that hub in the panel while
+  // the canvas — handed `state.selected`, still empty — marked nothing. The
+  // canvas now takes its selection from this same value, so the two cannot
+  // disagree about what is being inspected.
+  const selected = state.selected ? nodeById.get(state.selected) : undefined;
   const view = (state.view ?? defaultState.view) as View;
 
   useEffect(() => {
@@ -243,7 +248,7 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
               <GraphCanvas
                 graph={graph}
                 height={narrow ? CANVAS_HEIGHT_NARROW : CANVAS_HEIGHT}
-                selected={state.selected}
+                selected={selected?.id}
                 selectedStyle="soft-glow"
                 emphasized={hasSelection ? mapMatchIds : undefined}
                 drag={graphConfig.interaction.drag}
@@ -270,7 +275,7 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
                 onSelect={(id) => patch({ selected: id })}
               />
             ) : (
-              <p className="muted">Select a node.</p>
+              <Overview hubs={graph.hubs} onSelect={(id) => patch({ selected: id })} />
             )}
           </aside>
         </div>
@@ -380,6 +385,44 @@ const DIRECTION_TEXT: Record<Direction, string> = {
 // relationship on offer, and splitting the list by direction was precisely
 // what hid it — you had to notice the same title twice to see it at all.
 const DIRECTION_RANK: Record<Direction, number> = { both: 0, out: 1, in: 2 };
+
+/**
+ * Panel shown while nothing is selected on the map.
+ *
+ * The hubs are the map's entry points, so they are listed as a way in — rows
+ * that select, exactly like Preview's connection rows. Picking one here and
+ * clicking it on the canvas are the same gesture with the same result.
+ */
+function Overview({ hubs, onSelect }: { hubs: EntryNode[]; onSelect: (id: string) => void }) {
+  return (
+    <>
+      <p className="preview-prompt">Select a node on the map to see its details and connections.</p>
+      {hubs.length > 0 && (
+        <div className="sidebar-section">
+          <p className="sidebar-section__label">
+            Hubs <span className="sidebar-section__count">{hubs.length}</span>
+          </p>
+          <ul className="connection-list">
+            {hubs.map((hub) => {
+              const hubType = getEntryType(hub.type);
+              return (
+                <li key={hub.id}>
+                  <button type="button" className="preview-link" onClick={() => onSelect(hub.id)}>
+                    <NodeIcon
+                      shape={hubType.graph.shape as NodeShape}
+                      color={hubType.graph.color as string}
+                    />
+                    <span className="connection-title">{hub.title}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </>
+  );
+}
 
 /**
  * Panel describing whatever node is selected on the map.

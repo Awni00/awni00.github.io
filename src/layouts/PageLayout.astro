@@ -22,14 +22,18 @@ import TwoColumns from "../components/article/TwoColumns.astro";
 import Video from "../components/article/Video.astro";
 import WrapFigure from "../components/article/WrapFigure.astro";
 import YouTubeVideo from "../components/article/YouTubeVideo.astro";
+import { themeConfig } from "../config/theme";
+import { justifyClasses } from "../lib/article/justify";
 
 type Props = {
   title: string;
   description?: string;
   Content: any;
+  /** The page's `article.justify` frontmatter, if set. */
+  justify?: boolean;
 };
 
-const { title, description, Content } = Astro.props;
+const { title, description, Content, justify } = Astro.props;
 const components = {
   Aside,
   Box,
@@ -62,7 +66,7 @@ const components = {
       <h1>{title}</h1>
       {description && <p class="page-description">{description}</p>}
     </header>
-    <div class="article-content">
+    <div class:list={["article-content", ...justifyClasses(themeConfig.typography.justify, justify)]}>
       <Content components={components} />
     </div>
   </article>

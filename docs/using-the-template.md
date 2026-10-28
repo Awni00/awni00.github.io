@@ -48,6 +48,12 @@ src/content/pages/foo/bar.mdx   -> /foo/bar
 Use custom pages for durable website pages such as research, teaching, about,
 lab members, resources, or CV notes. These pages are outside the writing graph.
 
+A custom page accepts `title`, `description`, and optionally
+`article.justify` to justify that page's prose regardless of the site
+setting (see [Justified text](theming.md#justified-text)). `home.mdx` is the
+homepage bio, shown beside the hero card (see
+[Homepage Hero](configuration.md#homepage-hero)).
+
 ## Writing Entries
 
 Writing entries live in:
@@ -89,6 +95,7 @@ hero:
   caption: "Optional caption."
 article:
   mode: article
+  justify: true
   asides: margin
   toc:
     minDepth: 2
@@ -112,6 +119,11 @@ The `article` block holds per-entry presentation overrides and mirrors the
 thing at both levels. Do not name this key `layout`: Astro reserves
 `frontmatter.layout` as a path to a layout component and will fail the build
 with a syntax error if it holds an object.
+
+`article.justify` is the exception: it has no registry equivalent, and
+switches justified prose on or off for this entry over the site-wide
+`theme.typography.justify.enabled` (see
+[Justified text](theming.md#justified-text)).
 
 `hero` renders an optional figure alongside the article body. It works in both
 presentation modes, but its position differs: in `article` mode it leads the

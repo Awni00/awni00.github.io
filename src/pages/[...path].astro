@@ -64,6 +64,11 @@ const rendered = entry ? await render(entry) : undefined;
 
 {
   kind === "page" && entry && rendered && (
-    <PageLayout title={entry.data.title} description={entry.data.description} Content={rendered.Content} />
+    <PageLayout
+      title={entry.data.title}
+      description={entry.data.description}
+      Content={rendered.Content}
+      justify={entry.data.article?.justify}
+    />
   )
 }
