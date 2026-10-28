@@ -1,0 +1,13 @@
+{
+  "latent-strategies-in-lms": "P2",
+  "algorithmic-generalization-transformer-architectures": "P2",
+  "cot-info": "P2",
+  "dual-attention": "P1",
+  "information-structure-rl": "P2",
+  "relation-function-approximation": "R1",
+  "relational-convolutions": "R2",
+  "relational-bottleneck": "P4",
+  "abstractor": "P2",
+  "decentralized-marl-continuous-spaces": "P3",
+  "transformer-theories": "T2"
+}

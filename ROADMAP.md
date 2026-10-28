@@ -53,12 +53,13 @@ Open decisions are marked **DECIDE**.
 - [x] Added *Putting Transformer Theories to the Test* to the bib, with placeholders listed in a note above the entry: arXiv ID, `blog` link, preview, tldr.
 - [ ] **Launch check:** that paper now renders on `/publications`. If launch happens before the arXiv announcement, decide whether to show it.
 - [ ] `tldr` for the two new papers (latent strategies, transformer theories). **(you)**
-- [ ] **Preview-image redesign: done, awaiting review and merge** (as of 2026-10-27). Commit `bccee17` on `branch/laughing-bassi-53a05a`: 11 WebP previews of 11–120 KB, replacing PNGs of up to 6.6 MB, with sources in `preview-art/`, and `preview` fields updated. geneDRAGNN's old PNG is untouched (it's commented out). Merging will conflict with `main` in `ROADMAP.md` and `publications.bib`. Original brief: Replace every publication preview, now year-old generative-model images, with a consistent minimalist style:
-  - Sonnet sub-agents, one per paper. Each reads the paper and produces 3–5 algorithmic-art options (`algorithmic-art` skill), optionally drawing on the paper's figures.
-  - Set a shared style guide and run a 2-paper pilot first, so all the options look consistent.
-  - Output a gallery page showing every option at its real display sizes (96×72 thumbnail, ~220×140 on small screens), on light and dark backgrounds. You pick.
-  - Constraints: 4:3 aspect ratio; readable at 96×72; palette parameterised, so the art can be re-rendered when the site theme is chosen; files ≲200 KB (the current PNGs are up to 6.6 MB each).
-  - Finish: export the picks, update the `preview` fields, and remove the old images.
+- [x] **Preview-image redesign ✅ (2026-10-26).** Every publication preview is replaced with one minimalist, algorithmic style.
+  - Each image is a seeded p5.js sketch in `preview-art/papers/<slug>/`; the alternates you liked are kept there too.
+  - `preview-art/selection.json` records the pick for each paper. `preview-art/README.md` covers the style guide and the render/export commands.
+  - The site serves 800×600 WebPs at `public/publications/<slug>.webp`, 11–118 KB each (the old PNGs were up to 6.9 MB).
+  - Two picks are animated loops (Unlocking OOD, Relational Bottleneck). Each has a static version in `preview-art/`.
+  - The two new papers now have previews, and the nine old PNGs are deleted.
+- [x] Decided (2026-10-26): keep `public/publications/genedraggn-genai-2.png` for now. The commented-out geneDRAGNN entry still points to it.
 - [ ] Choose which papers are `selected`. All 10 currently are, and the homepage shows 6.
 - [ ] Optional: several bib `abstract` fields are shortened versions of the paper abstracts. Keep them short, or use the full text?
 - [ ] Sync each page's frontmatter `bibtex:` with the canonical citation (also see the CITE item in the backlog).
@@ -134,4 +135,7 @@ Being triaged in the separate session (see section 0). Items:
 - [ ] **New (2026-10-25):** the blog browser hardcodes "Writing" / "All writing" (`src/components/graph/GraphBrowser.tsx:169,187`) instead of using `writing.label`, so it shows "Writing" even with the label set to "Blog".
 - [ ] **New (2026-10-25):** `/blog/topics` (the parent of the hub URLs) returns a 404. Make it redirect to the browser's topics view, `/blog?view=topics`.
 - [x] The blog map opens with nothing selected (`b23d065` on template `main`; arrives with the next sync).
+- [ ] **New (2026-10-26):** publication previews render at only about 74×55 px on desktop, too small for the new preview art to read. A larger desktop tile, or an enlarge-on-hover, would help. On mobile they are fine (about 220×165).
+- [ ] **New (2026-10-26):** animated previews (an animated WebP in the `preview` field) can't respect `prefers-reduced-motion`. Add an optional still field (e.g. `preview_still`), rendered with `<picture>` and a `(prefers-reduced-motion: reduce)` source. The stills already exist in `preview-art/`.
+- [ ] **New (2026-10-26):** previews are light tiles only. Add an optional dark-mode variant field (e.g. `preview_dark`). `preview-art/` already renders a dark (`ink`) version of every pick.
 - [ ] `dot-tasks` setup for this repo (`.tasks/` exists, with one stale todo about theming support).
