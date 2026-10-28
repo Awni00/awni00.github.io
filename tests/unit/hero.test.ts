@@ -141,12 +141,16 @@ describe("hero links", () => {
     expect(resolved[2].label).toBe("CV");
   });
 
-  it('labels the x and twitter keys "Twitter"', () => {
+  it('labels the x and twitter keys "Twitter", with the bird', () => {
     const resolved = resolveHeroLinks(["x", "twitter"], { x: "https://x.com/me", twitter: "https://twitter.com/me" });
     expect(resolved.map((link) => [link.label, link.icon])).toEqual([
-      ["Twitter", "x"],
+      ["Twitter", "twitter"],
       ["Twitter", "twitter"]
     ]);
+    expect(getHeroIcon("twitter")).not.toBe(heroIcons.x);
+    // The X logo stays available by name.
+    const custom = resolveHeroLinks(["x"], { x: { label: "X", href: "https://x.com/me", icon: "x" } });
+    expect(getHeroIcon(custom[0].icon)).toBe(heroIcons.x);
   });
 
   it("resolves custom links and title-cases unknown string keys", () => {
@@ -191,7 +195,7 @@ describe("hero icons", () => {
   });
 
   it("resolves aliases and falls back to the link icon", () => {
-    expect(getHeroIcon("twitter")).toBe(heroIcons.x);
+    expect(getHeroIcon("mail")).toBe(heroIcons.email);
     expect(getHeroIcon("Google-Scholar")).toBe(heroIcons.scholar);
     expect(getHeroIcon("not-an-icon")).toBe(heroIcons.link);
     expect(getHeroIcon(undefined)).toBe(heroIcons.link);

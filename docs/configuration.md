@@ -208,7 +208,7 @@ measure, caption typography and order, and tap-target sizes.
 
 `site.links` maps a key to a URL. These keys come with a label and an icon:
 `email`, `cv`, `scholar`, `github`, `gitlab`, `x` or `twitter` (labelled
-"Twitter"), `linkedin`,
+"Twitter", with the bird; `icon: "x"` gives the X logo), `linkedin`,
 `orcid`, `bluesky`, `mastodon`, `threads`, `semantic-scholar`, `researchgate`,
 `arxiv`, `youtube`, `website`, and `rss`. For anything else, give a label and
 optionally an icon:

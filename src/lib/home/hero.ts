@@ -42,6 +42,11 @@ export type HeroLink = {
   icon: string;
 };
 
+/** Icons for keys whose icon name differs from the key; the rest use the key. */
+const KNOWN_LINK_ICONS: Record<string, string> = {
+  x: "twitter"
+};
+
 /** Display labels for the keys the template knows; anything else is title-cased. */
 const KNOWN_LINK_LABELS: Record<string, string> = {
   email: "Email",
@@ -160,9 +165,9 @@ export function resolveHeroLinks(
     const value = links[key];
     if (!hasLink(value)) continue;
     if (typeof value === "string") {
-      resolved.push({ key, label: KNOWN_LINK_LABELS[key] ?? titleCase(key), href: value, icon: key });
+      resolved.push({ key, label: KNOWN_LINK_LABELS[key] ?? titleCase(key), href: value, icon: KNOWN_LINK_ICONS[key] ?? key });
     } else {
-      resolved.push({ key, label: value.label, href: value.href, icon: value.icon ?? key });
+      resolved.push({ key, label: value.label, href: value.href, icon: value.icon ?? KNOWN_LINK_ICONS[key] ?? key });
     }
   }
   return resolved;
