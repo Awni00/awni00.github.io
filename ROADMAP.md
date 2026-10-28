@@ -23,7 +23,7 @@ Open decisions are marked **DECIDE**.
 - [x] Teaching: page removed. TA roles go in the CV, which you'll update yourself (not tracked here).
 - [x] About page: deleted.
 - [x] geneDRAGNN: omitted (no page, and commented out of the bib).
-- [x] Template backlog: triaged in a separate session in `academic-map-template`, with its hand-off at `docs/handoff/2026-10-triage.md` there.
+- [ ] Template backlog triage: the session was queued 2026-10-12 but **never started**. No session or `docs/handoff/2026-10-triage.md` exists. Re-queue it, trimmed to the items still open below.
 
 ## 1. Blog restructure: `/writing` → `/blog` ✅ (2026-10-12)
 
@@ -53,7 +53,7 @@ Open decisions are marked **DECIDE**.
 - [x] Added *Putting Transformer Theories to the Test* to the bib, with placeholders listed in a note above the entry: arXiv ID, `blog` link, preview, tldr.
 - [ ] **Launch check:** that paper now renders on `/publications`. If launch happens before the arXiv announcement, decide whether to show it.
 - [ ] `tldr` for the two new papers (latent strategies, transformer theories). **(you)**
-- [ ] **Preview-image redesign (separate session, in this repo).** Replace every publication preview, now year-old generative-model images, with a consistent minimalist style:
+- [ ] **Preview-image redesign: done, awaiting review and merge** (as of 2026-10-27). Commit `bccee17` on `branch/laughing-bassi-53a05a`: 11 WebP previews of 11–120 KB, replacing PNGs of up to 6.6 MB, with sources in `preview-art/`, and `preview` fields updated. geneDRAGNN's old PNG is untouched (it's commented out). Merging will conflict with `main` in `ROADMAP.md` and `publications.bib`. Original brief: Replace every publication preview, now year-old generative-model images, with a consistent minimalist style:
   - Sonnet sub-agents, one per paper. Each reads the paper and produces 3–5 algorithmic-art options (`algorithmic-art` skill), optionally drawing on the paper's figures.
   - Set a shared style guide and run a 2-paper pilot first, so all the options look consistent.
   - Output a gallery page showing every option at its real display sizes (96×72 thumbnail, ~220×140 on small screens), on light and dark backgrounds. You pick.
@@ -73,10 +73,19 @@ Open decisions are marked **DECIDE**.
 ## 5. Homepage
 
 - [ ] (you) Draft the updated bio and summary of research interests in `home.mdx`: shorter, current, and pointing to `/research`. Strip the scratch notes and TODOs.
-- [ ] **Homepage layout redesign** (the profile-picture placement looks awkward). It's a template change, so it's implemented upstream in `academic-map-template`:
-  1. Discuss, then survey reference academic homepages: how they lay out the photo against the bio, and how that adapts across screen sizes.
-  2. Mock up several designs (sub-agents allowed) at phone, tablet, and desktop widths, using sample texts of representative lengths (short, medium, long bio). Iterate.
-  3. Hand the chosen mockup to a session in `academic-map-template` to implement responsively, with before/after screenshots. Then sync the template downstream.
+- [ ] **Homepage layout redesign** (the profile-picture placement looks awkward). It's a template change, implemented upstream in `academic-map-template`.
+  - [x] Surveyed 11 academic homepages: `.scratch/home-layout-survey/`, served by the `scratch-static` launch config at `http://localhost:4330/`.
+  - [x] Mocked up and iterated (`.scratch/home-mockups/`). **Chosen: A3 "margin card".**
+    - Desktop and tablet: photo card on the left, beside the bio; the text never wraps around it.
+    - Photo: 240px rounded square.
+    - Caption: name, role, affiliation.
+    - Links: pills (icon + label) at every width.
+    - Phone: the card is centered above the bio.
+    - Ragged-right text; the sticky card is off.
+  - [x] Decided: equal margins via a **site-wide** narrower content width (about 1020px). **Text justification** becomes a new site-wide, configurable feature (off by default).
+  - [x] Handoff written: `.scratch/home-hero-handoff/SPEC.md`, with before/final/variant screenshots and the reference mockup. Config: photo side/width/shape/focal point/sticky, caption options, link set/order/style per breakpoint, custom links, phone layout.
+  - [x] Implemented and **merged into template `main`** (`3225fa1`…`fbe049e`, 2026-10-27). It goes beyond the spec: a balanced adaptive pill grid, a text-icons link style, and the Twitter bird icon.
+  - [ ] Sync the template into this site (not done yet; `main..template/main` has 7 commits). Then set `photo.side: "left"` and the other hero config, and check it with before/after screenshots.
 - [ ] (claude) Check section layout and length once the bio is final. Possibly retitle the homepage preview ("Research Writing") to fit "Blog".
 - [ ] Affiliation display (from `TODO.md`). Clarify what's missing.
 
@@ -113,8 +122,8 @@ Being triaged in the separate session (see section 0). Items:
 - [ ] Bug: some graph nodes are clickable/hoverable and others aren't.
 - [ ] Bug: the React graph possibly re-renders repeatedly.
 - [ ] Bug: `featured:` frontmatter does nothing.
-- [ ] Homepage layout configurability (Selected Publications width when News is off; general component layout).
-- [ ] "Recent Writing" as a single row or carousel.
+- [x] Homepage layout configurability: publications or news take the full row when the other is off (`72f9b79`, already synced).
+- [x] "Recent Writing" as a card carousel with a configurable title and "View all" card (`b9895f1`, `bac50b0`, already synced).
 - [ ] Option to hide backlinks. Rename "Outgoing"; maybe undirected links.
 - [ ] Rename the "Publisher" link and the "VENUE" header label.
 - [ ] Restyle the publication link buttons.
@@ -124,5 +133,5 @@ Being triaged in the separate session (see section 0). Items:
 - [ ] **New:** the publications list doesn't render math in abstracts, so the bib abstract for the latent-strategies paper uses plain-text formulas.
 - [ ] **New (2026-10-25):** the blog browser hardcodes "Writing" / "All writing" (`src/components/graph/GraphBrowser.tsx:169,187`) instead of using `writing.label`, so it shows "Writing" even with the label set to "Blog".
 - [ ] **New (2026-10-25):** `/blog/topics` (the parent of the hub URLs) returns a 404. Make it redirect to the browser's topics view, `/blog?view=topics`.
-- [ ] **New (2026-10-25), separate session:** the blog map opens with a hub pre-selected in the info sidebar, but the graph shows no selection (no halo). It should open with nothing selected.
+- [x] The blog map opens with nothing selected (`b23d065` on template `main`; arrives with the next sync).
 - [ ] `dot-tasks` setup for this repo (`.tasks/` exists, with one stale todo about theming support).
