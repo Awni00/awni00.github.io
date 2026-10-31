@@ -61,6 +61,24 @@ Supported top-level sections:
 - `writing`: writing route, browser behavior, validation behavior.
 - `entryTypes`: the writing entry type registry.
 
+### Graph layout and edges
+
+`graph.layout.hubs` decides how the writing map is arranged:
+
+- `cluster` (default) — every page gathers around the hub whose folder it lives
+  in, and the hubs settle where the forces put them. Topics read as groups, and
+  links between topics lean the groups toward each other.
+- `circle` — hubs pinned evenly round a circle, everything else free.
+- `row` — hubs pinned in a row across the top.
+- `force` — no pins and no grouping; links alone decide.
+
+`graph.links.directed` (default `false`) draws edges as plain curves. Direction
+is still shown where it can be read, in the selected page's connection list;
+set it to `true` for arrowheads on the canvas.
+
+Glyph sizes (`entryTypes[].graph.size`) are diameters in screen pixels, and
+hold at every zoom level.
+
 ### Graph interaction
 
 `graph.interaction.drag` decides whether readers can rearrange a graph by
@@ -76,8 +94,21 @@ dragging its nodes:
 Both draggable modes pin the node on release; a mode that handed it straight
 back to the forces would look like the drag had been refused. The setting
 applies to the writing browser and the per-entry local maps. The homepage
-preview is decorative and is never draggable. Dragging is mouse and pen only —
-on touch, a drag pans the canvas as before.
+preview is never draggable. Dragging is mouse and pen only — on touch, a drag
+pans the canvas as before.
+
+### Homepage writing map
+
+`site.homepage.writingPreview` controls the "Explore Writing" map below the
+hero. `interactive` (default `true`) makes it work like the per-entry local
+map: clicking or tapping a node selects it, and a panel beside the map shows
+its type, title, tags, and summary, with an "Open page" link. Clicking never
+navigates on its own. Set `interactive: false` for the canvas alone.
+
+`desktopMode` and `mobileMode` choose between the graph (`"graph"`) and a grid
+of topic links (`"topic-cards"`) above and below 680px. Phones default to topic
+cards; set `mobileMode: "graph"` to show the interactive map there too, with
+the panel stacked under the canvas.
 
 Low-level rendering internals should stay in template-owned code. If a visual or
 feature option should be reusable by many sites, add a documented config knob to
@@ -106,6 +137,21 @@ export const siteConfigOverrides = {
         abstractDisplay: "hidden"
       }
     }
+  }
+} satisfies SiteConfigOverrides;
+```
+
+Math in an abstract is typeset with KaTeX in every mode: write `$…$` or
+`\(…\)` in the BibTeX `abstract` field, as in a paper. It uses the same
+macros as articles (`src/site/math.ts`). `\$` is a literal dollar, and
+prices stay prose: a `$` with no partner, or a pair with a space just inside
+or a digit right after (`costs $5 and $10`), is left as text. To print
+abstracts exactly as written instead:
+
+```ts
+export const siteConfigOverrides = {
+  publications: {
+    abstractMath: false
   }
 } satisfies SiteConfigOverrides;
 ```
@@ -257,6 +303,27 @@ every page. Pages that need more room keep their own wider layouts: the
 writing map (up to 1440px), the writing list (1180px), and article pages with
 a table of contents and margin asides (1340px).
 
+## Renaming The Writing Section
+
+`writing.route` moves the writing browser and every entry URL, and
+`writing.label` names the section: the browser's heading, its page title and
+description, the RSS feed title, and the homepage "View all" card.
+`writing.description` is the line beneath the browser's heading, and the page's
+meta description; set it to `""` to hide the line.
+
+```ts
+export const siteConfigOverrides = {
+  writing: {
+    route: "/blog",
+    label: "Blog",
+    rss: { route: "/blog/rss.xml" }
+  }
+} satisfies SiteConfigOverrides;
+```
+
+The nav is a separate array (`site.nav`), so update its entry too, and the
+homepage section title (`site.homepage.recentWriting.title`).
+
 ## Homepage Recent Writing
 
 The homepage shows the newest dated entries as a horizontally scrolling row of
@@ -273,6 +340,7 @@ export const siteConfigOverrides = {
         enabled: true,
         title: "Recent posts",
         maxItems: 6,
+        select: "featured-first",
         viewAll: {
           enabled: true,
           label: "View all →",
@@ -289,6 +357,14 @@ export const siteConfigOverrides = {
 - `title`: the section heading, default `"Recent writing"`. Set it alongside
   `writing.label` and `writing.route` if you rename the writing section.
 - `maxItems`: how many entries to show, default `6`.
+- `select`: which entries fill the row, newest first within each group.
+  - `featured-first` (default): entries with `featured: true` in their
+    frontmatter, then the rest. Without any featured entry this is the same
+    as `recent`. If you feature `maxItems` or more entries, the row shows only
+    those.
+  - `recent`: by date only; `featured` is ignored.
+  - `featured`: only featured entries. Retitle the section to match, e.g.
+    `title: "Featured writing"`.
 - `viewAll`: the card that ends the row. `enabled: false` drops it, leaving
   only the recent entries. `label` is its link text, default `"View all →"`.
   `description` is the line beneath, default `"Browse {writing.label}"`, so it
@@ -338,9 +414,10 @@ Common fields:
   writing.
 - `graph.shape`: one of `circle`, `square`, `diamond`, or `hexagon`.
 - `graph.color`: any CSS color, including project CSS variables.
+- `graph.size`: the glyph's diameter in screen pixels, the same at every zoom.
 - `graph.labelVisibility`: `always` paints the title on the canvas beside the
-  node permanently (used for hubs), `hover` shows a floating label beside the
-  cursor, `never` shows no label at all.
+  node permanently (used for hubs, set in the body serif), `hover` names the
+  node when it or a neighbour is hovered, `never` shows no label at all.
 - `graph.interactive`: `false` makes nodes of this type ignore clicks. Defaults
   to `true`. Whether a given graph responds to clicks at all is still decided by
   the surface — the article-page and homepage graphs are read-only.

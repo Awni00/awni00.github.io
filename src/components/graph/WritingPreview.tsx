@@ -1,8 +1,12 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
+import { graphConfig } from "../../config";
+import { hubMemberCounts } from "../../lib/graph/clusterLayout";
 import type { EntryType, GraphIndex, EntryNode } from "../../lib/graph/types";
 import { writingEntryUrl } from "../../lib/routes/paths";
 import GraphCanvas from "./GraphCanvas";
+import HubList from "./HubList";
+import NodeDetailPanel from "./NodeDetailPanel";
 
 /**
  * The "Explore Writing" widget that sits on the homepage below the hero.
@@ -10,9 +14,12 @@ import GraphCanvas from "./GraphCanvas";
  * `/writing`).
  *
  * Two view modes, picked per-viewport:
- *   "graph"       — interactive force-directed preview rendered by
- *                   `GraphCanvas`. Shows a subset of the full graph chosen
- *                   by the `filter` prop (see below).
+ *   "graph"       — force-directed preview rendered by `GraphCanvas`.
+ *                   Shows a subset of the full graph chosen by the `filter`
+ *                   prop (see below). With `interactive`, a click selects a
+ *                   node and a panel beside the canvas describes it, with the
+ *                   explicit link that opens it — the same select-then-open
+ *                   interaction as the full map and the per-entry local map.
  *   "topic-cards" — a quiet grid of hub-only links. Same content as the
  *                   graph's hubs, no canvas. Cheaper to render and friendlier
  *                   on narrow viewports.
@@ -67,6 +74,11 @@ export type WritingPreviewProps = {
   desktopMode?: WritingPreviewMode;
   /** View to render at viewports ≤680px. */
   mobileMode?: WritingPreviewMode;
+  /**
+   * Whether graph nodes can be selected, with a panel describing the
+   * selection. `false` renders the canvas alone, as a decorative preview.
+   */
+  interactive?: boolean;
 };
 
 export default function WritingPreview({
@@ -78,12 +90,27 @@ export default function WritingPreview({
   maxNodes = 24,
   previewHeight = 280,
   desktopMode = "graph",
-  mobileMode = "topic-cards"
+  mobileMode = "topic-cards",
+  interactive = true
 }: WritingPreviewProps) {
   const previewGraph = useMemo(
     () => buildPreviewGraph(graph, filter, maxNodes),
     [graph, filter, maxNodes]
   );
+
+  // Starts with nothing selected, as the full map does; the panel offers the
+  // hubs in the meantime.
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
+  const handleSelect = useCallback((id: string) => setSelectedId(id), []);
+  const selected = previewGraph.nodes.find((node) => node.id === selectedId);
+  const previewHubs = useMemo(() => {
+    const shown = new Set(previewGraph.nodes.map((node) => node.id));
+    return graph.hubs.filter((hub) => shown.has(hub.id));
+  }, [graph, previewGraph]);
+  // Counted over the whole collection, not the preview's subset: the number
+  // says how big a topic is, which a capped preview would understate.
+  const hubCounts = useMemo(() => hubMemberCounts(graph.nodes), [graph]);
+  const showPanel = interactive && previewGraph.nodes.length > 0;
 
   const needsGraph = desktopMode === "graph" || mobileMode === "graph";
   const needsCards = desktopMode === "topic-cards" || mobileMode === "topic-cards";
@@ -91,8 +118,11 @@ export default function WritingPreview({
   const rootClass = [
     "writing-preview",
     `writing-preview--desktop-${desktopMode}`,
-    `writing-preview--mobile-${mobileMode}`
-  ].join(" ");
+    `writing-preview--mobile-${mobileMode}`,
+    showPanel && "writing-preview--interactive"
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <section className={rootClass}>
@@ -109,13 +139,26 @@ export default function WritingPreview({
       </header>
 
       {needsGraph && (
-        <div className="writing-preview__graph">
-          <GraphCanvas
-            graph={previewGraph}
-            height={previewHeight}
-            hubLayout="circle"
-            labelMode="config"
-          />
+        <div
+          className="writing-preview__graph"
+          style={{ ["--map-height" as string]: `${previewHeight}px` }}
+        >
+          <div className="writing-preview__canvas">
+            <GraphCanvas
+              graph={previewGraph}
+              height={previewHeight}
+              hubLayout={graphConfig.layout.hubs}
+              labelMode="config"
+              selected={showPanel ? selected?.id : undefined}
+              onSelect={showPanel ? handleSelect : undefined}
+            />
+          </div>
+          {showPanel &&
+            (selected ? (
+              <NodeDetailPanel node={selected} className="writing-preview__side" />
+            ) : (
+              <PreviewOverview hubs={previewHubs} counts={hubCounts} onSelect={handleSelect} />
+            ))}
         </div>
       )}
 
@@ -130,6 +173,27 @@ export default function WritingPreview({
         </div>
       )}
     </section>
+  );
+}
+
+/**
+ * The panel before anything is selected: what to do, and the hubs as a way in
+ * — the same opening state as the full map's preview pane.
+ */
+function PreviewOverview({
+  hubs,
+  counts,
+  onSelect
+}: {
+  hubs: EntryNode[];
+  counts: Map<string, number>;
+  onSelect: (id: string) => void;
+}) {
+  return (
+    <div className="node-panel writing-preview__side writing-preview__overview">
+      <p className="preview-prompt">Select a node on the map to see its details.</p>
+      <HubList hubs={hubs} counts={counts} onSelect={onSelect} />
+    </div>
   );
 }
 

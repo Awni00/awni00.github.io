@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { getEntryType, graphConfig, writingConfig, type EntryType } from "../../config";
 import type { EntryNode, GraphIndex, WritingBrowserState } from "../../lib/graph/types";
+import { hubMemberCounts } from "../../lib/graph/clusterLayout";
 import { searchWriting, toSearchDocuments } from "../../lib/search/writingSearch";
 import GraphCanvas from "./GraphCanvas";
+import HubList from "./HubList";
+import NodeDetailPanel from "./NodeDetailPanel";
+import NodeIcon, { type NodeShape } from "./NodeIcon";
 import ListView from "./list/ListView";
 import TopicsView from "./topics/TopicsView";
 
@@ -15,12 +19,20 @@ const defaultState: WritingBrowserState = {
   view: "map"
 };
 
-// Where graph.css stops laying the browser out in columns and stacks it.
+// Where graph.css stops laying the browser out in columns and turns the panel
+// into a bottom sheet over the map.
 const STACK_BREAKPOINT = 980;
-// Stacked, the map shares the screen with the panel beneath it, so a desktop
-// canvas height would fill a phone on its own and push that panel out of sight.
-const CANVAS_HEIGHT = 660;
-const CANVAS_HEIGHT_NARROW = 420;
+// The canvas is sized to the window so the whole map — chrome, canvas, panel —
+// fits on one screen. These bound it: below the minimum a map is not worth
+// having, and above the maximum a big monitor gets more empty canvas, not more
+// map. The gap is what stays visible below the frame.
+const CANVAS_MIN = 420;
+const CANVAS_MAX = 760;
+const CANVAS_MIN_NARROW = 300;
+const BOTTOM_GAP = 28;
+const BOTTOM_GAP_NARROW = 12;
+// Server render and first paint, before the window has been measured.
+const CANVAS_HEIGHT_DEFAULT = 600;
 
 const VIEWS = ["map", "topics", "list"] as const;
 type View = (typeof VIEWS)[number];
@@ -35,6 +47,14 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
   // The canvas needs a pixel height, so this one piece of layout cannot live in
   // the stylesheet with the rest. Matches the grid's own breakpoint.
   const [narrow, setNarrow] = useState(false);
+  const [canvasHeight, setCanvasHeight] = useState(CANVAS_HEIGHT_DEFAULT);
+  // On a phone the panel is a sheet over the bottom of the map. The map fits
+  // itself to what the *collapsed* sheet leaves visible; expanding the sheet to
+  // read more covers part of the map rather than shrinking it to a stamp.
+  const [sheetExpanded, setSheetExpanded] = useState(false);
+  const [sheetInset, setSheetInset] = useState(0);
+  const canvasSlotRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
   const nodeById = useMemo(() => new Map(graph.nodes.map((node) => [node.id, node])), [graph.nodes]);
   const tags = useMemo(() => [...new Set(graph.nodes.flatMap((node) => node.tags))].sort(), [graph.nodes]);
   const typeCounts = useMemo(() => {
@@ -43,6 +63,7 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
     return out;
   }, [graph.nodes]);
   const docs = useMemo(() => toSearchDocuments(graph.nodes), [graph.nodes]);
+  const hubCounts = useMemo(() => hubMemberCounts(graph.nodes), [graph.nodes]);
   // Per-view filter sets. Each view applies only the filters it surfaces in
   // its own UI. Inputs to these filters are still a single shared state
   // object, so toggling a chip in one view that also exists in another
@@ -104,6 +125,46 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
     return () => query.removeEventListener("change", update);
   }, []);
 
+  // Fit the canvas to the window: whatever height is left below the canvas's
+  // top edge, less a small gap. Measured from the page top, not the viewport,
+  // so a resize while scrolled gives the same answer as one at the top.
+  useLayoutEffect(() => {
+    if (view !== "map") return;
+    const measure = () => {
+      const slot = canvasSlotRef.current;
+      if (!slot) return;
+      const top = slot.getBoundingClientRect().top + window.scrollY;
+      const available = window.innerHeight - top - (narrow ? BOTTOM_GAP_NARROW : BOTTOM_GAP);
+      const next = narrow
+        ? Math.max(CANVAS_MIN_NARROW, available)
+        : Math.min(CANVAS_MAX, Math.max(CANVAS_MIN, available));
+      setCanvasHeight(Math.round(next));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [view, narrow]);
+
+  // Track the collapsed sheet's height, which is what the map fits above.
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!narrow || !panel || sheetExpanded) {
+      if (!narrow) setSheetInset(0);
+      return;
+    }
+    const update = () => setSheetInset(Math.round(panel.offsetHeight));
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(panel);
+    return () => observer.disconnect();
+  }, [narrow, sheetExpanded, view, state.selected]);
+
+  // A new selection opens collapsed: the sheet's first job is to say what was
+  // tapped, and the map should stay in view while it does.
+  useEffect(() => {
+    setSheetExpanded(false);
+  }, [state.selected]);
+
   useEffect(() => {
     // Gated: `writeStateToUrl` omits the parameter whenever the view equals the
     // default, so writing before the URL has been read would strip the very
@@ -138,21 +199,20 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
     .map((doc) => nodeById.get(doc.id))
     .filter((node): node is EntryNode => Boolean(node));
 
-  // The map no longer removes anything, so a bare node count would read "14
-  // pages" forever. Matches-of-total is what carries the responsiveness a
-  // filter owes the reader once it has stopped changing the picture's size.
+  // The heading's count is the whole collection on the map, where a filter
+  // marks rather than removes; the bar beside the chips reports the matches.
+  // The list and topics views do remove, so there it is the count shown.
   const mapMatchCount = mapMatchIds.size;
-  const countLabel =
+  const pageCount =
     view === "map"
-      ? hasSelection
-        ? `${mapMatchCount} of ${graph.nodes.length} pages`
-        : `${graph.nodes.length} pages`
+      ? graph.nodes.length
       : view === "topics"
-      ? `${topicsEntries.length} pages`
-      : `${listEntries.length} pages`;
+        ? topicsEntries.length
+        : listEntries.length;
+  const countLabel = `${pageCount} ${pageCount === 1 ? "page" : "pages"}`;
 
   const ViewSwitcher = (
-    <div className="graph-seg" role="tablist" aria-label="Writing view">
+    <div className="graph-seg" role="tablist" aria-label={`${writingConfig.label} view`}>
       {VIEWS.map((v) => (
         <button
           key={v}
@@ -168,46 +228,35 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
   );
 
   return (
-    <section className="graph-browser" aria-label="Writing browser">
-      <div className="graph-view-bar">
-        <div className="graph-view-bar__left">
-          <span style={{ color: "var(--color-fg)", fontWeight: 500 }}>Writing</span>
-          <span className="graph-view-bar__count">{countLabel}</span>
-        </div>
-        <div className="graph-view-bar__right">
-          <input
-            className="graph-input"
-            value={state.query ?? ""}
-            onChange={(event) => patch({ query: event.target.value || undefined })}
-            placeholder="Search title, tag, type…"
-          />
+    <section className="graph-browser" aria-label={`${writingConfig.label} browser`}>
+      {/* The page's own header, set like every other top-level page's: the
+          serif title and a line beneath it, with the controls that act on the
+          whole collection beside the title. */}
+      <header className="graph-browser__head">
+        <h1 className="graph-browser__title">{writingConfig.label}</h1>
+        <div className="graph-browser__controls">
+          <label className="graph-search">
+            <SearchIcon />
+            <input
+              className="graph-input"
+              type="search"
+              value={state.query ?? ""}
+              onChange={(event) => patch({ query: event.target.value || undefined })}
+              placeholder="Search title, tag, type…"
+              aria-label={`Search ${writingConfig.label.toLowerCase()}`}
+            />
+          </label>
           {ViewSwitcher}
         </div>
-      </div>
+        <p className="graph-browser__lede">
+          {writingConfig.description}
+          <span className="graph-browser__count">{countLabel}</span>
+        </p>
+      </header>
       {view === "map" ? (
         <div className="graph-browser__grid">
           <div className="graph-panel graph-panel--center">
             <div className="graph-canvas-bar">
-              <div className="graph-crumbs">
-                <span className="crumb">All writing</span>
-                {/* A map where everything is faded looks identical to one that
-                    failed to render, so the zero case has to be said in words
-                    rather than shown. */}
-                {hasSelection && mapMatchCount === 0 && (
-                  <span className="crumb crumb--empty">No pages match</span>
-                )}
-                {hasSelection && (
-                  <button
-                    type="button"
-                    className="graph-crumbs__reset"
-                    onClick={() =>
-                      patch({ query: undefined, types: undefined, tags: undefined })
-                    }
-                  >
-                    Reset
-                  </button>
-                )}
-              </div>
               <div className="graph-filters">
                 {/* Doubles as the canvas legend. Each chip carries the glyph
                     its type is actually drawn with, so the vocabulary and the
@@ -243,18 +292,42 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
                   onClear={() => patch({ tags: undefined })}
                 />
               </div>
+              {/* Only while a filter is on: it reports on the filter, and the
+                  heading already gives the total. A map where everything is
+                  faded looks identical to one that failed to render, so the
+                  zero case is said in words. */}
+              {hasSelection && (
+                <div className="graph-status" role="status">
+                  {mapMatchCount === 0 ? (
+                    <span className="graph-status__empty">No pages match</span>
+                  ) : (
+                    <span>
+                      {mapMatchCount} of {graph.nodes.length}
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    className="graph-status__reset"
+                    onClick={() => patch({ query: undefined, types: undefined, tags: undefined })}
+                  >
+                    Reset
+                  </button>
+                </div>
+              )}
             </div>
-            <div className="graph-canvas">
+            <div className="graph-canvas" ref={canvasSlotRef}>
               <GraphCanvas
                 graph={graph}
-                height={narrow ? CANVAS_HEIGHT_NARROW : CANVAS_HEIGHT}
+                height={canvasHeight}
                 selected={selected?.id}
-                selectedStyle="soft-glow"
                 emphasized={hasSelection ? mapMatchIds : undefined}
                 drag={graphConfig.interaction.drag}
                 hubLayout={graphConfig.layout.hubs}
                 labelMode={graphConfig.layout.labels}
                 labelSide={graphConfig.layout.labelSide}
+                fitPad={narrow ? 30 : 44}
+                bottomInset={narrow ? sheetInset : 0}
+                zoomControls={!narrow}
                 // One meaning for every node, hubs included. Clicking a hub
                 // used to also dim the map down to its immediate neighbours,
                 // which made the same gesture carry two very different
@@ -266,16 +339,25 @@ export default function GraphBrowser({ graph }: GraphBrowserProps) {
             </div>
           </div>
 
-          <aside className="graph-panel graph-panel--right preview-pane">
+          <aside
+            ref={panelRef}
+            className={`graph-panel graph-panel--right preview-pane${sheetExpanded ? " is-expanded" : ""}`}
+          >
             {selected ? (
               <Preview
                 node={selected}
                 graph={graph}
                 nodeById={nodeById}
                 onSelect={(id) => patch({ selected: id })}
+                sheet={narrow ? { expanded: sheetExpanded, toggle: () => setSheetExpanded((open) => !open) } : undefined}
               />
             ) : (
-              <Overview hubs={graph.hubs} onSelect={(id) => patch({ selected: id })} />
+              <Overview
+                hubs={graph.hubs}
+                counts={hubCounts}
+                narrow={narrow}
+                onSelect={(id) => patch({ selected: id })}
+              />
             )}
           </aside>
         </div>
@@ -393,31 +475,28 @@ const DIRECTION_RANK: Record<Direction, number> = { both: 0, out: 1, in: 2 };
  * that select, exactly like Preview's connection rows. Picking one here and
  * clicking it on the canvas are the same gesture with the same result.
  */
-function Overview({ hubs, onSelect }: { hubs: EntryNode[]; onSelect: (id: string) => void }) {
+function Overview({
+  hubs,
+  counts,
+  narrow,
+  onSelect
+}: {
+  hubs: EntryNode[];
+  counts: Map<string, number>;
+  narrow: boolean;
+  onSelect: (id: string) => void;
+}) {
   return (
     <>
-      <p className="preview-prompt">Select a node on the map to see its details and connections.</p>
+      <p className="preview-prompt">
+        {`${narrow ? "Tap" : "Select"} a node on the map to see what it connects to.`}
+      </p>
       {hubs.length > 0 && (
         <div className="sidebar-section">
           <p className="sidebar-section__label">
             Hubs <span className="sidebar-section__count">{hubs.length}</span>
           </p>
-          <ul className="connection-list">
-            {hubs.map((hub) => {
-              const hubType = getEntryType(hub.type);
-              return (
-                <li key={hub.id}>
-                  <button type="button" className="preview-link" onClick={() => onSelect(hub.id)}>
-                    <NodeIcon
-                      shape={hubType.graph.shape as NodeShape}
-                      color={hubType.graph.color as string}
-                    />
-                    <span className="connection-title">{hub.title}</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+          <HubList hubs={hubs} counts={counts} onSelect={onSelect} />
         </div>
       )}
     </>
@@ -425,26 +504,32 @@ function Overview({ hubs, onSelect }: { hubs: EntryNode[]; onSelect: (id: string
 }
 
 /**
- * Panel describing whatever node is selected on the map.
+ * Panel describing whatever node is selected on the map: the shared
+ * NodeDetailPanel, as the homepage preview and the per-entry map use it, then
+ * the node's connections.
  *
  * Its rows *select*, they do not navigate — the same division of labour
  * LocalGraphMap already documents. A reader following a chain of connections
  * is inspecting the graph, not leaving it, and a row that silently changes
  * the page costs them the map they were reading. Navigation stays the one
  * explicit action: "Open page".
+ *
+ * On a phone the panel is a bottom sheet, and `sheet` adds the toggle that
+ * opens it up to the summary and connections.
  */
 function Preview({
   node,
   graph,
   nodeById,
-  onSelect
+  onSelect,
+  sheet
 }: {
   node: EntryNode;
   graph: GraphIndex;
   nodeById: Map<string, EntryNode>;
   onSelect: (id: string) => void;
+  sheet?: { expanded: boolean; toggle: () => void };
 }) {
-  const entryType = getEntryType(node.type);
   const connections = useMemo(() => {
     const linksTo = new Set(graph.linksTo[node.id] ?? []);
     const linkedFrom = new Set(graph.linkedFrom[node.id] ?? []);
@@ -467,31 +552,22 @@ function Preview({
       );
   }, [graph, node.id, nodeById]);
 
+  const toggle =
+    sheet && connections.length > 0 ? (
+      <button
+        type="button"
+        className="node-panel__more"
+        aria-expanded={sheet.expanded}
+        onClick={sheet.toggle}
+      >
+        {connections.length} {connections.length === 1 ? "link" : "links"}
+        <span aria-hidden="true">{sheet.expanded ? "▾" : "▴"}</span>
+      </button>
+    ) : undefined;
+
   return (
     <>
-      <div className="preview-header">
-        <span className="pill" style={{ ["--pill-color" as any]: entryType.graph.color }}>
-          {entryType.label}
-        </span>
-        {node.date && <span className="preview-date">{node.date}</span>}
-      </div>
-      {/*
-        Not a heading: this is a panel label that changes on every click, not
-        page structure, and promoting it would put the same title in the
-        document outline twice. Same reasoning as LocalGraphMap's title.
-      */}
-      <p className="preview-title">{node.title}</p>
-      {node.summary && <p className="preview-summary">{node.summary}</p>}
-      {node.tags.length > 0 && (
-        <div className="tag-list">
-          {node.tags.map((tag) => (
-            <span key={tag}>{tag}</span>
-          ))}
-        </div>
-      )}
-      <a className="open-btn" href={node.url}>
-        Open page →
-      </a>
+      <NodeDetailPanel node={node} size="large" showDate actions={toggle} />
       {connections.length > 0 && (
         <div className="sidebar-section">
           <p className="sidebar-section__label">
@@ -595,6 +671,25 @@ function DirectionIcon({ direction }: { direction: Direction }) {
   }
 }
 
+function SearchIcon() {
+  return (
+    <svg
+      width={13}
+      height={13}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      aria-hidden="true"
+      className="graph-search__icon"
+    >
+      <circle cx={11} cy={11} r={7} />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+  );
+}
+
 /**
  * Marks the tag filter, which is the one chip in the bar whose label is not
  * accompanied by the glyph its subject is drawn with. Outlined rather than
@@ -618,51 +713,4 @@ function TagIcon() {
       <circle cx={7} cy={7} r={1.3} fill="currentColor" stroke="none" />
     </svg>
   );
-}
-
-type NodeShape = "square" | "circle" | "diamond" | "hexagon";
-
-function NodeIcon({ shape, color }: { shape: NodeShape; color: string }) {
-  // Inline SVG so the legend mirrors the actual node glyphs drawn on the
-  // canvas (not just colored dots).
-  const props = {
-    width: 12,
-    height: 12,
-    viewBox: "-6 -6 12 12",
-    "aria-hidden": true,
-    className: "graph-legend-icon",
-    style: { color, fill: color }
-  } as const;
-  switch (shape) {
-    case "square":
-      return (
-        <svg {...props}>
-          <rect x={-4} y={-4} width={8} height={8} />
-        </svg>
-      );
-    case "diamond":
-      return (
-        <svg {...props}>
-          <polygon points="0,-5 5,0 0,5 -5,0" />
-        </svg>
-      );
-    case "hexagon": {
-      const points = Array.from({ length: 6 }, (_, i) => {
-        const angle = (Math.PI * 2 * i) / 6 - Math.PI / 2;
-        return `${Math.cos(angle) * 5},${Math.sin(angle) * 5}`;
-      }).join(" ");
-      return (
-        <svg {...props}>
-          <polygon points={points} />
-        </svg>
-      );
-    }
-    case "circle":
-    default:
-      return (
-        <svg {...props}>
-          <circle cx={0} cy={0} r={4.5} />
-        </svg>
-      );
-  }
 }

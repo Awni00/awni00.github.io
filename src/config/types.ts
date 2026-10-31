@@ -33,6 +33,11 @@ export type PlacementSpec = {
 
 export type EntryTypeGraphConfig = {
   shape: GraphNodeShape;
+  /**
+   * Glyph diameter in screen pixels. Constant at every zoom level, so a paper
+   * reads as the same mark on the full map, the homepage preview, and a
+   * page's local map.
+   */
   size: number;
   color: string;
   /**
@@ -92,6 +97,11 @@ export type ListConfig = {
 export type WritingConfig = {
   route: string;
   label: string;
+  /**
+   * One line under the writing page's title, and the page's meta description.
+   * Empty hides the line.
+   */
+  description?: string;
   entryTypes: readonly EntryType[];
   search: {
     writing: {
@@ -219,6 +229,8 @@ export type SiteConfig = {
       enabled: boolean;
       desktopMode: "graph" | "topic-cards";
       mobileMode: "graph" | "topic-cards";
+      /** Click a node to select it and describe it in a panel beside the map. */
+      interactive: boolean;
       filter:
         | { mode: "all" }
         | { mode: "types"; types?: EntryType[] }
@@ -244,6 +256,12 @@ export type SiteConfig = {
       enabled: boolean;
       title: string;
       maxItems: number;
+      /**
+       * Which entries fill the row, newest first within each group.
+       * "featured-first": entries with `featured: true`, then the rest.
+       * "recent": by date only. "featured": featured entries only.
+       */
+      select: RecentWritingSelect;
       /**
        * The card that ends the row and links to the writing browser.
        * `description` defaults to "Browse {writing.label}"; set it to ""
@@ -397,6 +415,8 @@ export type HoverNoteAppearance = "card" | "inverted";
 /** "dotted" draws a soft dotted underline under a `<Term>`; "none" leaves just the accent colour. */
 export type TermUnderline = "dotted" | "none";
 
+export type RecentWritingSelect = "featured-first" | "recent" | "featured";
+
 export type PublicationsConfig = {
   source: string;
   grouping: {
@@ -408,6 +428,8 @@ export type PublicationsConfig = {
     showButtonField: string;
   };
   abstractDisplay: PublicationAbstractDisplay;
+  /** Typeset `$…$` and `\(…\)` in abstracts with KaTeX; `false` prints them as written. */
+  abstractMath: boolean;
   previews: {
     enabled: boolean;
     basePath: string;
@@ -444,7 +466,7 @@ export type GraphConfigBase = {
     };
   };
   layout: {
-    hubs: "circle" | "row" | "force";
+    hubs: "cluster" | "circle" | "row" | "force";
     labels: "config" | "all" | "none";
     labelSide: "top" | "bottom" | "auto";
   };

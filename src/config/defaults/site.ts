@@ -49,6 +49,7 @@ export const defaultSiteConfig = {
       enabled: true,
       desktopMode: "graph",
       mobileMode: "topic-cards",
+      interactive: true,
       filter: {
         mode: "neighborhood",
         roots: "hubs",
@@ -72,6 +73,7 @@ export const defaultSiteConfig = {
       enabled: true,
       title: "Recent writing",
       maxItems: 6,
+      select: "featured-first",
       viewAll: {
         enabled: true,
         label: "View all →"
