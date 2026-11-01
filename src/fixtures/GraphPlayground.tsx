@@ -2,15 +2,23 @@ import { useMemo, useState } from "react";
 
 import GraphCanvas from "../components/graph/GraphCanvas";
 import { getEntryType, graphConfig } from "../config";
+import { arrowMode } from "../lib/graph/graphSettings";
 import type {
+  GraphArrows,
   GraphConfigBase,
   GraphForcesConfig,
   GraphHoverConfig,
-  GraphHoverLabels
+  GraphHoverLabels,
+  GraphSelectionStyle
 } from "../config/types";
 import type { GraphIndex } from "../lib/graph/types";
 
-type Links = Pick<GraphConfigBase["links"], "width" | "opacity" | "curvature" | "directed">;
+type Links = Pick<GraphConfigBase["links"], "width" | "opacity" | "curvature"> & {
+  arrows: GraphArrows;
+  /** `links.arrow.length` and `.width`, flattened so each is one control. */
+  arrowLength: number;
+  arrowWidth: number;
+};
 type Hubs = GraphConfigBase["layout"]["hubs"];
 
 type Settings = {
@@ -18,6 +26,7 @@ type Settings = {
   forces: GraphForcesConfig;
   links: Links;
   hover: GraphHoverConfig;
+  selection: GraphSelectionStyle;
   sizes: Record<string, number>;
 };
 
@@ -42,8 +51,16 @@ const LINK_SLIDERS: (Slider & { key: "width" | "opacity" | "curvature" })[] = [
   { key: "curvature", label: "Edge curvature", min: 0, max: 0.5, step: 0.01, hint: "0 draws straight lines" }
 ];
 
+const ARROW_SLIDERS: (Slider & { key: "arrowLength" | "arrowWidth" })[] = [
+  { key: "arrowLength", label: "Arrowhead length", min: 2, max: 16, step: 0.5, hint: "Along the edge, px" },
+  { key: "arrowWidth", label: "Arrowhead width", min: 0.5, max: 8, step: 0.25, hint: "Half the head's width, px" }
+];
+
+const ARROW_MODES: GraphArrows[] = ["never", "highlighted", "always"];
+
 const HUB_LAYOUTS: Hubs[] = ["cluster", "circle", "row", "force"];
 const HOVER_LABELS: GraphHoverLabels[] = ["node", "neighbours", "none"];
+const SELECTION_STYLES: GraphSelectionStyle[] = ["halo", "ring"];
 
 function defaults(types: string[]): Settings {
   return {
@@ -53,9 +70,12 @@ function defaults(types: string[]): Settings {
       width: graphConfig.links.width,
       opacity: graphConfig.links.opacity,
       curvature: graphConfig.links.curvature,
-      directed: graphConfig.links.directed
+      arrows: arrowMode(graphConfig.links),
+      arrowLength: graphConfig.links.arrow.length,
+      arrowWidth: graphConfig.links.arrow.width
     },
     hover: { ...graphConfig.hover },
+    selection: graphConfig.selection.style,
     sizes: Object.fromEntries(types.map((type) => [type, getEntryType(type).graph.size]))
   };
 }
@@ -76,7 +96,12 @@ export default function GraphPlayground({ graph }: { graph: GraphIndex }) {
   const [height, setHeight] = useState(520);
   const [copied, setCopied] = useState(false);
 
-  const links = useMemo(() => ({ ...settings.links }), [settings.links]);
+  // Back into config's shape for the canvas: the flattened head size goes into
+  // `arrow`, alongside the parts of it the playground does not control.
+  const links = useMemo(() => {
+    const { arrowLength, arrowWidth, ...rest } = settings.links;
+    return { ...rest, arrow: { ...graphConfig.links.arrow, length: arrowLength, width: arrowWidth } };
+  }, [settings.links]);
   const forces = useMemo(() => ({ ...settings.forces }), [settings.forces]);
   const sizes = useMemo(() => ({ ...settings.sizes }), [settings.sizes]);
   const snippet = useMemo(() => configSnippet(base, settings), [base, settings]);
@@ -142,12 +167,23 @@ export default function GraphPlayground({ graph }: { graph: GraphIndex }) {
               onChange={(value) => patch("links", slider.key, value)}
             />
           ))}
-          <Toggle
+          <Select
             label="Arrowheads"
-            value={settings.links.directed}
-            changed={settings.links.directed !== base.links.directed}
-            onChange={(value) => patch("links", "directed", value)}
+            value={settings.links.arrows}
+            options={ARROW_MODES}
+            changed={settings.links.arrows !== base.links.arrows}
+            onChange={(value) => patch("links", "arrows", value as GraphArrows)}
           />
+          <p className="gp-note">"highlighted" shows heads only on the hovered or selected node's edges.</p>
+          {ARROW_SLIDERS.map((slider) => (
+            <Range
+              key={slider.key}
+              slider={slider}
+              value={settings.links[slider.key]}
+              base={base.links[slider.key]}
+              onChange={(value) => patch("links", slider.key, value)}
+            />
+          ))}
         </Group>
 
         <Group title="Hover">
@@ -164,6 +200,17 @@ export default function GraphPlayground({ graph }: { graph: GraphIndex }) {
             changed={settings.hover.dim !== base.hover.dim}
             onChange={(value) => patch("hover", "dim", value)}
           />
+        </Group>
+
+        <Group title="Selection">
+          <Select
+            label="Selected node"
+            value={settings.selection}
+            options={SELECTION_STYLES}
+            changed={settings.selection !== base.selection}
+            onChange={(value) => set("selection", value as GraphSelectionStyle)}
+          />
+          <p className="gp-note">Click a node on either map to compare.</p>
         </Group>
 
         <Group title="Node sizes">
@@ -211,6 +258,7 @@ export default function GraphPlayground({ graph }: { graph: GraphIndex }) {
             onSelect={setSelected}
             hubLayout={settings.hubs}
             hover={settings.hover}
+            selectionStyle={settings.selection}
             links={links}
             forces={forces}
             nodeSizes={sizes}
@@ -390,13 +438,17 @@ function configSnippet(base: Settings, next: Settings): string | null {
   if (layout.length) graph.push(`layout: { ${layout.join(", ")} }`);
 
   const linkKeys = diff(base.links, next.links) as (keyof Links)[];
-  if (linkKeys.length) {
-    graph.push(
-      `links: { ${linkKeys
-        .map((key) => `${key}: ${typeof next.links[key] === "number" ? format(next.links[key] as number) : next.links[key]}`)
-        .join(", ")} }`
-    );
+  const links: string[] = [];
+  for (const key of linkKeys) {
+    if (key === "arrowLength" || key === "arrowWidth") continue;
+    const value = next.links[key];
+    links.push(`${key}: ${typeof value === "number" ? format(value) : `"${value}"`}`);
   }
+  const head: string[] = [];
+  if (linkKeys.includes("arrowLength")) head.push(`length: ${format(next.links.arrowLength)}`);
+  if (linkKeys.includes("arrowWidth")) head.push(`width: ${format(next.links.arrowWidth)}`);
+  if (head.length) links.push(`arrow: { ${head.join(", ")} }`);
+  if (links.length) graph.push(`links: { ${links.join(", ")} }`);
 
   const hoverKeys = diff(base.hover, next.hover) as (keyof GraphHoverConfig)[];
   if (hoverKeys.length) {
@@ -406,6 +458,8 @@ function configSnippet(base: Settings, next: Settings): string | null {
         .join(", ")} }`
     );
   }
+
+  if (next.selection !== base.selection) graph.push(`selection: { style: "${next.selection}" }`);
 
   const sizeKeys = diff(base.sizes, next.sizes);
   if (!graph.length && !sizeKeys.length) return null;

@@ -23,6 +23,13 @@ export function themeToCss(theme: Theme, selector: string): string {
   lines.push("  --color-surface: var(--color-bg-soft);");
   lines.push("  --color-surface-strong: var(--color-bg-soft-2);");
 
+  // The scrim behind floating surfaces (menus, sheets). Those surfaces are
+  // the theme's own `surface-raised`; a dark page cannot be dimmed much
+  // further, so it takes the heavier scrim. Nothing is read on a scrim, so
+  // it is not a theme token.
+  const dark = theme.appearance === "dark";
+  lines.push(`  --color-scrim: ${dark ? "rgb(0 0 0 / 0.6)" : "rgb(0 0 0 / 0.32)"};`);
+
   for (const [name, value] of Object.entries(theme.shadows)) {
     lines.push(`  --shadow-${name}: ${value};`);
   }

@@ -63,7 +63,7 @@ Supported top-level sections:
 
 ### Graph layout and edges
 
-Everything in this section, plus node sizes, can be tried before it is written
+Everything in this section, plus node sizes and the selection mark, can be tried before it is written
 down: run `npm run dev` and open `/fixtures/graph-playground`. It shows your
 writing map as your config draws it, beside the same map driven by sliders and
 toggles, and writes the changed values out as config to paste into
@@ -87,10 +87,15 @@ Edges (`graph.links`):
 - `curvature` (default `0.1`) — how far an edge bows, as a fraction of its
   length; `0` draws straight lines, `0.5` is the most allowed.
 - `color` (default `var(--graph-edge)`) — any CSS colour.
-- `directed` (default `false`) — plain curves. Direction is still shown where
-  it can be read, in the selected page's connection list; set it to `true` for
-  arrowheads on the canvas (`arrow.length`, `arrow.width`, `arrow.relPos`,
-  `arrow.color` shape them).
+- `arrows` (default `"never"`) — which edges carry arrowheads: `"never"`,
+  `"always"`, or `"highlighted"` (only the edges of the hovered or selected
+  node, so the map stays quiet until the reader asks about one node). Without
+  arrowheads, direction is still shown in the selected page's connection list.
+  The older `directed: true` still works, as `"always"`, when `arrows` is unset.
+- `arrow.length` (default `5`) and `arrow.width` (default `1.5`) — the head's
+  size in screen pixels: its length along the edge, and half its width across.
+  Heads grow with thicker edges. `arrow.color` (default `"edge"`) gives them a
+  colour of their own.
 
 Glyph sizes (`entryTypes[].graph.size`) are diameters in screen pixels, and
 hold at every zoom level.
@@ -148,6 +153,15 @@ export const siteConfigOverrides = {
   site: { homepage: { writingPreview: { hover: { labels: "none" } } } }
 } satisfies SiteConfigOverrides;
 ```
+
+#### Selection
+
+`graph.selection.style` sets how the selected node is marked on every map:
+
+- `"halo"` (default) — a translucent disc in the node's own colour behind it.
+- `"ring"` — a thin dark ring around it.
+
+Either way, the selected node's edges are drawn in the accent colour.
 
 ### Graph interaction
 
@@ -225,6 +239,32 @@ export const siteConfigOverrides = {
   }
 } satisfies SiteConfigOverrides;
 ```
+
+## Navigation
+
+`site.nav` lists the header's links, in order. Arrays replace the default, so
+list every item you want:
+
+```ts
+nav: [
+  { label: "Home", href: "/", icon: "house" },
+  { label: "Writing", href: "/writing", icon: "waypoints" },
+  { label: "CV", href: "/cv.pdf", icon: "file-text" }
+]
+```
+
+The header shows the links inline while they fit on one line beside the site
+name. When they do not, and on any phone held sideways, it becomes an app bar:
+the name, the theme toggle, and a menu button that opens the links as a sheet.
+The switch follows the nav's real length, so a short nav stays inline even on
+a phone.
+
+`icon` is optional: a [Lucide](https://lucide.dev/icons) name from the list in
+`src/config/navIcons.ts`, drawn beside the label in that menu. Give every item
+an icon or none of them; with some missing the menu shows none, so the labels
+keep one edge, and `npm run validate` warns. To use an icon not on the list,
+add its name there and its component in `src/components/layout/navIcons.ts`.
+Links to a PDF are marked "PDF" in the menu, and links off the site "↗".
 
 ## Homepage Hero
 

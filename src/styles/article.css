@@ -216,8 +216,8 @@
 }
 
 .article-byline__col a:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
+  color: var(--color-link);
+  border-bottom-color: var(--color-link);
 }
 
 .article-byline__note {
@@ -231,10 +231,34 @@
   margin-bottom: 0;
 }
 
+/* Phones: the byline as label/value rows rather than a stack of labelled
+   blocks, so the article starts on the first screen instead of the second. */
 @media (max-width: 680px) {
   .article-byline {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px 16px;
+    margin-top: 20px;
+    padding-top: 18px;
+  }
+
+  .article-byline__col {
+    display: contents;
+  }
+
+  .article-byline__label {
+    margin: 0;
+    padding-top: 2px;
+    font-size: 10.5px;
+  }
+
+  .article-byline__list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .article-byline__list li + li::before {
+    content: ", ";
   }
 }
 
@@ -383,13 +407,13 @@
 }
 
 .article-content a:not(.heading-anchor) {
-  color: var(--color-accent);
+  color: var(--color-link);
   text-decoration: none;
-  border-bottom: 1px solid var(--color-accent-line);
+  border-bottom: 1px solid var(--color-link-line);
 }
 
 .article-content a:not(.heading-anchor):hover {
-  border-bottom-color: var(--color-accent);
+  border-bottom-color: var(--color-link);
 }
 
 .article-content blockquote {
@@ -483,8 +507,8 @@
 }
 
 .sidebar-section a:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
+  color: var(--color-link);
+  border-bottom-color: var(--color-link);
 }
 
 /* TOC */
@@ -1419,7 +1443,7 @@
   border-bottom-color: var(--color-fg);
 }
 
-/* The accent is tuned for the page background, not for this one. */
+/* The link colour is tuned for the page background, not for this one. */
 [data-hover-popover][data-appearance="inverted"] .hover-pop a {
   color: inherit;
   border-bottom-color: color-mix(in srgb, currentColor 45%, transparent);
@@ -1472,7 +1496,7 @@ body {
   border: 0;
   border-radius: 3px;
   background: none;
-  color: var(--color-accent);
+  color: var(--color-annotation);
   font: inherit;
   /* After `font`, which resets it. A <button> is inline-block, so it would take
      the sup's zero line-height and collapse to a 0px box: a flat focus ring,
@@ -1484,11 +1508,11 @@ body {
 }
 
 .hovernote[data-open] .hovernote__mark {
-  background: var(--color-accent-soft);
+  background: var(--color-annotation-soft);
 }
 
 .hovernote :is(a, button).hovernote__mark:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-annotation);
   outline-offset: 1px;
 }
 
@@ -1514,7 +1538,7 @@ body {
   padding-top: 6px;
   border-top: 1px solid var(--color-border-soft);
   border-bottom: 0;
-  color: var(--color-accent);
+  color: var(--color-link);
   font-size: 12px;
 }
 
@@ -1570,10 +1594,11 @@ body {
 
 /* ── Term (words that explain themselves) ───────────────────────────── */
 
-/* Accent words, tinted only while their note is open (hover, focus, tap). */
+/* Annotation-coloured words, tinted only while their note is open (hover,
+   focus, tap). `--color-annotation` is the accent unless the theme sets it. */
 .term__text {
   border-radius: 3px;
-  color: var(--color-accent);
+  color: var(--color-annotation);
   cursor: help;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
@@ -1585,25 +1610,25 @@ body {
 /* Beats `.article-content a:not(.heading-anchor)` by source order. */
 .term a.term__text {
   border-bottom: 0;
-  color: var(--color-accent);
+  color: var(--color-annotation);
   cursor: pointer;
 }
 
-/* underline="dotted": drawn in the soft accent line, and dotted where a link's
+/* underline="dotted": drawn in the soft annotation line, and dotted where a link's
    underline is solid, so a term does not read as a link. */
 .term[data-underline="dotted"] .term__text {
   text-decoration: underline dotted 1.5px;
-  text-decoration-color: var(--color-accent-line);
+  text-decoration-color: var(--color-annotation-line);
   text-underline-offset: 0.22em;
 }
 
 .term[data-open] .term__text {
-  background: var(--color-accent-soft);
-  text-decoration-color: var(--color-accent);
+  background: var(--color-annotation-soft);
+  text-decoration-color: var(--color-annotation);
 }
 
 .term__text:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-annotation);
   outline-offset: 2px;
 }
 
@@ -1702,8 +1727,8 @@ body {
 }
 
 .entry-foot-content a:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
+  color: var(--color-link);
+  border-bottom-color: var(--color-link);
 }
 
 /* When the article has no sidebar, centre its main column. */
@@ -1745,9 +1770,11 @@ body {
 }
 
 @media (max-width: 980px) {
+  /* One gutter, the site's: the header, the prose and the site bar above
+     share a left edge. */
   .article-grid {
     display: block;
-    padding: 32px 1rem 64px;
+    padding: 24px var(--page-gutter) 64px;
   }
 
   .article-sidebar {
@@ -1772,7 +1799,8 @@ body {
   }
 
   .article-header {
-    padding: 32px 1rem 24px;
+    padding: 8px 0 24px;
+    margin-bottom: 28px;
   }
 
   .article-header h1 {
@@ -1791,7 +1819,7 @@ body {
     /* Horizontal padding comes back at this breakpoint; keep the base
        rule's zero bottom padding so the abstract's top rule still does
        the work of closing the header. */
-    padding: 32px 1rem 0;
+    padding: 8px 0 0;
   }
 }
 
@@ -1855,4 +1883,148 @@ body {
    template's surface and let only the tokens carry the theme's colour. */
 .astro-code {
   background-color: var(--color-bg-soft) !important;
+}
+
+/* ── Contents sheet (≤ 980px) ───────────────────────────────────────── */
+
+/* Where the sidebars collapse, the contents ride in a pill at the foot of the
+   screen and open as a sheet (ContentsSheet.tsx). */
+.contents-sheet {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .contents-sheet {
+    display: contents;
+  }
+
+  .contents-pill {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index: 15;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    max-width: min(280px, calc(100vw - 32px));
+    height: 44px;
+    padding: 0 16px 0 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--color-surface-raised) 90%, transparent);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-md);
+    color: var(--color-fg);
+    font: 500 13.5px var(--font-ui);
+    cursor: pointer;
+  }
+
+  .contents-pill:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Reading progress as a ring: a conic fill masked to a band. */
+  .contents-pill__ring {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: conic-gradient(var(--color-accent) calc(var(--progress, 0) * 1turn), var(--color-border) 0);
+    -webkit-mask: radial-gradient(circle, transparent 5.5px, #000 6px);
+    mask: radial-gradient(circle, transparent 5.5px, #000 6px);
+  }
+
+  .contents-pill__text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .contents-sheet__panel {
+    position: fixed;
+    inset: auto 0 0;
+    width: 100%;
+    max-width: none;
+    max-height: 70dvh;
+    margin: 0;
+    padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px));
+    overflow: auto;
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    border-radius: 20px 20px 0 0;
+    background: var(--color-surface-raised);
+    color: var(--color-fg);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .contents-sheet__panel::backdrop {
+    background: var(--color-scrim);
+  }
+
+  .contents-sheet__panel::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 4px;
+    margin: 0 auto 10px;
+    border-radius: 2px;
+    background: var(--color-rule);
+  }
+
+  .contents-sheet__label {
+    margin: 0 0 6px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .contents-sheet__panel .toc a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 10px;
+    border-radius: 10px;
+    color: var(--color-fg-soft);
+    font: 15px var(--font-ui);
+    text-decoration: none;
+  }
+
+  .contents-sheet__panel .toc--strip {
+    gap: 0;
+  }
+
+  .contents-sheet__panel .toc-tip {
+    font-size: inherit;
+    white-space: normal;
+  }
+
+  .contents-sheet__panel .toc li[data-depth="3"] a {
+    padding-left: 28px;
+    font-size: 14px;
+    color: var(--color-muted);
+  }
+
+  .contents-sheet__panel .toc a[aria-current="true"] {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  /* Room at the foot of the article so the pill never covers its last line. */
+  .article-grid:has(.contents-sheet) {
+    padding-bottom: 96px;
+  }
+}
+
+/* The header's link chips at touch size. */
+@media (pointer: coarse) {
+  .entry-chip {
+    min-height: 40px;
+  }
 }

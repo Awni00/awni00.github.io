@@ -1,4 +1,5 @@
 import type { BundledTheme } from "shiki";
+import type { NavIconName } from "./navIcons";
 
 export type EntryType = string;
 
@@ -76,6 +77,12 @@ export type TopicsSortDir = "asc" | "desc";
 export type TopicsSort = { field: TopicsSortField; dir: TopicsSortDir };
 export type PublicationAbstractDisplay = "inline" | "popup" | "hidden";
 
+/**
+ * The Topics and List views of the writing browser. Both share its toolbar:
+ * `sortOptions` are the choices in its Sort menu (and, in List, the column
+ * labels that sort), and `showDensityToggle` adds a row-density switch to that
+ * menu. Filters are the toolbar's, the same in every view.
+ */
 export type TopicsConfig = {
   showHubSummaries: boolean;
   density: TopicsDensity;
@@ -89,6 +96,10 @@ export type TopicsConfig = {
 export type ListConfig = {
   density: TopicsDensity;
   showDensityToggle: boolean;
+  /**
+   * @deprecated Ignored. Type filters now live in the toolbar's Filters panel,
+   * shared by every view. Kept so existing configs still type-check.
+   */
   showTypeFilter: boolean;
   defaultSort: TopicsSort;
   sortOptions: readonly TopicsSortField[];
@@ -221,7 +232,11 @@ export type SiteConfig = {
    * `linkedin`, `orcid`, …) take a URL; anything else may be a `CustomLink`.
    */
   links: Record<string, string | CustomLink>;
-  nav: readonly { label: string; href: string }[];
+  /**
+   * The header's links. `icon` (a name from `navIconNames`) is drawn beside
+   * the label in the phone menu; give every item one, or the menu shows none.
+   */
+  nav: readonly { label: string; href: string; icon?: NavIconName }[];
   homepage: {
     hero: HeroConfig;
     researchSummary: { enabled: boolean; source: string };
@@ -290,7 +305,13 @@ export type ThemeAppearance = "light" | "dark";
 /**
  * Every colour token a theme supplies, without the `--color-` / `--graph-`
  * prefixes those become in CSS. Values may be any CSS colour; `defineTheme`
- * fills omitted ones with `color-mix()` expressions derived from the core.
+ * fills omitted ones with mixes derived from the core.
+ *
+ * `link` and `annotation` are optional roles split off the accent: links in
+ * running text, and the words and marks that open a note (`<Term>`,
+ * `<HoverNote>`). Each falls back to the accent, so a theme that sets neither
+ * looks exactly as it would without them. Everything else interactive — nav,
+ * pills, buttons, the graph — stays on `accent`.
  *
  * The semantic colours come in pairs. The bare token (`warning`) is the
  * palette's real hue and is only used for graphic elements — callout rules,
@@ -303,6 +324,12 @@ export type ThemeColors = {
   bg: string;
   "bg-soft": string;
   "bg-soft-2": string;
+  /**
+   * Menus, sheets and other surfaces that float over the page. A light theme
+   * keeps `bg`; a dark one is lifted toward `fg`, as elevation reads in dark
+   * UIs. Text is drawn on it, so it is contrast-checked like `bg`.
+   */
+  "surface-raised": string;
   fg: string;
   "fg-soft": string;
   muted: string;
@@ -313,6 +340,11 @@ export type ThemeColors = {
   accent: string;
   "accent-soft": string;
   "accent-line": string;
+  link: string;
+  "link-line": string;
+  annotation: string;
+  "annotation-soft": string;
+  "annotation-line": string;
   danger: string;
   "danger-text": string;
   warning: string;
@@ -417,7 +449,7 @@ export type JustifyMinWidth = "all" | "tablet";
 export type HoverNoteMarker = "superscript" | "bracket";
 /** "card" uses the page palette; "inverted" reverses it. */
 export type HoverNoteAppearance = "card" | "inverted";
-/** "dotted" draws a soft dotted underline under a `<Term>`; "none" leaves just the accent colour. */
+/** "dotted" draws a soft dotted underline under a `<Term>`; "none" leaves just the annotation colour. */
 export type TermUnderline = "dotted" | "none";
 
 export type RecentWritingSelect = "featured-first" | "recent" | "featured";
@@ -465,6 +497,14 @@ export type DragMode = "none" | "stays" | "resettle";
  */
 export type GraphHoverLabels = "node" | "neighbours" | "none";
 
+/**
+ * How the selected node is marked.
+ *   "halo" — a translucent disc in the node's own colour around the glyph.
+ *   "ring" — a thin dark ring around the glyph.
+ * Either way the selected node's edges are drawn in the accent colour.
+ */
+export type GraphSelectionStyle = "halo" | "ring";
+
 export type GraphHoverConfig = {
   labels: GraphHoverLabels;
   /** Fade everything outside the hovered node's neighbourhood. */
@@ -499,6 +539,15 @@ export type GraphForcesConfig = {
   centerPull: number;
 };
 
+/**
+ * Which edges carry arrowheads.
+ *   "never"       — none; direction is read in the panel's connection list.
+ *   "always"      — every edge.
+ *   "highlighted" — only the edges of the hovered or selected node, so the
+ *                   map stays quiet until the reader asks about one node.
+ */
+export type GraphArrows = "never" | "always" | "highlighted";
+
 export type GraphConfigBase = {
   colorBy: "type";
   links: {
@@ -507,9 +556,14 @@ export type GraphConfigBase = {
     opacity: number;
     /** How far an edge bows, as a fraction of its length. 0 draws straight lines. */
     curvature: number;
+    /** Which edges carry arrowheads. Unset, `directed` decides (true = "always"). */
+    arrows?: GraphArrows;
+    /** The older switch for arrowheads, kept for existing configs; `arrows` wins. */
     directed: boolean;
     arrow: {
+      /** Head length along the edge, in screen pixels at the default edge width. */
       length: number;
+      /** Head half-width, so a head is twice this across. */
       width: number;
       relPos: number;
       color: "edge" | string;
@@ -528,6 +582,7 @@ export type GraphConfigBase = {
    * `site.homepage.writingPreview.hover`.
    */
   hover: GraphHoverConfig;
+  selection: { style: GraphSelectionStyle };
   interaction: {
     /**
      * Applies to the writing browser and the per-entry local maps. The
