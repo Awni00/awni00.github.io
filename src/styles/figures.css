@@ -1,0 +1,150 @@
+/* Charts drawn by <Chart>. Spec: the F1 figure board.
+
+   Series colours: six slots in a fixed order plus a neutral. Hues follow the
+   theme (slot 1 = accent hue, slot 2 = link hue); lightness and chroma are
+   stepped per appearance and validated for contrast and colour-blind
+   separation. These values are for the claret pair. If the theme pair
+   changes, re-derive slots 1–2 at the same lightness and re-validate. */
+:root,
+[data-theme="light"] {
+  --figure-1: #902343; /* claret */
+  --figure-2: #2e64a6; /* navy */
+  --figure-3: #c0851f; /* ochre */
+  --figure-4: #109488; /* teal */
+  --figure-5: #7b52a4; /* violet */
+  --figure-6: #6c9539; /* olive */
+  --figure-neutral: #8e9095;
+  --figure-band-opacity: 0.14;
+}
+
+[data-theme="dark"] {
+  --figure-1: #d36d86;
+  --figure-2: #5290d3;
+  --figure-3: #b68f1b;
+  --figure-4: #20a89b;
+  --figure-5: #9468c2;
+  --figure-6: #77a246;
+  --figure-neutral: #74757a;
+  --figure-band-opacity: 0.18;
+}
+
+.figure-chart {
+  container-type: inline-size;
+  width: 100%;
+  max-width: var(--figure-width);
+  color: var(--color-fg-soft);
+  font-family: var(--font-ui);
+}
+
+/* Plot's own rules use :where(), so these win without !important. */
+.figure-chart .figure-plot {
+  background: none;
+  overflow: visible;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  width: 100%;
+}
+
+.figure-chart .figure-plot-figure {
+  margin: 0;
+}
+
+/* Panel title: small and left-aligned, not a heading. */
+.figure-chart__title {
+  margin: 0 0 4px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-fg-soft);
+}
+
+.figure-chart [aria-label$="tick label"] {
+  fill: var(--color-muted);
+}
+
+.figure-chart [aria-label$="axis label"] {
+  fill: var(--color-fg-soft);
+  font-size: 13px;
+}
+
+.figure-chart [aria-label$="axis tick"],
+.figure-chart [aria-label$="axis"] {
+  stroke: var(--color-rule);
+}
+
+.figure-chart [aria-label$="grid"] {
+  stroke: var(--color-border);
+  stroke-opacity: 1;
+}
+
+.figure-chart [aria-label="frame"],
+.figure-chart .figure-baseline {
+  stroke: var(--color-rule);
+}
+
+.figure-chart [aria-label="area"] {
+  fill-opacity: var(--figure-band-opacity);
+}
+
+/* Error bars: 1px in label ink, so they read against any series colour. */
+.figure-chart .figure-error {
+  stroke: var(--color-fg-soft);
+  stroke-width: 1;
+}
+
+.figure-chart [aria-label="y-axis tick"] {
+  display: none;
+}
+
+.figure-chart [aria-label="facet label"],
+.figure-chart [aria-label$="facet label"] {
+  fill: var(--color-muted);
+}
+
+/* Identifiers (code names) set in the mono face. */
+.figure-chart[data-mono~="x"] [aria-label="x-axis tick label"],
+.figure-chart[data-mono~="fx"] [aria-label="fx-axis tick label"],
+.figure-chart[data-mono~="legend"] .figure-legend {
+  font-family: var(--font-code, var(--font-mono));
+}
+
+/* Legend: above the plot, left-aligned, no box. */
+.figure-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin: 0 0 6px;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-fg-soft);
+}
+
+.figure-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.figure-legend svg {
+  flex: none;
+  overflow: visible;
+}
+
+/* Full-width charts carry a phone layout and swap to it on narrow columns. */
+.figure-chart__compact {
+  display: none;
+}
+
+@container (max-width: 520px) {
+  .figure-chart--full .figure-chart__wide {
+    display: none;
+  }
+
+  .figure-chart--full .figure-chart__compact {
+    display: block;
+  }
+}

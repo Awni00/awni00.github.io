@@ -1,85 +1,61 @@
-# Figure styles (draft)
+# Figures
 
-Status: **draft for F1, not wired in.** Nothing in the build reads these files.
-The spec they implement, with before/after mocks, is the
-[Blog Figure Spec](https://claude.ai/artifact/1oXx17LyhAAiCRAUgY2XKq) board.
-Re-exports (F2–F7) wait on approval of that board.
+Charts on the blog are drawn with [Observable Plot](https://observablehq.com/plot/)
+when the site builds, and inlined as SVG. They ship no JavaScript, use the
+page's fonts, recolour with the theme toggle, and swap to a phone layout on
+narrow screens. The style they follow is the F1 figure spec.
 
-| File                      | What                                                          |
-| ------------------------- | ------------------------------------------------------------- |
-| `site.mplstyle`           | matplotlib base style, light page                             |
-| `site-dark.mplstyle`      | overlay for the dark page; swaps colours only                 |
-| `plotly-site-light.json`  | plotly template (`layout` + `data` defaults), light page      |
-| `plotly-site-dark.json`   | same, dark page                                               |
-| `dump_pdf_paths.py`       | prints a PDF figure's paths and text, for recovering its data |
+Three things are kept apart, so any one can change without the others:
 
-Figure data lives in `src/data/figures/<post>/<figure>.csv`, separate from
-chart code and exports. `src/data/figures/sources.yaml` records where each
-file came from and how exact it is.
+| What                 | Where                                   | Owner    |
+| -------------------- | --------------------------------------- | -------- |
+| Data                 | `src/data/figures/<post>/<figure>.csv`  | site     |
+| Chart definition     | `src/site/figures/<post>/<figure>.ts`   | site     |
+| Shared style, render | `src/lib/figures/`, `src/styles/figures.css`, `src/components/article/Chart.astro` | template |
 
-## matplotlib
+`src/data/figures/sources.yaml` records where each data file came from and
+how exact it is (`source`, `vector`, or `by-eye`).
 
-```python
-import matplotlib.pyplot as plt
+## Using a chart in a post
 
-for mode in ("light", "dark"):
-    styles = ["scripts/figures/site.mplstyle"]
-    if mode == "dark":
-        styles.append("scripts/figures/site-dark.mplstyle")
-    with plt.style.context(styles):
-        fig, ax = plt.subplots(figsize=(3.75, 2.6))   # narrow preset
-        ...
-        ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), ncol=3)
-        fig.savefig(f"name-{mode}.svg")
+```mdx
+<Chart figure="cot-info/linear-thresh-empirical-sample-complexity" alt="…" caption="…" />
 ```
 
-Then in MDX: `<Picture lightSrc="…/name-light.svg" darkSrc="…/name-dark.svg" />`.
-Don't use `invertInDarkMode` on charts.
+`figure` is the definition's path under `src/site/figures/`, without `.ts`.
+A `<Fragment slot="caption">` works too, for captions with math.
 
-Install Inter on the exporting machine; `svg.fonttype: path` bakes the glyphs
-into the SVG, because an `<img>` can't load the page's web fonts.
+## Writing a definition
 
-## plotly
+```ts
+import * as Plot from "@observablehq/plot";
+import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures/render";
 
-```python
-import json, plotly.io as pio
-pio.templates["site-light"] = json.load(open("scripts/figures/plotly-site-light.json"))
-pio.templates["site-dark"]  = json.load(open("scripts/figures/plotly-site-dark.json"))
-fig.update_layout(template="site-light")
+export default defineFigure({
+  data: "post/figure.csv",
+  size: "narrow", // narrow 360px · medium 560px · full 760px (also drawn at 360px for phones)
+  legend: [{ label: "Ours", color: SERIES[0], key: "line" }],
+  plot: ({ data, width }) => ({
+    width,
+    height: 230,
+    marks: [Plot.gridY(), Plot.lineY(data, { x: "step", y: "loss", stroke: SERIES[0] })]
+  })
+});
 ```
 
-Switching template with the page theme needs a change to `PlotlyFigure`
-(template-owned, so upstream).
+- Colours: `SERIES[0..5]` in fixed order (the paper's own method first), and
+  `NEUTRAL` for baselines and catch-all groups. They become theme variables
+  (`--figure-1` … `--figure-6`, `--figure-neutral`) in the output.
+- Legends come from `legend`, not Plot, so every chart's legend looks the same.
+- Ink, grid, axes and type come from `figures.css`; definitions don't set them.
+- Add a `title` channel to marks for hover values (native tooltips, no JS).
+- Error bars: a mark with `className: "figure-error"`.
 
-## Size presets
+## Recovering data from a PDF figure
 
-Sizes are the width the figure is *shown* at; type sizes assume 1:1 display.
+```bash
+uv run --with pymupdf python scripts/figures/dump_pdf_paths.py FILE.pdf
+```
 
-| Preset | px          | inches (figsize) | Use                                        |
-| ------ | ----------- | ---------------- | ------------------------------------------ |
-| full   | 760 × 400   | 7.92 × 4.17      | plotly only (re-lays out on phones)        |
-| medium | 560 × 340   | 5.83 × 3.54      | single static chart (the style's default)  |
-| narrow | 360 × 240–280 | 3.75 × 2.5–2.9 | `FigureGrid` 2-up cell, `WrapFigure`       |
-
-## Palette
-
-Six slots, fixed order. Hues come from the theme tokens (slot 1 = accent hue,
-slot 2 = link hue); lightness and chroma are set per mode and validated
-(OKLCH band, chroma ≥ 0.10, CVD ΔE ≥ 8 for adjacent slots, 3:1 contrast).
-
-| Slot | Name   | Light     | Dark      |
-| ---- | ------ | --------- | --------- |
-| 1    | claret | `#902343` | `#d36d86` |
-| 2    | navy   | `#2e64a6` | `#5290d3` |
-| 3    | ochre  | `#c0851f` | `#b68f1b` |
-| 4    | teal   | `#109488` | `#20a89b` |
-| 5    | violet | `#7b52a4` | `#9468c2` |
-| 6    | olive  | `#6c9539` | `#77a246` |
-| —    | grey   | `#8e9095` | `#74757a` |
-
-Grey is for baselines and catch-all groups. Scatter plots use slots 1–3 only.
-If the theme pair changes (ROADMAP §7), re-derive slots 1–2 from the new
-accent and link hues at the same lightness, and re-validate.
-
-Ink maps to tokens: labels `--color-fg-soft`, ticks `--color-muted`, axis
-`--color-rule`, grid `--color-border`. Values are claret-light / claret-dark.
+Prints every path and text span. Find the axis frame and tick labels, map path
+coordinates back to data units, and note the file in `sources.yaml` as `vector`.

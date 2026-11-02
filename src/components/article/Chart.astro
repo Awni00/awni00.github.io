@@ -1,0 +1,108 @@
+---
+/**
+ * A chart drawn at build time from a figure definition and its data.
+ *
+ *   <Chart figure="abstractor/pairwise-order" caption="…" />
+ *
+ * `figure` names a definition in `src/site/figures/` (path without `.ts`);
+ * the definition names its data file in `src/data/figures/`. The chart is
+ * inline SVG, so it uses the page's fonts and recolours with the theme.
+ * A `full` chart is also drawn at phone width and swapped in on narrow
+ * columns, rather than shrinking its type.
+ */
+import Figure from "./Figure.astro";
+import {
+  DASH,
+  FIGURE_COMPACT_WIDTH,
+  FIGURE_SIZES,
+  colorToken,
+  parseFigureData,
+  renderFigure,
+  type FigureDefinition,
+  type FigureSize
+} from "../../lib/figures/render";
+import "../../styles/figures.css";
+
+type Props = {
+  figure: string;
+  alt?: string;
+  caption?: string;
+  /** Overrides the definition's size preset. */
+  size?: FigureSize;
+};
+
+const { figure, alt, caption, size: sizeOverride } = Astro.props;
+
+const definitions = import.meta.glob<{ default: FigureDefinition }>("/src/site/figures/**/*.ts", {
+  eager: true
+});
+const datasets = import.meta.glob<string>("/src/data/figures/**/*.csv", {
+  eager: true,
+  query: "?raw",
+  import: "default"
+});
+
+const definition = definitions[`/src/site/figures/${figure}.ts`]?.default;
+if (!definition) throw new Error(`<Chart>: no figure definition at src/site/figures/${figure}.ts`);
+const csv = datasets[`/src/data/figures/${definition.data}`];
+if (csv === undefined) throw new Error(`<Chart>: no data file at src/data/figures/${definition.data}`);
+
+const data = parseFigureData(csv);
+const size = sizeOverride ?? definition.size;
+const width = FIGURE_SIZES[size];
+const label = alt ?? definition.alt ?? "";
+const wide = renderFigure(definition.plot({ data, width, compact: false }), label);
+const compact =
+  size === "full"
+    ? renderFigure(definition.plot({ data, width: FIGURE_COMPACT_WIDTH, compact: true }), label)
+    : null;
+// Rendered here and handed on, because an empty forwarded slot would still
+// count as a caption to <Figure> and leave an empty <figcaption>.
+const escapeHtml = (text: string) =>
+  text.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+const captionHtml = Astro.slots.has("caption")
+  ? await Astro.slots.render("caption")
+  : caption && escapeHtml(caption);
+const legend = definition.legend ?? [];
+const mono = (definition.mono ?? []).join(" ");
+---
+
+<Figure maxWidth={`${width}px`}>
+  <div
+    slot="figure"
+    class:list={["figure-chart", `figure-chart--${size}`]}
+    style={`--figure-width: ${width}px`}
+    data-mono={mono || undefined}
+  >
+    {definition.title && <p class="figure-chart__title">{definition.title}</p>}
+    {
+      legend.length > 0 && (
+        <ul class="figure-legend" aria-hidden="true">
+          {legend.map((item) => (
+            <li>
+              <svg width="16" height="10" viewBox="0 0 16 10">
+                {item.key === "line" ? (
+                  <line
+                    x1="0"
+                    x2="16"
+                    y1="5"
+                    y2="5"
+                    stroke={colorToken(item.color)}
+                    stroke-width="2"
+                    stroke-dasharray={item.dashed ? DASH : undefined}
+                  />
+                ) : (
+                  <rect x="3" y="0" width="10" height="10" rx="1.5" fill={colorToken(item.color)} />
+                )}
+              </svg>
+              {item.label}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    <div class="figure-chart__wide" set:html={wide} />
+    {compact && <div class="figure-chart__compact" set:html={compact} />}
+  </div>
+  {captionHtml && <Fragment slot="caption" set:html={captionHtml} />}
+</Figure>

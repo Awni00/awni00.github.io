@@ -14,6 +14,11 @@ cot-info/linear-thresh-empirical-sample-complexity.csv:
   fidelity: vector
   note: Step-function vertices. x is log10(epsilon), plotted reversed (1 to 1e-3).
 
+relational-convolutions/relational-games-ood.csv:
+  figure: public/blog/relational-convolutions/figs/relational_games_ood_gen.json
+  fidelity: source
+  note: Flattened from the plotly figure's traces. error is the plotted error bar.
+
 abstractor/pairwise-order-learning-curves.csv:
   figure: public/blog/abstractor/figs/pairwise_order_learning_curves.png
   fidelity: by-eye

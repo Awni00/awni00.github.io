@@ -1,0 +1,98 @@
+---
+/**
+ * Before/after review for the figure system: each chart as the post shows it
+ * today, next to the same chart rebuilt with <Chart>. Uses the posts' own
+ * markup for "Now" so the comparison is like for like, at the same width.
+ *
+ * Dev-only, routed through `src/pages/fixtures/[fixture].astro`.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Chart from "../components/article/Chart.astro";
+import Figure from "../components/article/Figure.astro";
+import FigureGrid from "../components/article/FigureGrid.astro";
+import Picture from "../components/article/Picture.astro";
+import PlotlyFigure from "../components/article/PlotlyFigure.astro";
+
+const title = "Figure review";
+const description = "Each chart as published today, next to its rebuild. Flip the theme toggle to compare dark mode.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="page-shell">
+    <header class="page-header">
+      <h1 id="figure-review">{title}</h1>
+      <p class="page-description">{description}</p>
+    </header>
+    <div class="article-content">
+      <h2 id="abstractor">abstractor · pairwise order</h2>
+      <p class="figure-review-note">Rebuilt data was read off the PNG by eye; see <code>src/data/figures/sources.yaml</code>.</p>
+      <FigureGrid columns={2}>
+        <Figure
+          src="/blog/abstractor/figs/pairwise_order_learning_curves.png"
+          alt="learning curves of pairwise order discriminative task"
+          caption="Now"
+        />
+        <Chart
+          figure="abstractor/pairwise-order"
+          alt="learning curves of pairwise order discriminative task"
+          caption="Rebuilt"
+        />
+      </FigureGrid>
+
+      <h2 id="norm">algorithmic generalization · norm amplification</h2>
+      <Figure mediaMaxWidth="440px" caption="Now">
+        <Picture
+          slot="figure"
+          src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_ov_operator_norm_mpl.pdf"
+          alt="L0 OV Norm"
+          invertInDarkMode
+        />
+      </Figure>
+      <Chart
+        figure="algorithmic-generalization-transformer-architectures/l0-ov-operator-norm"
+        alt="L0 OV Norm"
+        caption="Rebuilt"
+      />
+
+      <h2 id="cot-info">cot-info · empirical sample complexity</h2>
+      <FigureGrid columns={2}>
+        <Figure caption="Now">
+          <Picture
+            slot="figure"
+            src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/empirical_sample_complexity_legendin.pdf"
+            alt="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class."
+            invertInDarkMode
+          />
+        </Figure>
+        <Chart
+          figure="cot-info/linear-thresh-empirical-sample-complexity"
+          alt="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class."
+          caption="Rebuilt"
+        />
+      </FigureGrid>
+
+      <h2 id="relational-games">relational convolutions · relational games</h2>
+      <p class="figure-review-note">Now</p>
+      <PlotlyFigure
+        src="/blog/relational-convolutions/figs/relational_games_ood_gen.html"
+        iframeTitle="Relational games out-of-distribution generalization"
+        height="520px"
+        width="100%"
+        showOpenLink={false}
+      />
+      <Chart
+        figure="relational-convolutions/relational-games-ood"
+        alt="Relational games out-of-distribution generalization"
+        caption="Rebuilt. Hover a bar for its value."
+      />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .figure-review-note {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--color-muted);
+  }
+</style>
