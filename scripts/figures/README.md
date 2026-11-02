@@ -130,6 +130,25 @@ files:
     notes: <anything a later reader needs>
 ```
 
+A source outside any git repo (a PDF in a reference manager, a download)
+sets `repo`, `remote` and `commit` to `none`, gives the file's absolute
+`path` and `sha256`, and records what dates it in `created` (for a PDF, its
+creation date from the metadata).
+
+## Shared helpers
+
+- `src/lib/figures/panels.ts`: small multiples whose panels each keep their
+  own x and y range (Plot facets share one scale). Data are mapped to [0, 1]
+  per panel and the panel's ticks, grid and labels are drawn as marks.
+- Hand-drawn axes take `className`s so `figures.css` styles them like Plot's
+  own: `figure-tick-label`, `figure-axis-label`, `figure-grid`,
+  `figure-axis-line`.
+- Ordinal or sequential keys: a legend item `{ key: "ramp", label, color,
+  opacities, from, to }`.
+- `scripts/figures/extract_curves.py`: line-and-band charts from a PDF page,
+  with automatic tick calibration and legend matching
+  (`scripts/figures/abstractor/build_data.py` shows its use).
+
 ## Review page
 
 `src/fixtures/figure-review/<post>.ts` lists the post's charts for the

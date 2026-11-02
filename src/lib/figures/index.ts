@@ -72,13 +72,26 @@ export type FigureContext = {
  * gets the same one: below the plot, left-aligned, with line keys for lines
  * (dashed when the series is) and square keys for fills.
  */
-export type LegendItem = {
-  label: string;
-  /** A SERIES sentinel or NEUTRAL. */
-  color: string;
-  key: "line" | "swatch" | "dot";
-  dashed?: boolean;
-};
+export type LegendItem =
+  | {
+      label: string;
+      /** A SERIES sentinel or NEUTRAL. */
+      color: string;
+      key: "line" | "swatch" | "dot";
+      /** true for the standard dash, or an SVG dash pattern such as "1.5,3" (dotted). */
+      dashed?: boolean | string;
+    }
+  | {
+      /** An ordinal or sequential key: one hue at increasing opacity. */
+      key: "ramp";
+      label: string;
+      color: string;
+      /** Opacity of each step, low to high. */
+      opacities: number[];
+      /** End labels, e.g. "1" and "10". */
+      from: string;
+      to: string;
+    };
 
 export type FigureDefinition = {
   /** Path under `src/data/figures/`. */

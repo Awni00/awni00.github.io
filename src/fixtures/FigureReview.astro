@@ -25,7 +25,7 @@ const reviews = Object.values(
   .sort((a, b) => a.order - b.order);
 
 const definitions = import.meta.glob<{ default: FigureDefinition }>(
-  ["/src/site/figures/**/*.ts", "!/src/site/figures/**/*.client.ts"],
+  ["/src/site/figures/**/*.ts", "!/src/site/figures/**/*.client.ts", "!/src/site/figures/**/_*.ts"],
   { eager: true }
 );
 const isNarrow = (entry: ReviewEntry) =>

@@ -157,17 +157,42 @@
   overflow: visible;
 }
 
+.figure-legend__ramp span {
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hooks for hand-drawn axes (panels with their own scales draw ticks, grid
+   and titles as ordinary marks): give those marks these classNames. */
+.figure-chart .figure-tick-label {
+  fill: var(--color-muted);
+}
+
+.figure-chart .figure-axis-label {
+  fill: var(--color-fg-soft);
+  font-size: 13px;
+}
+
+.figure-chart .figure-grid {
+  stroke: var(--color-border);
+  stroke-opacity: 1;
+}
+
+.figure-chart .figure-axis-line {
+  stroke: var(--color-rule);
+}
+
 /* Full-width charts carry a phone layout and swap to it on narrow columns. */
 .figure-chart__compact {
   display: none;
 }
 
 @container (max-width: 520px) {
-  .figure-chart--full .figure-chart__wide {
+  .figure-chart:is(.figure-chart--medium, .figure-chart--full) .figure-chart__wide {
     display: none;
   }
 
-  .figure-chart--full .figure-chart__compact {
+  .figure-chart:is(.figure-chart--medium, .figure-chart--full) .figure-chart__compact {
     display: block;
   }
 }

@@ -1,0 +1,60 @@
+# Where this paper's figure data came from. Schema: scripts/figures/README.md#provenance
+paper: Disentangling and Integrating Relational and Sensory Information in Transformer Architectures
+files:
+  relgames-learning-curves.csv:
+    figure: Relational games learning curves (blog relgames_learning_curves plotly figure)
+    used_by: src/site/figures/dual-attention/relgames-learning-curves.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/dual-attention/static/figs/relgames_learning_curves.json
+          sha256: 5c016c91794baad47f5303a2ea31790d817d1c05b6a0da2034d50cfc310d7666
+        - path: public/blog/dual-attention/static/figs/relgames_learning_curves.html
+          sha256: c0616c69e9dafff20db0c1185a6ed72c61a80852920b8d09dd2d6c1a39930a4a
+      generator: plotly express figure JSON; original script not in this repo
+    extracted: 2026-11-01
+    method: converted
+    tool: scripts/figures/dual-attention/convert_plotly.py
+    fidelity: exact (same numbers as the plotly traces)
+    notes: The published HTML inlines the same traces as the JSON (checked identical). One row per model, task and training set size; null points dropped (match pattern has sizes 2500–25000, the other tasks 250–2500). n_sa / n_ra are the head counts in the trace name; error is the plotted error bar.
+  math-accuracy-scaling.csv:
+    figure: Mathematical problem solving, accuracy vs parameter count (blog math_accuracy_scaling plotly figure)
+    used_by: src/site/figures/dual-attention/math-accuracy-scaling.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/dual-attention/static/figs/math_accuracy_scaling.json
+          sha256: a2ebaf2962ac946b6b314633f73aa0c9495d94f8de9c1200c7386d8f3f057c58
+        - path: public/blog/dual-attention/static/figs/math_accuracy_scaling.html
+          sha256: 5e734217830583cd5b45fa28e84116beccdb1fb887577ab06d7dd62b21fd1bdc
+      generator: plotly express figure JSON; original script not in this repo
+    extracted: 2026-11-01
+    method: converted
+    tool: scripts/figures/dual-attention/convert_plotly.py
+    fidelity: exact (same numbers as the plotly traces)
+    notes: The published HTML inlines the same traces as the JSON (checked identical). One row per model, task and parameter count. error is the plotted error bar; trials is the trace's customdata ("count").
+  language-modeling-scaling-laws.csv:
+    figure: Language modeling scaling laws, tokens to reach a perplexity vs parameter count (blog language_modeling_scaling_laws plotly figure)
+    used_by: src/site/figures/dual-attention/language-modeling-scaling-laws.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/dual-attention/static/figs/language_modeling_scaling_laws.json
+          sha256: 48b1b75ed9a576771b2d5cfc3c292e6df9634e65f4b21f01f1aa9d6203569672
+        - path: public/blog/dual-attention/static/figs/language_modeling_scaling_laws.html
+          sha256: d8dfb1b32453e45c93a0cf0a1a58f1ec3d042b10bd3b54d96092da94e9916463
+      generator: plotly express figure JSON; original script not in this repo
+    extracted: 2026-11-01
+    method: converted
+    tool: scripts/figures/dual-attention/convert_plotly.py
+    fidelity: exact (same numbers as the plotly traces)
+    notes: The published HTML inlines the same traces as the JSON (checked identical). One row per model, perplexity level and parameter count; tokens is the number of training tokens to reach that perplexity. The 343M DAT and 353M Transformer never reached perplexity 15 (null in the source), so those rows are absent. The two legend-only traces are skipped.

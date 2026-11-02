@@ -37,7 +37,7 @@ type Props = {
 const { figure, alt, caption, size: sizeOverride } = Astro.props;
 
 const definitions = import.meta.glob<{ default: FigureDefinition }>(
-  ["/src/site/figures/**/*.ts", "!/src/site/figures/**/*.client.ts"],
+  ["/src/site/figures/**/*.ts", "!/src/site/figures/**/*.client.ts", "!/src/site/figures/**/_*.ts"],
   { eager: true }
 );
 const clients = import.meta.glob("/src/site/figures/**/*.client.ts");
@@ -57,8 +57,10 @@ const size = sizeOverride ?? definition.size;
 const width = FIGURE_SIZES[size];
 const label = alt ?? definition.alt ?? "";
 const wide = renderFigure(definition.plot({ data, width, compact: false }), label);
+// Medium and full charts also get a phone layout, so their type never
+// shrinks below the spec; narrow charts already fit a phone column.
 const compact =
-  size === "full"
+  size !== "narrow"
     ? renderFigure(definition.plot({ data, width: FIGURE_COMPACT_WIDTH, compact: true }), label)
     : null;
 const interactive = `/src/site/figures/${figure}.client.ts` in clients;
@@ -90,28 +92,41 @@ const mono = (definition.mono ?? []).join(" ");
     {
       legend.length > 0 && (
         <ul class="figure-legend" aria-hidden="true">
-          {legend.map((item) => (
-            <li>
-              <svg width="16" height="10" viewBox="0 0 16 10">
-                {item.key === "line" ? (
-                  <line
-                    x1="0"
-                    x2="16"
-                    y1="5"
-                    y2="5"
-                    stroke={colorToken(item.color)}
-                    stroke-width="2"
-                    stroke-dasharray={item.dashed ? DASH : undefined}
-                  />
-                ) : item.key === "dot" ? (
-                  <circle cx="8" cy="5" r="4" fill={colorToken(item.color)} />
-                ) : (
-                  <rect x="3" y="0" width="10" height="10" rx="1.5" fill={colorToken(item.color)} />
-                )}
-              </svg>
-              {item.label}
-            </li>
-          ))}
+          {legend.map((item) =>
+            item.key === "ramp" ? (
+              <li class="figure-legend__ramp">
+                {item.label}
+                <span>{item.from}</span>
+                <svg width={item.opacities.length * 12} height="10" viewBox={`0 0 ${item.opacities.length * 12} 10`}>
+                  {item.opacities.map((opacity, i) => (
+                    <rect x={i * 12 + 1} y="0" width="10" height="10" rx="1.5" fill={colorToken(item.color)} fill-opacity={opacity} />
+                  ))}
+                </svg>
+                <span>{item.to}</span>
+              </li>
+            ) : (
+              <li>
+                <svg width="16" height="10" viewBox="0 0 16 10">
+                  {item.key === "line" ? (
+                    <line
+                      x1="0"
+                      x2="16"
+                      y1="5"
+                      y2="5"
+                      stroke={colorToken(item.color)}
+                      stroke-width="2"
+                      stroke-dasharray={item.dashed === true ? DASH : item.dashed || undefined}
+                    />
+                  ) : item.key === "dot" ? (
+                    <circle cx="8" cy="5" r="4" fill={colorToken(item.color)} />
+                  ) : (
+                    <rect x="3" y="0" width="10" height="10" rx="1.5" fill={colorToken(item.color)} />
+                  )}
+                </svg>
+                {item.label}
+              </li>
+            )
+          )}
         </ul>
       )
     }

@@ -1,8 +1,9 @@
 import * as Plot from "@observablehq/plot";
 import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures";
 
-const MODELS = ["Abstractor", "CoRelNet (Asymmetric)", "PrediNet", "CoRelNet", "MLP"];
-const COLORS = [SERIES[0], SERIES[1], SERIES[2], SERIES[3], NEUTRAL];
+// Legend order of the published figure. Colours match set-classification.ts.
+const MODELS = ["Abstractor", "CoRelNet", "CoRelNet (Asymmetric)", "PrediNet", "MLP"];
+const COLORS = [SERIES[0], SERIES[3], SERIES[1], SERIES[2], NEUTRAL];
 
 export default defineFigure({
   data: "abstractor/pairwise-order-learning-curves.csv",
@@ -13,6 +14,7 @@ export default defineFigure({
     width,
     height: 230,
     marginLeft: 44,
+    marginRight: 14,
     marginBottom: 40,
     color: { domain: MODELS, range: COLORS },
     x: {
@@ -29,24 +31,14 @@ export default defineFigure({
     },
     marks: [
       Plot.gridY({ ticks: [0.5, 0.6, 0.7, 0.8, 0.9] }),
-      Plot.areaY(data, {
-        x: "train_size",
-        y1: (d) => d.accuracy - d.band_halfwidth,
-        y2: (d) => d.accuracy + d.band_halfwidth,
-        fill: "model"
-      }),
-      Plot.lineY(data, {
-        x: "train_size",
-        y: "accuracy",
-        stroke: "model",
-        strokeWidth: 2
-      }),
+      Plot.areaY(data, { x: "train_size", y1: "lo", y2: "hi", fill: "model" }),
+      Plot.lineY(data, { x: "train_size", y: "accuracy", stroke: "model", strokeWidth: 2 }),
       Plot.dot(data, {
         x: "train_size",
         y: "accuracy",
         fill: "model",
         r: 3,
-        title: (d) => `${d.model}\n${d.train_size} examples: ${d.accuracy}`
+        title: (d) => `${d.model}\n${d.train_size} examples: ${d.accuracy.toFixed(3)}`
       })
     ]
   })

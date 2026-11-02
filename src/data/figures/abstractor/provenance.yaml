@@ -2,18 +2,87 @@
 paper: "Abstractors and Relational Cross-Attention: An Inductive Bias for Explicit Relational Reasoning in Transformers"
 files:
   pairwise-order-learning-curves.csv:
-    figure: Learning Asymmetric ≺ Relation (blog pairwise_order_learning_curves.png)
+    figure: Learning Asymmetric ≺ Relation, ICLR 2024 paper p. 7 (blog pairwise_order_learning_curves.png)
     used_by: src/site/figures/abstractor/pairwise-order.ts
+    source:
+      repo: none (author's Zotero copy of the ICLR 2024 camera-ready PDF; not in a git repo)
+      remote: none
+      commit: none
+      commit_date: 2024-04-12T17:54:30-04:00 # PDF creation date
+      files:
+        - path: ~/Zotero/storage/8RUBIWBA/Altabaa et al. - 2023 - Abstractors and relational cross-attention An ind.pdf
+          sha256: 55a0ade6f8e43530394701aa9e08434b7f45794350a67a564beb07187092383f
+      generator: experiment logs not found locally (no Abstractor experiment repo or results in ~/Documents/project-code)
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/abstractor/build_data.py (page index 6, via extract_curves.py), calibrated against the axis ticks
+    fidelity: exact to the PDF's coordinate precision
+    notes: Replaces the earlier by-eye read of the PNG; values agree with it. lo/hi are the plotted band edges (statistic not stated in the figure). train_size is rounded to the integer; the first and last points sit at 5 and 2015.
+  set-classification.csv:
+    figure: SET Classification, ICLR 2024 slides p. 10 (blog set_classification.png)
+    used_by: src/site/figures/abstractor/set-classification.ts
     source:
       repo: awni00.github.io
       remote: https://github.com/Awni00/awni00.github.io.git
-      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
-      commit_date: 2026-10-12T17:56:11-04:00
+      commit: d954f62fb5a5124fdf01c93650afe43d1c60a219
+      commit_date: 2026-05-24T23:18:36-04:00
       files:
-        - path: public/blog/abstractor/figs/pairwise_order_learning_curves.png
-          sha256: 9b096f97b4b01aaf20e68c20665f22d48b095bff31907ea8789c6eb550bd017b
-      generator: unknown; no source data found
+        - path: public/publications/slides/abstractor-slides.pdf
+          sha256: c3f1de513ce5b20d35937f1eb8809e403488ae15fd7f7534570eaced515115a0
+      generator: experiment logs not found locally
     extracted: 2026-11-01
-    method: by-eye
-    fidelity: approximate; shape and ordering are right, values are not
-    notes: First point's x was read as about 10. Band half-widths are rough. Replace when the original logs turn up.
+    method: vector-extracted
+    tool: scripts/figures/abstractor/build_data.py (page index 13, via extract_curves.py), calibrated against the axis ticks
+    fidelity: exact to the PDF's coordinate precision
+    notes: Same curves as the ICLR 2024 paper figure and the blog PNG. lo/hi are the plotted band edges.
+  random-object-sorting.csv:
+    figure: Random Object Sorting, ICLR 2024 slides p. 11 (blog random_object_sorting.png)
+    used_by: src/site/figures/abstractor/random-object-sorting.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: d954f62fb5a5124fdf01c93650afe43d1c60a219
+      commit_date: 2026-05-24T23:18:36-04:00
+      files:
+        - path: public/publications/slides/abstractor-slides.pdf
+          sha256: c3f1de513ce5b20d35937f1eb8809e403488ae15fd7f7534570eaced515115a0
+      generator: experiment logs not found locally
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/abstractor/build_data.py (page index 14, left axes), calibrated against the axis ticks
+    fidelity: exact to the PDF's coordinate precision
+    notes: lo/hi are the plotted band edges; some exceed 1 as plotted (the chart clips them). train_size rounded to the integer.
+  random-object-sorting-generalization.csv:
+    figure: Random Object Sorting Generalization, ICLR 2024 slides p. 11 (blog random_object_sorting_generalization.png)
+    used_by: src/site/figures/abstractor/random-object-sorting-generalization.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: d954f62fb5a5124fdf01c93650afe43d1c60a219
+      commit_date: 2026-05-24T23:18:36-04:00
+      files:
+        - path: public/publications/slides/abstractor-slides.pdf
+          sha256: c3f1de513ce5b20d35937f1eb8809e403488ae15fd7f7534570eaced515115a0
+      generator: experiment logs not found locally
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/abstractor/build_data.py (page index 14, right axes), calibrated against the axis ticks
+    fidelity: exact to the PDF's coordinate precision
+    notes: The legend reads Abstractor / Pre-trained / Transformer / Pre-trained; model and pretrained were assigned from the line colour (light = from scratch, dark = pre-trained). lo/hi are the plotted band edges.
+  math-training-curves.csv:
+    figure: Mathematical problem-solving training curves, ICLR 2024 slides p. 12 (blog math_training_curves.png)
+    used_by: src/site/figures/abstractor/math-training-curves.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: d954f62fb5a5124fdf01c93650afe43d1c60a219
+      commit_date: 2026-05-24T23:18:36-04:00
+      files:
+        - path: public/publications/slides/abstractor-slides.pdf
+          sha256: c3f1de513ce5b20d35937f1eb8809e403488ae15fd7f7534570eaced515115a0
+      generator: experiment logs not found locally
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/abstractor/build_data.py (page index 15, five axes), calibrated against the axis ticks
+    fidelity: exact to the PDF's coordinate precision
+    notes: Task names are written as in the PNG panel titles (the slides render the double underscores as spaces). lo/hi are the plotted band edges.

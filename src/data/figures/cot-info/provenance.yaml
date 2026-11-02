@@ -18,3 +18,105 @@ files:
     tool: scripts/figures/dump_pdf_paths.py, calibrated against the axis ticks
     fidelity: exact to the PDF's coordinate precision
     notes: Step-function vertices. log10_epsilon is plotted reversed (1 to 1e-3).
+  linear-thresh-cot-info-vs-e2e-diff.csv:
+    figure: Relative CoT information vs end-to-end disagreement, linear autoregressive class (blog CoTInfo_vs_E2EDiff.pdf, LinearThresh run)
+    used_by: src/site/figures/cot-info/linear-thresh-cot-info-vs-e2e-diff.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_E2EDiff.pdf
+          sha256: 0a4213485d3ebbed82822fd092b7b648684be041165deca9a75ecd5806af840e
+      generator: not found locally (the local cot-info and stochastic-cot-inf repos hold different experiments)
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/cot-info/extract.py (axes calibrated against the major ticks)
+    fidelity: exact to the PDF's coordinate precision (marker centres)
+    notes: One row per scatter marker (103). The dashed y = x reference line is drawn from its formula, not stored.
+  linear-thresh-cot-info-vs-epsilon.csv:
+    figure: CoT information function vs epsilon, linear autoregressive class (blog CoTInfo_vs_Epsilon_log.pdf, LinearThresh run)
+    used_by: src/site/figures/cot-info/linear-thresh-cot-info-vs-epsilon.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_Epsilon_log.pdf
+          sha256: 852b04563c5aceccce4104d19ffb532b6d457f624b0fd0448909e4185b773922
+      generator: not found locally (the local cot-info and stochastic-cot-inf repos hold different experiments)
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/cot-info/extract.py (axes calibrated against the major ticks)
+    fidelity: exact to the PDF's coordinate precision
+    notes: series=cot_information holds the curve's path vertices (it runs slightly past the axis at 1e-2; the chart clips it). series=vertical_rule is the unlabelled vertical dashed line (value empty). The dashed y = epsilon curve is drawn from its formula.
+  linear-thresh-learning-curves.csv:
+    figure: Probability of zero error vs sample size, linear autoregressive class (blog learning_curves_prob_success_eps0_log_legendin_e2eerr.pdf, LinearThresh run)
+    used_by: src/site/figures/cot-info/linear-thresh-learning-curves.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/learning_curves_prob_success_eps0_log_legendin_e2eerr.pdf
+          sha256: f97b474caa0cb129acbf28bf0b5686ad3866a8d98aec017896fd09d6ea152a53
+      generator: not found locally (the local cot-info and stochastic-cot-inf repos hold different experiments)
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/cot-info/extract.py (axes calibrated against the major ticks)
+    fidelity: exact to the PDF's coordinate precision
+    notes: lower/upper are the shaded band's edges at each line vertex. m rounded to integers (recovered values within 0.02%).
+  dfa-cot-info-ratio-by-detail.csv:
+    figure: CoT information ratio vs epsilon by CoT detail level, DFA (blog CoTInfoRatio_vs_Epsilon_by_detail_log.pdf, DFA_S4A2L10_varycotdetail run)
+    used_by: src/site/figures/cot-info/dfa-cot-info-ratio-by-detail.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/cot-info/figs/simulation_figs/DFA_S4A2L10_varycotdetail/20250503-194523/figs/CoTInfoRatio_vs_Epsilon_by_detail_log.pdf
+          sha256: aeeb0f66c95cb02ed8edc8d6675f4f26ac05560316d89f20c249de02cd115324
+      generator: not found locally (the local cot-info and stochastic-cot-inf repos hold different experiments)
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/cot-info/extract.py (axes calibrated against the major ticks)
+    fidelity: exact to the PDF's coordinate precision (about 0.2 ratio units per point)
+    notes: detail_level is read off the colour bar; the 10 curves are drawn light to dark, matching levels 1 to 10. The dashed curve (y = epsilon) is drawn from its formula; a near-invisible grey fill at y = 0 is not recovered.
+  dfa-empirical-sample-complexity.csv:
+    figure: Empirical sample complexity, DFA (blog empirical_sample_complexity_legendin.pdf, DFA_S4A2L10_learning run)
+    used_by: src/site/figures/cot-info/dfa-empirical-sample-complexity.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/empirical_sample_complexity_legendin.pdf
+          sha256: e71ba32b4b76852c0aa74968d03d113ceb24023b1bd29b10ec16c1abd56a335a
+      generator: not found locally (the local cot-info and stochastic-cot-inf repos hold different experiments)
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/cot-info/extract.py (axes calibrated against the major ticks)
+    fidelity: exact to the PDF's coordinate precision
+    notes: Step-function vertices. sample_complexity rounded to integers (recovered values within 0.05). log10_epsilon is plotted reversed (1 to 1e-4).
+  dfa-learning-curves.csv:
+    figure: Probability of zero error vs sample size, DFA (blog learning_curves_prob_success_eps0_log_legendin.pdf, DFA_S4A2L10_learning run)
+    used_by: src/site/figures/cot-info/dfa-learning-curves.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/learning_curves_prob_success_eps0_log_legendin.pdf
+          sha256: 9e72c6f48eb20c00850c7386fa429f7817e7ac038a59d42a7ffe6653ba4db9be
+      generator: not found locally (the local cot-info and stochastic-cot-inf repos hold different experiments)
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/cot-info/extract.py (axes calibrated against the major ticks)
+    fidelity: exact to the PDF's coordinate precision
+    notes: lower/upper are the shaded band's edges at each line vertex. m rounded to integers (recovered values within 0.02%).

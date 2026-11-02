@@ -1,0 +1,7 @@
+order,method,method_label,iid,explore,base
+0,global_plus_token,Global + token,73.822,81.523,75.69
+1,token_pressure,Token weighting,73.275,80.651,75.69
+2,global_norm,Global scale,73.861,81.048,75.69
+3,token_inverse,Token inverse,69.258,69.232,75.69
+4,standard_cvae,ELBO,75.56,75.859,75.69
+5,beta_elbo,β-ELBO,75.684,75.859,75.69
