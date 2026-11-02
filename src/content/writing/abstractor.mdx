@@ -15,7 +15,7 @@ updated: "2026-05-24"
 summary: "Abstractors add relational cross-attention to Transformers as an inductive bias for explicit relational reasoning and abstraction."
 venue: "International Conference on Learning Representations (ICLR)"
 tags: ["transformers", "architectures", "inductive biases", "relational reasoning", "generalization"]
-links: ["topics/abstraction", "./relational-convolutions", "./dual-attention"]
+links: ["topics/inductive-biases", "./relational-convolutions", "./dual-attention"]
 authors:
   - name: "Awni Altabaa"
     affiliation: "Yale University"
@@ -45,14 +45,11 @@ bibtex: |
 
 
 
-<TwoColumns>
-  <Figure slot="left" src="/blog/abstractor/figs/self_attn_fig.png" alt="depiction of self-attention" />
-  <Figure slot="right" src="/blog/abstractor/figs/rel_crossattn_fig.png" alt="depiction of relational cross-attention" />
-</TwoColumns>
-
-<Figure>
+<FigureGrid columns={2}>
+  <Figure src="/blog/abstractor/figs/self_attn_fig.png" alt="depiction of self-attention" />
+  <Figure src="/blog/abstractor/figs/rel_crossattn_fig.png" alt="depiction of relational cross-attention" />
   <Fragment slot="caption">Figure: A depiction of relational cross-attention (right), compared with standard self-attention (left). Relational cross-attention implements a type of information bottleneck to disentangle object-level features from relational features. When integrated into a broader Transformer-based architecture, this enables explicit relational representation, yielding improved abstraction and generalization from limited data.</Fragment>
-</Figure>
+</FigureGrid>
 
 ## Abstract
 
@@ -60,7 +57,7 @@ An extension of Transformers is proposed that enables explicit relational reason
 
 ## Method Overview
 
-The ability to infer, represent, and process relations lies at the heart of human abilities for abstraction---by representing the relations between different situations, we are able to draw connections and synthesize new ideas. The Transformer architecture has the ability to model relations between objects *implicitly* through its attention mechanisms. However, we argue that standard attention produces entangled representations encoding a mixture of relational information and object-level features. In this work we propose an extension of Transformers that enables explicit relational reasoning through a novel module called the *Abstractor* and a new variant of attention called *relational cross-attention*.
+The ability to infer, represent, and process relations lies at the heart of human abilities for abstraction—by representing the relations between different situations, we are able to draw connections and synthesize new ideas. The Transformer architecture has the ability to model relations between objects *implicitly* through its attention mechanisms. However, we argue that standard attention produces entangled representations encoding a mixture of relational information and object-level features. In this work we propose an extension of Transformers that enables explicit relational reasoning through a novel module called the *Abstractor* and a new variant of attention called *relational cross-attention*.
 
 The core operation in a Transformer is attention. For an input sequence $$X = (x_1, \ldots, x_n)$$, self-attention transforms the sequence via, $$ X' \gets \phi_v(X) \, \mathrm{Softmax}({\phi_q(X)}^\top \phi_k(X))$$, where $$\phi_q, \phi_k, \phi_v$$ are functions on $$\mathcal{X}$$ applied independently to each object in the sequence. We think of $$R := \phi_q(X)^\top \phi_k(X)$$ as a relation matrix. Self-attention admits an interpretation as a form of neural message-passing as follows,
 
@@ -70,7 +67,7 @@ $$
 
 where $$m_{j \to i} = (\phi_v(x_j), R_{ij})$$ is the message from object $$j$$ to object $$i$$, encoding the sender's features and the relation between the two objects, and $$\bar{R} = \mathrm{Softmax}(R)$$ is the softmax-normalized relation matrix. Hence, the processed representation obtained by self-attention is an entangled mixture of relational information and object-level features.
 
-Our goal is to learn relational representations which are abstracted away from object-level features in order to achieve more sample-efficient learning and improved generalization in relational reasoning. This is not naturally supported by the entangled representations produced by standard self-attention. We achieve this via a simple modification of attention---we replace the values $$\phi_v(x_i)$$ with vectors that *identify* objects, but do not encode any information about their features. We call those vectors *symbols*. Hence, the message sent from object $$j$$ to object $$i$$ is now $$m_{j \to i} = (s_j, R_{ij})$$, the relation between the two objects, together with with the symbol identifying the sender object,
+Our goal is to learn relational representations which are abstracted away from object-level features in order to achieve more sample-efficient learning and improved generalization in relational reasoning. This is not naturally supported by the entangled representations produced by standard self-attention. We achieve this via a simple modification of attention—we replace the values $$\phi_v(x_i)$$ with vectors that *identify* objects, but do not encode any information about their features. We call those vectors *symbols*. Hence, the message sent from object $$j$$ to object $$i$$ is now $$m_{j \to i} = (s_j, R_{ij})$$, the relation between the two objects, together with the symbol identifying the sender object,
 
 $$
 A_i \gets \mathrm{MessagePassing}\left(\left\{(s_j, R_{ij})\right\}_{j \in [n]}\right)
@@ -78,7 +75,7 @@ $$
 
 Symbols act as abstract references to objects. They do not contain any information about the contents or features of the objects, but rather *refer* to objects.
 
-Abstraction relies on the assignment of symbols to individual objects without directly encoding their features. We propose three different mechanisms for assigning symbols to objects: *positional symbols* (symbols are assigned to objects sequentially based on the order they appear), *position-relative symbols* (symbols are assigned to encode the relative position of the sender with respect ot the receiver), and *symbolic attention* (symbols are retrieved via attention from a library of learned symbols).
+Abstraction relies on the assignment of symbols to individual objects without directly encoding their features. We propose three different mechanisms for assigning symbols to objects: *positional symbols* (symbols are assigned to objects sequentially based on the order they appear), *position-relative symbols* (symbols are assigned to encode the relative position of the sender with respect to the receiver), and *symbolic attention* (symbols are retrieved via attention from a library of learned symbols).
 
 This motivates a variant of attention which we call *relational cross-attention*. Relational cross-attention forms the core of the *Abstractor* module. The Abstractor processes a sequence of objects to produce a sequence of "abstract embeddings" which encode the relational features among its input.
 
@@ -88,27 +85,21 @@ Please see the paper for the details.
 
 We evaluate our proposed architecture on a series of experiments involving both discriminative and generative tasks. We compare to a standard Transformer as well as to previous relational architectures. Please see the paper for a description of the tasks and the experimental set up. We include a preview of the results here.
 
-**Discriminative Relational Tasks.** We begin our experimental evaluation with discriminative relational classification tasks---a setting where it is possible to compare to previously proposed relational architectures such as [PrediNet](https://arxiv.org/abs/1905.10307) and [CoRelNet](https://arxiv.org/abs/2206.05056). THe figure below compares sample-efficiency at two discriminative relational tasks: modeling transitive pairwise order in random objects and a task based on the [SET card game](https://www.wikiwand.com/en/Set_(card_game)). We find that explicitly relational architectures always outperform an MLP, with the Abstractor being the best-performing model on these tasks.
+**Discriminative Relational Tasks.** We begin our experimental evaluation with discriminative relational classification tasks—a setting where it is possible to compare to previously proposed relational architectures such as [PrediNet](https://arxiv.org/abs/1905.10307) and [CoRelNet](https://arxiv.org/abs/2206.05056). The figure below compares sample-efficiency at two discriminative relational tasks: modeling transitive pairwise order in random objects and a task based on the [SET card game](https://www.wikiwand.com/en/Set_(card_game)). We find that explicitly relational architectures always outperform an MLP, with the Abstractor being the best-performing model on these tasks.
 
-<TwoColumns>
-  <Figure slot="left" src="/blog/abstractor/figs/pairwise_order_learning_curves.png" alt="learning curves of pairwise order discriminative task" />
-  <Figure slot="right" src="/blog/abstractor/figs/set_classification.png" alt="learning curves on SET game classification task" />
-</TwoColumns>
-
-<Figure>
+<FigureGrid columns={2}>
+  <Figure src="/blog/abstractor/figs/pairwise_order_learning_curves.png" alt="learning curves of pairwise order discriminative task" />
+  <Figure src="/blog/abstractor/figs/set_classification.png" alt="learning curves on SET game classification task" />
   <Fragment slot="caption">Figure: Learning curves on the discriminative relational tasks. Modeling transitive pairwise order in random objects (left) and a task based on the SET game (right).</Fragment>
-</Figure>
+</FigureGrid>
 
 **Random Object Sorting.** Next, we evaluate a sequence-to-sequence relational task and compare to a standard Transformer. The task is to autoregressively predict the argsort of a sequence of randomly-generated objects. The underlying order relation must be learned from data in an end-to-end fashion. We observe the Abstractor-based model to be dramatically more sample-efficient at this task. Moreover, the Abstractor is able to generalize to new but similar tasks.
 
-<TwoColumns>
-  <Figure slot="left" src="/blog/abstractor/figs/random_object_sorting.png" alt="learning curves for object-sorting experiments" />
-  <Figure slot="right" src="/blog/abstractor/figs/random_object_sorting_generalization.png" alt="learning curves for object-sorting experiments after pre-training on related task" />
-</TwoColumns>
-
-<Figure>
+<FigureGrid columns={2}>
+  <Figure src="/blog/abstractor/figs/random_object_sorting.png" alt="learning curves for object-sorting experiments" />
+  <Figure src="/blog/abstractor/figs/random_object_sorting_generalization.png" alt="learning curves for object-sorting experiments after pre-training on related task" />
   <Fragment slot="caption">Figure: Learning curves on autoregressive object-sorting task (left) and learning curves after pre-training on a similar but different object-sorting task (right).</Fragment>
-</Figure>
+</FigureGrid>
 
 **Mathematical Problem-Solving.** Finally, we evaluate the Abstractor on a sequence-to-sequence task which is more representative of the complexity of real-world tasks: solving mathematical problems. The mathematical problems includes the following tasks: differentiation (calculus), predicting the next term in a sequence (algebra), solving linear equations (algebra), expanding products of polynomials, and adding polynomials. We observe a consistent and notable improvement in performance and sample efficiency.
 
