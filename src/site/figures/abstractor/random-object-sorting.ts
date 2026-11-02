@@ -1,9 +1,10 @@
 import * as Plot from "@observablehq/plot";
-import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures";
+import { defineFigure } from "../../../lib/figures";
+import { ROLE } from "../_roles";
 
-// Transformer keeps SERIES[1] here and in random-object-sorting-generalization.ts.
 const MODELS = ["Abstractor", "Ablation Model", "Transformer"];
-const COLORS = [SERIES[0], NEUTRAL, SERIES[1]];
+// Abstractor blue (relational), Transformer red (sensory), the ablation neutral.
+const COLORS = [ROLE.relational, ROLE.generic, ROLE.sensory];
 const TICKS = [0, 0.25, 0.5, 0.75, 1];
 
 export default defineFigure({

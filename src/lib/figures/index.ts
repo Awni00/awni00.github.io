@@ -21,11 +21,18 @@ export const FIGURE_COMPACT_WIDTH = 360;
 
 /** Series colours, in their fixed order. Never cycle past six. */
 export const SERIES = ["#000101", "#000102", "#000103", "#000104", "#000105", "#000106"] as const;
+/**
+ * A companion shade of each series colour, for a series closely related to
+ * another (a model and its variant): same hue, clearly different lightness,
+ * still >= 3:1 against the page.
+ */
+export const SERIES_ALT = ["#000111", "#000112", "#000113", "#000114", "#000115", "#000116"] as const;
 /** Baselines, catch-all groups and reference lines. */
 export const NEUTRAL = "#000107";
 
 export const COLOR_TOKENS: Record<string, string> = {
   ...Object.fromEntries(SERIES.map((hex, i) => [hex, `var(--figure-${i + 1})`])),
+  ...Object.fromEntries(SERIES_ALT.map((hex, i) => [hex, `var(--figure-${i + 1}-alt)`])),
   [NEUTRAL]: "var(--figure-neutral)"
 };
 

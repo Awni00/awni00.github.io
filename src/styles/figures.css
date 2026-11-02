@@ -13,6 +13,14 @@
   --figure-4: #109488; /* teal */
   --figure-5: #7b52a4; /* violet */
   --figure-6: #6c9539; /* olive */
+  /* Companion shades (SERIES_ALT): strong slots paled toward the page until
+     about 3.2:1, weak ones (3, 4, 6) darkened, so every line stays >= 3:1. */
+  --figure-1-alt: #be7d90;
+  --figure-2-alt: #6b91c0;
+  --figure-3-alt: #775213;
+  --figure-4-alt: #0a5c54;
+  --figure-5-alt: #a184be;
+  --figure-6-alt: #435c23;
   --figure-neutral: #8e9095;
   --figure-band-opacity: 0.14;
 }
@@ -24,6 +32,12 @@
   --figure-4: #20a89b;
   --figure-5: #9468c2;
   --figure-6: #77a246;
+  --figure-1-alt: #934e60;
+  --figure-2-alt: #3b6593;
+  --figure-3-alt: #796017;
+  --figure-4-alt: #196f68;
+  --figure-5-alt: #76549b;
+  --figure-6-alt: #4f6b32;
   --figure-neutral: #74757a;
   --figure-band-opacity: 0.18;
 }

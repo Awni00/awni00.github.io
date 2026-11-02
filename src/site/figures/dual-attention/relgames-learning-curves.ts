@@ -1,12 +1,13 @@
 import * as Plot from "@observablehq/plot";
-import { ERROR_BAR, NEUTRAL, SERIES, defineFigure, type FigureRow } from "../../../lib/figures";
+import { ERROR_BAR, defineFigure, type FigureRow } from "../../../lib/figures";
 import { panelGrid, type Panel } from "../../../lib/figures/panels";
+import { ROLE } from "../_roles";
 
 const TASKS = ["same", "occurs", "xoccurs", "between", "match pattern"];
 const MODELS = [
-  { key: "DAT 0 2", label: "DAT ($n_h^{sa}=0,\\ n_h^{ra}=2$)", color: SERIES[0] },
-  { key: "DAT 1 1", label: "DAT ($n_h^{sa}=1,\\ n_h^{ra}=1$)", color: SERIES[1] },
-  { key: "Transformer 2 0", label: "Transformer ($n_h^{sa}=2,\\ n_h^{ra}=0$)", color: NEUTRAL }
+  { key: "DAT 0 2", label: "DAT ($n_h^{sa}=0,\\ n_h^{ra}=2$)", color: ROLE.relational },
+  { key: "DAT 1 1", label: "DAT ($n_h^{sa}=1,\\ n_h^{ra}=1$)", color: ROLE.sensoryRelational },
+  { key: "Transformer 2 0", label: "Transformer ($n_h^{sa}=2,\\ n_h^{ra}=0$)", color: ROLE.sensory }
 ];
 const modelKey = (d: FigureRow) => `${d.model} ${d.n_sa} ${d.n_ra}`;
 const labelOf = (d: FigureRow) => MODELS.find((m) => m.key === modelKey(d))!.label;

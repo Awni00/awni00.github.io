@@ -1,8 +1,10 @@
 import * as Plot from "@observablehq/plot";
-import { DASH, NEUTRAL, SERIES, defineFigure, type FigureRow } from "../../../lib/figures";
+import { DASH, defineFigure, type FigureRow } from "../../../lib/figures";
+import { ROLE } from "../_roles";
 
 const MODELS = ["DAT", "Transformer"];
-const COLORS = [SERIES[0], NEUTRAL];
+// DAT mixes sensory and relational heads (purple); the Transformer is sensory only (red).
+const COLORS = [ROLE.sensoryRelational, ROLE.sensory];
 const formatCount = (v: number) => (v >= 1e9 ? `${+(v / 1e9).toFixed(2)}B` : `${+(v / 1e6).toFixed(0)}M`);
 
 // One label per perplexity level, beside the pair's right ends (geometric

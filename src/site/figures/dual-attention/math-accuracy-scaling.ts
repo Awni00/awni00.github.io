@@ -1,6 +1,7 @@
 import * as Plot from "@observablehq/plot";
-import { ERROR_BAR, NEUTRAL, SERIES, defineFigure, type FigureRow } from "../../../lib/figures";
+import { ERROR_BAR, defineFigure, type FigureRow } from "../../../lib/figures";
 import { niceTicks, panelGrid, tickFormat, type Panel } from "../../../lib/figures/panels";
+import { ROLE } from "../_roles";
 
 const TASKS = [
   "algebra__linear_1d",
@@ -10,7 +11,8 @@ const TASKS = [
   "polynomials__expand"
 ];
 const MODELS = ["DAT", "Transformer"];
-const COLORS = [SERIES[0], NEUTRAL];
+// DAT mixes sensory and relational heads (purple); the Transformer is sensory only (red).
+const COLORS = [ROLE.sensoryRelational, ROLE.sensory];
 const X: [number, number] = [650_000, 1_780_000];
 const X_TICKS = [750_000, 1_000_000, 1_250_000, 1_750_000];
 const X_TICKS_COMPACT = [750_000, 1_250_000, 1_750_000];

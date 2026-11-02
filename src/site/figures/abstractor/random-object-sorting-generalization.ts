@@ -1,8 +1,9 @@
 import * as Plot from "@observablehq/plot";
-import { DASH, SERIES, defineFigure } from "../../../lib/figures";
+import { DASH, defineFigure } from "../../../lib/figures";
+import { ROLE } from "../_roles";
 
 // Colour is the model, dash marks training from scratch; pre-trained is solid.
-const COLOR: Record<string, string> = { Abstractor: SERIES[0], Transformer: SERIES[1] };
+const COLOR: Record<string, string> = { Abstractor: ROLE.relational, Transformer: ROLE.sensory };
 const series = (d: Record<string, any>) => `${d.model}${d.pretrained ? ", pre-trained" : ""}`;
 
 export default defineFigure({
@@ -11,10 +12,10 @@ export default defineFigure({
   title: "Random Object Sorting Generalization",
   // Published legend wording: Abstractor / Pre-trained / Transformer / Pre-trained.
   legend: [
-    { label: "Abstractor", color: SERIES[0], key: "line", dashed: true },
-    { label: "Pre-trained", color: SERIES[0], key: "line" },
-    { label: "Transformer", color: SERIES[1], key: "line", dashed: true },
-    { label: "Pre-trained", color: SERIES[1], key: "line" }
+    { label: "Abstractor", color: ROLE.relational, key: "line", dashed: true },
+    { label: "Pre-trained", color: ROLE.relational, key: "line" },
+    { label: "Transformer", color: ROLE.sensory, key: "line", dashed: true },
+    { label: "Pre-trained", color: ROLE.sensory, key: "line" }
   ],
   plot: ({ data, width }) => {
     const scratch = data.filter((d) => !d.pretrained);

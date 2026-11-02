@@ -18,7 +18,7 @@ export default definePaperReview({
       label: "Relational games, learning curves",
       alt: "Relational games learning curves",
       before: { kind: "plotly", src: "/blog/dual-attention/static/figs/relgames_learning_curves.html", height: "560px" },
-      note: "Panels keep their own x range as in the plotly subplots (match pattern runs 2,500–25,000, the rest 250–2,500); the y range is shared. Transformer is the neutral baseline."
+      note: "Panels keep their own x range as in the plotly subplots (match pattern runs 2,500–25,000, the rest 250–2,500); the y range is shared. Colours follow the paper: relational-only DAT blue, mixed DAT purple, Transformer red."
     },
     {
       figure: "dual-attention/math-accuracy-scaling",

@@ -1,8 +1,10 @@
 import * as Plot from "@observablehq/plot";
-import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures";
+import { defineFigure } from "../../../lib/figures";
+import { ROLE } from "../_roles";
 
 const MODELS = ["Transformer", "Transformer+", "Abstractor (pos. symbols)", "Abstractor (symbolic attn)"];
-const COLORS = [NEUTRAL, SERIES[1], SERIES[0], SERIES[2]];
+// Each architecture's two variants share a hue: Transformer red (sensory), Abstractor blue (relational).
+const COLORS = [ROLE.sensoryAlt, ROLE.sensory, ROLE.relationalAlt, ROLE.relational];
 
 /**
  * Each panel has its own y range, which Plot facets can't do (they share

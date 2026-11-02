@@ -1,9 +1,11 @@
 import * as Plot from "@observablehq/plot";
-import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures";
+import { defineFigure } from "../../../lib/figures";
+import { ROLE } from "../_roles";
 
 // Legend order of the published figure. Colours match pairwise-order.ts.
 const MODELS = ["Abstractor", "CoRelNet", "CoRelNet (No Softmax)", "PrediNet", "MLP"];
-const COLORS = [SERIES[0], SERIES[3], SERIES[1], SERIES[2], NEUTRAL];
+// Abstractor blue (relational); the two CoRelNet variants share a hue; MLP neutral.
+const COLORS = [ROLE.relational, ROLE.baseline, ROLE.baselineAlt, ROLE.otherBaseline, ROLE.generic];
 
 export default defineFigure({
   data: "abstractor/set-classification.csv",
