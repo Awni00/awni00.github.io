@@ -209,6 +209,15 @@
   stroke: var(--color-rule);
 }
 
+/* A chart sets its own height. Equal-frame grids size image frames to a
+   fixed ratio, which would clip a chart's legend, so a chart's frame takes
+   its natural height instead; cells still align on their tops. */
+.figure-grid .article-figure__body:has(> .figure-chart) {
+  aspect-ratio: auto;
+  height: auto;
+  overflow: visible;
+}
+
 /* Full-width charts carry a phone layout and swap to it on narrow columns. */
 .figure-chart__compact {
   display: none;

@@ -367,22 +367,18 @@ Each model has window size $d = 8$, produces $T = 16$ autoregressive steps, and 
 The CoT trace corresponds to the full sequence of intermediate tokens, while the final output $y$ is the last generated token.
 
 <FigureGrid columns={2} equalFrames mediaAspectRatio="3 / 2">
-  <Figure>
-    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_E2EDiff.pdf" alt="Scatter plot comparing CoT information and end-to-end disagreement for the linear autoregressive class." invertInDarkMode />
+  <Chart figure="cot-info/linear-thresh-cot-info-vs-e2e-diff" alt="Scatter plot comparing CoT information and end-to-end disagreement for the linear autoregressive class.">
     <Fragment slot="caption">Relative CoT information between pairs of hypotheses versus their end-to-end disagreement. Observing the CoT makes distinguishing hypotheses statistically easier.</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_Epsilon_log.pdf" alt="Plot of CoT information as a function of epsilon for the linear autoregressive class." invertInDarkMode />
+  </Chart>
+  <Chart figure="cot-info/linear-thresh-cot-info-vs-epsilon" alt="Plot of CoT information as a function of epsilon for the linear autoregressive class.">
     <Fragment slot="caption">The CoT information function $\cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H})$. The dashed line is the line $y = \epsilon$. The CoT information always dominates the $\epsilon$ baseline.</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/empirical_sample_complexity_legendin.pdf" alt="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class." invertInDarkMode />
+  </Chart>
+  <Chart figure="cot-info/linear-thresh-empirical-sample-complexity" alt="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class.">
     <Fragment slot="caption">Empirical sample complexity for end-to-end versus CoT learning.</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/learning_curves_prob_success_eps0_log_legendin_e2eerr.pdf" alt="Empirical probability of zero error for end-to-end vs CoT learners in the linear autoregressive class." invertInDarkMode />
+  </Chart>
+  <Chart figure="cot-info/linear-thresh-learning-curves" alt="Empirical probability of zero error for end-to-end vs CoT learners in the linear autoregressive class.">
     <Fragment slot="caption">Probability that each learning rule achieves zero error as the sample size grows.</Fragment>
-  </Figure>
+  </Chart>
 </FigureGrid>
 
 The empirical data closely match the theoretical prediction: $\lim_{\epsilon \to 0} \cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H}) / \epsilon^+ \approx 6$, corresponding to a roughly 6× theoretical gain. Measured sample complexity shows an actual ≈5× empirical improvement, validating that CoT information accurately predicts the observed acceleration in learning.
@@ -402,18 +398,15 @@ Here, $h^{\text{e2e}}(x)$ indicates whether a string $x$ belongs to a regular la
     />
     <Fragment slot="caption">DFA whose state trajectory forms the chain-of-thought trace.</Fragment>
   </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/DFA_S4A2L10_varycotdetail/20250503-194523/figs/CoTInfoRatio_vs_Epsilon_by_detail_log.pdf" alt="CoT information ratio as a function of epsilon under varying detail levels of the DFA trace." invertInDarkMode />
+  <Chart figure="cot-info/dfa-cot-info-ratio-by-detail" alt="CoT information ratio as a function of epsilon under varying detail levels of the DFA trace.">
     <Fragment slot="caption">How CoT information scales with epsilon as trace detail varies.</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/empirical_sample_complexity_legendin.pdf" alt="Empirical sample complexity for DFA learning under end-to-end vs CoT supervision." invertInDarkMode />
+  </Chart>
+  <Chart figure="cot-info/dfa-empirical-sample-complexity" alt="Empirical sample complexity for DFA learning under end-to-end vs CoT supervision.">
     <Fragment slot="caption">Empirical sample complexity for end-to-end versus CoT learning.</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/cot-info/figs/simulation_figs/DFA_S4A2L10_learning/20250504-165732/figs/learning_curves_prob_success_eps0_log_legendin.pdf" alt="Probability of zero error for DFA learning with and without CoT supervision." invertInDarkMode />
+  </Chart>
+  <Chart figure="cot-info/dfa-learning-curves" alt="Probability of zero error for DFA learning with and without CoT supervision.">
     <Fragment slot="caption">Probability that each learning rule achieves zero error as the sample size grows.</Fragment>
-  </Figure>
+  </Chart>
 </FigureGrid>
 
 In this setting, the theoretical $\cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H}) / \epsilon^+$ curve approaches $\approx 600$ as $\epsilon \to 0$, forecasting an improvement on the order of 600× to learn $\hstar$ with very small error. Empirical results confirm dramatic gains: between $10^2$ and $10^3$ times fewer samples are needed under CoT supervision to reach equivalent accuracy. This demonstrates that CoT information can yield *orders-of-magnitude* improvements in sample efficiency, depending on how much structure the reasoning trace exposes about the underlying computation.
