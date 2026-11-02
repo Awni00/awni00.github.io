@@ -4,9 +4,9 @@ import { panelGrid, type Panel } from "../../../lib/figures/panels";
 
 const TASKS = ["same", "occurs", "xoccurs", "between", "match pattern"];
 const MODELS = [
-  { key: "DAT 0 2", label: "DAT (nₕˢᵃ=0, nₕʳᵃ=2)", color: SERIES[0] },
-  { key: "DAT 1 1", label: "DAT (nₕˢᵃ=1, nₕʳᵃ=1)", color: SERIES[1] },
-  { key: "Transformer 2 0", label: "Transformer (nₕˢᵃ=2, nₕʳᵃ=0)", color: NEUTRAL }
+  { key: "DAT 0 2", label: "DAT ($n_h^{sa}=0,\\ n_h^{ra}=2$)", color: SERIES[0] },
+  { key: "DAT 1 1", label: "DAT ($n_h^{sa}=1,\\ n_h^{ra}=1$)", color: SERIES[1] },
+  { key: "Transformer 2 0", label: "Transformer ($n_h^{sa}=2,\\ n_h^{ra}=0$)", color: NEUTRAL }
 ];
 const modelKey = (d: FigureRow) => `${d.model} ${d.n_sa} ${d.n_ra}`;
 const labelOf = (d: FigureRow) => MODELS.find((m) => m.key === modelKey(d))!.label;

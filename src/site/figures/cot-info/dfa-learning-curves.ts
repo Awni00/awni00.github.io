@@ -45,12 +45,12 @@ export default defineFigure({
       x: {
         type: "log",
         domain: [0.71, 1410],
-        label: "Sample size m",
+        label: "Sample size $m$",
         ticks: [1, 10, 100, 1000],
         tickFormat: powerOfTen
       },
       y: {
-        label: "ℙ(ℛ(𝒜(Sₘ)) = 0)",
+        label: "$\\mathbb{P}(\\mathcal{R}(\\mathcal{A}(S_m))=0)$",
         domain: [-0.04, 1.05],
         ticks: [0, 0.2, 0.4, 0.6, 0.8, 1]
       },

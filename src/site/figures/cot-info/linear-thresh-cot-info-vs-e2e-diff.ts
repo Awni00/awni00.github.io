@@ -13,12 +13,12 @@ export default defineFigure({
     marginRight: 14,
     marginBottom: 40,
     x: {
-      label: "ℙ(h₁ᵉ²ᵉ(x) ≠ h₂ᵉ²ᵉ(x))",
+      label: "$\\mathbb{P}(h_1^{e2e}(x) \\neq h_2^{e2e}(x))$",
       domain: [-0.05, 1.05],
       ticks: [0, 0.2, 0.4, 0.6, 0.8, 1]
     },
     y: {
-      label: "ℐᶜᵒᵀ(h₁, h₂)",
+      label: "$\\mathcal{I}^{\\mathrm{CoT}}_{\\mathcal{D}}(h_1, h_2)$",
       domain: [-0.2, 5.1],
       ticks: [0, 1, 2, 3, 4, 5],
       tickFormat: String

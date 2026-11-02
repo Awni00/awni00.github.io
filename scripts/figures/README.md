@@ -69,6 +69,13 @@ Conventions (the F1 spec):
   `Plot.ruleY([0], { className: BASELINE })`.
 - **Labels** in sentence case, but keep the wording of the published figure
   (including titles); the post's author writes the words.
+- **Math** in axis titles, legend labels and panel titles is TeX between
+  `$…$` (`"$\\mathbb{P}(L(\\mathcal{A}(S_m))=0)$"`), rendered with KaTeX at build
+  time, like the posts' math. Use the published figure's notation exactly.
+  Tick labels and hover tips stay plain text. Charts drawn in the browser
+  (`.client.ts`) don't render TeX yet.
+- **Axis titles** are centred on their axis, the y title rotated (the
+  default; margins widen to fit).
 - **Size.** Pick the preset for the width the post shows the figure at: a
   2-up `FigureGrid` cell or `WrapFigure` is `narrow`; a single static chart is
   `medium`; `full` only when the chart needs the width (it gets a separate

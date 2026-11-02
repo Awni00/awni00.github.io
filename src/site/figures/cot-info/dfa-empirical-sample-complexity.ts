@@ -49,7 +49,7 @@ export default defineFigure({
       x: {
         type: "log",
         domain: [1, 1e-4],
-        label: "ε",
+        label: "$\\varepsilon$",
         ticks: [1, 1e-1, 1e-2, 1e-3, 1e-4],
         tickFormat: powerOfTen
       },

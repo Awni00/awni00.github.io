@@ -13,7 +13,7 @@ export default definePaperReview({
       label: "CoT information vs end-to-end disagreement, linear class",
       alt: "Scatter plot comparing CoT information and end-to-end disagreement for the linear autoregressive class.",
       before: pdf("LinearThresh_Wind8A2L8/20250505-191322/figs/CoTInfo_vs_E2EDiff.pdf"),
-      note: "Vector-extracted (marker centres). Dashed y = x line drawn from its formula. Axis labels drop the 𝒟 subscript (no Unicode subscript D)."
+      note: "Vector-extracted (marker centres). Dashed y = x line drawn from its formula. Axis labels are the published TeX, rendered with KaTeX."
     },
     {
       figure: "cot-info/linear-thresh-cot-info-vs-epsilon",
@@ -40,7 +40,7 @@ export default definePaperReview({
       label: "CoT information ratio by CoT detail level, DFA",
       alt: "CoT information ratio as a function of epsilon under varying detail levels of the DFA trace.",
       before: pdf("DFA_S4A2L10_varycotdetail/20250503-194523/figs/CoTInfoRatio_vs_Epsilon_by_detail_log.pdf"),
-      note: "Vector-extracted. Detail level 1–10 is an opacity ramp toward series 1; the colour bar becomes a ramp key in the legend. Dashed y = ε curve drawn from its formula; the near-invisible grey band at y ≈ 0 is dropped. Label drops the 𝒟, h* subscript."
+      note: "Vector-extracted. Detail level 1–10 is an opacity ramp toward series 1; the colour bar becomes a ramp key in the legend. Dashed y = ε curve drawn from its formula; the near-invisible grey band at y ≈ 0 is dropped."
     },
     {
       figure: "cot-info/dfa-empirical-sample-complexity",

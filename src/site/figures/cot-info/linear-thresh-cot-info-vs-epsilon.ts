@@ -21,12 +21,12 @@ export default defineFigure({
       x: {
         type: "log",
         domain: [1, 1e-2],
-        label: "ε",
+        label: "$\\varepsilon$",
         ticks: [1, 1e-1, 1e-2],
         tickFormat: powerOfTen
       },
       y: {
-        label: "ℐᶜᵒᵀ(ε; ℋ, h*)",
+        label: "$\\mathcal{I}^{\\mathrm{CoT}}_{\\mathcal{D}}(\\varepsilon;\\mathcal{H},h^*)$",
         domain: [-0.15, 3.3],
         ticks: [0, 1, 2, 3],
         tickFormat: String

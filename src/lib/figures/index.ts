@@ -119,12 +119,25 @@ export type FigureClient = (root: HTMLElement, context: { data: FigureRow[] }) =
 
 export const defineFigureClient = (mount: FigureClient) => mount;
 
-/** Axis labels name the quantity; Plot's direction arrows aren't in the spec. */
+/**
+ * Site defaults for every chart:
+ * - axis labels name the quantity, without Plot's direction arrows;
+ * - x and y labels are centred on their axis (the y label rotated), with the
+ *   margins widened so they clear the tick labels.
+ */
 export function withSiteDefaults(options: Plot.PlotOptions): Plot.PlotOptions {
-  const unarrowed = Object.fromEntries(
-    (["x", "y", "fx", "fy"] as const).map((key) => [key, { labelArrow: "none", ...options[key] }])
-  );
-  return { ...options, ...unarrowed, className: "figure-plot" };
+  const axes = Object.fromEntries(
+    (["x", "y", "fx", "fy"] as const).map((key) => [
+      key,
+      { labelArrow: "none", ...(key === "x" || key === "y" ? { labelAnchor: "center" } : {}), ...options[key] }
+    ])
+  ) as Pick<Plot.PlotOptions, "x" | "y" | "fx" | "fy">;
+  const labelled = (scale: Plot.ScaleOptions | undefined) =>
+    typeof scale?.label === "string" && scale.axis !== null && (scale.labelAnchor ?? "center") === "center";
+  const margins: Partial<Plot.PlotOptions> = {};
+  if (labelled(axes.y)) margins.marginLeft = (options.marginLeft ?? 40) + 14;
+  if (labelled(axes.x)) margins.marginBottom = Math.max(options.marginBottom ?? 30, 44);
+  return { ...options, ...axes, ...margins, className: "figure-plot" };
 }
 
 export function replaceColorSentinels(html: string): string {

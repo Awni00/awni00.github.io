@@ -162,6 +162,33 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* TeX in labels, rendered by KaTeX at build time. Axis labels sit in a
+   foreignObject placed where Plot drew the SVG text. */
+.figure-chart .figure-tex {
+  overflow: visible;
+}
+
+.figure-tex__label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 24px;
+  color: var(--color-fg-soft);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.figure-tex__label[data-anchor="start"] {
+  text-align: left;
+}
+
+.figure-tex__label[data-anchor="end"] {
+  text-align: right;
+}
+
+.figure-chart .katex {
+  font-size: 1.08em;
+}
+
 /* Hooks for hand-drawn axes (panels with their own scales draw ticks, grid
    and titles as ordinary marks): give those marks these classNames. */
 .figure-chart .figure-tick-label {

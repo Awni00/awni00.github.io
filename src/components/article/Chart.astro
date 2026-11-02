@@ -24,6 +24,7 @@ import {
   type FigureSize
 } from "../../lib/figures";
 import { parseFigureData, renderFigure } from "../../lib/figures/render";
+import { texToHtml } from "../../lib/figures/tex";
 import "../../styles/figures.css";
 
 type Props = {
@@ -84,7 +85,7 @@ const mono = (definition.mono ?? []).join(" ");
     data-figure={figure}
     data-figure-client={interactive ? "" : undefined}
   >
-    {definition.title && <p class="figure-chart__title">{definition.title}</p>}
+    {definition.title && <p class="figure-chart__title" set:html={texToHtml(definition.title)} />}
     <div class="figure-chart__plot">
       <div class="figure-chart__wide" set:html={wide} />
       {compact && <div class="figure-chart__compact" set:html={compact} />}
@@ -95,7 +96,7 @@ const mono = (definition.mono ?? []).join(" ");
           {legend.map((item) =>
             item.key === "ramp" ? (
               <li class="figure-legend__ramp">
-                {item.label}
+                <Fragment set:html={texToHtml(item.label)} />
                 <span>{item.from}</span>
                 <svg width={item.opacities.length * 12} height="10" viewBox={`0 0 ${item.opacities.length * 12} 10`}>
                   {item.opacities.map((opacity, i) => (
@@ -123,7 +124,7 @@ const mono = (definition.mono ?? []).join(" ");
                     <rect x="3" y="0" width="10" height="10" rx="1.5" fill={colorToken(item.color)} />
                   )}
                 </svg>
-                {item.label}
+                <Fragment set:html={texToHtml(item.label)} />
               </li>
             )
           )}

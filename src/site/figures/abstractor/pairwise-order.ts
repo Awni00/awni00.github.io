@@ -8,7 +8,7 @@ const COLORS = [SERIES[0], SERIES[3], SERIES[1], SERIES[2], NEUTRAL];
 export default defineFigure({
   data: "abstractor/pairwise-order-learning-curves.csv",
   size: "narrow",
-  title: "Learning Asymmetric ≺ Relation",
+  title: "Learning Asymmetric $\\prec$ Relation",
   legend: MODELS.map((label, i) => ({ label, color: COLORS[i], key: "line" })),
   plot: ({ data, width }) => ({
     width,

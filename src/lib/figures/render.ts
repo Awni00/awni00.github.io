@@ -2,6 +2,7 @@ import * as Plot from "@observablehq/plot";
 import { autoType, csvParse } from "d3-dsv";
 import { parseHTML } from "linkedom";
 import { replaceColorSentinels, withSiteDefaults, type FigureRow } from "./index";
+import { renderTexAxisLabels, texToPlain } from "./tex";
 
 /**
  * Build-time chart rendering.
@@ -17,8 +18,9 @@ export function renderFigure(options: Plot.PlotOptions, ariaLabel: string): stri
   const { document } = parseHTML("<!doctype html><html><body></body></html>");
   const node = Plot.plot({
     ...withSiteDefaults(options),
-    ariaLabel,
+    ariaLabel: texToPlain(ariaLabel),
     document: document as unknown as Document
   });
-  return replaceColorSentinels((node as unknown as Element).outerHTML);
+  const svg = replaceColorSentinels((node as unknown as Element).outerHTML);
+  return renderTexAxisLabels(svg, options.width ?? 640);
 }

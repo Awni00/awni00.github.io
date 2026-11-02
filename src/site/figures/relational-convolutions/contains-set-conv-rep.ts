@@ -1,8 +1,8 @@
 import * as Plot from "@observablehq/plot";
 import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures";
 
-// Published axis titles were LaTeX: \langle R[g], \boldsymbol{f} \rangle_{\mathrm{rel}} [PC1].
-const axisLabel = (pc: string) => `⟨R[g], 𝒇⟩ᵣₑₗ [${pc}]`;
+// The published axis titles, in TeX.
+const axisLabel = (pc: string) => `$\\langle R[g], \\boldsymbol{f} \\rangle_{\\mathrm{rel}}$ [${pc}]`;
 
 export default defineFigure({
   data: "relational-convolutions/contains-set-conv-rep.csv",
