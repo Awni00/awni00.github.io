@@ -13,7 +13,7 @@ updated: "2026-05-24"
 summary: "Four architectural mechanisms to improve OOD algorithmic generalization in Transformers, evaluated on a modular-arithmetic circuit task."
 venue: "Under review"
 tags: ["transformers", "architectures", "inductive biases", "generalization", "reasoning"]
-links: ["topics/abstraction", "topics/reasoning"]
+links: ["topics/inductive-biases", "topics/reasoning"]
 authors:
   - name: "Awni Altabaa"
     affiliation: "Yale University"
@@ -208,7 +208,7 @@ This task possesses three key properties that make it perfect for testing whethe
 
 **Testing for Algorithmic Generalization:** To assess algorithmic generalization, we vary graph size up to $N = 128$, inspecting the degradation of performance of different methods as complexity scales beyond the training regime.
 
-These larger problem instances are not only longer (i.e., input representation scales with graph size), but also also have larger *computational depth*, requiring computation to scale beyond anything seen during training. That is, generalizing to these more complex problem instances requires an ability to **handle longer inputs** as well as an ability to **scale computation beyond the training regime**.
+These larger problem instances are not only longer (i.e., input representation scales with graph size), but also have larger *computational depth*, requiring computation to scale beyond anything seen during training. That is, generalizing to these more complex problem instances requires an ability to **handle longer inputs** as well as an ability to **scale computation beyond the training regime**.
 
 ### Baseline Methods
 
@@ -297,11 +297,11 @@ To evaluate the effectiveness of each mechanism, we study multiple model configu
 | End-to-End Feedforward | ○ | ○ | ○ | ○ |
 | Recurrent End-to-End | ◐ | ○ | ○ | ○ |
 | Chain-of-Thought | ◐ | ◐ | ○ | ○ |
-| Continuous Latent Space Supervision | ⬤ | ⬤ | ○ | ○ |
-| Discrete Latent Space Supervision | ⬤ | ⬤ | ⬤ | ○ |
-| **Discrete Latent Space Supervision ↻** | ⬤ | ⬤ | ⬤ | ⬤ |
+| Continuous Latent Space Supervision | ● | ● | ○ | ○ |
+| Discrete Latent Space Supervision | ● | ● | ● | ○ |
+| **Discrete Latent Space Supervision ↻** | ● | ● | ● | ● |
 
-*Table: ⬤ = fully implemented, ◐ = partially implemented, ○ = not implemented*
+*Table: ● = fully implemented, ◐ = partially implemented, ○ = not implemented*
 
 ---
 
@@ -480,17 +480,21 @@ Here's what we found: the model implements an **induction head** mechanism tailo
 **Relative Variance Analysis Results** — Each heatmap below shows which attention heads respond strongly when perturbing a specific variable position:
 
 <FigureGrid columns={4}>
-  <Figure caption="`var₀` (Heads 4, 8)">
+  <Figure>
     <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_var_0_relative_variance_heatmap.pdf" alt="VAR_0" invertInDarkMode />
+    <Fragment slot="caption"><code>var₀</code> (Heads 4, 8)</Fragment>
   </Figure>
-  <Figure caption="`var₁` (Heads 5, 12)">
+  <Figure>
     <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_var_1_relative_variance_heatmap.pdf" alt="VAR_1" invertInDarkMode />
+    <Fragment slot="caption"><code>var₁</code> (Heads 5, 12)</Fragment>
   </Figure>
-  <Figure caption="`var₂` (Heads 3, 7, 11, 14)">
+  <Figure>
     <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_var_2_relative_variance_heatmap.pdf" alt="VAR_2" invertInDarkMode />
+    <Fragment slot="caption"><code>var₂</code> (Heads 3, 7, 11, 14)</Fragment>
   </Figure>
-  <Figure caption="`rhs` (result position)">
+  <Figure>
     <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_rhs_relative_variance_heatmap.pdf" alt="RHS" invertInDarkMode />
+    <Fragment slot="caption"><code>rhs</code> (result position)</Fragment>
   </Figure>
 </FigureGrid>
 
@@ -498,7 +502,7 @@ Here's what we found: the model implements an **induction head** mechanism tailo
 
 **Norm Amplification Analysis** — What type of information do these heads copy?
 
-<Figure caption="Operator norm amplification for different factored embedding types across all 16 attention heads.">
+<Figure mediaMaxWidth="440px" caption="Operator norm amplification for different factored embedding types across all 16 attention heads.">
   <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_ov_operator_norm_mpl.pdf" alt="L0 OV Norm" invertInDarkMode />
 </Figure>
 
@@ -536,14 +540,17 @@ The `variable` factor (orange) shows dramatically higher amplification than othe
 **Attention Head Statistics** — Quantifying head specialization through relative variance analysis
 
 <FigureGrid columns={3}>
-  <Figure caption="`var₀` relative variance">
+  <Figure>
     <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var0.pdf" alt="VAR_0_stats" invertInDarkMode />
+    <Fragment slot="caption"><code>var₀</code> relative variance</Fragment>
   </Figure>
-  <Figure caption="`var₁` relative variance">
+  <Figure>
     <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var1.pdf" alt="VAR_1_stats" invertInDarkMode />
+    <Fragment slot="caption"><code>var₁</code> relative variance</Fragment>
   </Figure>
-  <Figure caption="`var₂` relative variance">
+  <Figure>
     <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var2.pdf" alt="VAR_2_stats" invertInDarkMode />
+    <Fragment slot="caption"><code>var₂</code> relative variance</Fragment>
   </Figure>
 </FigureGrid>
 
@@ -551,7 +558,7 @@ The `variable` factor (orange) shows dramatically higher amplification than othe
 
 **Norm Amplification Analysis** — What type of information is copied?
 
-<Figure caption="Operator norm amplification for Layer 2 heads.">
+<Figure mediaMaxWidth="440px" caption="Operator norm amplification for Layer 2 heads.">
   <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L1_ov_operator_norm.pdf" alt="L1 OV Operator Norm" invertInDarkMode />
 </Figure>
 
