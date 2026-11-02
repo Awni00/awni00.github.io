@@ -1,16 +1,7 @@
 import * as Plot from "@observablehq/plot";
-import { DASH, NEUTRAL, SERIES, defineFigure, type FigureRow } from "../../../lib/figures/render";
+import { DASH, NEUTRAL, SERIES, defineFigure, powerOfTen, type FigureRow } from "../../../lib/figures";
 
 const RULES = ["CoT-Cons", "E2E-Cons"];
-const SUPERSCRIPT: Record<string, string> = {
-  "-": "⁻",
-  "0": "⁰",
-  "1": "¹",
-  "2": "²",
-  "3": "³"
-};
-const powerOfTen = (v: number) =>
-  "10" + String(Math.round(Math.log10(v))).replace(/./g, (c) => SUPERSCRIPT[c] ?? c);
 
 export default defineFigure({
   data: "cot-info/linear-thresh-empirical-sample-complexity.csv",

@@ -1,0 +1,19 @@
+# Where this paper's figure data came from. Schema: scripts/figures/README.md#provenance
+paper: Learning Hierarchical Relational Representations through Relational Convolutions
+files:
+  relational-games-ood.csv:
+    figure: Out-of-distribution generalization on relational games (blog relational_games_ood_gen plotly figure)
+    used_by: src/site/figures/relational-convolutions/relational-games-ood.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/relational-convolutions/figs/relational_games_ood_gen.json
+          sha256: f17db700bbef75a097e44c5a647db9ecfe6be9a5791b00b6c3da2faf21a2535a
+      generator: plotly express figure JSON; original script not in this repo
+    extracted: 2026-11-01
+    method: converted
+    fidelity: exact (same numbers as the plotly traces)
+    notes: Flattened one row per model, split and task. error is the plotted error bar; trials is the trace's customdata.

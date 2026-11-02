@@ -1,0 +1,19 @@
+# Where this paper's figure data came from. Schema: scripts/figures/README.md#provenance
+paper: "Abstractors and Relational Cross-Attention: An Inductive Bias for Explicit Relational Reasoning in Transformers"
+files:
+  pairwise-order-learning-curves.csv:
+    figure: Learning Asymmetric ≺ Relation (blog pairwise_order_learning_curves.png)
+    used_by: src/site/figures/abstractor/pairwise-order.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/abstractor/figs/pairwise_order_learning_curves.png
+          sha256: 9b096f97b4b01aaf20e68c20665f22d48b095bff31907ea8789c6eb550bd017b
+      generator: unknown; no source data found
+    extracted: 2026-11-01
+    method: by-eye
+    fidelity: approximate; shape and ordering are right, values are not
+    notes: First point's x was read as about 10. Band half-widths are rough. Replace when the original logs turn up.

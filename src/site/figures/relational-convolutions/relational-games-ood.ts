@@ -1,5 +1,5 @@
 import * as Plot from "@observablehq/plot";
-import { SERIES, defineFigure } from "../../../lib/figures/render";
+import { SERIES, defineFigure } from "../../../lib/figures";
 
 const MODELS = ["RelConvNet", "CoRelNet", "PrediNet", "Transformer"];
 const COLORS = SERIES.slice(0, 4);

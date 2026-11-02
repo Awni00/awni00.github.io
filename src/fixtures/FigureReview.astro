@@ -1,20 +1,40 @@
 ---
 /**
- * Before/after review for the figure system: each chart as the post shows it
- * today, next to the same chart rebuilt with <Chart>. Uses the posts' own
- * markup for "Now" so the comparison is like for like, at the same width.
+ * Before/after review for the figure system: every chart as its post shows it
+ * today, next to the same chart rebuilt with <Chart>. "Now" uses the posts'
+ * own components, so the comparison is like for like at the same width.
  *
+ * Each paper's entries live in `src/fixtures/figure-review/<post>.ts`.
  * Dev-only, routed through `src/pages/fixtures/[fixture].astro`.
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Chart from "../components/article/Chart.astro";
+import EmbedFrame from "../components/article/EmbedFrame.astro";
 import Figure from "../components/article/Figure.astro";
 import FigureGrid from "../components/article/FigureGrid.astro";
 import Picture from "../components/article/Picture.astro";
 import PlotlyFigure from "../components/article/PlotlyFigure.astro";
+import type { FigureDefinition } from "../lib/figures";
+import type { PaperReview, ReviewEntry } from "./figure-review/types";
+
+const reviews = Object.values(
+  import.meta.glob<{ default: PaperReview }>("./figure-review/*.ts", { eager: true })
+)
+  .map((module) => module.default)
+  .filter(Boolean)
+  .sort((a, b) => a.order - b.order);
+
+const definitions = import.meta.glob<{ default: FigureDefinition }>(
+  ["/src/site/figures/**/*.ts", "!/src/site/figures/**/*.client.ts"],
+  { eager: true }
+);
+const isNarrow = (entry: ReviewEntry) =>
+  definitions[`/src/site/figures/${entry.figure}.ts`]?.default.size === "narrow";
+const anchor = (entry: ReviewEntry) => entry.figure.replaceAll("/", "--");
+const total = reviews.reduce((n, review) => n + review.entries.length, 0);
 
 const title = "Figure review";
-const description = "Each chart as published today, next to its rebuild. Flip the theme toggle to compare dark mode.";
+const description = `${total} charts as published today, next to their rebuilds. Flip the theme toggle to compare dark mode.`;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -24,73 +44,115 @@ const description = "Each chart as published today, next to its rebuild. Flip th
       <p class="page-description">{description}</p>
     </header>
     <div class="article-content">
-      <h2 id="abstractor">abstractor · pairwise order</h2>
-      <p class="figure-review-note">Rebuilt data was read off the PNG by eye; see <code>src/data/figures/sources.yaml</code>.</p>
-      <FigureGrid columns={2}>
-        <Figure
-          src="/blog/abstractor/figs/pairwise_order_learning_curves.png"
-          alt="learning curves of pairwise order discriminative task"
-          caption="Now"
-        />
-        <Chart
-          figure="abstractor/pairwise-order"
-          alt="learning curves of pairwise order discriminative task"
-          caption="Rebuilt"
-        />
-      </FigureGrid>
+      <nav class="figure-review-toc" aria-label="Papers">
+        {
+          reviews.map((review) => (
+            <a href={`#${review.post}`}>
+              {review.paper} <span>{review.entries.length}</span>
+            </a>
+          ))
+        }
+      </nav>
 
-      <h2 id="norm">algorithmic generalization · norm amplification</h2>
-      <Figure mediaMaxWidth="440px" caption="Now">
-        <Picture
-          slot="figure"
-          src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_ov_operator_norm_mpl.pdf"
-          alt="L0 OV Norm"
-          invertInDarkMode
-        />
-      </Figure>
-      <Chart
-        figure="algorithmic-generalization-transformer-architectures/l0-ov-operator-norm"
-        alt="L0 OV Norm"
-        caption="Rebuilt"
-      />
-
-      <h2 id="cot-info">cot-info · empirical sample complexity</h2>
-      <FigureGrid columns={2}>
-        <Figure caption="Now">
-          <Picture
-            slot="figure"
-            src="/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/empirical_sample_complexity_legendin.pdf"
-            alt="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class."
-            invertInDarkMode
-          />
-        </Figure>
-        <Chart
-          figure="cot-info/linear-thresh-empirical-sample-complexity"
-          alt="Empirical sample complexity for end-to-end vs CoT consistency in the linear autoregressive class."
-          caption="Rebuilt"
-        />
-      </FigureGrid>
-
-      <h2 id="relational-games">relational convolutions · relational games</h2>
-      <p class="figure-review-note">Now</p>
-      <PlotlyFigure
-        src="/blog/relational-convolutions/figs/relational_games_ood_gen.html"
-        iframeTitle="Relational games out-of-distribution generalization"
-        height="520px"
-        width="100%"
-        showOpenLink={false}
-      />
-      <Chart
-        figure="relational-convolutions/relational-games-ood"
-        alt="Relational games out-of-distribution generalization"
-        caption="Rebuilt. Hover a bar for its value."
-      />
+      {
+        reviews.map((review) => (
+          <section class="figure-review-paper">
+            <h2 id={review.post}>{review.paper}</h2>
+            {review.entries.map((entry) => {
+              const before = entry.before;
+              const nowPanel =
+                before.kind === "image" ? (
+                  <Figure caption="Now">
+                    <Picture
+                      slot="figure"
+                      src={before.src}
+                      alt={entry.alt}
+                      invertInDarkMode={before.invertInDarkMode}
+                    />
+                  </Figure>
+                ) : before.kind === "pdf" ? (
+                  <Figure caption="Now">
+                    <Picture
+                      slot="figure"
+                      src={before.src}
+                      alt={entry.alt}
+                      invertInDarkMode={before.invertInDarkMode}
+                    />
+                  </Figure>
+                ) : before.kind === "plotly" ? (
+                  <>
+                    <p class="figure-review-note">Now</p>
+                    <PlotlyFigure
+                      src={before.src}
+                      iframeTitle={entry.alt}
+                      height={before.height ?? "520px"}
+                      width="100%"
+                      showOpenLink={false}
+                    />
+                  </>
+                ) : before.kind === "embed" ? (
+                  <>
+                    <p class="figure-review-note">Now</p>
+                    <EmbedFrame src={before.src} title={entry.alt} height={before.height} />
+                  </>
+                ) : (
+                  <p class="figure-review-none">Now: {before.reason}</p>
+                );
+              return (
+                <div class="figure-review-entry" id={anchor(entry)}>
+                  <h3>{entry.label}</h3>
+                  <p class="figure-review-id">
+                    <code>{entry.figure}</code>
+                  </p>
+                  {isNarrow(entry) && before.kind !== "none" ? (
+                    <FigureGrid columns={2}>
+                      {nowPanel}
+                      <Chart figure={entry.figure} alt={entry.alt} caption="Rebuilt" />
+                    </FigureGrid>
+                  ) : (
+                    <>
+                      {nowPanel}
+                      <Chart figure={entry.figure} alt={entry.alt} caption="Rebuilt" />
+                    </>
+                  )}
+                  {entry.note && <p class="figure-review-note">{entry.note}</p>}
+                </div>
+              );
+            })}
+          </section>
+        ))
+      }
     </div>
   </article>
 </BaseLayout>
 
 <style>
-  .figure-review-note {
+  .figure-review-toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+  }
+
+  .figure-review-toc span {
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .figure-review-paper {
+    margin-top: 48px;
+  }
+
+  .figure-review-entry {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .figure-review-id,
+  .figure-review-note,
+  .figure-review-none {
     font-family: var(--font-ui);
     font-size: 13px;
     color: var(--color-muted);

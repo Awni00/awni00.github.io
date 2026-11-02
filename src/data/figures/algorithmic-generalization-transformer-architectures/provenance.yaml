@@ -1,0 +1,20 @@
+# Where this paper's figure data came from. Schema: scripts/figures/README.md#provenance
+paper: Unlocking Out-of-Distribution Generalization in Transformers via Recursive Latent Space Reasoning
+files:
+  l0-ov-operator-norm.csv:
+    figure: Layer-0 OV operator-norm amplification (paper fig:l0, right; blog L0_ov_operator_norm_mpl.pdf)
+    used_by: src/site/figures/algorithmic-generalization-transformer-architectures/l0-ov-operator-norm.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/L0_ov_operator_norm_mpl.pdf
+          sha256: 4181b01a712c1bad852fefbc14157981409e4b521cb475267166940f31411504
+      generator: none in any repo (made in a notebook from model weights; the paper repo has only figs/experiment_results/mech_interp/load_fig.ipynb)
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/dump_pdf_paths.py, bar heights calibrated against the y tick labels
+    fidelity: exact to the PDF's coordinate precision (about 0.01 units)
+    notes: The PDF is byte-identical to the paper repo's copy.

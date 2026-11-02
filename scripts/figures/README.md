@@ -1,20 +1,22 @@
 # Figures
 
 Charts on the blog are drawn with [Observable Plot](https://observablehq.com/plot/)
-when the site builds, and inlined as SVG. They ship no JavaScript, use the
-page's fonts, recolour with the theme toggle, and swap to a phone layout on
-narrow screens. The style they follow is the F1 figure spec.
+when the site builds, and inlined as SVG. They use the page's fonts, recolour
+with the theme toggle, swap to a phone layout on narrow screens, and show a
+styled tip on hover. The style they follow is the F1 figure spec.
 
-Three things are kept apart, so any one can change without the others:
+Data, chart code, and shared style are kept apart, so any one can change
+without the others:
 
-| What                 | Where                                   | Owner    |
-| -------------------- | --------------------------------------- | -------- |
-| Data                 | `src/data/figures/<post>/<figure>.csv`  | site     |
-| Chart definition     | `src/site/figures/<post>/<figure>.ts`   | site     |
-| Shared style, render | `src/lib/figures/`, `src/styles/figures.css`, `src/components/article/Chart.astro` | template |
+| What                  | Where                                                    | Owner    |
+| --------------------- | -------------------------------------------------------- | -------- |
+| Data + provenance     | `src/data/figures/<post>/` (`*.csv`, `provenance.yaml`)  | site     |
+| Chart definition      | `src/site/figures/<post>/<figure>.ts`                    | site     |
+| Interactive behaviour | `src/site/figures/<post>/<figure>.client.ts` (optional)  | site     |
+| Review entries        | `src/fixtures/figure-review/<post>.ts`                   | site     |
+| Shared style, render  | `src/lib/figures/`, `src/styles/figures.css`, `src/components/article/Chart.astro` | template |
 
-`src/data/figures/sources.yaml` records where each data file came from and
-how exact it is (`source`, `vector`, or `by-eye`).
+`<post>` is the post's slug (`src/content/writing/<post>.mdx`).
 
 ## Using a chart in a post
 
@@ -23,33 +25,117 @@ how exact it is (`source`, `vector`, or `by-eye`).
 ```
 
 `figure` is the definition's path under `src/site/figures/`, without `.ts`.
-A `<Fragment slot="caption">` works too, for captions with math.
+A `<Fragment slot="caption">` works for captions with math. Inside a
+`<FigureGrid>`, a `<Chart>` is one cell, like a `<Figure>`.
 
 ## Writing a definition
 
 ```ts
 import * as Plot from "@observablehq/plot";
-import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures/render";
+import { ERROR_BAR, NEUTRAL, SERIES, defineFigure } from "../../../lib/figures";
 
 export default defineFigure({
   data: "post/figure.csv",
   size: "narrow", // narrow 360px · medium 560px · full 760px (also drawn at 360px for phones)
-  legend: [{ label: "Ours", color: SERIES[0], key: "line" }],
-  plot: ({ data, width }) => ({
+  title: "Optional panel title", // only when the published figure has one; keep its wording
+  legend: [{ label: "Ours", color: SERIES[0], key: "line" }], // "line" | "swatch" | "dot", dashed?: true
+  plot: ({ data, width, compact }) => ({
     width,
     height: 230,
-    marks: [Plot.gridY(), Plot.lineY(data, { x: "step", y: "loss", stroke: SERIES[0] })]
+    marks: [
+      Plot.gridY(),
+      Plot.lineY(data, { x: "step", y: "loss", stroke: SERIES[0], title: (d) => `step ${d.step}: ${d.loss}` })
+    ]
   })
 });
 ```
 
-- Colours: `SERIES[0..5]` in fixed order (the paper's own method first), and
-  `NEUTRAL` for baselines and catch-all groups. They become theme variables
-  (`--figure-1` … `--figure-6`, `--figure-neutral`) in the output.
-- Legends come from `legend`, not Plot, so every chart's legend looks the same.
-- Ink, grid, axes and type come from `figures.css`; definitions don't set them.
-- Add a `title` channel to marks for hover values (native tooltips, no JS).
-- Error bars: a mark with `className: "figure-error"`.
+Conventions (the F1 spec):
+
+- **Colour.** `SERIES[0..5]` in fixed order, never cycled. The post's own
+  method takes `SERIES[0]`. Baselines, "others" and reference lines take
+  `NEUTRAL`. Scatter plots, where any two colours can touch, use at most
+  `SERIES[0..2]`. A seventh series means folding into `NEUTRAL` or small
+  multiples. Sequential data (heatmaps) uses one hue: a Plot `color` scale
+  with `scheme` is fine, but prefer a ramp toward `SERIES[0]`.
+- **Ink, grid, axes, type** come from `figures.css`. Definitions don't set
+  colours for text or axes, or font sizes.
+- **Legend** comes from `legend`, drawn below the plot. Don't use Plot's own
+  `legend: true`. With ≤ 4 series, direct labels (`Plot.text`) are fine
+  instead, if they don't collide.
+- **Secondary encoding** is line dash (`DASH`), never a second colour scale.
+- **Hover.** Give data marks a `title` channel; it becomes the hover tip.
+- **Error bars.** A rule mark with `className: ERROR_BAR`. Zero baseline:
+  `Plot.ruleY([0], { className: BASELINE })`.
+- **Labels** in sentence case, but keep the wording of the published figure
+  (including titles); the post's author writes the words.
+- **Size.** Pick the preset for the width the post shows the figure at: a
+  2-up `FigureGrid` cell or `WrapFigure` is `narrow`; a single static chart is
+  `medium`; `full` only when the chart needs the width (it gets a separate
+  `compact` layout for phones, so branch on `compact`).
+- **Log axes.** `tickFormat: powerOfTen`.
+- **Identifiers** (code names, variable names): `mono: ["x" | "fx" | "legend"]`.
+
+## Interactive figures
+
+A sibling `<figure>.client.ts` makes a chart interactive. It mounts when the
+chart scrolls near the viewport; the build-time SVG stays as the no-JS
+fallback, so the definition must still draw a sensible static state.
+
+```ts
+import * as Plot from "@observablehq/plot";
+import { defineFigureClient, SERIES } from "../../../lib/figures";
+import { renderFigureInBrowser } from "../../../lib/figures/client";
+
+export default defineFigureClient((root, { data }) => {
+  const plot = root.querySelector(".figure-chart__plot")!;
+  const draw = (step: number) => plot.replaceChildren(renderFigureInBrowser({ /* Plot options */ }, "alt"));
+  // add controls (input[type=range], buttons) to `root`, call draw on change
+});
+```
+
+- `data` is the definition's CSV, parsed. Larger data (JSON) can be imported
+  by the client module itself (`import frames from "…/frames.json"`), so it
+  only loads with that figure.
+- `renderFigureInBrowser` applies the same defaults and theme colours as the
+  build-time renderer.
+- Controls use the site's UI font and tokens (`--font-ui`, `--color-*`),
+  have labels, work with the keyboard, and respect `prefers-reduced-motion`
+  (no autoplay when it is set).
+
+## Provenance
+
+Every data file in `src/data/figures/<post>/` has an entry in that folder's
+`provenance.yaml`:
+
+```yaml
+paper: "<paper title>"
+files:
+  <file>.csv:
+    figure: <which figure: paper label and/or published blog file>
+    used_by: src/site/figures/<post>/<figure>.ts
+    source:
+      repo: <repo name>
+      remote: <git remote URL>
+      commit: <full hash of the source repo when read>
+      commit_date: <ISO date of that commit>
+      files:
+        - path: <path within that repo>
+          sha256: <hash of the file as read>
+      generator: <script that produced the source data, or why there is none>
+    extracted: <YYYY-MM-DD>
+    method: copied | converted | vector-extracted | by-eye
+    tool: <script or procedure used, for converted/vector-extracted>
+    fidelity: <exact | exact to PDF precision | approximate …>
+    notes: <anything a later reader needs>
+```
+
+## Review page
+
+`src/fixtures/figure-review/<post>.ts` lists the post's charts for the
+dev-only review page at `/fixtures/figures` (see `types.ts` there): each
+entry names the `figure`, a `label`, the `alt`, and how the post shows it
+today (`before`: image, pdf, plotly, embed, or none with a reason).
 
 ## Recovering data from a PDF figure
 
@@ -58,4 +144,4 @@ uv run --with pymupdf python scripts/figures/dump_pdf_paths.py FILE.pdf
 ```
 
 Prints every path and text span. Find the axis frame and tick labels, map path
-coordinates back to data units, and note the file in `sources.yaml` as `vector`.
+coordinates back to data units, and record the file as `vector-extracted`.

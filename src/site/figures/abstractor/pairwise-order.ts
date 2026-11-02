@@ -1,5 +1,5 @@
 import * as Plot from "@observablehq/plot";
-import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures/render";
+import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures";
 
 const MODELS = ["Abstractor", "CoRelNet (Asymmetric)", "PrediNet", "CoRelNet", "MLP"];
 const COLORS = [SERIES[0], SERIES[1], SERIES[2], SERIES[3], NEUTRAL];

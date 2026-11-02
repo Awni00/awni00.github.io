@@ -1,5 +1,5 @@
 import * as Plot from "@observablehq/plot";
-import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures/render";
+import { NEUTRAL, SERIES, defineFigure } from "../../../lib/figures";
 
 const GROUPS = ["var 0", "var 1", "var 2", "others"];
 const COLORS = [SERIES[0], SERIES[1], SERIES[2], NEUTRAL];

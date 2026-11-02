@@ -1,0 +1,20 @@
+# Where this paper's figure data came from. Schema: scripts/figures/README.md#provenance
+paper: "CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision"
+files:
+  linear-thresh-empirical-sample-complexity.csv:
+    figure: Empirical sample complexity, linear autoregressive class (blog empirical_sample_complexity_legendin.pdf, LinearThresh run)
+    used_by: src/site/figures/cot-info/linear-thresh-empirical-sample-complexity.ts
+    source:
+      repo: awni00.github.io
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/empirical_sample_complexity_legendin.pdf
+          sha256: 782c39d7e2ef3b5ce6531e250af7f10aa43cba4e69d0cd78a2396f4ccf4fa7dc
+      generator: not found locally (the local cot-info repo holds different experiments)
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: scripts/figures/dump_pdf_paths.py, calibrated against the axis ticks
+    fidelity: exact to the PDF's coordinate precision
+    notes: Step-function vertices. log10_epsilon is plotted reversed (1 to 1e-3).
