@@ -8,15 +8,17 @@ import type * as Plot from "@observablehq/plot";
  *
  * Colour is the one thing Plot can't take as a CSS variable, because it parses
  * colours. Figures draw with the sentinel hexes below instead, and the output
- * has each sentinel swapped for its `var(--figure-*)` token. Every other colour
- * (ink, axes, grid) is set from the theme in `figures.css`.
+ * has each sentinel swapped for its `var(--figure-*)` token. Those tokens are
+ * theme roles (`figure-1` … `figure-6`, `figure-N-alt`, `figure-neutral`; see
+ * `src/lib/theme/figureColors.ts`), so charts follow the theme toggle. Every
+ * other colour (ink, axes, grid) is set from the theme in `figures.css`.
  */
 
 /** Widths the chart is drawn at, in CSS px. Type sizes assume 1:1 display. */
 export const FIGURE_SIZES = { narrow: 360, medium: 560, full: 760 } as const;
 export type FigureSize = keyof typeof FIGURE_SIZES;
 
-/** Phone layout: a `full` chart is also drawn at this width and swapped in. */
+/** Phone layout: a medium or full figure is also drawn at this width and swapped in. */
 export const FIGURE_COMPACT_WIDTH = 360;
 
 /** Series colours, in their fixed order. Never cycle past six. */
@@ -70,7 +72,7 @@ export type FigureRow = Record<string, any>;
 export type FigureContext = {
   data: FigureRow[];
   width: number;
-  /** True for the phone layout of a `full` chart. */
+  /** True for the phone layout of a medium or full chart. */
   compact: boolean;
 };
 
@@ -145,7 +147,9 @@ export function withSiteDefaults(options: Plot.PlotOptions): Plot.PlotOptions {
   const margins: Partial<Plot.PlotOptions> = {};
   if (labelled(axes.y)) margins.marginLeft = (options.marginLeft ?? 40) + 14;
   if (labelled(axes.x)) margins.marginBottom = Math.max(options.marginBottom ?? 30, 44);
-  return { ...options, ...axes, ...margins, className: "figure-plot" };
+  // `figure-plot` scopes the chart styles; a definition's own class is kept.
+  const className = ["figure-plot", options.className].filter(Boolean).join(" ");
+  return { ...options, ...axes, ...margins, className };
 }
 
 export function replaceColorSentinels(html: string): string {

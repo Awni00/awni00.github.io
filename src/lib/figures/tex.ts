@@ -1,32 +1,44 @@
 import katex from "katex";
+import { globalMathMacros } from "../../site/math";
+import { resolveMathMacros } from "../math/resolve";
+import { escapeHtml, unescapeHtml } from "./escape";
 
 /**
  * Chart labels may carry inline TeX between `$…$`, rendered with KaTeX (the
- * same renderer and stylesheet as the posts' math). Build time only.
+ * same renderer and stylesheet as the posts' math, with the site's global
+ * macros). Build time only.
  */
 
-const escapeHtml = (text: string) =>
-  text.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+const macros = resolveMathMacros({ globalMacros: globalMathMacros });
 
-const unescapeHtml = (text: string) =>
-  text.replace(/&(amp|lt|gt|quot|#39);/g, (_, e) => ({ amp: "&", lt: "<", gt: ">", quot: '"', "#39": "'" })[e as string]!);
+/**
+ * `$…$` is math, except that a `$` followed by a digit is a dollar amount
+ * ("costs $5 to $10"), as in the posts' inline math.
+ */
+const TEX = /\$(?!\d)[^$]+\$/;
+const TEX_PARTS = /(\$(?!\d)[^$]+\$)/;
 
-export const hasTex = (text: string) => /\$[^$]+\$/.test(text);
+export const hasTex = (text: string) => TEX.test(text);
 
 /** Plain text stays text (escaped); each `$…$` becomes KaTeX HTML. */
 export function texToHtml(text: string): string {
   return text
-    .split(/(\$[^$]+\$)/)
+    .split(TEX_PARTS)
     .map((part) =>
-      /^\$[^$]+\$$/.test(part)
-        ? katex.renderToString(part.slice(1, -1), { throwOnError: false, output: "html" })
+      /^\$(?!\d)[^$]+\$$/.test(part)
+        ? katex.renderToString(part.slice(1, -1), {
+            throwOnError: false,
+            output: "html",
+            // A copy, since KaTeX writes \gdef definitions into it.
+            macros: { ...macros }
+          })
         : escapeHtml(part)
     )
     .join("");
 }
 
 /** Text without the TeX markup, for alt text and tooltips. */
-export const texToPlain = (text: string) => text.replace(/\$([^$]+)\$/g, "$1");
+export const texToPlain = (text: string) => text.replace(/\$(?!\d)([^$]+)\$/g, "$1");
 
 /**
  * Swap Plot's SVG axis-label text for KaTeX HTML in a foreignObject at the

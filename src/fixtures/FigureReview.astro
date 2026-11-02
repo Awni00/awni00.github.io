@@ -1,11 +1,13 @@
 ---
 /**
- * Before/after review for the figure system: every chart as its post shows it
- * today, next to the same chart rebuilt with <Chart>. "Now" uses the posts'
- * own components, so the comparison is like for like at the same width.
+ * Review page for the figure system: every chart and diagram a site lists,
+ * and, for one redrawn from a published figure, how the post showed it
+ * before ("Before" uses the posts' own components, so the comparison is like
+ * for like at the same width).
  *
- * Each paper's entries live in `src/fixtures/figure-review/<post>.ts`.
- * Dev-only, routed through `src/pages/fixtures/[fixture].astro`.
+ * Entries are site content, in `src/site/figure-review/<post>.ts` (types in
+ * `./figure-review/types.ts`). Dev-only, routed through
+ * `src/pages/fixtures/[fixture].astro`.
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Chart from "../components/article/Chart.astro";
@@ -20,7 +22,7 @@ import type { DiagramDefinition } from "../lib/figures/diagram";
 import type { PaperReview, ReviewEntry } from "./figure-review/types";
 
 const reviews = Object.values(
-  import.meta.glob<{ default: PaperReview }>("./figure-review/*.ts", { eager: true })
+  import.meta.glob<{ default: PaperReview }>("/src/site/figure-review/*.ts", { eager: true })
 )
   .map((module) => module.default)
   .filter(Boolean)
@@ -34,6 +36,7 @@ const diagrams = import.meta.glob<{ default: DiagramDefinition }>(
   ["/src/site/diagrams/**/*.ts", "!/src/site/diagrams/**/_*.ts"],
   { eager: true }
 );
+// A narrow figure sits beside its "before"; wider ones stack.
 const isNarrow = (entry: ReviewEntry) =>
   (entry.kind === "diagram"
     ? diagrams[`/src/site/diagrams/${entry.figure}.ts`]?.default.size
@@ -42,7 +45,10 @@ const anchor = (entry: ReviewEntry) => entry.figure.replaceAll("/", "--");
 const total = reviews.reduce((n, review) => n + review.entries.length, 0);
 
 const title = "Figure review";
-const description = `${total} figures as published today, next to their rebuilds. Flip the theme toggle to compare dark mode.`;
+const description =
+  total > 0
+    ? `${total} figures from src/site/figure-review, beside how their posts showed them before where an entry says so. Flip the theme toggle to check dark mode.`
+    : "No entries yet: list figures in src/site/figure-review/<post>.ts to review them here.";
 ---
 
 <BaseLayout title={title} description={description}>
@@ -68,9 +74,9 @@ const description = `${total} figures as published today, next to their rebuilds
             <h2 id={review.post}>{review.paper}</h2>
             {review.entries.map((entry) => {
               const before = entry.before;
-              const nowPanel =
+              const nowPanel = !before ? null :
                 before.kind === "image" ? (
-                  <Figure caption="Now">
+                  <Figure caption="Before">
                     <Picture
                       slot="figure"
                       src={before.src}
@@ -79,7 +85,7 @@ const description = `${total} figures as published today, next to their rebuilds
                     />
                   </Figure>
                 ) : before.kind === "pdf" ? (
-                  <Figure caption="Now">
+                  <Figure caption="Before">
                     <Picture
                       slot="figure"
                       src={before.src}
@@ -89,7 +95,7 @@ const description = `${total} figures as published today, next to their rebuilds
                   </Figure>
                 ) : before.kind === "plotly" ? (
                   <>
-                    <p class="figure-review-note">Now</p>
+                    <p class="figure-review-note">Before</p>
                     <PlotlyFigure
                       src={before.src}
                       iframeTitle={entry.alt}
@@ -100,17 +106,17 @@ const description = `${total} figures as published today, next to their rebuilds
                   </>
                 ) : before.kind === "embed" ? (
                   <>
-                    <p class="figure-review-note">Now</p>
+                    <p class="figure-review-note">Before</p>
                     <EmbedFrame src={before.src} title={entry.alt} height={before.height} />
                   </>
                 ) : (
-                  <p class="figure-review-none">Now: {before.reason}</p>
+                  <p class="figure-review-none">Before: {before.reason}</p>
                 );
               const rebuilt =
                 entry.kind === "diagram" ? (
-                  <Diagram figure={entry.figure} alt={entry.alt} caption="Rebuilt" />
+                  <Diagram figure={entry.figure} alt={entry.alt} caption={before && "Rebuilt"} />
                 ) : (
-                  <Chart figure={entry.figure} alt={entry.alt} caption="Rebuilt" />
+                  <Chart figure={entry.figure} alt={entry.alt} caption={before && "Rebuilt"} />
                 );
               return (
                 <div class="figure-review-entry" id={anchor(entry)}>
@@ -118,7 +124,7 @@ const description = `${total} figures as published today, next to their rebuilds
                   <p class="figure-review-id">
                     <code>{entry.figure}</code>
                   </p>
-                  {isNarrow(entry) && before.kind !== "none" ? (
+                  {before && isNarrow(entry) && before.kind !== "none" ? (
                     <FigureGrid columns={2}>
                       {nowPanel}
                       {rebuilt}

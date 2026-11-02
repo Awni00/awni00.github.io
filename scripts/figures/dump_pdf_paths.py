@@ -2,7 +2,8 @@
 
 Used to recover figure data from published PDFs: find the axis frame and
 tick-label positions in the output, then map path coordinates back to data
-units. Record the result's provenance in src/data/figures/sources.yaml.
+units. Record the result in src/data/figures/<post>/provenance.yaml as
+`vector-extracted` (see docs/figures.md).
 
 Run: uv run --with pymupdf python scripts/figures/dump_pdf_paths.py FILE.pdf
 

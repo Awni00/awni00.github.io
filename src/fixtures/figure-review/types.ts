@@ -1,10 +1,16 @@
 /**
- * One paper's section of the figure review page (`/fixtures/figures`).
- * Each paper has its own file next to this one, so people working on
- * different papers never edit the same file.
+ * Entries for the figure review page (`/fixtures/figures`, dev only).
+ *
+ * The entries themselves are site content: each post's live in
+ * `src/site/figure-review/<post>.ts`, which default-exports
+ * `definePaperReview({ … })`, so people working on different posts never
+ * edit the same file. These types are the template's.
  */
 
-/** How the post shows the figure today. Mirror the post's own markup. */
+/**
+ * How the post showed the figure before it was rebuilt, drawn beside the
+ * rebuild for comparison. Mirror the post's own markup.
+ */
 export type ReviewBefore =
   | { kind: "image"; src: string; invertInDarkMode?: boolean }
   | { kind: "pdf"; src: string; invertInDarkMode?: boolean }
@@ -19,17 +25,19 @@ export type ReviewEntry = {
    */
   figure: string;
   kind?: "chart" | "diagram";
-  /** Short label for the comparison, e.g. "Learning curves, pairwise order". */
+  /** Short label for the entry, e.g. "Learning curves, pairwise order". */
   label: string;
   alt: string;
-  before: ReviewBefore;
-  /** Shown under the pair: data fidelity, layout changes, open questions. */
+  /** Leave out for a figure that is new rather than redrawn. */
+  before?: ReviewBefore;
+  /** Shown under the entry: data fidelity, layout changes, open questions. */
   note?: string;
 };
 
 export type PaperReview = {
   /** Post slug, matching src/content/writing/<post>.mdx and src/data/figures/<post>/. */
   post: string;
+  /** The section's heading: the paper's or post's title. */
   paper: string;
   /** Section order on the page. */
   order: number;

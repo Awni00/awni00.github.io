@@ -6,7 +6,7 @@ data units, reads the matching translucent band (fill_between) as its min/max
 at each x, and names series from the legend entry next to their colour.
 
 Run:
-  uv run --with pymupdf python scripts/figures/abstractor/extract_curves.py FILE.pdf PAGE [--clip x0,y0,x1,y1]
+  uv run --with pymupdf python scripts/figures/extract_curves.py FILE.pdf PAGE [--clip x0,y0,x1,y1]
 
 Prints CSV to stdout: panel,series,color,x,y,lo,hi (panel is the title text above the axes).
 """

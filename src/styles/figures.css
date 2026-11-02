@@ -1,46 +1,9 @@
-/* Charts drawn by <Chart>. Spec: the F1 figure board.
+/* Charts (<Chart>) and diagrams (<Diagram>). See docs/figures.md.
 
-   Series colours: six slots in a fixed order plus a neutral. Hues follow the
-   theme (slot 1 = accent hue, slot 2 = link hue); lightness and chroma are
-   stepped per appearance and validated for contrast and colour-blind
-   separation. These values are for the claret pair. If the theme pair
-   changes, re-derive slots 1–2 at the same lightness and re-validate. */
-:root,
-[data-theme="light"] {
-  --figure-1: #902343; /* claret */
-  --figure-2: #2e64a6; /* navy */
-  --figure-3: #c0851f; /* ochre */
-  --figure-4: #109488; /* teal */
-  --figure-5: #7b52a4; /* violet */
-  --figure-6: #6c9539; /* olive */
-  /* Companion shades (SERIES_ALT): strong slots paled toward the page until
-     about 3.2:1, weak ones (3, 4, 6) darkened, so every line stays >= 3:1. */
-  --figure-1-alt: #be7d90;
-  --figure-2-alt: #6b91c0;
-  --figure-3-alt: #775213;
-  --figure-4-alt: #0a5c54;
-  --figure-5-alt: #a184be;
-  --figure-6-alt: #435c23;
-  --figure-neutral: #8e9095;
-  --figure-band-opacity: 0.14;
-}
-
-[data-theme="dark"] {
-  --figure-1: #d36d86;
-  --figure-2: #5290d3;
-  --figure-3: #b68f1b;
-  --figure-4: #20a89b;
-  --figure-5: #9468c2;
-  --figure-6: #77a246;
-  --figure-1-alt: #934e60;
-  --figure-2-alt: #3b6593;
-  --figure-3-alt: #796017;
-  --figure-4-alt: #196f68;
-  --figure-5-alt: #76549b;
-  --figure-6-alt: #4f6b32;
-  --figure-neutral: #74757a;
-  --figure-band-opacity: 0.18;
-}
+   Colours come from the theme: --figure-1 … --figure-6, --figure-N-alt and
+   --figure-neutral are theme roles, and --figure-tint, --figure-strong and
+   --figure-band-opacity are emitted with them per appearance
+   (src/lib/theme/themeCss.ts). This file only reads them. */
 
 .figure-chart {
   container-type: inline-size;
@@ -50,7 +13,10 @@
   font-family: var(--font-ui);
 }
 
-/* Plot's own rules use :where(), so these win without !important. */
+/* Plot's own rules use :where(), so these win without !important. The
+   aria-label rules below are scoped to descendants of Plot's root SVG
+   (.figure-plot): the root's own aria-label is the alt text, which could end
+   in "axis" or "grid", and a diagram's SVG is never matched. */
 .figure-chart .figure-plot {
   background: none;
   overflow: visible;
@@ -73,31 +39,31 @@
   color: var(--color-fg-soft);
 }
 
-.figure-chart [aria-label$="tick label"] {
+.figure-chart .figure-plot [aria-label$="tick label"] {
   fill: var(--color-muted);
 }
 
-.figure-chart [aria-label$="axis label"] {
+.figure-chart .figure-plot [aria-label$="axis label"] {
   fill: var(--color-fg-soft);
   font-size: 13px;
 }
 
-.figure-chart [aria-label$="axis tick"],
-.figure-chart [aria-label$="axis"] {
+.figure-chart .figure-plot [aria-label$="axis tick"],
+.figure-chart .figure-plot [aria-label$="axis"] {
   stroke: var(--color-rule);
 }
 
-.figure-chart [aria-label$="grid"] {
+.figure-chart .figure-plot [aria-label$="grid"] {
   stroke: var(--color-border);
   stroke-opacity: 1;
 }
 
-.figure-chart [aria-label="frame"],
+.figure-chart .figure-plot [aria-label="frame"],
 .figure-chart .figure-baseline {
   stroke: var(--color-rule);
 }
 
-.figure-chart [aria-label="area"] {
+.figure-chart .figure-plot [aria-label="area"] {
   fill-opacity: var(--figure-band-opacity);
 }
 
@@ -107,18 +73,18 @@
   stroke-width: 1;
 }
 
-.figure-chart [aria-label="y-axis tick"] {
+.figure-chart .figure-plot [aria-label="y-axis tick"] {
   display: none;
 }
 
-.figure-chart [aria-label="facet label"],
-.figure-chart [aria-label$="facet label"] {
+.figure-chart .figure-plot [aria-label="facet label"],
+.figure-chart .figure-plot [aria-label$="facet label"] {
   fill: var(--color-muted);
 }
 
 /* Identifiers (code names) set in the mono face. */
-.figure-chart[data-mono~="x"] [aria-label="x-axis tick label"],
-.figure-chart[data-mono~="fx"] [aria-label="fx-axis tick label"],
+.figure-chart[data-mono~="x"] .figure-plot [aria-label="x-axis tick label"],
+.figure-chart[data-mono~="fx"] .figure-plot [aria-label="fx-axis tick label"],
 .figure-chart[data-mono~="legend"] .figure-legend {
   font-family: var(--font-code, var(--font-mono));
 }
@@ -226,16 +192,6 @@
 /* Diagrams (<Diagram>): schematic figures in the charts' palette and type.
    A tone sets --tone; regions are an opaque tint of it (overlaps stay
    distinct and nothing shows through), outlined in the tone itself. */
-:root,
-[data-theme="light"] {
-  --figure-tint: 26%;
-  --figure-strong: 82%;
-}
-
-[data-theme="dark"] {
-  --figure-tint: 34%;
-  --figure-strong: 64%;
-}
 
 .figure-diagram__svg {
   display: block;
@@ -375,9 +331,14 @@
   overflow: visible;
 }
 
-/* Full-width charts carry a phone layout and swap to it on narrow columns. */
+/* Medium and full figures carry a phone layout and swap to it on narrow
+   columns. It is drawn at --figure-compact-width (360px) and is never
+   stretched past that, so its type keeps the size it was set at; in a
+   column between that and the breakpoint it sits centred. */
 .figure-chart__compact {
   display: none;
+  max-width: var(--figure-compact-width);
+  margin-inline: auto;
 }
 
 @container (max-width: 520px) {
@@ -387,5 +348,12 @@
 
   .figure-chart:is(.figure-chart--medium, .figure-chart--full) .figure-chart__compact {
     display: block;
+  }
+
+  /* The title, legend and Replay button line up with the centred layout. */
+  .figure-chart:is(.figure-chart--medium, .figure-chart--full)
+    > :is(.figure-chart__title, .figure-legend, .figure-diagram__replay) {
+    max-width: var(--figure-compact-width);
+    margin-left: max(0px, calc((100% - var(--figure-compact-width)) / 2));
   }
 }

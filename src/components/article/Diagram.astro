@@ -2,105 +2,117 @@
 /**
  * A diagram drawn at build time from a definition in `src/site/diagrams/`.
  *
- *   <Diagram figure="cot-info/consistency-sets" caption="…" />
+ *   <Diagram figure="my-post/pipeline" caption="…" />
  *
  * Diagrams share the charts' palette, type, line weights and legend, and
  * are inline SVG, so they recolour with the theme. A medium or full diagram
  * may draw a phone layout too (its definition sees `compact: true`), swapped
- * in on narrow columns like a chart's.
+ * in on narrow columns like a chart's. See docs/figures.md.
  */
-import Figure from "./Figure.astro";
-import FigureLegend from "./FigureLegend.astro";
-import { FIGURE_COMPACT_WIDTH, FIGURE_SIZES, type FigureSize } from "../../lib/figures";
+import FigureFrame from "./FigureFrame.astro";
+import type { FigureSize } from "../../lib/figures";
 import type { DiagramDefinition } from "../../lib/figures/diagram";
-import { texToHtml } from "../../lib/figures/tex";
-import "../../styles/figures.css";
+import { figureLayout, findDefinition } from "../../lib/figures/frame";
 
 type Props = {
   figure: string;
   alt?: string;
   caption?: string;
+  /** Overrides the definition's size preset. */
   size?: FigureSize;
 };
 
-const { figure, alt, caption, size: sizeOverride } = Astro.props;
+const { figure, alt, caption, size } = Astro.props;
 
 const definitions = import.meta.glob<{ default: DiagramDefinition }>(
   ["/src/site/diagrams/**/*.ts", "!/src/site/diagrams/**/_*.ts"],
   { eager: true }
 );
-const definition = definitions[`/src/site/diagrams/${figure}.ts`]?.default;
-if (!definition) throw new Error(`<Diagram>: no definition at src/site/diagrams/${figure}.ts`);
+const definition = findDefinition(definitions, "src/site/diagrams", figure, "Diagram");
 
-const size = sizeOverride ?? definition.size;
-const width = FIGURE_SIZES[size];
+const layout = figureLayout(size ?? definition.size);
 const label = alt ?? definition.alt ?? "";
-const wide = definition.draw({ width, compact: false }).toSvg(label);
-const compact = size !== "narrow" ? definition.draw({ width: FIGURE_COMPACT_WIDTH, compact: true }).toSvg(label) : null;
-
-const escapeHtml = (text: string) =>
-  text.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
-const captionHtml = Astro.slots.has("caption")
-  ? await Astro.slots.render("caption")
-  : caption && escapeHtml(caption);
+const wide = definition.draw({ width: layout.width, compact: false }).toSvg(label);
+const compact =
+  layout.compactWidth === null
+    ? null
+    : definition.draw({ width: layout.compactWidth, compact: true }).toSvg(label);
+const { animate } = definition;
 ---
 
-<Figure maxWidth={`${width}px`}>
-  <div
-    slot="figure"
-    class:list={["figure-chart", "figure-diagram", `figure-chart--${size}`]}
-    style={`--figure-width: ${width}px`}
-    data-diagram={figure}
-    data-animated={definition.animate ? "" : undefined}
-    data-delay={definition.animate ? (definition.animate.delay ?? 400) : undefined}
-  >
-    {definition.title && <p class="figure-chart__title" set:html={texToHtml(definition.title)} />}
-    <div class="figure-chart__plot">
-      <div class="figure-chart__wide" set:html={wide} />
-      {compact && <div class="figure-chart__compact" set:html={compact} />}
-    </div>
-    <FigureLegend items={definition.legend ?? []} />
-    {
-      definition.animate && (
-        <button type="button" class="figure-diagram__replay" hidden>
-          Replay
-        </button>
-      )
-    }
-  </div>
-  {captionHtml && <Fragment slot="caption" set:html={captionHtml} />}
-</Figure>
+<FigureFrame
+  layout={layout}
+  class="figure-diagram"
+  title={definition.title}
+  legend={definition.legend}
+  wide={wide}
+  compact={compact}
+  caption={caption}
+  attrs={{
+    "data-diagram": figure,
+    "data-animated": animate ? "" : undefined,
+    "data-delay": animate ? (animate.delay ?? 400) : undefined
+  }}
+>
+  {
+    animate && (
+      <button type="button" class="figure-diagram__replay" hidden>
+        Replay
+      </button>
+    )
+  }
+  <slot name="caption" slot="caption" />
+</FigureFrame>
 
 <script>
-  // Play-once diagrams: start when half in view, replay on request. With
-  // reduced motion (or no JS) the static final frame stays and no button shows.
+  // Play-once diagrams: start once half the diagram, or half the viewport,
+  // is covered by it (a diagram taller than twice the viewport can never be
+  // half in view), and offer Replay after the first play. With reduced
+  // motion (or no JS) the static final frame stays and no button shows.
   const motion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const pending = new WeakMap<HTMLElement, number>();
+
   const play = (root: HTMLElement) => {
+    pending.delete(root);
     root.removeAttribute("data-play");
     void root.offsetWidth;
     root.setAttribute("data-play", "");
+    const button = root.querySelector<HTMLButtonElement>(".figure-diagram__replay");
+    if (button) button.hidden = false;
   };
+
+  const inView = (entry: IntersectionObserverEntry) => {
+    if (!entry.isIntersecting) return false;
+    const viewport = entry.rootBounds?.height ?? window.innerHeight;
+    return entry.intersectionRatio >= 0.5 || entry.intersectionRect.height >= viewport * 0.5;
+  };
+
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
         const root = entry.target as HTMLElement;
+        if (!inView(entry) || pending.has(root)) continue;
         observer.unobserve(root);
-        window.setTimeout(() => play(root), Number(root.dataset.delay ?? 400));
+        pending.set(
+          root,
+          window.setTimeout(() => play(root), Number(root.dataset.delay ?? 400))
+        );
       }
     },
-    { threshold: 0.5 }
+    { threshold: Array.from({ length: 11 }, (_, i) => i / 20) }
   );
+
   if (motion) {
     for (const root of document.querySelectorAll<HTMLElement>(".figure-diagram[data-animated]")) {
-      const button = root.querySelector<HTMLButtonElement>(".figure-diagram__replay");
       // Armed: will play. Definitions may show their first frame under
       // `[data-armed]:not([data-play])`, so the final frame doesn't flash first.
       root.setAttribute("data-armed", "");
-      if (button) {
-        button.hidden = false;
-        button.addEventListener("click", () => play(root));
-      }
+      root.querySelector<HTMLButtonElement>(".figure-diagram__replay")?.addEventListener("click", () => {
+        // A replay supersedes any first play still waiting to start.
+        observer.unobserve(root);
+        window.clearTimeout(pending.get(root));
+        play(root);
+      });
       observer.observe(root);
     }
   }

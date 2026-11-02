@@ -1,4 +1,5 @@
-import { FIGURE_SIZES, type FigureSize, type LegendItem } from "./index";
+import { escapeHtml } from "./escape";
+import type { FigureSize, LegendItem } from "./index";
 import { hasTex, texToHtml, texToPlain } from "./tex";
 
 /**
@@ -26,9 +27,9 @@ export type DiagramDefinition = {
   title?: string;
   legend?: LegendItem[];
   /**
-   * Play-once animation. The root gets `data-animated`; once the diagram is
-   * half in view (after `delay` ms, default 400), it gets `data-play`, and a
-   * Replay button restarts it. Write keyframes with `raw("<style>…</style>")`
+   * Play-once animation. The root gets `data-animated`; once half of the
+   * diagram, or half the viewport, is covered by it, it gets `data-play`
+   * after `delay` ms (default 400), and a Replay button appears to restart it. Write keyframes with `raw("<style>…</style>")`
    * under `.figure-diagram[data-play]`, with class names prefixed per
    * diagram. The static drawing is the final frame: without JS, or with
    * reduced motion, `data-play` is never set.
@@ -45,9 +46,6 @@ export const STROKE = { line: 1.25, frame: 1, emphasis: 2 } as const;
 const HEAD = { length: 7, halfWidth: 3.25 };
 
 const toneClass = (tone: Tone) => `d-tone-${tone}`;
-
-const escape = (text: string) =>
-  text.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
 const fmt = (n: number) => String(Math.round(n * 100) / 100);
 
@@ -262,7 +260,7 @@ export class DiagramCanvas {
     } else {
       const dominant = baseline === "top" ? "hanging" : baseline === "bottom" ? "auto" : "central";
       this.parts.push(
-        `<text x="${fmt(at.x)}" y="${fmt(at.y)}" text-anchor="${anchor}" dominant-baseline="${dominant}" class="${classes}">${escape(text)}</text>`
+        `<text x="${fmt(at.x)}" y="${fmt(at.y)}" text-anchor="${anchor}" dominant-baseline="${dominant}" class="${classes}">${escapeHtml(text)}</text>`
       );
     }
     return this;
@@ -270,7 +268,7 @@ export class DiagramCanvas {
 
   toSvg(ariaLabel: string) {
     return (
-      `<svg class="figure-diagram__svg" viewBox="0 0 ${fmt(this.width)} ${fmt(this.height)}" width="${fmt(this.width)}" height="${fmt(this.height)}" role="img" aria-label="${escape(texToPlain(ariaLabel))}">` +
+      `<svg class="figure-diagram__svg" viewBox="0 0 ${fmt(this.width)} ${fmt(this.height)}" width="${fmt(this.width)}" height="${fmt(this.height)}" role="img" aria-label="${escapeHtml(texToPlain(ariaLabel))}">` +
       this.parts.join("") +
       `</svg>`
     );
@@ -278,5 +276,3 @@ export class DiagramCanvas {
 }
 
 export const canvas = (width: number, height: number) => new DiagramCanvas(width, height);
-
-export const diagramWidth = (size: FigureSize) => FIGURE_SIZES[size];
