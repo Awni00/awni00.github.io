@@ -9,6 +9,22 @@ export default definePaperReview({
   order: 30,
   entries: [
     {
+      kind: "diagram",
+      figure: "cot-info/consistency-sets",
+      label: "Diagram: geometry of CoT information",
+      alt: "Multi-panel illustration comparing end-to-end and CoT consistency sets as sample size increases.",
+      before: { kind: "pdf", src: "/blog/cot-info/figs/diagrams/cotcons_dynamic_diagram.pdf" },
+      note: "Redrawn with <Diagram> from the PDF's geometry: disc radii and arrow angles as published. CoT takes series 1 and E2E series 2, matching the post's charts (the published diagram had them the other way round). Legend moves below; the axis arrow's label is sentence case."
+    },
+    {
+      kind: "diagram",
+      figure: "cot-info/dfa",
+      label: "Diagram: DFA transition diagram",
+      alt: "Deterministic finite automaton with four states used in the simulation.",
+      before: pdf("DFA_transition_diagram.pdf"),
+      note: "Redrawn with <Diagram>: same states, layout and transitions. Start state tinted series 2 (blue, as published), accepting state series 4 (teal, for the published green), others neutral."
+    },
+    {
       figure: "cot-info/linear-thresh-cot-info-vs-e2e-diff",
       label: "CoT information vs end-to-end disagreement, linear class",
       alt: "Scatter plot comparing CoT information and end-to-end disagreement for the linear autoregressive class.",

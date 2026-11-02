@@ -262,10 +262,9 @@ We will see that the CoT information characterizes the sample complexity of lear
 ### Main Theorem: CoT Information Governs the Statistical Rate of Learning under CoT Supervision
 
 
-<Figure>
-  <Picture slot="figure" src="/blog/cot-info/figs/diagrams/cotcons_dynamic_diagram.pdf" alt="Multi-panel illustration comparing end-to-end and CoT consistency sets as sample size increases." />
+<Diagram figure="cot-info/consistency-sets" alt="Multi-panel illustration comparing end-to-end and CoT consistency sets as sample size increases.">
   <Fragment slot="caption">Geometry of CoT information: consistency sets shrink much faster under CoT supervision.</Fragment>
-</Figure>
+</Diagram>
 
 <Statement label="Result" title="Sample Complexity Under CoT Supervision" accent="#ef4444">
   For finite $\calH$, the *CoT consistency rule*
@@ -389,15 +388,9 @@ Our second experiment examines multi-step reasoning via regular language recogni
 Here, $h^{\text{e2e}}(x)$ indicates whether a string $x$ belongs to a regular language $\mathcal{L}$, while $h^{\text{CoT}}(x)$ records the sequence of states traversed by the corresponding deterministic finite automaton during recognition. The CoT thus captures the latent computational process underlying membership decisions.
 
 <FigureGrid columns={2} mediaFit="contain" equalFrames mediaAspectRatio="3 / 2">
-  <Figure>
-    <Picture
-      slot="figure"
-      src="/blog/cot-info/figs/simulation_figs/DFA_transition_diagram.pdf"
-      alt="Deterministic finite automaton with four states used in the simulation."
-      invertInDarkMode
-    />
+  <Diagram figure="cot-info/dfa" alt="Deterministic finite automaton with four states used in the simulation.">
     <Fragment slot="caption">DFA whose state trajectory forms the chain-of-thought trace.</Fragment>
-  </Figure>
+  </Diagram>
   <Chart figure="cot-info/dfa-cot-info-ratio-by-detail" alt="CoT information ratio as a function of epsilon under varying detail levels of the DFA trace.">
     <Fragment slot="caption">How CoT information scales with epsilon as trace detail varies.</Fragment>
   </Chart>

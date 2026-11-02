@@ -6,6 +6,14 @@ export default definePaperReview({
   order: 50,
   entries: [
     {
+      kind: "diagram",
+      figure: "dual-attention/attention-mechanisms",
+      label: "Diagram: sensory and relational attention",
+      alt: "Sensory and Relational Attention",
+      before: { kind: "image", src: "/blog/dual-attention/static/figs/paper_main_figure.png" },
+      note: "Redrawn with <Diagram> by eye from the PNG (no TikZ or slide source found): same two panels, rows, converging edges and labels. Colours as published, from the site palette: sensory red (series 1) for the objects x, y_i and values v_i; relational blue (series 2) for r(x, y_i); symbols green (series 6). Panels stack on phones."
+    },
+    {
       figure: "dual-attention/relgames-learning-curves",
       label: "Relational games, learning curves",
       alt: "Relational games learning curves",

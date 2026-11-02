@@ -77,7 +77,8 @@ export type LegendItem =
       label: string;
       /** A SERIES sentinel or NEUTRAL. */
       color: string;
-      key: "line" | "swatch" | "dot";
+      /** `region` and `arrow` are diagram keys: a tinted outlined square, an arrow. */
+      key: "line" | "swatch" | "dot" | "region" | "arrow";
       /** true for the standard dash, or an SVG dash pattern such as "1.5,3" (dotted). */
       dashed?: boolean | string;
     }

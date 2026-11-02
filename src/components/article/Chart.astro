@@ -15,11 +15,10 @@
  * chart scrolls into view, and the build-time SVG stays as its fallback.
  */
 import Figure from "./Figure.astro";
+import FigureLegend from "./FigureLegend.astro";
 import {
-  DASH,
   FIGURE_COMPACT_WIDTH,
   FIGURE_SIZES,
-  colorToken,
   type FigureDefinition,
   type FigureSize
 } from "../../lib/figures";
@@ -90,47 +89,7 @@ const mono = (definition.mono ?? []).join(" ");
       <div class="figure-chart__wide" set:html={wide} />
       {compact && <div class="figure-chart__compact" set:html={compact} />}
     </div>
-    {
-      legend.length > 0 && (
-        <ul class="figure-legend" aria-hidden="true">
-          {legend.map((item) =>
-            item.key === "ramp" ? (
-              <li class="figure-legend__ramp">
-                <Fragment set:html={texToHtml(item.label)} />
-                <span>{item.from}</span>
-                <svg width={item.opacities.length * 12} height="10" viewBox={`0 0 ${item.opacities.length * 12} 10`}>
-                  {item.opacities.map((opacity, i) => (
-                    <rect x={i * 12 + 1} y="0" width="10" height="10" rx="1.5" fill={colorToken(item.color)} fill-opacity={opacity} />
-                  ))}
-                </svg>
-                <span>{item.to}</span>
-              </li>
-            ) : (
-              <li>
-                <svg width="16" height="10" viewBox="0 0 16 10">
-                  {item.key === "line" ? (
-                    <line
-                      x1="0"
-                      x2="16"
-                      y1="5"
-                      y2="5"
-                      stroke={colorToken(item.color)}
-                      stroke-width="2"
-                      stroke-dasharray={item.dashed === true ? DASH : item.dashed || undefined}
-                    />
-                  ) : item.key === "dot" ? (
-                    <circle cx="8" cy="5" r="4" fill={colorToken(item.color)} />
-                  ) : (
-                    <rect x="3" y="0" width="10" height="10" rx="1.5" fill={colorToken(item.color)} />
-                  )}
-                </svg>
-                <Fragment set:html={texToHtml(item.label)} />
-              </li>
-            )
-          )}
-        </ul>
-      )
-    }
+    <FigureLegend items={legend} />
     {interactive && <script type="application/json" data-figure-data set:html={JSON.stringify(data)} />}
   </div>
   {captionHtml && <Fragment slot="caption" set:html={captionHtml} />}

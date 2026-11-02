@@ -9,12 +9,14 @@
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Chart from "../components/article/Chart.astro";
+import Diagram from "../components/article/Diagram.astro";
 import EmbedFrame from "../components/article/EmbedFrame.astro";
 import Figure from "../components/article/Figure.astro";
 import FigureGrid from "../components/article/FigureGrid.astro";
 import Picture from "../components/article/Picture.astro";
 import PlotlyFigure from "../components/article/PlotlyFigure.astro";
 import type { FigureDefinition } from "../lib/figures";
+import type { DiagramDefinition } from "../lib/figures/diagram";
 import type { PaperReview, ReviewEntry } from "./figure-review/types";
 
 const reviews = Object.values(
@@ -28,13 +30,19 @@ const definitions = import.meta.glob<{ default: FigureDefinition }>(
   ["/src/site/figures/**/*.ts", "!/src/site/figures/**/*.client.ts", "!/src/site/figures/**/_*.ts"],
   { eager: true }
 );
+const diagrams = import.meta.glob<{ default: DiagramDefinition }>(
+  ["/src/site/diagrams/**/*.ts", "!/src/site/diagrams/**/_*.ts"],
+  { eager: true }
+);
 const isNarrow = (entry: ReviewEntry) =>
-  definitions[`/src/site/figures/${entry.figure}.ts`]?.default.size === "narrow";
+  (entry.kind === "diagram"
+    ? diagrams[`/src/site/diagrams/${entry.figure}.ts`]?.default.size
+    : definitions[`/src/site/figures/${entry.figure}.ts`]?.default.size) === "narrow";
 const anchor = (entry: ReviewEntry) => entry.figure.replaceAll("/", "--");
 const total = reviews.reduce((n, review) => n + review.entries.length, 0);
 
 const title = "Figure review";
-const description = `${total} charts as published today, next to their rebuilds. Flip the theme toggle to compare dark mode.`;
+const description = `${total} figures as published today, next to their rebuilds. Flip the theme toggle to compare dark mode.`;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -98,6 +106,12 @@ const description = `${total} charts as published today, next to their rebuilds.
                 ) : (
                   <p class="figure-review-none">Now: {before.reason}</p>
                 );
+              const rebuilt =
+                entry.kind === "diagram" ? (
+                  <Diagram figure={entry.figure} alt={entry.alt} caption="Rebuilt" />
+                ) : (
+                  <Chart figure={entry.figure} alt={entry.alt} caption="Rebuilt" />
+                );
               return (
                 <div class="figure-review-entry" id={anchor(entry)}>
                   <h3>{entry.label}</h3>
@@ -107,12 +121,12 @@ const description = `${total} charts as published today, next to their rebuilds.
                   {isNarrow(entry) && before.kind !== "none" ? (
                     <FigureGrid columns={2}>
                       {nowPanel}
-                      <Chart figure={entry.figure} alt={entry.alt} caption="Rebuilt" />
+                      {rebuilt}
                     </FigureGrid>
                   ) : (
                     <>
                       {nowPanel}
-                      <Chart figure={entry.figure} alt={entry.alt} caption="Rebuilt" />
+                      {rebuilt}
                     </>
                   )}
                   {entry.note && <p class="figure-review-note">{entry.note}</p>}

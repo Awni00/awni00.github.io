@@ -83,6 +83,42 @@ Conventions (the F1 spec):
 - **Log axes.** `tickFormat: powerOfTen`.
 - **Identifiers** (code names, variable names): `mono: ["x" | "fx" | "legend"]`.
 
+## Diagrams
+
+Schematic figures (automata, set pictures, block diagrams) use `<Diagram>`,
+which shares the charts' palette, type, legend and theme handling:
+
+```mdx
+<Diagram figure="cot-info/dfa" alt="…">
+  <Fragment slot="caption">…</Fragment>
+</Diagram>
+```
+
+A definition in `src/site/diagrams/<post>/<name>.ts` default-exports
+`defineDiagram({ size, alt, legend?, draw })`. `draw({ width, compact })`
+returns a canvas from `canvas(width, height)` (`src/lib/figures/diagram.ts`)
+with shapes added through its helpers: `frame`, `circle`, `rect`, `dot`,
+`arrow`, `line`, `edge` (node to node, trimmed, with `bend`), `loop` and
+`label` (`$…$` renders with KaTeX). Medium and full diagrams also draw a
+360px phone layout when `compact` is true.
+
+Rules:
+
+- Colour by role with a tone: a series slot (1–6) for the things the
+  post's charts colour the same way (CoT is 1 and E2E 2 in CoT Info),
+  `"neutral"` for everything else, `"ink"` for arrows and outlines, and
+  `"muted"` for annotations. Regions are an opaque tint with an outline,
+  or `fill: "strong"` (a darker shade, no outline) with `tone: "inverse"`
+  (white) labels, for labelled blocks and tokens.
+- One line weight (1.25px) for outlines and arrows; frames are 1px rules.
+  Arrowheads are the library's filled triangles; don't draw your own.
+- Type: 13px labels, 12px annotations (`size: "sm"`), 15px node names
+  (`size: "lg"`). Sentence case. Labels on lines take `halo: true`.
+- Legends go below via `legend`, with `region` and `arrow` keys for
+  diagram shapes. Prefer labelling a shape directly when there's room.
+- Keep the published geometry when redrawing (read it with
+  `dump_pdf_paths.py`), and note the source PDF in a comment.
+
 ## Interactive figures
 
 A sibling `<figure>.client.ts` makes a chart interactive. It mounts when the

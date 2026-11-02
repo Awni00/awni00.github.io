@@ -13,8 +13,12 @@ export type ReviewBefore =
   | { kind: "none"; reason: string };
 
 export type ReviewEntry = {
-  /** `<Chart figure>` id: path under src/site/figures without `.ts`. */
+  /**
+   * `<Chart figure>` id (path under src/site/figures without `.ts`), or with
+   * `kind: "diagram"` a `<Diagram figure>` id under src/site/diagrams.
+   */
   figure: string;
+  kind?: "chart" | "diagram";
   /** Short label for the comparison, e.g. "Learning curves, pairwise order". */
   label: string;
   alt: string;

@@ -6,6 +6,22 @@ export default definePaperReview({
   order: 40,
   entries: [
     {
+      kind: "diagram",
+      figure: "relational-convolutions/relational-convolution",
+      label: "Diagram: the relational convolution",
+      alt: "Relational Convolutional Networks architecture diagram",
+      before: { kind: "image", src: "/blog/relational-convolutions/figs/relconv_diagram.png" },
+      note: "Redrawn by eye from the PNG (no vector source found); positions are the PNG's, scaled. Colours as published: edges (relations) blue, nodes red or blue by kind; edge opacities kept. Row labels in sentence case; \"rel\" set upright. Phone layout moves the row labels beside and under the rows."
+    },
+    {
+      kind: "diagram",
+      figure: "relational-convolutions/architecture",
+      label: "Diagram: relational convolutional network architecture",
+      alt: "Relational Convolutional Networks architecture diagram",
+      before: { kind: "image", src: "/blog/relational-convolutions/figs/relconv_architecture.png" },
+      note: "Redrawn by eye from the PNG (no vector source found): same stack and shape annotations. Block colours as published: relational convolution red (series 1), inner product relation blue (series 2), initial embedder green (series 6). Block names in sentence case. In the post, WrapFigure only takes an image, so the diagram sits in the right column of a TwoColumns beside the same two paragraphs."
+    },
+    {
       figure: "relational-convolutions/relational-games-ood",
       label: "Relational games, out-of-distribution accuracy",
       alt: "Relational games out-of-distribution generalization",
