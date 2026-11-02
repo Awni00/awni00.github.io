@@ -148,6 +148,9 @@ const writing = defineCollection({
         // Justify this entry's prose, overriding
         // theme.typography.justify.enabled.
         justify: z.boolean().optional(),
+        // Number this entry's figure and table captions, overriding
+        // writing.entryLayout.figureNumbers.
+        figureNumbers: z.boolean().optional(),
         // Override aside placement: "margin" floats <Aside> blocks into
         // the right gutter; "inline" renders them as left-bordered blocks.
         asides: z.enum(["margin", "inline"]).optional(),
@@ -155,8 +158,10 @@ const writing = defineCollection({
         // Depths are h2-h6; h1 is reserved for the article title.
         toc: tocConfig.optional(),
         // Structured placement overrides — partial; fields you omit fall
-        // through to the type-level or global default. Legacy "sidebar"
-        // value is accepted and silently mapped to "right".
+        // through to the type-level or global default. Legacy values still
+        // parse: toc "sidebar" maps to "right", related "left"/"right"/
+        // "sidebar" map to "footer", and `linkedFrom` is ignored
+        // (`npm run validate` warns about the last two).
         placement: z
           .object({
             toc: z
@@ -169,7 +174,10 @@ const writing = defineCollection({
               .object({ where: z.enum(["left", "right", "footer", "sidebar", "none"]).optional() })
               .optional(),
             related: z
-              .object({ where: z.enum(["left", "right", "footer", "sidebar", "none"]).optional() })
+              .object({
+                where: z.enum(["footer", "none", "left", "right", "sidebar"]).optional(),
+                withLocalGraph: z.boolean().optional()
+              })
               .optional()
           })
           .optional()
