@@ -1,0 +1,172 @@
+{
+  "layout": {
+    "font": {
+      "family": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif",
+      "size": 13,
+      "color": "#d8d6d0"
+    },
+    "paper_bgcolor": "rgba(0,0,0,0)",
+    "plot_bgcolor": "rgba(0,0,0,0)",
+    "colorway": [
+      "#d36d86",
+      "#5290d3",
+      "#b68f1b",
+      "#20a89b",
+      "#9468c2",
+      "#77a246"
+    ],
+    "title": {
+      "font": {
+        "size": 13,
+        "color": "#d8d6d0"
+      },
+      "x": 0,
+      "xanchor": "left",
+      "xref": "paper"
+    },
+    "xaxis": {
+      "showgrid": false,
+      "gridcolor": "#2a2b30",
+      "gridwidth": 1,
+      "zeroline": false,
+      "showline": true,
+      "linecolor": "#35363b",
+      "linewidth": 1,
+      "ticks": "outside",
+      "ticklen": 4,
+      "tickwidth": 1,
+      "tickcolor": "#35363b",
+      "tickfont": {
+        "size": 12,
+        "color": "#9a9b9f"
+      },
+      "title": {
+        "font": {
+          "size": 13,
+          "color": "#d8d6d0"
+        },
+        "standoff": 8
+      },
+      "automargin": true
+    },
+    "yaxis": {
+      "showgrid": true,
+      "gridcolor": "#2a2b30",
+      "gridwidth": 1,
+      "zeroline": false,
+      "showline": false,
+      "linecolor": "#35363b",
+      "linewidth": 1,
+      "ticks": "",
+      "ticklen": 0,
+      "tickwidth": 1,
+      "tickcolor": "#35363b",
+      "tickfont": {
+        "size": 12,
+        "color": "#9a9b9f"
+      },
+      "title": {
+        "font": {
+          "size": 13,
+          "color": "#d8d6d0"
+        },
+        "standoff": 8
+      },
+      "automargin": true
+    },
+    "legend": {
+      "orientation": "h",
+      "x": 0,
+      "xanchor": "left",
+      "y": 1.02,
+      "yanchor": "bottom",
+      "bgcolor": "rgba(0,0,0,0)",
+      "borderwidth": 0,
+      "font": {
+        "size": 12,
+        "color": "#d8d6d0"
+      },
+      "title": {
+        "text": ""
+      },
+      "itemwidth": 30,
+      "tracegroupgap": 0
+    },
+    "margin": {
+      "t": 40,
+      "r": 8,
+      "b": 44,
+      "l": 52,
+      "pad": 0
+    },
+    "bargap": 0.28,
+    "bargroupgap": 0.08,
+    "hoverlabel": {
+      "bgcolor": "#131418",
+      "bordercolor": "#2a2b30",
+      "font": {
+        "family": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif",
+        "size": 12,
+        "color": "#d8d6d0"
+      }
+    },
+    "hovermode": "closest",
+    "annotationdefaults": {
+      "font": {
+        "size": 12,
+        "color": "#d8d6d0"
+      },
+      "showarrow": false
+    },
+    "colorscale": {
+      "sequential": [
+        [
+          0,
+          "#1a1c21"
+        ],
+        [
+          0.5,
+          "#8b3a52"
+        ],
+        [
+          1,
+          "#f3c3cf"
+        ]
+      ]
+    },
+    "meta": {
+      "neutral": "#74757a",
+      "draft": "F1 figure spec, not wired in"
+    }
+  },
+  "data": {
+    "scatter": [
+      {
+        "type": "scatter",
+        "line": {
+          "width": 2
+        },
+        "marker": {
+          "size": 7,
+          "line": {
+            "width": 0
+          }
+        }
+      }
+    ],
+    "bar": [
+      {
+        "type": "bar",
+        "marker": {
+          "line": {
+            "width": 0
+          }
+        },
+        "error_y": {
+          "thickness": 1,
+          "width": 0
+        }
+      }
+    ]
+  }
+}

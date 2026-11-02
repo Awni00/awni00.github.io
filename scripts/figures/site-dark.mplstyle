@@ -1,0 +1,21 @@
+# Site figure style — dark overlay. DRAFT (F1), not wired in yet.
+# Apply after site.mplstyle; it only swaps colours (claret-dark tokens).
+#   plt.style.use(["scripts/figures/site.mplstyle",
+#                  "scripts/figures/site-dark.mplstyle"])
+
+text.color:          d8d6d0
+axes.labelcolor:     d8d6d0
+axes.titlecolor:     d8d6d0
+xtick.color:         35363b
+ytick.color:         35363b
+xtick.labelcolor:    9a9b9f
+ytick.labelcolor:    9a9b9f
+legend.labelcolor:   d8d6d0
+
+# Same six hues, re-stepped for the dark surface (not inverted).
+# 1 rose (accent) · 2 blue (link) · 3 ochre · 4 teal · 5 violet · 6 olive
+# Neutral baseline: 74757a
+axes.prop_cycle:     cycler('color', ['d36d86', '5290d3', 'b68f1b', '20a89b', '9468c2', '77a246'])
+
+axes.edgecolor:      35363b
+grid.color:          2a2b30

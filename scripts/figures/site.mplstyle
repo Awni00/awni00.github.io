@@ -1,0 +1,111 @@
+# Site figure style — light. DRAFT (F1), not wired in yet.
+#
+# Use:   plt.style.use("scripts/figures/site.mplstyle")
+# Dark:  plt.style.use(["scripts/figures/site.mplstyle",
+#                       "scripts/figures/site-dark.mplstyle"])
+#
+# Sizes assume the SVG is shown at 1 CSS px per 1/96 in, i.e. at its natural
+# width. Matplotlib points are 1/72 in, so 1pt = 1.333px:
+#   9.75pt = 13px (labels, legend)   9pt = 12px (tick labels)
+#   1.5pt  = 2px  (data lines)       0.75pt = 1px (axes, grid)
+# Size presets (figure.figsize) are in scripts/figures/README.md.
+# Colours are the claret-light theme tokens; see README for how they map.
+
+# ── Type ────────────────────────────────────────────────────────────────
+font.family:         sans-serif
+font.sans-serif:     Inter, Helvetica Neue, Helvetica, Arial, DejaVu Sans
+font.size:           9.75
+axes.labelsize:      9.75
+axes.titlesize:      9.75
+axes.titleweight:    medium
+axes.titlelocation:  left
+xtick.labelsize:     9
+ytick.labelsize:     9
+legend.fontsize:     9
+legend.title_fontsize: 9
+mathtext.fontset:    stixsans
+text.usetex:         False
+
+# ── Ink (fg-soft for labels, muted for ticks) ──────────────────────────
+text.color:          2b2c30
+axes.labelcolor:     2b2c30
+axes.titlecolor:     2b2c30
+xtick.color:         d8d6d0
+ytick.color:         d8d6d0
+xtick.labelcolor:    6b6d72
+ytick.labelcolor:    6b6d72
+
+# ── Series: 6 slots, fixed order, never cycled past 6 ──────────────────
+# 1 claret (accent) · 2 navy (link) · 3 ochre · 4 teal · 5 violet · 6 olive
+# Baselines that are "reference only" use the neutral 8e9095 instead.
+axes.prop_cycle:     cycler('color', ['902343', '2e64a6', 'c0851f', '109488', '7b52a4', '6c9539'])
+
+# ── Frame and grid ─────────────────────────────────────────────────────
+axes.facecolor:      none
+axes.edgecolor:      d8d6d0
+axes.linewidth:      0.75
+axes.spines.top:     False
+axes.spines.right:   False
+axes.spines.left:    False
+axes.grid:           True
+axes.grid.axis:      y
+axes.axisbelow:      True
+grid.color:          e8e6e0
+grid.linewidth:      0.75
+grid.linestyle:      -
+axes.labelpad:       6
+axes.titlepad:       8
+axes.xmargin:        0.02
+axes.ymargin:        0.04
+
+xtick.direction:     out
+ytick.direction:     out
+xtick.major.size:    3
+ytick.major.size:    0
+xtick.minor.size:    1.5
+ytick.minor.size:    0
+xtick.major.width:   0.75
+ytick.major.width:   0.75
+xtick.major.pad:     4
+ytick.major.pad:     4
+
+# ── Marks ──────────────────────────────────────────────────────────────
+lines.linewidth:     1.5
+lines.markersize:    4.5
+lines.markeredgewidth: 0
+lines.solid_capstyle: round
+lines.dash_capstyle: round
+patch.linewidth:     0
+patch.edgecolor:     none
+errorbar.capsize:    0
+hatch.linewidth:     0.75
+scatter.edgecolors:  face
+
+# ── Legend: frameless, above the plot, left-aligned ───────────────────
+# rcParams can't set ncol or bbox; call
+#   ax.legend(loc="lower left", bbox_to_anchor=(0, 1.02), ncol=n)
+# or direct-label the line ends when there are four series or fewer.
+legend.frameon:      False
+legend.loc:          upper left
+legend.borderaxespad: 0
+legend.handlelength: 1.6
+legend.handletextpad: 0.5
+legend.columnspacing: 1.4
+legend.labelspacing: 0.35
+legend.labelcolor:   2b2c30
+
+# ── Canvas and export ──────────────────────────────────────────────────
+figure.figsize:      5.83, 3.4
+figure.dpi:          96
+figure.facecolor:    none
+figure.edgecolor:    none
+savefig.format:      svg
+savefig.dpi:         192
+savefig.transparent: True
+savefig.bbox:        tight
+savefig.pad_inches:  0.04
+# Outlines keep Inter wherever the SVG is shown (an <img> can't use the
+# page's web fonts). Needs Inter installed where you export.
+svg.fonttype:        path
+svg.hashsalt:        site-figures
+pdf.fonttype:        42

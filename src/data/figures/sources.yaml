@@ -1,0 +1,20 @@
+# Where each figure's data came from. One entry per data file.
+# fidelity: source  — exported from the original results
+#           vector  — read back from the published PDF's drawing paths
+#                     (exact to the PDF's coordinate precision)
+#           by-eye  — read off a raster image; shape is right, values are not
+#                     exact. Replace when the original data turns up.
+
+algorithmic-generalization-transformer-architectures/l0-ov-operator-norm.csv:
+  figure: public/blog/algorithmic-generalization-transformer-architectures/figures/L0_ov_operator_norm_mpl.pdf
+  fidelity: vector
+
+cot-info/linear-thresh-empirical-sample-complexity.csv:
+  figure: public/blog/cot-info/figs/simulation_figs/LinearThresh_Wind8A2L8/20250505-191322/figs/empirical_sample_complexity_legendin.pdf
+  fidelity: vector
+  note: Step-function vertices. x is log10(epsilon), plotted reversed (1 to 1e-3).
+
+abstractor/pairwise-order-learning-curves.csv:
+  figure: public/blog/abstractor/figs/pairwise_order_learning_curves.png
+  fidelity: by-eye
+  note: First point's x was read as ~10. Band half-widths are rough.
