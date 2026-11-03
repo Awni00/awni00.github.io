@@ -4,10 +4,10 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   site: {
     title: "Awni Altabaa",
     name: "Awni Altabaa",
-    role: "PhD Student",
+    role: "PhD Candidate",
     affiliation: "Yale Statistics & Data Science",
     description:
-      "Academic website for Awni Altabaa, a PhD student studying the foundations of machine intelligence.",
+      "Academic website for Awni Altabaa, a PhD candidate studying the foundations of artificial intelligence.",
     url: "https://awni.xyz",
     profileImage: "/profile.jpg",
     links: {
@@ -19,11 +19,10 @@ export const siteConfigOverrides: SiteConfigOverrides = {
       linkedin: "https://www.linkedin.com/in/awni-altabaa"
     },
     nav: [
-      { label: "Home", href: "/" },
-      { label: "Research", href: "/research" },
-      { label: "Blog", href: "/blog" },
-      { label: "Publications", href: "/publications" },
-      { label: "CV", href: "/cv.pdf" }
+      { label: "Home", href: "/", icon: "house" },
+      { label: "Blog", href: "/blog", icon: "waypoints" },
+      { label: "Publications", href: "/publications", icon: "book-open" },
+      { label: "CV", href: "/cv.pdf", icon: "file-text" }
     ],
     homepage: {
       hero: {
@@ -50,6 +49,9 @@ export const siteConfigOverrides: SiteConfigOverrides = {
       }
     }
   },
+  graph: {
+    layout: { forces: { hubHubRepulsion: 275, hubLinkLength: 57 } }
+  },
   publications: {
     authorHighlight: ["Awni Altabaa", "Altabaa, Awni"],
     previews: {
@@ -63,6 +65,7 @@ export const siteConfigOverrides: SiteConfigOverrides = {
       route: "/blog/rss.xml"
     },
     entryLayout: {
+      figureNumbers: true,
       toc: {
         default: {
           minDepth: 2,
@@ -72,10 +75,9 @@ export const siteConfigOverrides: SiteConfigOverrides = {
     }
   },
   theme: {
-    // Paper and ink with this site's chart colours (src/site/themes.ts).
-    light: "paper-site",
-    dark: "ink-site",
-    defaultMode: "system"
+    light: "claret-light",
+    dark: "claret-dark",
+    defaultMode: "light"
   }
 
   // Reference: the template's documented options (commented out).

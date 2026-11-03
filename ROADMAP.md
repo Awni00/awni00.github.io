@@ -14,8 +14,8 @@ Open decisions are marked **DECIDE**.
 
 ## 0. Decisions
 
-- [x] Research areas (2026-10-25): three hubs, under `/blog/topics/<slug>` so they don't look like paper pages (e.g. `/blog/topics/abstraction` vs `/blog/abstractor`). Papers can belong to several hubs.
-  - `/blog/topics/abstraction`, **Inductive Biases for Abstraction**: Abstractors, RelConvNet, DAT, Relational Bottleneck, Relation-function approx., Recursive latent reasoning
+- [x] Research areas (2026-10-25): three hubs, under `/blog/topics/<slug>` so they don't look like paper pages (e.g. `/blog/topics/inductive-biases` vs `/blog/abstractor`). Papers can belong to several hubs.
+  - `/blog/topics/inductive-biases` (was `abstraction`), **Architectural Inductive Biases** (renamed 2026-11-01): Abstractors, RelConvNet, DAT, Relational Bottleneck, Relation-function approx., Recursive latent reasoning
   - `/blog/topics/reasoning`, **Reasoning in Transformers & LLMs**: Recursive latent reasoning, CoT Information, Latent strategies, Transformer theories
   - `/blog/topics/theory`, **Theoretical Foundations**: CoT Information, Relation-function approx., Info-structure RL, Decentralized MARL, Transformer theories
 - [ ] **DECIDE (near launch): News.** Keep it off, or turn it on?
@@ -41,8 +41,9 @@ Open decisions are marked **DECIDE**.
 - [x] (claude) Created `src/content/pages/research.mdx` → `/research` (placeholder body), with the nav pointing at it.
 - [x] (claude) Deleted the `writing/research/index.mdx` hub and removed `research` from every entry's `links`.
 - [x] (claude) Scaffolded the three hubs in `src/content/writing/topics/<slug>/index.mdx`, with two-way links between each hub and its papers. *Transformer theories* links to its hubs from its own page only; add it to the hubs' `links` when it's published.
-- [ ] (you) Write the Research page: overview of the areas, linking to each hub.
-- [ ] (you) Draft the hub/topic pages: intro and `summary` for `abstraction`, `reasoning`, and `theory`. Validation warns until the summaries exist. Discuss or refine with Claude as needed.
+- [ ] **Deferred (2026-11-01):** the Research page. The homepage gives the overview and the blog map has a page per thread, so `research.mdx` is `draft: true` and out of the nav. Revisit after the hubs are written.
+  - Include a current/future interests list (moved off the homepage, 2026-11-01, to keep the bio short and broad): recurrence and recursion; relational and analogical reasoning; extrapolative OOD generalization; directed exploration when learning from experience; continual learning and long-horizon problems. Name recurrence and relational structure here as examples of the architectural mechanisms studied.
+- [ ] Hub pages (`inductive-biases`, `reasoning`, `theory`), worked on together: an opening paragraph (what the thread is about, why it matters, your philosophy on it; first person), then the main papers, each with a one-sentence description framed for that hub, plus the frontmatter `summary`. Validation warns until the summaries exist.
 
 ## 3. Publications
 
@@ -51,7 +52,6 @@ Open decisions are marked **DECIDE**.
 - [x] Fixed the *Relational Bottleneck* author list in the bib and on the page (added Segert, Giallanza, Dulberg, per arXiv).
 - [x] Added `blog` links for every paper that has a page, plus arXiv IDs for Decentralized MARL and Relational Bottleneck.
 - [x] Added *Putting Transformer Theories to the Test* to the bib, with placeholders listed in a note above the entry: arXiv ID, `blog` link, preview, tldr.
-- [ ] **Launch check:** that paper now renders on `/publications`. If launch happens before the arXiv announcement, decide whether to show it.
 - [ ] `tldr` for the two new papers (latent strategies, transformer theories). **(you)**
 - [x] **Preview-image redesign ✅ (2026-10-26).** Every publication preview is replaced with one minimalist, algorithmic style.
   - Each image is a seeded p5.js sketch in `preview-art/papers/<slug>/`; the alternates you liked are kept there too.
@@ -68,12 +68,25 @@ Open decisions are marked **DECIDE**.
 
 - [x] New: `/blog/relation-function-approximation`, with the full arXiv abstract. Summary finalized. **(you) Review** the `tags` I drafted.
 - [x] Switched to `article.mode: abstract` with full arXiv abstracts (the old ones were truncated): Decentralized MARL, Info-structure RL, Relational Bottleneck.
-- [ ] *Putting Transformer Theories to the Test*: draft page created (`transformer-theories.mdx`, abstract-only, `draft: true`). Not yet announced on arXiv (`submit/8270939`). Authors filled in. **(you)** still need the date and summary. Once the arXiv ID exists, add a bib entry and remove `draft`.
+- [x] *Putting Transformer Theories to the Test*: published (arXiv 2610.32104, 2026-10-23). Page, bib entry, and links to the reasoning and theory hubs are done.
 - [x] Hub links added to all paper pages.
 
 ## 5. Homepage
 
 - [ ] (you) Draft the updated bio and summary of research interests in `home.mdx`: shorter, current, and pointing to `/research`. Strip the scratch notes and TODOs.
+  - **Content brief** (agreed 2026-10-30; this is content, not prose, and you write the sentences):
+    - Subject: machine intelligence / AI at the umbrella level; "models" in the threads.
+    - Goal (both): learning complex tasks efficiently, and generalizing beyond experience.
+    - How: neural architectures and learning algorithms that embed inductive biases and support reasoning (relational inductive biases, input-adaptive recurrence, CoT / intermediate-step supervision).
+    - Approach: empirical and mathematical science.
+    - Why (both): explain what works and why; build more capable systems by a more principled path.
+    - Structure (about 120 words): who/where → goal + how → approach + why → three threads, each an angle on the goal, with `<HoverNote cite>`s → pointers to `/research` and `/blog`.
+    - Threads:
+      - Architectural inductive biases (hub renamed from "Inductive Biases for Abstraction", 2026-11-01): what mechanisms an architecture needs (recurrence, relational structure, …) for models to learn efficiently and form robust abstractions. Framed as a question, like the other two; examples are instances, not the scope. *(name and slug agreed; wording being refined)*
+      - Reasoning: how models learn, represent, and execute multi-step reasoning, and how it extends to harder problems. *(agreed)*
+      - Theory: what determines whether models learn efficiently and generalize: the architecture, the learning algorithm, and the structure of the learning problem itself. *(agreed 2026-11-01)*
+        - Coverage: architecture (Transformer theories, relation-function approximation); learning algorithm (CoT Information, MARL); learning problem (information-structure RL).
+    - Avoid: "My research asks", "ideally at the same time", "artificial or natural".
 - [ ] **Homepage layout redesign** (the profile-picture placement looks awkward). It's a template change, implemented upstream in `academic-map-template`.
   - [x] Surveyed 11 academic homepages: `.scratch/home-layout-survey/`, served by the `scratch-static` launch config at `http://localhost:4330/`.
   - [x] Mocked up and iterated (`.scratch/home-mockups/`). **Chosen: A3 "margin card".**
@@ -99,6 +112,7 @@ Open decisions are marked **DECIDE**.
 - [ ] Pick a light/dark theme pair. Compare the built-ins at `/fixtures/themes` in dev, or define a custom theme in `src/site/themes.ts`.
 - [ ] Fonts (`src/site/fonts.ts`), if you want something other than the defaults.
 - [ ] Replace the template-placeholder `public/og-image.svg`. Check the favicon.
+- [ ] Blog polish (audit 2026-11-01). Status of every item lives in the [Blog Polish Tracker](https://claude.ai/artifact/Mr8grkc3iVUaaFJCTfUpBy), with screenshots in the [audit](https://claude.ai/artifact/QXXBHxE8LHMJFpMMDs9Lkb). Workstreams: template fixes (upstream), figure system, content decisions. Sessions update the tracker, not this file.
 
 ## 8. Launch cutover (at the end, with your OK at each step)
 
@@ -120,6 +134,7 @@ The `deploy` workflow on `main` builds fine, but the `github-pages` environment'
 ## Template backlog (fix upstream in academic-map-template, then sync)
 
 Being triaged in the separate session (see section 0). Items:
+- [ ] Hub pages: "Linked from" and "Related" render the same list twice, both redundant with the local graph; `entryLayout.hubPages.autoRenderLinkedEntries` is declared but never read. Session queued 2026-11-01 ("Fix redundant link lists on hub pages"): plan first, then de-duplicate in general, hub defaults, and a site-level switch.
 - [ ] Bug: some graph nodes are clickable/hoverable and others aren't.
 - [ ] Bug: the React graph possibly re-renders repeatedly.
 - [ ] Bug: `featured:` frontmatter does nothing.

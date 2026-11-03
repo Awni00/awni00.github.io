@@ -237,7 +237,7 @@ To quantify the true advantage of CoT supervision, we need a measure that explic
 
 To quantify the statistical advantage of intermediate supervision, we introduce the **Chain-of-Thought Information**, capturing the added discriminative power that CoT supervision provides over standard end-to-end learning.
 
-<Statement label="Definition" title="CoT Information">
+<Statement label="Definition" title="CoT Information" accent="fg">
   For a CoT hypothesis class $\calH$ and realizable distribution $\calD$ over $\calX \times \calY \times \calZ$, the CoT information is defined as the function
 
 $$
@@ -266,7 +266,7 @@ We will see that the CoT information characterizes the sample complexity of lear
   <Fragment slot="caption">Geometry of CoT information: consistency sets shrink much faster under CoT supervision.</Fragment>
 </Diagram>
 
-<Statement label="Result" title="Sample Complexity Under CoT Supervision" accent="#ef4444">
+<Statement label="Result" title="Sample Complexity Under CoT Supervision" accent="accent">
   For finite $\calH$, the *CoT consistency rule*
 
 $$
@@ -314,7 +314,7 @@ In the following, we establish information-theoretic lower bounds that validate 
 
 ### Lower Bound via Two-Point Method
 
-<Statement label="Result" title="Lower Bound via Two-Point Method" accent="#ef4444">
+<Statement label="Result" title="Lower Bound via Two-Point Method" accent="accent">
   Fix a distribution $\calD$ over $\calX$, and draw $m$ samples, $x_1, \ldots, x_m \simiid \calD$. If
 
 $$
@@ -336,7 +336,7 @@ However, it does not scale with size of the hypothesis class. This is a limitati
 ### Lower Bound via Fano's Method
 Fano's method generalizes the two-point argument by considering a packing of many hypotheses that are pairwise well-separated with respect to end-to-end error
 
-<Statement label="Result" title="Lower Bound via Fano's Method" accent="#ef4444">
+<Statement label="Result" title="Lower Bound via Fano's Method" accent="accent">
   Fix a distribution $\calD$ over $\calX$, and draw $m$ samples, $x_1, \ldots, x_m \simiid \calD$. For any algorithm $\calA$, if the number of samples satisfies
 
 $$

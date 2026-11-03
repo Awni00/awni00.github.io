@@ -20,6 +20,24 @@
         "4322"
       ],
       "port": 4322
+    },
+    {
+      "name": "scratch-static",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "/Users/awni/Documents/project-code/awni00.github.io/.scratch/serve.mjs"
+      ],
+      "port": 4330
+    },
+    {
+      "name": "figures-dev",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": [
+        "-c",
+        "cd \"/Users/awni/Documents/project-code/awni00.github.io/.claude/worktrees/figure-system\" && exec \"/Users/awni/.local/share/fnm/node-versions/v22.22.3/installation/bin/node\" node_modules/astro/bin/astro.mjs dev --port 4331"
+      ],
+      "port": 4331,
+      "autoPort": false
     }
   ]
 }
