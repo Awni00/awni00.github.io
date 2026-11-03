@@ -1,0 +1,158 @@
+---
+/**
+ * A ChatGPT-style chat window for showing a model's answer to a prompt.
+ * Site-owned (used by cot-info). Slots:
+ *   prompt    the user's message, shown as a right-aligned bubble
+ *   thinking  optional reasoning, shown small and muted under `thinkingLabel`
+ *   (default) the model's answer
+ * `verdict` marks the answer right or wrong in the window's header, with
+ * text as well as colour. Colours come from the theme, so it follows light
+ * and dark.
+ */
+type Props = {
+  /** The model's name after "ChatGPT", e.g. "5 Instant". */
+  model: string;
+  verdict?: "correct" | "wrong";
+  /** Heading of the reasoning block, e.g. "Thought for 7s". */
+  thinkingLabel?: string;
+};
+
+const { model, verdict, thinkingLabel } = Astro.props;
+const hasThinking = Astro.slots.has("thinking");
+---
+
+<div class="chat-window">
+  <div class="chat-window__bar">
+    <span class="chat-window__model">ChatGPT <span>{model}</span></span>
+    {
+      verdict && (
+        <span class:list={["chat-window__verdict", `chat-window__verdict--${verdict}`]}>
+          <span aria-hidden="true">{verdict === "correct" ? "✓" : "✗"}</span> {verdict}
+        </span>
+      )
+    }
+  </div>
+  <div class="chat-window__body">
+    <div class="chat-window__prompt"><slot name="prompt" /></div>
+    {
+      (hasThinking || thinkingLabel) && (
+        <div class="chat-window__thinking">
+          {thinkingLabel && <p class="chat-window__thinking-label">{thinkingLabel}</p>}
+          {hasThinking && (
+            <div class="chat-window__thinking-text">
+              <slot name="thinking" />
+            </div>
+          )}
+        </div>
+      )
+    }
+    <div class="chat-window__answer"><slot /></div>
+  </div>
+  <div class="chat-window__composer" aria-hidden="true">Ask anything</div>
+</div>
+
+<style is:inline>
+  .chat-window {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background: var(--color-bg);
+    font-family: var(--font-ui);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-fg);
+    overflow: hidden;
+  }
+
+  .chat-window__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .chat-window__model {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .chat-window__model span {
+    color: var(--color-muted);
+    font-weight: 400;
+  }
+
+  .chat-window__verdict {
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .chat-window__verdict--wrong {
+    color: var(--color-danger-text);
+  }
+
+  .chat-window__verdict--correct {
+    color: var(--color-success-text);
+  }
+
+  .chat-window__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .chat-window__prompt {
+    align-self: flex-end;
+    max-width: 88%;
+    padding: 8px 14px;
+    border-radius: 18px;
+    background: var(--color-bg-soft-2);
+  }
+
+  .chat-window__thinking {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+
+  .chat-window__thinking-label {
+    margin: 0 0 4px;
+    font-weight: 500;
+  }
+
+  .chat-window__thinking-label::after {
+    content: " ›";
+  }
+
+  .chat-window__thinking-text {
+    padding-left: 10px;
+    border-left: 2px solid var(--color-border);
+  }
+
+  .chat-window__answer {
+    font-weight: 500;
+  }
+
+  .chat-window p {
+    margin: 0;
+  }
+
+  .chat-window p + p {
+    margin-top: 6px;
+  }
+
+  .chat-window__composer {
+    margin: 0 12px 12px;
+    padding: 7px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--color-muted);
+  }
+</style>
