@@ -10,4 +10,24 @@ links:
 theme: global
 ---
 
-{/* TODO (Awni): hub intro. */}
+For a long time, reasoning was regarded as a distinctly human ability, far beyond the reach of machine learning.
+Today, frontier AI systems routinely work through proofs, debug programs, and plan multi-step solutions to novel problems.
+This is functionally a form of reasoning, even if it is likely achieved very differently from how humans reason.
+
+In contrast to retrieval or memorization, reasoning involves multi-step computation that composes what the system already knows in new ways, producing results that could not be obtained from recall alone.
+The steps are typically sequential, and finding the right chain often involves search or exploration among alternative strategies.
+The mark of genuine reasoning is *systematicity*: a process that applies to every problem sharing the same structure, including longer or harder ones than any seen in training, rather than memorized patterns that happen to cover the training distribution.
+
+Modern LLMs are transformers pre-trained on internet-scale human text, then trained on high-quality reasoning traces and refined with reinforcement learning. Reasoning emerges somewhere in this pipeline, but we have a limited understanding of how, or how far it extends.
+I'm interested in understanding how these models *learn* to reason from data and experience, how they *represent* and organize the reasoning process internally, and how they *execute* long chains of computation.
+
+**Papers in this thread:**
+- **[CoT Information](/blog/cot-info):** a learning theory of how supervising intermediate steps, rather than only final answers, makes reasoning easier to *learn*, and formally quantifying the gain in sample efficiency.
+- **[Putting transformer theories to the test](/blog/transformer-theories):** compares formal theories of what transformers can *execute* in a single forward pass, and tests their predictions empirically.
+- **[Recursive latent space reasoning](/blog/algorithmic-generalization-transformer-architectures):** explores recurrence in latent space as an alternative architecture for reasoning to autoregressive rollouts in token space, combining input-adaptive recurrence, supervision of latent steps, and discrete latent states to enable transformers to extrapolate to problems far larger than those seen in training.
+- **[Uncovering latent reasoning strategies in language models](/blog/latent-strategies-in-lms):** LLMs implicitly *represent* a broad repertoire of abstract strategies, often several for the same problem; this paper studies how to recover them as an explicit variable that can be interpreted and controlled.
+
+More broadly, I'm interested in studying and designing better algorithms for learning from experience.
+Current reinforcement learning methods for LLMs make little use of the rich structure these models learn, exploring only passively by sampling from their existing distribution.
+Making this structure explicit and controllable could enable a model to actively direct its exploration through abstract strategy space.
+I'm also interested in long-horizon problems and continual learning.

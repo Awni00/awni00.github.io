@@ -251,7 +251,7 @@ This asymmetry prevents the direct application of classical learning theory resu
 
 One approach to studying CoT-supervised learning, taken by recent related work[^joshietal], sidesteps this asymmetry by bounding the CoT risk instead of the end-to-end risk, noting that $\cotrisk{\calD}(h) \geq \eterisk{\calD}(h)$ for all $h$. This problem is now symmetric because both the training and testing objectives are the CoT error, enabling a direct application of standard learning results. In particular, this approach yields a sample complexity of $\bigO\big(\VC(\calLCoT(\calH)) / \epsilon\big)$, where $\calLCoT(\calH) := \{\ell_h^{\CoT}: (x, y, z) \mapsto \Ind{h(x) \neq (y, z)}\}$.
 
-[^joshietal]: [Joshi et al. (2025) [arXiv:2505.15927]](https://arxiv.org/abs/2505.15927)
+[^joshietal]: [Joshi et al. (2025) [arXiv:2503.07932]](https://arxiv.org/abs/2503.07932)
 
 While this provides an upper bound, the resulting rate, scaling as $1/\epsilon$, matches that of standard end-to-end supervision (in terms of the dependence on $\epsilon$). Yet, we know that CoT supervision can provide significant statistical advantages in practice. This suggests that the analysis is loose, failing to capture the full benefit of CoT supervision through the extra information encoded in the traces.
 
