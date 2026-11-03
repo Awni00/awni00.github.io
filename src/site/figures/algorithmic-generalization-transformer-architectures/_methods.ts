@@ -9,9 +9,18 @@ import { DASH, NEUTRAL, SERIES, type FigureRow } from "../../../lib/figures";
 export const light = (color: string) => `color-mix(in srgb, ${color} 65%, var(--color-bg))`;
 
 /**
+ * Discrete LSS: cerulean, a blue between Continuous LSS's teal and the full
+ * method's navy, at a weight comparable to both. Not a palette slot (all six
+ * are taken across the blog), so it names its own light and dark values;
+ * `light-dark()` follows the theme's color-scheme. Contrast on the page:
+ * 4.7:1 light, 6.7:1 dark. Pass it through an identity channel, like `light`.
+ */
+export const DISCRETE = "light-dark(#2a7ab0, #3fa0d6)";
+
+/**
  * The paper's seven methods, with their figure-legend names
  * (paper_figures/labels.py), coloured by family as in the paper's figures:
- * discrete-latent methods navy and violet (the full method navy), continuous-latent
+ * discrete-latent methods navy and cerulean (the full method navy), continuous-latent
  * methods greens (teal, olive), end-to-end baselines greys, and
  * chain-of-thought, the one token-space method, claret.
  */
@@ -21,7 +30,7 @@ export const METHODS = [
   { id: "chain-of-thought-supervision", label: "Chain-of-Thought", color: SERIES[0] },
   { id: "continuous-latent-space-supervision", label: "Continuous LSS", color: SERIES[3] },
   { id: "self-scheduled-lss", label: "Self-Scheduled LSS", color: SERIES[5] },
-  { id: "discrete-latent-space-supervision", label: "Discrete LSS", color: SERIES[4] },
+  { id: "discrete-latent-space-supervision", label: "Discrete LSS", color: DISCRETE },
   { id: "discrete-latent-space-supervision-on-policy-error-correction", label: "Discrete LSS + EC", color: SERIES[1] }
 ] as const;
 
