@@ -266,7 +266,7 @@ To quantify the statistical advantage of intermediate supervision, we introduce 
   For a CoT hypothesis class $\calH$ and realizable distribution $\calD$ over $\calX \times \calY \times \calZ$, the CoT information is defined as the function
 
 $$
-\cotinfodomain{\calD}(\epsilon; \calH) := \inf_{h \in \Deltaete_{\calD}(\epsilon; \calH)} \Big\{- \log \probunder{x,y,z \sim \calD}{(\hcot{h}(x), \hete{h}(x)) = (y, z)}\Big\},
+\cotinfodomain{\calD}(\epsilon; \calH) := \inf_{h \in \Deltaete_{\calD}(\epsilon; \calH)} \Big\{- \log \probunder{x,y,z \sim \calD}{(\hcot{h}(x), \hete{h}(x)) = (z, y)}\Big\},
 $$
 
   where $\Deltaete_{\calD}(\epsilon; \calH) := \{h \in \calH : \probunder{x,y}{\hete{h}(x) \neq y} > \epsilon\}$ is the set of hypotheses that disagree with the *end-to-end* reference function on at least an $\epsilon$ fraction of the inputs.
@@ -317,7 +317,7 @@ The take away: the $1/\epsilon$ rate of end-to-end learning is improved to the p
 For infinite classes, the result extends to
 
 $$
-m(\epsilon, \delta) = \bigO\!\left(\frac{\VC(\calLCoT(\calH)) \cdot \log \big(\tfrac{1}{\cotinfodomain{\calD}(\epsilon; \calH)} + 1\big) + \log(1/\delta)}{\cotinfodomain{\calD}(\epsilon; \calH)}\right).
+m(\epsilon, \delta) = \bigO\!\left(\Big(\frac{1}{\cotinfodomain{\calD}(\epsilon; \calH)} + 1\Big)\Big(\VC(\calLCoT(\calH)) \cdot \log \big(\tfrac{1}{\cotinfodomain{\calD}(\epsilon; \calH)} + 1\big) + \log(1/\delta)\Big)\right).
 $$
 
 
@@ -378,7 +378,7 @@ $$
   $\relcotinfo(h_1, h_2)$ is the pairwise CoT information, quantifying how distinguishable two hypotheses are when reasoning traces are observed.
 </Statement>
 
-This result scales appropriately with both error and class complexity, confirming that the CoT information is not merely an artifact of the upper bound but a tight characterization of the sample efficiency achievable under CoT supervision.
+This result scales also with the size of the hypothesis class, through its packing number. Together with the two-point bound, it suggests that the CoT information is not merely an artifact of the upper-bound analysis, but a fundamental measure of the statistical complexity of learning under CoT supervision.
 
 ## Part V: Simulations — Theory Meets Practice
 
@@ -429,15 +429,17 @@ Here, $h^{\text{e2e}}(x)$ indicates whether a string $x$ belongs to a regular la
 
 In this setting, the theoretical $\cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H}) / \epsilon^+$ curve approaches $\approx 600$ as $\epsilon \to 0$, forecasting an improvement on the order of 600× to learn $\hstar$ with very small error. Empirical results confirm dramatic gains: between $10^2$ and $10^3$ times fewer samples are needed under CoT supervision to reach equivalent accuracy. This demonstrates that CoT information can yield *orders-of-magnitude* improvements in sample efficiency, depending on how much structure the reasoning trace exposes about the underlying computation.
 
+{/*
 ### Estimating the CoT Information from Data for Complex Infinite Classes
 
 The above examples considered known distributions $\calD$ and finite hypothesis classes $\mathcal{H}$ where the CoT information could be computed exactly. Here, we briefly preview how CoT information can be estimated from random samples, which is particularly relevant for infinite hypothesis classes. The quantity
 $\cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H})$
 can be estimated consistently and uniformly over $\epsilon \in (0,1)$, enabling its application to neural networks and other expressive model families.
 This opens new possibilities: quantifying the value of CoT supervision in large-scale architectures, comparing different methods of generating reasoning traces, and analyzing how CoT information relates to out-of-distribution generalization. In essence, it provides a concrete, measurable way to answer a fundamental question in modern LLM training—*how much information is encoded in a chain of thought?*
+*/}
 
 ## Conclusion
 
-This work develops a learning theory framework for understanding the statistical advantage of chain-of-thought supervision. By introducing the notion of ***CoT information***, we provide an information-theoretic measure that quantifies how observing reasoning traces accelerate learning. The main results establish matching upper and lower bounds, showing that CoT information precisely governs the achievable rates of sample complexity under CoT supervision. Empirical simulations confirm these predictions, demonstrating substantial gains—sometimes by orders of magnitude—when reasoning traces align with the underlying computation.
+This work develops a learning theory framework for understanding the statistical advantage of chain-of-thought supervision. By introducing the notion of ***CoT information***, we provide an information-theoretic measure that quantifies how observing reasoning traces accelerate learning. The main results establish upper bounds on sample complexity in terms of the CoT information, together with information-theoretic lower bounds. Together, these results suggest that CoT information is a fundamental measure of the statistical complexity of learning under CoT supervision. Empirical simulations confirm these predictions, demonstrating substantial gains—sometimes by orders of magnitude—when reasoning traces align with the underlying computation.
 
 Several open directions remain. Theoretically, extending the framework to the agnostic and noisy settings raises questions about robustness and alignment between traces and hypotheses. Empirically, estimating CoT information in neural architectures, comparing different trace-generation pipelines, and exploring its role in out-of-distribution generalization and reinforcement learning for reasoning represent promising next steps. Together, these directions aim toward a unified understanding of how CoT supervision reshapes the statistical foundations of reasoning in large models.
