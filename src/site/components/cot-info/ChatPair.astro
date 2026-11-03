@@ -6,8 +6,7 @@
  * In a ToggleFigure every panel takes the tallest panel's height; the pair
  * fills that height and the windows stretch with it, so a shorter example
  * leaves no gap above the caption: the spare room falls inside the windows,
- * above their composer bar. It also restyles that figure's tab bar as a pill
- * selector with a "Question" label, scoped to toggle figures holding a pair.
+ * above their composer bar.
  * Styles are inline: the site's MDX pipeline does not collect scoped CSS
  * from components imported into posts.
  */
@@ -30,52 +29,12 @@
   }
 
   /* Stacked: the second window takes all the spare height, so the first
-     stays compact. The tab bar drops its label to keep the tabs in view. */
+     stays compact. */
   @media (max-width: 600px) {
     .chat-pair {
       grid-template-columns: minmax(0, 1fr);
       grid-template-rows: auto 1fr;
       gap: 12px;
     }
-
-    .toggle-figure:has(.chat-pair) .toggle-figure__controls::before {
-      display: none;
-    }
-  }
-
-  .toggle-figure:has(.chat-pair) .toggle-figure__controls {
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .toggle-figure:has(.chat-pair) .toggle-figure__controls::before {
-    content: "Question";
-    flex: none;
-    font-family: var(--font-ui);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-  }
-
-  .toggle-figure:has(.chat-pair) .toggle-figure__tablist {
-    gap: 2px;
-    padding: 3px;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    background: var(--color-bg-soft);
-  }
-
-  .toggle-figure:has(.chat-pair) .toggle-figure__tab {
-    padding: 6px 14px;
-    border-radius: 999px;
-  }
-
-  .toggle-figure:has(.chat-pair) .toggle-figure__tab[aria-selected="true"] {
-    box-shadow:
-      0 0 0 1px var(--color-border),
-      0 1px 2px rgb(0 0 0 / 0.06);
   }
 </style>
