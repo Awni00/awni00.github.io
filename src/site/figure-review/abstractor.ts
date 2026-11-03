@@ -1,4 +1,4 @@
-import { definePaperReview } from "./types";
+import { definePaperReview } from "../../fixtures/figure-review/types";
 
 const FIGS = "/blog/abstractor/figs";
 

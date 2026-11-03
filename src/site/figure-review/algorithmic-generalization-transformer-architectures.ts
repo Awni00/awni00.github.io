@@ -1,4 +1,4 @@
-import { definePaperReview } from "./types";
+import { definePaperReview } from "../../fixtures/figure-review/types";
 
 export default definePaperReview({
   post: "algorithmic-generalization-transformer-architectures",

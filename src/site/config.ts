@@ -72,6 +72,9 @@ export const siteConfigOverrides: SiteConfigOverrides = {
     }
   },
   theme: {
+    // Paper and ink with this site's chart colours (src/site/themes.ts).
+    light: "paper-site",
+    dark: "ink-site",
     defaultMode: "system"
   }
 

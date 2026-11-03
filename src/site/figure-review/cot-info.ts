@@ -1,4 +1,4 @@
-import { definePaperReview } from "./types";
+import { definePaperReview } from "../../fixtures/figure-review/types";
 
 const RUNS = "/blog/cot-info/figs/simulation_figs";
 const pdf = (src: string) => ({ kind: "pdf" as const, src: `${RUNS}/${src}`, invertInDarkMode: true });
