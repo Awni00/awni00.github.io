@@ -48,7 +48,7 @@ bibtex: |
 <FigureGrid columns={2}>
   <Figure src="/blog/abstractor/figs/self_attn_fig.png" alt="depiction of self-attention" />
   <Figure src="/blog/abstractor/figs/rel_crossattn_fig.png" alt="depiction of relational cross-attention" />
-  <Fragment slot="caption">Figure: A depiction of relational cross-attention (right), compared with standard self-attention (left). Relational cross-attention implements a type of information bottleneck to disentangle object-level features from relational features. When integrated into a broader Transformer-based architecture, this enables explicit relational representation, yielding improved abstraction and generalization from limited data.</Fragment>
+  <Fragment slot="caption">A depiction of relational cross-attention (right), compared with standard self-attention (left). Relational cross-attention implements a type of information bottleneck to disentangle object-level features from relational features. When integrated into a broader Transformer-based architecture, this enables explicit relational representation, yielding improved abstraction and generalization from limited data.</Fragment>
 </FigureGrid>
 
 ## Abstract
@@ -90,7 +90,7 @@ We evaluate our proposed architecture on a series of experiments involving both 
 <FigureGrid columns={2}>
   <Figure src="/blog/abstractor/figs/pairwise_order_learning_curves.png" alt="learning curves of pairwise order discriminative task" />
   <Figure src="/blog/abstractor/figs/set_classification.png" alt="learning curves on SET game classification task" />
-  <Fragment slot="caption">Figure: Learning curves on the discriminative relational tasks. Modeling transitive pairwise order in random objects (left) and a task based on the SET game (right).</Fragment>
+  <Fragment slot="caption">Learning curves on the discriminative relational tasks. Modeling transitive pairwise order in random objects (left) and a task based on the SET game (right).</Fragment>
 </FigureGrid>
 
 **Random Object Sorting.** Next, we evaluate a sequence-to-sequence relational task and compare to a standard Transformer. The task is to autoregressively predict the argsort of a sequence of randomly-generated objects. The underlying order relation must be learned from data in an end-to-end fashion. We observe the Abstractor-based model to be dramatically more sample-efficient at this task. Moreover, the Abstractor is able to generalize to new but similar tasks.
@@ -98,12 +98,12 @@ We evaluate our proposed architecture on a series of experiments involving both 
 <FigureGrid columns={2}>
   <Figure src="/blog/abstractor/figs/random_object_sorting.png" alt="learning curves for object-sorting experiments" />
   <Figure src="/blog/abstractor/figs/random_object_sorting_generalization.png" alt="learning curves for object-sorting experiments after pre-training on related task" />
-  <Fragment slot="caption">Figure: Learning curves on autoregressive object-sorting task (left) and learning curves after pre-training on a similar but different object-sorting task (right).</Fragment>
+  <Fragment slot="caption">Learning curves on autoregressive object-sorting task (left) and learning curves after pre-training on a similar but different object-sorting task (right).</Fragment>
 </FigureGrid>
 
 **Mathematical Problem-Solving.** Finally, we evaluate the Abstractor on a sequence-to-sequence task which is more representative of the complexity of real-world tasks: solving mathematical problems. The mathematical problems includes the following tasks: differentiation (calculus), predicting the next term in a sequence (algebra), solving linear equations (algebra), expanding products of polynomials, and adding polynomials. We observe a consistent and notable improvement in performance and sample efficiency.
 
-<Figure src="/blog/abstractor/figs/math_training_curves.png" alt="Learning Curves of Mathematical Problem-Solving Tasks" caption="Figure: Training curves on mathematical problem-solving tasks." />
+<Figure src="/blog/abstractor/figs/math_training_curves.png" alt="Learning Curves of Mathematical Problem-Solving Tasks" caption="Training curves on mathematical problem-solving tasks." />
 
 Please see the paper for details on these experiments.
 
