@@ -1,0 +1,113 @@
+method,display_name,graph_size,mean,sem,n_seeds
+chain-of-thought-supervision,Chain-of-Thought,8,1,0,5
+chain-of-thought-supervision,Chain-of-Thought,16,0.999805,0.000195312,5
+chain-of-thought-supervision,Chain-of-Thought,24,0.999023,0.000756442,5
+chain-of-thought-supervision,Chain-of-Thought,32,0.998633,0.000905627,5
+chain-of-thought-supervision,Chain-of-Thought,40,0.996875,0.00152544,5
+chain-of-thought-supervision,Chain-of-Thought,48,0.914258,0.0490798,5
+chain-of-thought-supervision,Chain-of-Thought,56,0.409375,0.101472,5
+chain-of-thought-supervision,Chain-of-Thought,64,0.015625,0.00810606,5
+chain-of-thought-supervision,Chain-of-Thought,72,0,0,5
+chain-of-thought-supervision,Chain-of-Thought,80,0,0,5
+chain-of-thought-supervision,Chain-of-Thought,88,0,0,5
+chain-of-thought-supervision,Chain-of-Thought,96,0,0,5
+chain-of-thought-supervision,Chain-of-Thought,104,0,0,5
+chain-of-thought-supervision,Chain-of-Thought,112,0,0,5
+chain-of-thought-supervision,Chain-of-Thought,120,0,0,5
+chain-of-thought-supervision,Chain-of-Thought,128,0,0,5
+continuous-latent-space-supervision,Continuous LSS,8,0.998437,0.00113886,5
+continuous-latent-space-supervision,Continuous LSS,16,0.987109,0.0071988,5
+continuous-latent-space-supervision,Continuous LSS,24,0.976562,0.0100401,5
+continuous-latent-space-supervision,Continuous LSS,32,0.940039,0.0224452,5
+continuous-latent-space-supervision,Continuous LSS,40,0.871875,0.0441892,5
+continuous-latent-space-supervision,Continuous LSS,48,0.789648,0.0748353,5
+continuous-latent-space-supervision,Continuous LSS,56,0.707617,0.105033,5
+continuous-latent-space-supervision,Continuous LSS,64,0.621875,0.136036,5
+continuous-latent-space-supervision,Continuous LSS,72,0.544922,0.151496,5
+continuous-latent-space-supervision,Continuous LSS,80,0.483594,0.166947,5
+continuous-latent-space-supervision,Continuous LSS,88,0.436133,0.173604,5
+continuous-latent-space-supervision,Continuous LSS,96,0.392188,0.177468,5
+continuous-latent-space-supervision,Continuous LSS,104,0.360938,0.176165,5
+continuous-latent-space-supervision,Continuous LSS,112,0.323047,0.166922,5
+continuous-latent-space-supervision,Continuous LSS,120,0.302539,0.169579,5
+continuous-latent-space-supervision,Continuous LSS,128,0.285547,0.162234,5
+discrete-latent-space-supervision,Discrete LSS,8,0.999805,0.000195312,5
+discrete-latent-space-supervision,Discrete LSS,16,0.998242,0.00078125,5
+discrete-latent-space-supervision,Discrete LSS,24,0.995508,0.00153168,5
+discrete-latent-space-supervision,Discrete LSS,32,0.99375,0.00234375,5
+discrete-latent-space-supervision,Discrete LSS,40,0.992188,0.00229024,5
+discrete-latent-space-supervision,Discrete LSS,48,0.990039,0.00276903,5
+discrete-latent-space-supervision,Discrete LSS,56,0.987305,0.00302577,5
+discrete-latent-space-supervision,Discrete LSS,64,0.981836,0.00520976,5
+discrete-latent-space-supervision,Discrete LSS,72,0.982031,0.00482979,5
+discrete-latent-space-supervision,Discrete LSS,80,0.975781,0.00622554,5
+discrete-latent-space-supervision,Discrete LSS,88,0.971875,0.0084989,5
+discrete-latent-space-supervision,Discrete LSS,96,0.968164,0.00831284,5
+discrete-latent-space-supervision,Discrete LSS,104,0.964844,0.00989658,5
+discrete-latent-space-supervision,Discrete LSS,112,0.963477,0.0102031,5
+discrete-latent-space-supervision,Discrete LSS,120,0.954297,0.0126705,5
+discrete-latent-space-supervision,Discrete LSS,128,0.94082,0.017774,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,8,1,0,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,16,1,0,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,24,0.999609,0.000390625,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,32,0.999023,0.000756442,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,40,0.999023,0.000756442,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,48,0.999414,0.000390625,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,56,0.998437,0.0015625,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,64,0.997852,0.00139481,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,72,0.996094,0.00247053,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,80,0.998633,0.000956832,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,88,0.997266,0.00167446,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,96,0.996094,0.0026922,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,104,0.996875,0.00212613,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,112,0.995703,0.00290681,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,120,0.994141,0.00339698,5
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS + EC,128,0.995508,0.00275522,5
+end-to-end-feedforward,Feedforward E2E,8,1,0,5
+end-to-end-feedforward,Feedforward E2E,16,0.864258,0.024496,5
+end-to-end-feedforward,Feedforward E2E,24,0.439063,0.0627996,5
+end-to-end-feedforward,Feedforward E2E,32,0.122266,0.0375963,5
+end-to-end-feedforward,Feedforward E2E,40,0.0195312,0.00693291,5
+end-to-end-feedforward,Feedforward E2E,48,0.00078125,0.000569429,5
+end-to-end-feedforward,Feedforward E2E,56,0,0,5
+end-to-end-feedforward,Feedforward E2E,64,0,0,5
+end-to-end-feedforward,Feedforward E2E,72,0,0,5
+end-to-end-feedforward,Feedforward E2E,80,0,0,5
+end-to-end-feedforward,Feedforward E2E,88,0,0,5
+end-to-end-feedforward,Feedforward E2E,96,0,0,5
+end-to-end-feedforward,Feedforward E2E,104,0,0,5
+end-to-end-feedforward,Feedforward E2E,112,0,0,5
+end-to-end-feedforward,Feedforward E2E,120,0,0,5
+end-to-end-feedforward,Feedforward E2E,128,0,0,5
+end-to-end-recurrent,Recurrent E2E,8,0.999805,0.000195312,5
+end-to-end-recurrent,Recurrent E2E,16,0.828711,0.0275429,5
+end-to-end-recurrent,Recurrent E2E,24,0.367187,0.0447123,5
+end-to-end-recurrent,Recurrent E2E,32,0.101953,0.0239698,5
+end-to-end-recurrent,Recurrent E2E,40,0.0146484,0.00588374,5
+end-to-end-recurrent,Recurrent E2E,48,0.000195313,0.000195312,5
+end-to-end-recurrent,Recurrent E2E,56,0,0,5
+end-to-end-recurrent,Recurrent E2E,64,0,0,5
+end-to-end-recurrent,Recurrent E2E,72,0,0,5
+end-to-end-recurrent,Recurrent E2E,80,0,0,5
+end-to-end-recurrent,Recurrent E2E,88,0,0,5
+end-to-end-recurrent,Recurrent E2E,96,0,0,5
+end-to-end-recurrent,Recurrent E2E,104,0,0,5
+end-to-end-recurrent,Recurrent E2E,112,0,0,5
+end-to-end-recurrent,Recurrent E2E,120,0,0,5
+end-to-end-recurrent,Recurrent E2E,128,0,0,5
+self-scheduled-lss,Self-Scheduled LSS,8,0.992773,0.00442804,5
+self-scheduled-lss,Self-Scheduled LSS,16,0.966602,0.0236751,5
+self-scheduled-lss,Self-Scheduled LSS,24,0.944922,0.0368393,5
+self-scheduled-lss,Self-Scheduled LSS,32,0.925195,0.0502551,5
+self-scheduled-lss,Self-Scheduled LSS,40,0.906641,0.0552346,5
+self-scheduled-lss,Self-Scheduled LSS,48,0.891016,0.0607737,5
+self-scheduled-lss,Self-Scheduled LSS,56,0.879102,0.0670788,5
+self-scheduled-lss,Self-Scheduled LSS,64,0.853125,0.0762048,5
+self-scheduled-lss,Self-Scheduled LSS,72,0.833398,0.0825623,5
+self-scheduled-lss,Self-Scheduled LSS,80,0.808984,0.0954715,5
+self-scheduled-lss,Self-Scheduled LSS,88,0.795703,0.106111,5
+self-scheduled-lss,Self-Scheduled LSS,96,0.769922,0.11321,5
+self-scheduled-lss,Self-Scheduled LSS,104,0.744922,0.123996,5
+self-scheduled-lss,Self-Scheduled LSS,112,0.726562,0.133259,5
+self-scheduled-lss,Self-Scheduled LSS,120,0.716406,0.137233,5
+self-scheduled-lss,Self-Scheduled LSS,128,0.692578,0.147812,5

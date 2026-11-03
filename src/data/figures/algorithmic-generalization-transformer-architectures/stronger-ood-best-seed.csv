@@ -1,0 +1,204 @@
+method,display_name,seed,graph_size,accuracy,correct_count,examples
+chain-of-thought-supervision,Chain-of-Thought,2208528648,8,1,1024,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,16,1,1024,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,24,1,1024,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,32,1,1024,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,40,0.999023,1023,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,48,0.995117,1019,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,56,0.833984,854,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,64,0.18457,189,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,72,0.00195312,2,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,80,0,0,1024
+chain-of-thought-supervision,Chain-of-Thought,2208528648,88,0,0,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,8,1,1024,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,16,0.998047,1022,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,24,0.994141,1018,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,32,0.984375,1008,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,40,0.980469,1004,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,48,0.957031,980,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,56,0.930664,953,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,64,0.890625,912,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,72,0.880859,902,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,80,0.841797,862,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,88,0.790039,809,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,96,0.734375,752,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,104,0.689453,706,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,112,0.626953,642,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,120,0.59375,608,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,128,0.548828,562,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,136,0.500977,513,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,144,0.438477,449,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,152,0.414062,424,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,160,0.34668,355,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,168,0.334961,343,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,176,0.291992,299,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,184,0.250977,257,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,192,0.229492,235,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,200,0.21582,221,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,208,0.179688,184,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,216,0.155273,159,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,224,0.131836,135,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,232,0.126953,130,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,240,0.0966797,99,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,248,0.0898438,92,1024
+continuous-latent-space-supervision,Continuous LSS,1418828153,256,0.078125,80,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,8,1,1024,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,16,1,1024,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,24,1,1024,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,32,1,1024,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,40,1,1024,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,48,1,1024,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,56,0.999023,1023,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,64,0.998047,1022,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,72,0.996094,1020,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,80,0.994141,1018,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,88,0.995117,1019,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,96,0.995117,1019,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,104,0.999023,1023,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,112,0.991211,1015,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,120,0.99707,1021,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,128,0.996094,1020,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,136,0.988281,1012,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,144,0.987305,1011,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,152,0.986328,1010,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,160,0.990234,1014,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,168,0.979492,1003,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,176,0.976562,1000,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,184,0.985352,1009,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,192,0.980469,1004,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,200,0.984375,1008,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,208,0.984375,1008,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,216,0.977539,1001,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,224,0.972656,996,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,232,0.974609,998,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,240,0.97168,995,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,248,0.964844,988,1024
+discrete-latent-space-supervision,Discrete LSS,2868521940,256,0.967773,991,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,8,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,16,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,24,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,32,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,40,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,48,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,56,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,64,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,72,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,80,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,88,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,96,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,104,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,112,0.999023,1023,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,120,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,128,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,136,0.999023,1023,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,144,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,152,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,160,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,168,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,176,0.999023,1023,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,184,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,192,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,200,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,208,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,216,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,224,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,232,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,240,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,248,1,1024,1024
+discrete-latent-space-supervision-on-policy-error-correction,Discrete LSS with Error Correction,2868521940,256,1,1024,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,8,1,1024,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,16,0.84082,861,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,24,0.458008,469,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,32,0.145508,149,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,40,0.0302734,31,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,48,0.00390625,4,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,56,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,64,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,72,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,80,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,88,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,96,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,104,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,112,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,120,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,128,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,136,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,144,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,152,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,160,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,168,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,176,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,184,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,192,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,200,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,208,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,216,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,224,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,232,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,240,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,248,0,0,1024
+end-to-end-feedforward,Feedforward E2E,3474191493,256,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,8,1,1024,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,16,0.881836,903,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,24,0.527344,540,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,32,0.199219,204,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,40,0.0576172,59,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,48,0.00585938,6,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,56,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,64,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,72,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,80,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,88,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,96,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,104,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,112,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,120,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,128,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,136,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,144,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,152,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,160,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,168,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,176,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,184,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,192,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,200,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,208,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,216,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,224,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,232,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,240,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,248,0,0,1024
+end-to-end-recurrent,Recurrent E2E,2208528648,256,0,0,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,8,0.993164,1017,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,16,0.992188,1016,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,24,0.990234,1014,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,32,0.985352,1009,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,40,0.982422,1006,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,48,0.97168,995,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,56,0.966797,990,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,64,0.966797,990,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,72,0.953125,976,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,80,0.948242,971,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,88,0.938477,961,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,96,0.9375,960,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,104,0.923828,946,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,112,0.931641,954,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,120,0.892578,914,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,128,0.893555,915,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,136,0.895508,917,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,144,0.883789,905,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,152,0.881836,903,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,160,0.853516,874,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,168,0.860352,881,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,176,0.828125,848,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,184,0.842773,863,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,192,0.832031,852,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,200,0.817383,837,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,208,0.805664,825,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,216,0.777344,796,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,224,0.783203,802,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,232,0.762695,781,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,240,0.753906,772,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,248,0.729492,747,1024
+self-scheduled-lss,Self-Scheduled LSS,2868521940,256,0.71582,733,1024

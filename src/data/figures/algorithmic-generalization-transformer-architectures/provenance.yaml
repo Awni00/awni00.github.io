@@ -18,3 +18,174 @@ files:
     tool: scripts/figures/dump_pdf_paths.py, bar heights calibrated against the y tick labels
     fidelity: exact to the PDF's coordinate precision (about 0.01 units)
     notes: The PDF is byte-identical to the paper repo's copy.
+  method-ood-comparison.csv:
+    figure: "Seven-method OOD comparison, five-seed mean ± 1 SEM (paper fig:method_ood_comparison; replaces blog method_ood_comparison_legendtop.pdf)"
+    used_by: "src/site/figures/algorithmic-generalization-transformer-architectures/method-ood-comparison.ts"
+    source:
+      repo: "paper--unlocking-ood-generalization (local clone overleaf-icml-unlocking-ood--generalization)"
+      remote: https://github.com/Awni00/paper--unlocking-ood-generalization.git
+      commit: 62d7199576661084029e3a99d089c6c571c8ea25
+      commit_date: 2026-10-13T19:02:03-04:00
+      files:
+        - path: paper-results-package/figure-data/method_ood_comparison/summary.csv
+          sha256: bdc7265b0b9a0b025f5a39f243aab49c80869e0bded1e60fb4a61069fcb6036a
+      generator: "paper-results-package/reproduction/figure-generation (generator id method-ood-comparison, 1sem view)"
+    extracted: 2026-11-01
+    method: converted
+    tool: "scripts/figures/algorithmic-generalization-transformer-architectures/build_data.py"
+    fidelity: "exact (values copied; float formatting to 6 significant digits)"
+    notes: "Columns method, display_name, graph_size, mean, sem, n_seeds kept from summary.csv. Bands are clipped to [0, 1] at render time, as in the paper. Recurrent E2E uses the paper's disclosed cohort (historical seed 1165367389 replaces follow-up seed 2868521940; see figures/method_ood_comparison/1sem/README.md)."
+  ec-stepwise-best-seed.csv:
+    figure: "Discrete LSS + EC solve rate vs recurrent iterations, best seed (paper fig:ourmethod_stepwise_results; replaces blog ourmethod_stepwise_results_Blues.pdf)"
+    used_by: "src/site/figures/algorithmic-generalization-transformer-architectures/ec-stepwise-best-seed.ts"
+    source:
+      repo: "paper--unlocking-ood-generalization (local clone overleaf-icml-unlocking-ood--generalization)"
+      remote: https://github.com/Awni00/paper--unlocking-ood-generalization.git
+      commit: 62d7199576661084029e3a99d089c6c571c8ea25
+      commit_date: 2026-10-13T19:02:03-04:00
+      files:
+        - path: paper-results-package/figure-data/stepwise_results/discrete_error_correction/seed_data.csv
+          sha256: 20907bc93a4802115c8bc8569a853ba8ca58d1c444096d7fcce3b9628c808f8b
+      generator: "generator id stepwise-results-discrete-error-correction-best-seed"
+    extracted: 2026-11-01
+    method: converted
+    tool: "scripts/figures/algorithmic-generalization-transformer-architectures/build_data.py"
+    fidelity: "exact (values copied; float formatting to 6 significant digits)"
+    notes: "Filtered to method discrete-latent-space-supervision-on-policy-error-correction, seed 2208528648 (the paper's selected best seed, tied with 3474191493; figures/stepwise_results/discrete_error_correction/best_seed provenance), steps 0–20. Step 0 is the output after the first recurrent application."
+  self-scheduled-first-fill.csv:
+    figure: "Self-Scheduled LSS median first-fill time vs node depth, all five seeds (paper fig:self_scheduled_schedule). New chart."
+    used_by: "src/site/figures/algorithmic-generalization-transformer-architectures/self-scheduled-first-fill.ts"
+    source:
+      repo: "paper--unlocking-ood-generalization (local clone overleaf-icml-unlocking-ood--generalization)"
+      remote: https://github.com/Awni00/paper--unlocking-ood-generalization.git
+      commit: 62d7199576661084029e3a99d089c6c571c8ea25
+      commit_date: 2026-10-13T19:02:03-04:00
+      files:
+        - path: paper-results-package/figure-data/self_scheduled_lss/first_nonempty_by_depth_seed.csv
+          sha256: 72b8ff5b00bc2dbad74421ca10ffbb5700d013bd8a6e11c214e67fbaa95e7330
+        - path: paper-results-package/figure-data/self_scheduled_lss/stopping_metrics_seed.csv
+          sha256: ff07d86e7540aba55906b3d218eb53d5c12527e2e39fec7bcb91844bf4def546
+      generator: "generator id self-scheduled-first-all-seeds (paper_figures/figures/self_scheduled_lss.py, _render_first_all_seeds)"
+    extracted: 2026-11-01
+    method: converted
+    tool: "scripts/figures/algorithmic-generalization-transformer-architectures/build_data.py"
+    fidelity: "exact (medians copied; derived columns recomputed and checked against the published legend)"
+    notes: "size_group == all; depths with coverage < 0.5 dropped (as the paper). levels_per_iteration = 1 / OLS slope of median vs depth over all depths, and solve_rate_n128 = a_emptyfree at N = 128 for arm nodepthloss_alpha_0p5, both recomputed with the generator's rule; they reproduce the paper legend (1.6/2.1/1.6/0.9/0.8 levels per iteration; 99/94/87/36/31% at N = 128). rank orders seeds by that solve rate."
+  stronger-ood-best-seed.csv:
+    figure: "Generalization from N ≤ 32 to N = 256, best of five seeds per method (paper fig:stronger_ood_best_seed). New chart."
+    used_by: "src/site/figures/algorithmic-generalization-transformer-architectures/stronger-ood-best-seed.ts"
+    source:
+      repo: "paper--unlocking-ood-generalization (local clone overleaf-icml-unlocking-ood--generalization)"
+      remote: https://github.com/Awni00/paper--unlocking-ood-generalization.git
+      commit: 62d7199576661084029e3a99d089c6c571c8ea25
+      commit_date: 2026-10-13T19:02:03-04:00
+      files:
+        - path: paper-results-package/figure-data/stronger_ood_n32_n256/method_ood_comparison/seed_data.csv
+          sha256: fd26ff656728ce2c6e06b5bacfd36bb9c633ddd2fe2d7ca63cf9e6cb616a73e9
+      generator: "generator id stronger-ood-method-best-seed"
+    extracted: 2026-11-01
+    method: converted
+    tool: "scripts/figures/algorithmic-generalization-transformer-architectures/build_data.py"
+    fidelity: "exact (values copied; float formatting to 6 significant digits)"
+    notes: "Rows of each method's selected seed. The selection (unweighted mean solve rate over N = 40–256; CoT over N = 40–72) is re-derived by the tool and asserted equal to the paper provenance's selected_seeds. CoT is right-censored after N = 88, as in the paper. The CSV's display_name for the EC method is the stronger-OOD long form; the chart uses the short legend name 'Discrete LSS + EC', as the published PDF does."
+  l1-ov-operator-norm.csv:
+    figure: "Layer-2 (L1) OV operator-norm amplification by head group (paper fig:l1, blog L1_ov_operator_norm.pdf)"
+    used_by: "src/site/figures/algorithmic-generalization-transformer-architectures/l1-ov-operator-norm.ts"
+    source:
+      repo: "awni00.github.io"
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/L1_ov_operator_norm.pdf
+          sha256: 5af489ea496cea8c3d2ddbd9a119b9e4628cd5127d3c23928ad1a2eabb34edf6
+      generator: "none in any repo (made in a notebook from model weights; the paper repo has only figs/experiment_results/mech_interp/load_fig.ipynb)"
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: "scripts/figures/algorithmic-generalization-transformer-architectures/extract_mechinterp.py"
+    fidelity: "exact to the PDF's coordinate precision (about 0.01 units)"
+    notes: "Plotly bars overlaid (barmode overlay), so each group's height is read from its own rectangle. The PDF is byte-identical to the paper repo's copy."
+  l2-relative-error.csv:
+    figure: "Relative L2 change of the residual stream through the layer-1 MLP (blog l2_relative_error.pdf)"
+    used_by: "src/site/figures/algorithmic-generalization-transformer-architectures/l2-relative-error.ts"
+    source:
+      repo: "awni00.github.io"
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/l2_relative_error.pdf
+          sha256: 7a3ccf0429098e5cabeec3125dac83de3e2eb2c8942eb17b75007ff426b24359
+      generator: "none in any repo (made in a notebook from model weights; the paper repo has only figs/experiment_results/mech_interp/load_fig.ipynb)"
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: "scripts/figures/algorithmic-generalization-transformer-architectures/extract_mechinterp.py"
+    fidelity: "exact (bin edges to 1e-4, integer counts)"
+    notes: "Bin edges from the x gridlines and tick labels; counts are integers. The PDF is byte-identical to the paper repo's copy."
+  l1-attention-head-statistics.csv:
+    figure: "Layer-2 attention-head statistics (variance per head, average norm, relative variance) for var 0/1/2 (blog l1_attention_head_statistics_var{0,1,2}.pdf)"
+    used_by: "src/site/figures/algorithmic-generalization-transformer-architectures/l1-attention-head-statistics-var{0,1,2}.ts"
+    source:
+      repo: "awni00.github.io"
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var0.pdf
+          sha256: 2749067bb0b53d61863b6cac5463261f579798e16de35b8fce711211c9f5e89a
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var1.pdf
+          sha256: e5498c5a7166e8707eae98dba36b3930ee88ed90a9f2430cb6ea650a494c0e12
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var2.pdf
+          sha256: cd5797306560ddee5de9c19524780fecb94d25fd5d27aef4b3bd0229691386b7
+      generator: "none in any repo (made in a notebook from model weights; the paper repo has only figs/experiment_results/mech_interp/load_fig.ipynb)"
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: "scripts/figures/algorithmic-generalization-transformer-architectures/extract_mechinterp.py"
+    fidelity: "exact to the PDF's coordinate precision (about 0.5% of each panel's range)"
+    notes: "Each panel calibrated separately against its own gridlines and tick labels. Heads the PDF draws only as a zero-height outline are recorded as 0. The PDFs are byte-identical to the paper repo's copies."
+  l0-relative-variance.csv:
+    figure: "Layer-1 (L0) relative-variance heatmaps, query token × head, perturbing var_0/var_1/var_2/rhs (blog L0_*_relative_variance_heatmap.pdf)"
+    used_by: "src/site/figures/algorithmic-generalization-transformer-architectures/l0-relative-variance-{var-0,var-1,var-2,rhs}.ts"
+    source:
+      repo: "awni00.github.io"
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/L0_var_0_relative_variance_heatmap.pdf
+          sha256: ee639ec3712302e8c0d1223739f41741737d958140778cc36a3e3564154ec954
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/L0_var_1_relative_variance_heatmap.pdf
+          sha256: 4c9e2f9afd7572fbdc53abab74cdd5c9d3b670fbebfcca1fd2446abc7a5480dc
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/L0_var_2_relative_variance_heatmap.pdf
+          sha256: 79261e7a2f58398aec5fe6253b0618ef5722503fe6669e04fc6a3d6df1ff55e8
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/L0_rhs_relative_variance_heatmap.pdf
+          sha256: eed2563e2ba3db31cdd514180266f21fae024880ee3b4842ba5bd905e7ca360d
+      generator: "none in any repo (made in a notebook from model weights; the paper repo has only figs/experiment_results/mech_interp/load_fig.ipynb)"
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: "scripts/figures/algorithmic-generalization-transformer-architectures/extract_mechinterp.py"
+    fidelity: "approximate: quantized to the colormap, about vmax / 255 ≈ 0.004"
+    notes: "Seaborn heatmaps: each cell's fill is matched to the nearest of matplotlib's 256 Blues colormap steps and scaled by the colour bar's range (0 to vmax ≈ 0.97, from the bar's image extent and tick marks). The PDFs are byte-identical to the paper repo's copies."
+  fft-histograms.csv:
+    figure: "Histograms of log10 |3D DFT| by frequency class at four stages of the layer-2 MLP and decoder (blog fft_histograms_*.pdf)"
+    used_by: "src/site/figures/algorithmic-generalization-transformer-architectures/fft-histograms-{l1-mlp-preact,l1-mlp-postact,l1-mlp-output,decoder-output}.ts"
+    source:
+      repo: "awni00.github.io"
+      remote: https://github.com/Awni00/awni00.github.io.git
+      commit: 1db209fa43b595eca34f0c02037d0cdc9a00e431
+      commit_date: 2026-10-12T17:56:11-04:00
+      files:
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-preact.pdf
+          sha256: cd338dffa5eab274b9f0e917b05d9f8901f83905bb4bcde39e835fdefbd6d63c
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-postact.pdf
+          sha256: b29f4da92c8b91966c8ab804e36b28d1feaf18989b21721cd53aa4dc43a816d0
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-output.pdf
+          sha256: 63d29d2f79eb3638e3765a92989e7b06040da9262e5719be29b891f25c5c212e
+        - path: public/blog/algorithmic-generalization-transformer-architectures/figures/fft_histograms_decoder-output.pdf
+          sha256: b6680b591db5616cda749713246bccf0a34a2aa01cc55f19812c3d757a483589
+      generator: "none in any repo (made in a notebook from model weights; the paper repo has only figs/experiment_results/mech_interp/load_fig.ipynb)"
+    extracted: 2026-11-01
+    method: vector-extracted
+    tool: "scripts/figures/algorithmic-generalization-transformer-architectures/extract_mechinterp.py"
+    fidelity: "exact for drawn bins (bin edges to 1e-4, integer counts)"
+    notes: "Overlaid plotly histograms on a log count axis; each class has its own bins; zero-count bins are not drawn. Counts round to integers and per-class totals agree across stages (1, 33, 33, 330, 11, 330, 990), except L1-mlp-preact, where values below log10 = 0 lie off the published axis and are absent from the PDF (4 of 11 diagonal, 132 of 330 one-repeat, 457 of 990 generic frequencies); its leftmost bins start just below 0 and are clipped at 0 when drawn. The PDFs are byte-identical to the paper repo's copies."
