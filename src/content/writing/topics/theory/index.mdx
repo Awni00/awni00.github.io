@@ -1,6 +1,7 @@
 ---
 title: "Theoretical Foundations"
 type: "hub"
+summary: "Precise accounts of how architecture, learning algorithm, and problem structure determine what models can learn."
 tags: []
 links:
   - "cot-info"
@@ -11,12 +12,19 @@ links:
 theme: global
 ---
 
-{/* TODO (Awni): hub intro. */}
+Progress in machine learning has been driven largely by empirical and engineering advances, and at times it has looked more like alchemy than science<HoverNote href="https://archives.argmin.net/2017/12/05/kitchen-sinks/">See Ali Rahimi and Ben Recht's nice NeurIPS 2017 Test of Time talk.</HoverNote>.
+Understanding has often lagged behind progress, and the gap has widened as models have become more capable.
+I believe in a scientific approach to machine learning, which, analogously to the natural sciences like physics, has two complementary sides: empirical science, which studies AI systems as natural phenomena and seeks empirical laws, and mathematical theory, which seeks a deep and precise formal understanding.
 
-progress in machine learning has at times looked more like alchemy than science.
-progress in machine learning has been driven largely by empirical and engineering efforts; understanding has often lagged behind progress, and the gap has widened over time.
-i believe in a scientific approach towards machine learning progress.
-in my view, formal mathematical theory is one way 
-i equally believe in developing understanding through empirical science (like physics and other natural sciences; viewing AI as a natural phenomenon to be studied, deriving *empirical laws*, etc.)
+Good theory explains observed phenomena through simple, general principles, predicts phenomena not yet observed<HoverNote>See Karl Popper, *The Logic of Scientific Discovery* (1959).</HoverNote>, and guides the design of new architectures and algorithms.
+My theoretical work aims to give precise accounts of how architecture, learning algorithm, and problem structure determine what models can learn, and how efficiently.
 
-my philosophy about role of theory in ai research
+**Papers in this thread:**
+- **[CoT Information](/blog/cot-info):** a statistical learning theory of chain-of-thought supervision, centered on the *CoT information*, an information-theoretic measure of the statistical value of observing intermediate steps which governs sample complexity.
+- **[Transformer theories](/blog/transformer-theories):** evaluates seven formal theories of transformer capabilities against experiments, mapping where each theory's predictions hold and where they break down.
+- **[Relation functions and attention](/blog/relation-function-approximation):** shows that inner products of neural networks, the primitive behind attention and relational architectures, can approximate broad classes of relation functions.
+- **[Information structure in RL](/blog/information-structure-rl):** formalizes the <Term note="i.e., the causal dependencies in the dynamics">information structure</Term> of a sequential decision-making problem as a graph and bounds the sample complexity of reinforcement learning in terms of it, recovering known tractable classes and identifying new ones.
+
+Broadly, I'm interested in developing theoretical understanding of modern AI methods through statistical and computational principles. 
+This includes questions such as what makes complex, multi-step tasks efficiently learnable, how inductive biases shape the solutions a model finds, and when those solutions generalize beyond training.
+One question I find especially important today is how reinforcement learning enables models to learn complex tasks and reasoning behaviors, and what role pre-training plays as a prior<HoverNote href="/blog/topics/reasoning">Understanding this question could lead to improved algorithms for using this latent prior knowledge to develop algorithms with improved active exploration. See the *reasoning* hub for more discussion on this.</HoverNote>.
