@@ -20,16 +20,17 @@ In addition to defining the search space, the architecture encodes inductive bia
 The right biases steer learning toward solutions with desirable properties, enabling greater data efficiency and the formation of abstractions that generalize robustly beyond training.
 
 This raises a natural question: which architectural mechanisms and inductive biases are the right ones? Are there fundamental primitives that a model needs in order to learn efficiently and generalize? I think answering this is one of the grand goals of machine learning research, just as the study of human and animal intelligence aims to explain intelligent behavior through a small set of simple principles.
+
 Much of the challenge lies in the tension between structure and generality: while building in task-specific inductive biases can make learning more efficient in the short term, the history of AI shows that general methods that scale with data and computation eventually outperform methods that build in human knowledge<HoverNote href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">See Rich Sutton's essay "The Bitter Lesson" (2019).</HoverNote>.
 In my view, the resolution is to find fundamental primitives that are general enough to scale, forming flexible building blocks that the learning algorithm can compose, without prescribing the structure of the solution.
 
 My own work on this question began with *relational reasoning*, which is believed to underlie human abilities for abstraction and systematic generalization. Its power lies in drawing inferences across instances that look very different on the surface but share an abstract structure, which gives humans a capacity for data-efficient, out-of-distribution generalization that machine learning has yet to match.
-A second mechanism that I believe is central to generalizing beyond experience is *recurrence*, which enforces a preference for compact recursive solutions that allow a model to adapt how much computation it uses to the difficulty of the problem.
+A second mechanism that I believe is central to generalizing beyond experience is *recurrence*, which favors compact, recursive solutions and allows the model to adapt how much computation it uses to the difficulty of the problem.
 
 **Papers in this thread:**
+- **[Recursive latent space reasoning](/blog/algorithmic-generalization-transformer-architectures):** explores recurrence, input-adaptive computation, and discrete latent states as inductive biases for depth-invariant computation, enabling transformers to learn algorithms that extend to problems far larger than those seen in training.
 - **[Abstractors](/blog/abstractor):** a relational information bottleneck<HoverNote cite="webbRelationalBottleneckInductive2023"/> inside the transformer, using relational cross-attention to separate the relations between objects from the objects' own features, which makes relational learning more sample-efficient.
 - **[Relational convolutions](/blog/relational-convolutions):** an architecture for learning hierarchical relational feature representations by composing convolution-like relational operations.
 - **[Dual Attention Transformer](/blog/dual-attention):** adds relational attention as a primitive alongside standard attention and lets the model learn how to combine relational and sensory information, improving data and parameter efficiency, including in language modeling.
-- **[Recursive latent space reasoning](/blog/algorithmic-generalization-transformer-architectures):** explores recurrence, input-adaptive computation, and discrete latent states as inductive biases for depth-invariant computation, enabling transformers to learn algorithms that extend to problems far larger than those seen in training.
-
 {/* - **[Approximation of relation functions](/blog/relation-function-approximation):** shows that inner products of neural networks, the primitive behind attention and relational architectures, can approximate any relation function, so the primitive does not limit which relations a model can learn. */}
+
