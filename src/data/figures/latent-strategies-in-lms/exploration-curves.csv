@@ -1,0 +1,833 @@
+method,method_label,sampling,step,coverage
+base,Base model,base,1,32.174
+base,Base model,base,2,52.826
+base,Base model,base,3,66.23
+base,Base model,base,4,75.69
+base,Base model,base,5,81.771
+base,Base model,base,6,85.742
+base,Base model,base,7,89.212
+base,Base model,base,8,91.413
+base,Base model,base,9,93.112
+base,Base model,base,10,94.219
+base,Base model,base,11,94.915
+base,Base model,base,12,95.664
+base,Base model,base,13,96.165
+base,Base model,base,14,96.504
+base,Base model,base,15,97.142
+base,Base model,base,16,97.48
+base,Base model,base,17,97.728
+base,Base model,base,18,97.806
+base,Base model,base,19,97.91
+base,Base model,base,20,98.04
+base,Base model,base,21,98.099
+base,Base model,base,22,98.118
+base,Base model,base,23,98.229
+base,Base model,base,24,98.32
+base,Base model,base,25,98.359
+base,Base model,base,26,98.477
+base,Base model,base,27,98.613
+base,Base model,base,28,98.704
+base,Base model,base,29,98.704
+base,Base model,base,30,98.776
+base,Base model,base,31,98.815
+base,Base model,base,32,98.874
+base,Base model,base,33,98.913
+base,Base model,base,34,98.913
+base,Base model,base,35,98.952
+base,Base model,base,36,98.971
+base,Base model,base,37,99.004
+base,Base model,base,38,99.004
+base,Base model,base,39,99.004
+base,Base model,base,40,99.004
+base,Base model,base,41,99.004
+base,Base model,base,42,99.036
+base,Base model,base,43,99.036
+base,Base model,base,44,99.069
+base,Base model,base,45,99.089
+base,Base model,base,46,99.089
+base,Base model,base,47,99.108
+base,Base model,base,48,99.108
+base,Base model,base,49,99.128
+base,Base model,base,50,99.128
+base,Base model,base,51,99.128
+base,Base model,base,52,99.128
+base,Base model,base,53,99.147
+base,Base model,base,54,99.147
+base,Base model,base,55,99.147
+base,Base model,base,56,99.147
+base,Base model,base,57,99.18
+base,Base model,base,58,99.18
+base,Base model,base,59,99.18
+base,Base model,base,60,99.18
+base,Base model,base,61,99.18
+base,Base model,base,62,99.18
+base,Base model,base,63,99.18
+base,Base model,base,64,99.18
+global_plus_token,Global + token,iid,1,31.23
+global_plus_token,Global + token,iid,2,52.311
+global_plus_token,Global + token,iid,3,65.26
+global_plus_token,Global + token,iid,4,73.822
+global_plus_token,Global + token,iid,5,80.527
+global_plus_token,Global + token,iid,6,85.176
+global_plus_token,Global + token,iid,7,88.366
+global_plus_token,Global + token,iid,8,91.074
+global_plus_token,Global + token,iid,9,92.422
+global_plus_token,Global + token,iid,10,93.796
+global_plus_token,Global + token,iid,11,94.551
+global_plus_token,Global + token,iid,12,95.365
+global_plus_token,Global + token,iid,13,96.016
+global_plus_token,Global + token,iid,14,96.406
+global_plus_token,Global + token,iid,15,96.667
+global_plus_token,Global + token,iid,16,96.875
+global_plus_token,Global + token,iid,17,97.279
+global_plus_token,Global + token,iid,18,97.533
+global_plus_token,Global + token,iid,19,97.663
+global_plus_token,Global + token,iid,20,97.897
+global_plus_token,Global + token,iid,21,98.047
+global_plus_token,Global + token,iid,22,98.086
+global_plus_token,Global + token,iid,23,98.145
+global_plus_token,Global + token,iid,24,98.268
+global_plus_token,Global + token,iid,25,98.379
+global_plus_token,Global + token,iid,26,98.418
+global_plus_token,Global + token,iid,27,98.477
+global_plus_token,Global + token,iid,28,98.529
+global_plus_token,Global + token,iid,29,98.568
+global_plus_token,Global + token,iid,30,98.587
+global_plus_token,Global + token,iid,31,98.607
+global_plus_token,Global + token,iid,32,98.665
+global_plus_token,Global + token,iid,33,98.737
+global_plus_token,Global + token,iid,34,98.757
+global_plus_token,Global + token,iid,35,98.757
+global_plus_token,Global + token,iid,36,98.828
+global_plus_token,Global + token,iid,37,98.867
+global_plus_token,Global + token,iid,38,98.887
+global_plus_token,Global + token,iid,39,98.906
+global_plus_token,Global + token,iid,40,98.945
+global_plus_token,Global + token,iid,41,98.945
+global_plus_token,Global + token,iid,42,98.945
+global_plus_token,Global + token,iid,43,98.965
+global_plus_token,Global + token,iid,44,98.997
+global_plus_token,Global + token,iid,45,98.997
+global_plus_token,Global + token,iid,46,98.997
+global_plus_token,Global + token,iid,47,99.036
+global_plus_token,Global + token,iid,48,99.076
+global_plus_token,Global + token,iid,49,99.076
+global_plus_token,Global + token,iid,50,99.076
+global_plus_token,Global + token,iid,51,99.128
+global_plus_token,Global + token,iid,52,99.128
+global_plus_token,Global + token,iid,53,99.128
+global_plus_token,Global + token,iid,54,99.147
+global_plus_token,Global + token,iid,55,99.167
+global_plus_token,Global + token,iid,56,99.206
+global_plus_token,Global + token,iid,57,99.206
+global_plus_token,Global + token,iid,58,99.245
+global_plus_token,Global + token,iid,59,99.245
+global_plus_token,Global + token,iid,60,99.245
+global_plus_token,Global + token,iid,61,99.264
+global_plus_token,Global + token,iid,62,99.264
+global_plus_token,Global + token,iid,63,99.264
+global_plus_token,Global + token,iid,64,99.264
+global_plus_token,Global + token,explore,1,31.23
+global_plus_token,Global + token,explore,2,58.509
+global_plus_token,Global + token,explore,3,73.392
+global_plus_token,Global + token,explore,4,81.523
+global_plus_token,Global + token,explore,5,86.354
+global_plus_token,Global + token,explore,6,90.117
+global_plus_token,Global + token,explore,7,92.676
+global_plus_token,Global + token,explore,8,93.945
+global_plus_token,Global + token,explore,9,94.909
+global_plus_token,Global + token,explore,10,95.703
+global_plus_token,Global + token,explore,11,96.406
+global_plus_token,Global + token,explore,12,96.947
+global_plus_token,Global + token,explore,13,97.357
+global_plus_token,Global + token,explore,14,97.63
+global_plus_token,Global + token,explore,15,97.975
+global_plus_token,Global + token,explore,16,98.086
+global_plus_token,Global + token,explore,17,98.242
+global_plus_token,Global + token,explore,18,98.366
+global_plus_token,Global + token,explore,19,98.418
+global_plus_token,Global + token,explore,20,98.477
+global_plus_token,Global + token,explore,21,98.607
+global_plus_token,Global + token,explore,22,98.646
+global_plus_token,Global + token,explore,23,98.698
+global_plus_token,Global + token,explore,24,98.757
+global_plus_token,Global + token,explore,25,98.776
+global_plus_token,Global + token,explore,26,98.874
+global_plus_token,Global + token,explore,27,98.932
+global_plus_token,Global + token,explore,28,98.952
+global_plus_token,Global + token,explore,29,98.971
+global_plus_token,Global + token,explore,30,98.971
+global_plus_token,Global + token,explore,31,99.049
+global_plus_token,Global + token,explore,32,99.049
+global_plus_token,Global + token,explore,33,99.069
+global_plus_token,Global + token,explore,34,99.069
+global_plus_token,Global + token,explore,35,99.069
+global_plus_token,Global + token,explore,36,99.102
+global_plus_token,Global + token,explore,37,99.102
+global_plus_token,Global + token,explore,38,99.102
+global_plus_token,Global + token,explore,39,99.102
+global_plus_token,Global + token,explore,40,99.102
+global_plus_token,Global + token,explore,41,99.121
+global_plus_token,Global + token,explore,42,99.186
+global_plus_token,Global + token,explore,43,99.186
+global_plus_token,Global + token,explore,44,99.186
+global_plus_token,Global + token,explore,45,99.186
+global_plus_token,Global + token,explore,46,99.219
+global_plus_token,Global + token,explore,47,99.238
+global_plus_token,Global + token,explore,48,99.258
+global_plus_token,Global + token,explore,49,99.258
+global_plus_token,Global + token,explore,50,99.258
+global_plus_token,Global + token,explore,51,99.258
+global_plus_token,Global + token,explore,52,99.258
+global_plus_token,Global + token,explore,53,99.277
+global_plus_token,Global + token,explore,54,99.277
+global_plus_token,Global + token,explore,55,99.277
+global_plus_token,Global + token,explore,56,99.277
+global_plus_token,Global + token,explore,57,99.277
+global_plus_token,Global + token,explore,58,99.277
+global_plus_token,Global + token,explore,59,99.277
+global_plus_token,Global + token,explore,60,99.297
+global_plus_token,Global + token,explore,61,99.329
+global_plus_token,Global + token,explore,62,99.362
+global_plus_token,Global + token,explore,63,99.362
+global_plus_token,Global + token,explore,64,99.362
+token_pressure,Token weighting,iid,1,30.951
+token_pressure,Token weighting,iid,2,50.938
+token_pressure,Token weighting,iid,3,64.062
+token_pressure,Token weighting,iid,4,73.275
+token_pressure,Token weighting,iid,5,79.59
+token_pressure,Token weighting,iid,6,83.958
+token_pressure,Token weighting,iid,7,87.324
+token_pressure,Token weighting,iid,8,89.974
+token_pressure,Token weighting,iid,9,91.673
+token_pressure,Token weighting,iid,10,93.047
+token_pressure,Token weighting,iid,11,94.03
+token_pressure,Token weighting,iid,12,94.98
+token_pressure,Token weighting,iid,13,95.592
+token_pressure,Token weighting,iid,14,95.944
+token_pressure,Token weighting,iid,15,96.361
+token_pressure,Token weighting,iid,16,96.576
+token_pressure,Token weighting,iid,17,96.81
+token_pressure,Token weighting,iid,18,96.927
+token_pressure,Token weighting,iid,19,97.077
+token_pressure,Token weighting,iid,20,97.253
+token_pressure,Token weighting,iid,21,97.37
+token_pressure,Token weighting,iid,22,97.539
+token_pressure,Token weighting,iid,23,97.708
+token_pressure,Token weighting,iid,24,97.845
+token_pressure,Token weighting,iid,25,97.962
+token_pressure,Token weighting,iid,26,98.021
+token_pressure,Token weighting,iid,27,98.132
+token_pressure,Token weighting,iid,28,98.151
+token_pressure,Token weighting,iid,29,98.223
+token_pressure,Token weighting,iid,30,98.262
+token_pressure,Token weighting,iid,31,98.281
+token_pressure,Token weighting,iid,32,98.301
+token_pressure,Token weighting,iid,33,98.359
+token_pressure,Token weighting,iid,34,98.379
+token_pressure,Token weighting,iid,35,98.379
+token_pressure,Token weighting,iid,36,98.379
+token_pressure,Token weighting,iid,37,98.379
+token_pressure,Token weighting,iid,38,98.379
+token_pressure,Token weighting,iid,39,98.457
+token_pressure,Token weighting,iid,40,98.457
+token_pressure,Token weighting,iid,41,98.477
+token_pressure,Token weighting,iid,42,98.516
+token_pressure,Token weighting,iid,43,98.516
+token_pressure,Token weighting,iid,44,98.535
+token_pressure,Token weighting,iid,45,98.594
+token_pressure,Token weighting,iid,46,98.594
+token_pressure,Token weighting,iid,47,98.646
+token_pressure,Token weighting,iid,48,98.646
+token_pressure,Token weighting,iid,49,98.665
+token_pressure,Token weighting,iid,50,98.717
+token_pressure,Token weighting,iid,51,98.717
+token_pressure,Token weighting,iid,52,98.717
+token_pressure,Token weighting,iid,53,98.717
+token_pressure,Token weighting,iid,54,98.789
+token_pressure,Token weighting,iid,55,98.809
+token_pressure,Token weighting,iid,56,98.809
+token_pressure,Token weighting,iid,57,98.809
+token_pressure,Token weighting,iid,58,98.809
+token_pressure,Token weighting,iid,59,98.848
+token_pressure,Token weighting,iid,60,98.867
+token_pressure,Token weighting,iid,61,98.867
+token_pressure,Token weighting,iid,62,98.867
+token_pressure,Token weighting,iid,63,98.887
+token_pressure,Token weighting,iid,64,98.926
+token_pressure,Token weighting,explore,1,30.951
+token_pressure,Token weighting,explore,2,57.389
+token_pressure,Token weighting,explore,3,72.012
+token_pressure,Token weighting,explore,4,80.651
+token_pressure,Token weighting,explore,5,85.827
+token_pressure,Token weighting,explore,6,89.03
+token_pressure,Token weighting,explore,7,91.693
+token_pressure,Token weighting,explore,8,93.47
+token_pressure,Token weighting,explore,9,94.668
+token_pressure,Token weighting,explore,10,95.482
+token_pressure,Token weighting,explore,11,96.035
+token_pressure,Token weighting,explore,12,96.367
+token_pressure,Token weighting,explore,13,96.823
+token_pressure,Token weighting,explore,14,97.031
+token_pressure,Token weighting,explore,15,97.188
+token_pressure,Token weighting,explore,16,97.37
+token_pressure,Token weighting,explore,17,97.533
+token_pressure,Token weighting,explore,18,97.65
+token_pressure,Token weighting,explore,19,97.708
+token_pressure,Token weighting,explore,20,97.806
+token_pressure,Token weighting,explore,21,97.917
+token_pressure,Token weighting,explore,22,97.936
+token_pressure,Token weighting,explore,23,97.956
+token_pressure,Token weighting,explore,24,97.975
+token_pressure,Token weighting,explore,25,98.014
+token_pressure,Token weighting,explore,26,98.105
+token_pressure,Token weighting,explore,27,98.236
+token_pressure,Token weighting,explore,28,98.288
+token_pressure,Token weighting,explore,29,98.307
+token_pressure,Token weighting,explore,30,98.327
+token_pressure,Token weighting,explore,31,98.327
+token_pressure,Token weighting,explore,32,98.327
+token_pressure,Token weighting,explore,33,98.379
+token_pressure,Token weighting,explore,34,98.379
+token_pressure,Token weighting,explore,35,98.418
+token_pressure,Token weighting,explore,36,98.438
+token_pressure,Token weighting,explore,37,98.457
+token_pressure,Token weighting,explore,38,98.509
+token_pressure,Token weighting,explore,39,98.509
+token_pressure,Token weighting,explore,40,98.6
+token_pressure,Token weighting,explore,41,98.62
+token_pressure,Token weighting,explore,42,98.62
+token_pressure,Token weighting,explore,43,98.62
+token_pressure,Token weighting,explore,44,98.639
+token_pressure,Token weighting,explore,45,98.639
+token_pressure,Token weighting,explore,46,98.639
+token_pressure,Token weighting,explore,47,98.659
+token_pressure,Token weighting,explore,48,98.691
+token_pressure,Token weighting,explore,49,98.691
+token_pressure,Token weighting,explore,50,98.691
+token_pressure,Token weighting,explore,51,98.691
+token_pressure,Token weighting,explore,52,98.724
+token_pressure,Token weighting,explore,53,98.724
+token_pressure,Token weighting,explore,54,98.743
+token_pressure,Token weighting,explore,55,98.743
+token_pressure,Token weighting,explore,56,98.783
+token_pressure,Token weighting,explore,57,98.802
+token_pressure,Token weighting,explore,58,98.841
+token_pressure,Token weighting,explore,59,98.841
+token_pressure,Token weighting,explore,60,98.841
+token_pressure,Token weighting,explore,61,98.88
+token_pressure,Token weighting,explore,62,98.88
+token_pressure,Token weighting,explore,63,98.9
+token_pressure,Token weighting,explore,64,98.919
+global_norm,Global scale,iid,1,31.803
+global_norm,Global scale,iid,2,52.044
+global_norm,Global scale,iid,3,65.15
+global_norm,Global scale,iid,4,73.861
+global_norm,Global scale,iid,5,80.228
+global_norm,Global scale,iid,6,84.779
+global_norm,Global scale,iid,7,87.389
+global_norm,Global scale,iid,8,89.844
+global_norm,Global scale,iid,9,91.667
+global_norm,Global scale,iid,10,93.158
+global_norm,Global scale,iid,11,94.368
+global_norm,Global scale,iid,12,95.143
+global_norm,Global scale,iid,13,95.859
+global_norm,Global scale,iid,14,96.387
+global_norm,Global scale,iid,15,96.764
+global_norm,Global scale,iid,16,97.096
+global_norm,Global scale,iid,17,97.344
+global_norm,Global scale,iid,18,97.546
+global_norm,Global scale,iid,19,97.773
+global_norm,Global scale,iid,20,97.852
+global_norm,Global scale,iid,21,98.027
+global_norm,Global scale,iid,22,98.105
+global_norm,Global scale,iid,23,98.184
+global_norm,Global scale,iid,24,98.242
+global_norm,Global scale,iid,25,98.301
+global_norm,Global scale,iid,26,98.32
+global_norm,Global scale,iid,27,98.411
+global_norm,Global scale,iid,28,98.483
+global_norm,Global scale,iid,29,98.522
+global_norm,Global scale,iid,30,98.542
+global_norm,Global scale,iid,31,98.659
+global_norm,Global scale,iid,32,98.717
+global_norm,Global scale,iid,33,98.75
+global_norm,Global scale,iid,34,98.789
+global_norm,Global scale,iid,35,98.809
+global_norm,Global scale,iid,36,98.809
+global_norm,Global scale,iid,37,98.867
+global_norm,Global scale,iid,38,98.867
+global_norm,Global scale,iid,39,98.939
+global_norm,Global scale,iid,40,98.978
+global_norm,Global scale,iid,41,99.017
+global_norm,Global scale,iid,42,99.017
+global_norm,Global scale,iid,43,99.069
+global_norm,Global scale,iid,44,99.069
+global_norm,Global scale,iid,45,99.108
+global_norm,Global scale,iid,46,99.128
+global_norm,Global scale,iid,47,99.147
+global_norm,Global scale,iid,48,99.147
+global_norm,Global scale,iid,49,99.147
+global_norm,Global scale,iid,50,99.147
+global_norm,Global scale,iid,51,99.167
+global_norm,Global scale,iid,52,99.167
+global_norm,Global scale,iid,53,99.206
+global_norm,Global scale,iid,54,99.225
+global_norm,Global scale,iid,55,99.225
+global_norm,Global scale,iid,56,99.225
+global_norm,Global scale,iid,57,99.225
+global_norm,Global scale,iid,58,99.225
+global_norm,Global scale,iid,59,99.225
+global_norm,Global scale,iid,60,99.225
+global_norm,Global scale,iid,61,99.225
+global_norm,Global scale,iid,62,99.225
+global_norm,Global scale,iid,63,99.245
+global_norm,Global scale,iid,64,99.245
+global_norm,Global scale,explore,1,31.803
+global_norm,Global scale,explore,2,59.264
+global_norm,Global scale,explore,3,72.956
+global_norm,Global scale,explore,4,81.048
+global_norm,Global scale,explore,5,86.23
+global_norm,Global scale,explore,6,89.518
+global_norm,Global scale,explore,7,91.751
+global_norm,Global scale,explore,8,93.118
+global_norm,Global scale,explore,9,94.225
+global_norm,Global scale,explore,10,95.215
+global_norm,Global scale,explore,11,95.82
+global_norm,Global scale,explore,12,96.27
+global_norm,Global scale,explore,13,96.628
+global_norm,Global scale,explore,14,96.979
+global_norm,Global scale,explore,15,97.428
+global_norm,Global scale,explore,16,97.624
+global_norm,Global scale,explore,17,97.852
+global_norm,Global scale,explore,18,97.982
+global_norm,Global scale,explore,19,98.092
+global_norm,Global scale,explore,20,98.184
+global_norm,Global scale,explore,21,98.236
+global_norm,Global scale,explore,22,98.398
+global_norm,Global scale,explore,23,98.477
+global_norm,Global scale,explore,24,98.496
+global_norm,Global scale,explore,25,98.555
+global_norm,Global scale,explore,26,98.607
+global_norm,Global scale,explore,27,98.685
+global_norm,Global scale,explore,28,98.743
+global_norm,Global scale,explore,29,98.763
+global_norm,Global scale,explore,30,98.783
+global_norm,Global scale,explore,31,98.815
+global_norm,Global scale,explore,32,98.835
+global_norm,Global scale,explore,33,98.874
+global_norm,Global scale,explore,34,98.893
+global_norm,Global scale,explore,35,98.952
+global_norm,Global scale,explore,36,99.004
+global_norm,Global scale,explore,37,99.004
+global_norm,Global scale,explore,38,99.004
+global_norm,Global scale,explore,39,99.043
+global_norm,Global scale,explore,40,99.062
+global_norm,Global scale,explore,41,99.062
+global_norm,Global scale,explore,42,99.082
+global_norm,Global scale,explore,43,99.082
+global_norm,Global scale,explore,44,99.102
+global_norm,Global scale,explore,45,99.102
+global_norm,Global scale,explore,46,99.141
+global_norm,Global scale,explore,47,99.141
+global_norm,Global scale,explore,48,99.141
+global_norm,Global scale,explore,49,99.16
+global_norm,Global scale,explore,50,99.16
+global_norm,Global scale,explore,51,99.212
+global_norm,Global scale,explore,52,99.212
+global_norm,Global scale,explore,53,99.212
+global_norm,Global scale,explore,54,99.232
+global_norm,Global scale,explore,55,99.251
+global_norm,Global scale,explore,56,99.251
+global_norm,Global scale,explore,57,99.251
+global_norm,Global scale,explore,58,99.251
+global_norm,Global scale,explore,59,99.251
+global_norm,Global scale,explore,60,99.271
+global_norm,Global scale,explore,61,99.271
+global_norm,Global scale,explore,62,99.271
+global_norm,Global scale,explore,63,99.271
+global_norm,Global scale,explore,64,99.271
+token_inverse,Token inverse,iid,1,32.051
+token_inverse,Token inverse,iid,2,50.762
+token_inverse,Token inverse,iid,3,61.999
+token_inverse,Token inverse,iid,4,69.258
+token_inverse,Token inverse,iid,5,74.375
+token_inverse,Token inverse,iid,6,77.819
+token_inverse,Token inverse,iid,7,80.495
+token_inverse,Token inverse,iid,8,82.122
+token_inverse,Token inverse,iid,9,83.893
+token_inverse,Token inverse,iid,10,85.111
+token_inverse,Token inverse,iid,11,85.892
+token_inverse,Token inverse,iid,12,86.432
+token_inverse,Token inverse,iid,13,87.005
+token_inverse,Token inverse,iid,14,87.422
+token_inverse,Token inverse,iid,15,88.008
+token_inverse,Token inverse,iid,16,88.255
+token_inverse,Token inverse,iid,17,88.496
+token_inverse,Token inverse,iid,18,88.757
+token_inverse,Token inverse,iid,19,88.932
+token_inverse,Token inverse,iid,20,89.225
+token_inverse,Token inverse,iid,21,89.577
+token_inverse,Token inverse,iid,22,89.714
+token_inverse,Token inverse,iid,23,89.818
+token_inverse,Token inverse,iid,24,89.889
+token_inverse,Token inverse,iid,25,90.078
+token_inverse,Token inverse,iid,26,90.202
+token_inverse,Token inverse,iid,27,90.475
+token_inverse,Token inverse,iid,28,90.664
+token_inverse,Token inverse,iid,29,90.749
+token_inverse,Token inverse,iid,30,90.885
+token_inverse,Token inverse,iid,31,90.957
+token_inverse,Token inverse,iid,32,91.029
+token_inverse,Token inverse,iid,33,91.1
+token_inverse,Token inverse,iid,34,91.152
+token_inverse,Token inverse,iid,35,91.243
+token_inverse,Token inverse,iid,36,91.309
+token_inverse,Token inverse,iid,37,91.38
+token_inverse,Token inverse,iid,38,91.465
+token_inverse,Token inverse,iid,39,91.53
+token_inverse,Token inverse,iid,40,91.615
+token_inverse,Token inverse,iid,41,91.699
+token_inverse,Token inverse,iid,42,91.771
+token_inverse,Token inverse,iid,43,91.803
+token_inverse,Token inverse,iid,44,91.94
+token_inverse,Token inverse,iid,45,91.992
+token_inverse,Token inverse,iid,46,91.992
+token_inverse,Token inverse,iid,47,92.012
+token_inverse,Token inverse,iid,48,92.051
+token_inverse,Token inverse,iid,49,92.122
+token_inverse,Token inverse,iid,50,92.161
+token_inverse,Token inverse,iid,51,92.246
+token_inverse,Token inverse,iid,52,92.285
+token_inverse,Token inverse,iid,53,92.37
+token_inverse,Token inverse,iid,54,92.409
+token_inverse,Token inverse,iid,55,92.533
+token_inverse,Token inverse,iid,56,92.552
+token_inverse,Token inverse,iid,57,92.585
+token_inverse,Token inverse,iid,58,92.669
+token_inverse,Token inverse,iid,59,92.721
+token_inverse,Token inverse,iid,60,92.839
+token_inverse,Token inverse,iid,61,92.871
+token_inverse,Token inverse,iid,62,92.956
+token_inverse,Token inverse,iid,63,92.995
+token_inverse,Token inverse,iid,64,93.047
+token_inverse,Token inverse,explore,1,32.051
+token_inverse,Token inverse,explore,2,50.352
+token_inverse,Token inverse,explore,3,61.921
+token_inverse,Token inverse,explore,4,69.232
+token_inverse,Token inverse,explore,5,74.342
+token_inverse,Token inverse,explore,6,77.819
+token_inverse,Token inverse,explore,7,80.482
+token_inverse,Token inverse,explore,8,82.044
+token_inverse,Token inverse,explore,9,83.854
+token_inverse,Token inverse,explore,10,84.915
+token_inverse,Token inverse,explore,11,85.827
+token_inverse,Token inverse,explore,12,86.413
+token_inverse,Token inverse,explore,13,87.044
+token_inverse,Token inverse,explore,14,87.461
+token_inverse,Token inverse,explore,15,88.092
+token_inverse,Token inverse,explore,16,88.353
+token_inverse,Token inverse,explore,17,88.574
+token_inverse,Token inverse,explore,18,88.835
+token_inverse,Token inverse,explore,19,88.991
+token_inverse,Token inverse,explore,20,89.212
+token_inverse,Token inverse,explore,21,89.512
+token_inverse,Token inverse,explore,22,89.681
+token_inverse,Token inverse,explore,23,89.733
+token_inverse,Token inverse,explore,24,89.805
+token_inverse,Token inverse,explore,25,90.033
+token_inverse,Token inverse,explore,26,90.137
+token_inverse,Token inverse,explore,27,90.358
+token_inverse,Token inverse,explore,28,90.573
+token_inverse,Token inverse,explore,29,90.658
+token_inverse,Token inverse,explore,30,90.814
+token_inverse,Token inverse,explore,31,90.938
+token_inverse,Token inverse,explore,32,91.009
+token_inverse,Token inverse,explore,33,91.081
+token_inverse,Token inverse,explore,34,91.172
+token_inverse,Token inverse,explore,35,91.296
+token_inverse,Token inverse,explore,36,91.348
+token_inverse,Token inverse,explore,37,91.439
+token_inverse,Token inverse,explore,38,91.543
+token_inverse,Token inverse,explore,39,91.628
+token_inverse,Token inverse,explore,40,91.712
+token_inverse,Token inverse,explore,41,91.797
+token_inverse,Token inverse,explore,42,91.868
+token_inverse,Token inverse,explore,43,91.934
+token_inverse,Token inverse,explore,44,92.018
+token_inverse,Token inverse,explore,45,92.07
+token_inverse,Token inverse,explore,46,92.09
+token_inverse,Token inverse,explore,47,92.09
+token_inverse,Token inverse,explore,48,92.148
+token_inverse,Token inverse,explore,49,92.22
+token_inverse,Token inverse,explore,50,92.259
+token_inverse,Token inverse,explore,51,92.324
+token_inverse,Token inverse,explore,52,92.383
+token_inverse,Token inverse,explore,53,92.467
+token_inverse,Token inverse,explore,54,92.487
+token_inverse,Token inverse,explore,55,92.604
+token_inverse,Token inverse,explore,56,92.624
+token_inverse,Token inverse,explore,57,92.676
+token_inverse,Token inverse,explore,58,92.76
+token_inverse,Token inverse,explore,59,92.832
+token_inverse,Token inverse,explore,60,92.949
+token_inverse,Token inverse,explore,61,92.982
+token_inverse,Token inverse,explore,62,93.047
+token_inverse,Token inverse,explore,63,93.086
+token_inverse,Token inverse,explore,64,93.138
+standard_cvae,ELBO,iid,1,32.448
+standard_cvae,ELBO,iid,2,53.509
+standard_cvae,ELBO,iid,3,66.738
+standard_cvae,ELBO,iid,4,75.56
+standard_cvae,ELBO,iid,5,81.647
+standard_cvae,ELBO,iid,6,86.348
+standard_cvae,ELBO,iid,7,88.887
+standard_cvae,ELBO,iid,8,91.087
+standard_cvae,ELBO,iid,9,92.917
+standard_cvae,ELBO,iid,10,94.473
+standard_cvae,ELBO,iid,11,95.521
+standard_cvae,ELBO,iid,12,96.296
+standard_cvae,ELBO,iid,13,96.758
+standard_cvae,ELBO,iid,14,97.201
+standard_cvae,ELBO,iid,15,97.754
+standard_cvae,ELBO,iid,16,98.079
+standard_cvae,ELBO,iid,17,98.288
+standard_cvae,ELBO,iid,18,98.385
+standard_cvae,ELBO,iid,19,98.477
+standard_cvae,ELBO,iid,20,98.652
+standard_cvae,ELBO,iid,21,98.73
+standard_cvae,ELBO,iid,22,98.815
+standard_cvae,ELBO,iid,23,98.893
+standard_cvae,ELBO,iid,24,98.984
+standard_cvae,ELBO,iid,25,99.004
+standard_cvae,ELBO,iid,26,99.023
+standard_cvae,ELBO,iid,27,99.095
+standard_cvae,ELBO,iid,28,99.154
+standard_cvae,ELBO,iid,29,99.232
+standard_cvae,ELBO,iid,30,99.232
+standard_cvae,ELBO,iid,31,99.232
+standard_cvae,ELBO,iid,32,99.251
+standard_cvae,ELBO,iid,33,99.271
+standard_cvae,ELBO,iid,34,99.303
+standard_cvae,ELBO,iid,35,99.323
+standard_cvae,ELBO,iid,36,99.323
+standard_cvae,ELBO,iid,37,99.323
+standard_cvae,ELBO,iid,38,99.342
+standard_cvae,ELBO,iid,39,99.342
+standard_cvae,ELBO,iid,40,99.362
+standard_cvae,ELBO,iid,41,99.382
+standard_cvae,ELBO,iid,42,99.382
+standard_cvae,ELBO,iid,43,99.382
+standard_cvae,ELBO,iid,44,99.401
+standard_cvae,ELBO,iid,45,99.453
+standard_cvae,ELBO,iid,46,99.453
+standard_cvae,ELBO,iid,47,99.453
+standard_cvae,ELBO,iid,48,99.473
+standard_cvae,ELBO,iid,49,99.473
+standard_cvae,ELBO,iid,50,99.473
+standard_cvae,ELBO,iid,51,99.473
+standard_cvae,ELBO,iid,52,99.492
+standard_cvae,ELBO,iid,53,99.512
+standard_cvae,ELBO,iid,54,99.512
+standard_cvae,ELBO,iid,55,99.512
+standard_cvae,ELBO,iid,56,99.512
+standard_cvae,ELBO,iid,57,99.531
+standard_cvae,ELBO,iid,58,99.531
+standard_cvae,ELBO,iid,59,99.531
+standard_cvae,ELBO,iid,60,99.531
+standard_cvae,ELBO,iid,61,99.531
+standard_cvae,ELBO,iid,62,99.531
+standard_cvae,ELBO,iid,63,99.531
+standard_cvae,ELBO,iid,64,99.531
+standard_cvae,ELBO,explore,1,32.448
+standard_cvae,ELBO,explore,2,53.483
+standard_cvae,ELBO,explore,3,66.882
+standard_cvae,ELBO,explore,4,75.859
+standard_cvae,ELBO,explore,5,81.895
+standard_cvae,ELBO,explore,6,86.296
+standard_cvae,ELBO,explore,7,89.017
+standard_cvae,ELBO,explore,8,91.465
+standard_cvae,ELBO,explore,9,93.105
+standard_cvae,ELBO,explore,10,94.564
+standard_cvae,ELBO,explore,11,95.436
+standard_cvae,ELBO,explore,12,96.191
+standard_cvae,ELBO,explore,13,96.497
+standard_cvae,ELBO,explore,14,96.96
+standard_cvae,ELBO,explore,15,97.493
+standard_cvae,ELBO,explore,16,97.832
+standard_cvae,ELBO,explore,17,98.092
+standard_cvae,ELBO,explore,18,98.242
+standard_cvae,ELBO,explore,19,98.385
+standard_cvae,ELBO,explore,20,98.561
+standard_cvae,ELBO,explore,21,98.6
+standard_cvae,ELBO,explore,22,98.704
+standard_cvae,ELBO,explore,23,98.783
+standard_cvae,ELBO,explore,24,98.874
+standard_cvae,ELBO,explore,25,98.913
+standard_cvae,ELBO,explore,26,99.004
+standard_cvae,ELBO,explore,27,99.023
+standard_cvae,ELBO,explore,28,99.102
+standard_cvae,ELBO,explore,29,99.18
+standard_cvae,ELBO,explore,30,99.18
+standard_cvae,ELBO,explore,31,99.212
+standard_cvae,ELBO,explore,32,99.264
+standard_cvae,ELBO,explore,33,99.303
+standard_cvae,ELBO,explore,34,99.336
+standard_cvae,ELBO,explore,35,99.355
+standard_cvae,ELBO,explore,36,99.355
+standard_cvae,ELBO,explore,37,99.355
+standard_cvae,ELBO,explore,38,99.395
+standard_cvae,ELBO,explore,39,99.395
+standard_cvae,ELBO,explore,40,99.414
+standard_cvae,ELBO,explore,41,99.434
+standard_cvae,ELBO,explore,42,99.434
+standard_cvae,ELBO,explore,43,99.434
+standard_cvae,ELBO,explore,44,99.453
+standard_cvae,ELBO,explore,45,99.453
+standard_cvae,ELBO,explore,46,99.453
+standard_cvae,ELBO,explore,47,99.453
+standard_cvae,ELBO,explore,48,99.512
+standard_cvae,ELBO,explore,49,99.512
+standard_cvae,ELBO,explore,50,99.512
+standard_cvae,ELBO,explore,51,99.512
+standard_cvae,ELBO,explore,52,99.531
+standard_cvae,ELBO,explore,53,99.551
+standard_cvae,ELBO,explore,54,99.551
+standard_cvae,ELBO,explore,55,99.551
+standard_cvae,ELBO,explore,56,99.551
+standard_cvae,ELBO,explore,57,99.551
+standard_cvae,ELBO,explore,58,99.551
+standard_cvae,ELBO,explore,59,99.551
+standard_cvae,ELBO,explore,60,99.551
+standard_cvae,ELBO,explore,61,99.551
+standard_cvae,ELBO,explore,62,99.551
+standard_cvae,ELBO,explore,63,99.551
+standard_cvae,ELBO,explore,64,99.551
+beta_elbo,β-ELBO,iid,1,32.5
+beta_elbo,β-ELBO,iid,2,53.574
+beta_elbo,β-ELBO,iid,3,66.927
+beta_elbo,β-ELBO,iid,4,75.684
+beta_elbo,β-ELBO,iid,5,81.667
+beta_elbo,β-ELBO,iid,6,85.99
+beta_elbo,β-ELBO,iid,7,88.75
+beta_elbo,β-ELBO,iid,8,90.859
+beta_elbo,β-ELBO,iid,9,92.715
+beta_elbo,β-ELBO,iid,10,94.089
+beta_elbo,β-ELBO,iid,11,95.189
+beta_elbo,β-ELBO,iid,12,95.794
+beta_elbo,β-ELBO,iid,13,96.224
+beta_elbo,β-ELBO,iid,14,96.842
+beta_elbo,β-ELBO,iid,15,97.37
+beta_elbo,β-ELBO,iid,16,97.689
+beta_elbo,β-ELBO,iid,17,97.917
+beta_elbo,β-ELBO,iid,18,98.04
+beta_elbo,β-ELBO,iid,19,98.138
+beta_elbo,β-ELBO,iid,20,98.366
+beta_elbo,β-ELBO,iid,21,98.483
+beta_elbo,β-ELBO,iid,22,98.626
+beta_elbo,β-ELBO,iid,23,98.685
+beta_elbo,β-ELBO,iid,24,98.802
+beta_elbo,β-ELBO,iid,25,98.802
+beta_elbo,β-ELBO,iid,26,98.822
+beta_elbo,β-ELBO,iid,27,98.861
+beta_elbo,β-ELBO,iid,28,98.88
+beta_elbo,β-ELBO,iid,29,98.919
+beta_elbo,β-ELBO,iid,30,98.939
+beta_elbo,β-ELBO,iid,31,98.978
+beta_elbo,β-ELBO,iid,32,98.978
+beta_elbo,β-ELBO,iid,33,99.017
+beta_elbo,β-ELBO,iid,34,99.056
+beta_elbo,β-ELBO,iid,35,99.076
+beta_elbo,β-ELBO,iid,36,99.076
+beta_elbo,β-ELBO,iid,37,99.076
+beta_elbo,β-ELBO,iid,38,99.095
+beta_elbo,β-ELBO,iid,39,99.095
+beta_elbo,β-ELBO,iid,40,99.115
+beta_elbo,β-ELBO,iid,41,99.134
+beta_elbo,β-ELBO,iid,42,99.134
+beta_elbo,β-ELBO,iid,43,99.134
+beta_elbo,β-ELBO,iid,44,99.193
+beta_elbo,β-ELBO,iid,45,99.212
+beta_elbo,β-ELBO,iid,46,99.251
+beta_elbo,β-ELBO,iid,47,99.251
+beta_elbo,β-ELBO,iid,48,99.29
+beta_elbo,β-ELBO,iid,49,99.29
+beta_elbo,β-ELBO,iid,50,99.29
+beta_elbo,β-ELBO,iid,51,99.323
+beta_elbo,β-ELBO,iid,52,99.362
+beta_elbo,β-ELBO,iid,53,99.382
+beta_elbo,β-ELBO,iid,54,99.414
+beta_elbo,β-ELBO,iid,55,99.434
+beta_elbo,β-ELBO,iid,56,99.453
+beta_elbo,β-ELBO,iid,57,99.453
+beta_elbo,β-ELBO,iid,58,99.473
+beta_elbo,β-ELBO,iid,59,99.512
+beta_elbo,β-ELBO,iid,60,99.512
+beta_elbo,β-ELBO,iid,61,99.512
+beta_elbo,β-ELBO,iid,62,99.512
+beta_elbo,β-ELBO,iid,63,99.512
+beta_elbo,β-ELBO,iid,64,99.512
+beta_elbo,β-ELBO,explore,1,32.5
+beta_elbo,β-ELBO,explore,2,53.587
+beta_elbo,β-ELBO,explore,3,67.025
+beta_elbo,β-ELBO,explore,4,75.859
+beta_elbo,β-ELBO,explore,5,82.031
+beta_elbo,β-ELBO,explore,6,86.335
+beta_elbo,β-ELBO,explore,7,89.023
+beta_elbo,β-ELBO,explore,8,91.068
+beta_elbo,β-ELBO,explore,9,92.806
+beta_elbo,β-ELBO,explore,10,94.206
+beta_elbo,β-ELBO,explore,11,95.312
+beta_elbo,β-ELBO,explore,12,95.938
+beta_elbo,β-ELBO,explore,13,96.419
+beta_elbo,β-ELBO,explore,14,96.979
+beta_elbo,β-ELBO,explore,15,97.422
+beta_elbo,β-ELBO,explore,16,97.773
+beta_elbo,β-ELBO,explore,17,97.982
+beta_elbo,β-ELBO,explore,18,98.138
+beta_elbo,β-ELBO,explore,19,98.216
+beta_elbo,β-ELBO,explore,20,98.457
+beta_elbo,β-ELBO,explore,21,98.574
+beta_elbo,β-ELBO,explore,22,98.665
+beta_elbo,β-ELBO,explore,23,98.724
+beta_elbo,β-ELBO,explore,24,98.841
+beta_elbo,β-ELBO,explore,25,98.861
+beta_elbo,β-ELBO,explore,26,98.88
+beta_elbo,β-ELBO,explore,27,98.919
+beta_elbo,β-ELBO,explore,28,98.939
+beta_elbo,β-ELBO,explore,29,98.978
+beta_elbo,β-ELBO,explore,30,98.978
+beta_elbo,β-ELBO,explore,31,99.017
+beta_elbo,β-ELBO,explore,32,99.017
+beta_elbo,β-ELBO,explore,33,99.056
+beta_elbo,β-ELBO,explore,34,99.115
+beta_elbo,β-ELBO,explore,35,99.134
+beta_elbo,β-ELBO,explore,36,99.134
+beta_elbo,β-ELBO,explore,37,99.134
+beta_elbo,β-ELBO,explore,38,99.154
+beta_elbo,β-ELBO,explore,39,99.154
+beta_elbo,β-ELBO,explore,40,99.154
+beta_elbo,β-ELBO,explore,41,99.173
+beta_elbo,β-ELBO,explore,42,99.173
+beta_elbo,β-ELBO,explore,43,99.173
+beta_elbo,β-ELBO,explore,44,99.212
+beta_elbo,β-ELBO,explore,45,99.232
+beta_elbo,β-ELBO,explore,46,99.251
+beta_elbo,β-ELBO,explore,47,99.251
+beta_elbo,β-ELBO,explore,48,99.29
+beta_elbo,β-ELBO,explore,49,99.29
+beta_elbo,β-ELBO,explore,50,99.29
+beta_elbo,β-ELBO,explore,51,99.342
+beta_elbo,β-ELBO,explore,52,99.382
+beta_elbo,β-ELBO,explore,53,99.401
+beta_elbo,β-ELBO,explore,54,99.434
+beta_elbo,β-ELBO,explore,55,99.453
+beta_elbo,β-ELBO,explore,56,99.473
+beta_elbo,β-ELBO,explore,57,99.473
+beta_elbo,β-ELBO,explore,58,99.492
+beta_elbo,β-ELBO,explore,59,99.531
+beta_elbo,β-ELBO,explore,60,99.531
+beta_elbo,β-ELBO,explore,61,99.531
+beta_elbo,β-ELBO,explore,62,99.531
+beta_elbo,β-ELBO,explore,63,99.531
+beta_elbo,β-ELBO,explore,64,99.531

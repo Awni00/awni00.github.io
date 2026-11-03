@@ -167,6 +167,13 @@ export type WritingConfig = {
      * once.
      */
     figureNumbers: boolean;
+    /**
+     * Whether an animated `<Diagram>` offers a Replay button after it has
+     * played. On by default; a definition's `animate.replay` and the
+     * component's `replay` prop override it, in that order of precedence
+     * (the prop wins).
+     */
+    diagramReplay: boolean;
     toc: {
       default: TocConfig;
       byType: Record<EntryType, TocConfigOverride>;
@@ -381,6 +388,24 @@ export type ThemeColors = {
   "graph-teaching": string;
   "graph-project": string;
   "graph-edge": string;
+  /**
+   * Chart and diagram colours (`<Chart>`, `<Diagram>`): six categorical
+   * slots in a fixed order, a companion shade of each, and a neutral. See
+   * `src/lib/theme/figureColors.ts`.
+   */
+  "figure-1": string;
+  "figure-2": string;
+  "figure-3": string;
+  "figure-4": string;
+  "figure-5": string;
+  "figure-6": string;
+  "figure-1-alt": string;
+  "figure-2-alt": string;
+  "figure-3-alt": string;
+  "figure-4-alt": string;
+  "figure-5-alt": string;
+  "figure-6-alt": string;
+  "figure-neutral": string;
   "placeholder-a": string;
   "placeholder-b": string;
 };

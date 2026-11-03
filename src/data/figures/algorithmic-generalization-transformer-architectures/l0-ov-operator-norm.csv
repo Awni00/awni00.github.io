@@ -1,0 +1,17 @@
+head_group,factor,norm_amplification
+var 0,syntax,3.76
+var 0,variable,16.92
+var 0,operation,3.95
+var 0,value,4.09
+var 1,syntax,4.56
+var 1,variable,17.02
+var 1,operation,5.24
+var 1,value,2.81
+var 2,syntax,4.66
+var 2,variable,15.62
+var 2,operation,3.92
+var 2,value,5.39
+others,syntax,9.89
+others,variable,29.14
+others,operation,9.13
+others,value,13.68

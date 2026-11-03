@@ -1,0 +1,1001 @@
+task,model,epoch,accuracy,lo,hi
+calculus__differentiate,Transformer,0,0.9409,0.9373,0.9446
+calculus__differentiate,Transformer,1,0.9678,0.9645,0.9712
+calculus__differentiate,Transformer,2,0.9757,0.9728,0.9786
+calculus__differentiate,Transformer,3,0.9791,0.977,0.9811
+calculus__differentiate,Transformer,4,0.9813,0.9793,0.9833
+calculus__differentiate,Transformer,5,0.9834,0.9815,0.9852
+calculus__differentiate,Transformer,6,0.9845,0.9827,0.9862
+calculus__differentiate,Transformer,7,0.9856,0.984,0.9873
+calculus__differentiate,Transformer,8,0.9863,0.985,0.9875
+calculus__differentiate,Transformer,9,0.9868,0.9855,0.9881
+calculus__differentiate,Transformer,10,0.9873,0.9862,0.9883
+calculus__differentiate,Transformer,11,0.9879,0.9868,0.989
+calculus__differentiate,Transformer,12,0.9879,0.9868,0.9891
+calculus__differentiate,Transformer,13,0.9885,0.9875,0.9894
+calculus__differentiate,Transformer,14,0.9887,0.988,0.9895
+calculus__differentiate,Transformer,15,0.9889,0.9879,0.9898
+calculus__differentiate,Transformer,16,0.9891,0.9883,0.9899
+calculus__differentiate,Transformer,17,0.9894,0.9885,0.9903
+calculus__differentiate,Transformer,18,0.9896,0.9885,0.9906
+calculus__differentiate,Transformer,19,0.9896,0.9884,0.9907
+calculus__differentiate,Transformer,20,0.9898,0.9888,0.9908
+calculus__differentiate,Transformer,21,0.9902,0.9893,0.991
+calculus__differentiate,Transformer,22,0.9897,0.9888,0.9907
+calculus__differentiate,Transformer,23,0.9904,0.9894,0.9913
+calculus__differentiate,Transformer,24,0.9902,0.9893,0.991
+calculus__differentiate,Transformer,25,0.9904,0.9896,0.9913
+calculus__differentiate,Transformer,26,0.9901,0.989,0.9913
+calculus__differentiate,Transformer,27,0.9905,0.9898,0.9913
+calculus__differentiate,Transformer,28,0.9907,0.9897,0.9916
+calculus__differentiate,Transformer,29,0.9905,0.9895,0.9916
+calculus__differentiate,Transformer,30,0.9906,0.9897,0.9915
+calculus__differentiate,Transformer,31,0.9907,0.9897,0.9918
+calculus__differentiate,Transformer,32,0.9907,0.9897,0.9916
+calculus__differentiate,Transformer,33,0.991,0.99,0.9919
+calculus__differentiate,Transformer,34,0.9912,0.9902,0.9922
+calculus__differentiate,Transformer,35,0.9909,0.9897,0.9921
+calculus__differentiate,Transformer,36,0.9914,0.9903,0.9925
+calculus__differentiate,Transformer,37,0.9914,0.9904,0.9924
+calculus__differentiate,Transformer,38,0.9914,0.9904,0.9924
+calculus__differentiate,Transformer,39,0.9914,0.9905,0.9923
+calculus__differentiate,Transformer,40,0.9914,0.9903,0.9926
+calculus__differentiate,Transformer,41,0.9915,0.9904,0.9927
+calculus__differentiate,Transformer,42,0.9916,0.9905,0.9928
+calculus__differentiate,Transformer,43,0.9917,0.9906,0.9927
+calculus__differentiate,Transformer,44,0.9914,0.9903,0.9924
+calculus__differentiate,Transformer,45,0.9914,0.9905,0.9924
+calculus__differentiate,Transformer,46,0.9916,0.9903,0.9929
+calculus__differentiate,Transformer,47,0.9915,0.9904,0.9926
+calculus__differentiate,Transformer,48,0.9917,0.9906,0.9928
+calculus__differentiate,Transformer,49,0.9918,0.9908,0.9928
+calculus__differentiate,Transformer+,0,0.962,0.9587,0.9654
+calculus__differentiate,Transformer+,1,0.9784,0.9772,0.9796
+calculus__differentiate,Transformer+,2,0.9835,0.9824,0.9846
+calculus__differentiate,Transformer+,3,0.9857,0.9842,0.9872
+calculus__differentiate,Transformer+,4,0.9874,0.9859,0.9888
+calculus__differentiate,Transformer+,5,0.9884,0.9872,0.9897
+calculus__differentiate,Transformer+,6,0.9894,0.9883,0.9905
+calculus__differentiate,Transformer+,7,0.9901,0.9887,0.9914
+calculus__differentiate,Transformer+,8,0.9905,0.9894,0.9917
+calculus__differentiate,Transformer+,9,0.991,0.9897,0.9923
+calculus__differentiate,Transformer+,10,0.9913,0.9902,0.9923
+calculus__differentiate,Transformer+,11,0.9917,0.9905,0.9928
+calculus__differentiate,Transformer+,12,0.9917,0.9904,0.993
+calculus__differentiate,Transformer+,13,0.9922,0.9911,0.9932
+calculus__differentiate,Transformer+,14,0.9921,0.9911,0.9932
+calculus__differentiate,Transformer+,15,0.9922,0.9912,0.9932
+calculus__differentiate,Transformer+,16,0.9925,0.9912,0.9938
+calculus__differentiate,Transformer+,17,0.9924,0.9913,0.9935
+calculus__differentiate,Transformer+,18,0.9926,0.9914,0.9937
+calculus__differentiate,Transformer+,19,0.993,0.9919,0.994
+calculus__differentiate,Transformer+,20,0.9926,0.9916,0.9935
+calculus__differentiate,Transformer+,21,0.9927,0.9916,0.9938
+calculus__differentiate,Transformer+,22,0.9926,0.9914,0.9938
+calculus__differentiate,Transformer+,23,0.9927,0.9919,0.9935
+calculus__differentiate,Transformer+,24,0.9928,0.9919,0.9937
+calculus__differentiate,Transformer+,25,0.9931,0.9921,0.994
+calculus__differentiate,Transformer+,26,0.993,0.9921,0.9939
+calculus__differentiate,Transformer+,27,0.9928,0.9916,0.9939
+calculus__differentiate,Transformer+,28,0.993,0.9917,0.9943
+calculus__differentiate,Transformer+,29,0.9931,0.9923,0.994
+calculus__differentiate,Transformer+,30,0.9933,0.9925,0.994
+calculus__differentiate,Transformer+,31,0.9935,0.993,0.9941
+calculus__differentiate,Transformer+,32,0.9932,0.9924,0.994
+calculus__differentiate,Transformer+,33,0.9935,0.9927,0.9942
+calculus__differentiate,Transformer+,34,0.9935,0.9928,0.9943
+calculus__differentiate,Transformer+,35,0.9934,0.9929,0.994
+calculus__differentiate,Transformer+,36,0.9938,0.9931,0.9944
+calculus__differentiate,Transformer+,37,0.9939,0.9933,0.9945
+calculus__differentiate,Transformer+,38,0.9939,0.9933,0.9945
+calculus__differentiate,Transformer+,39,0.9938,0.9933,0.9943
+calculus__differentiate,Transformer+,40,0.9938,0.9932,0.9944
+calculus__differentiate,Transformer+,41,0.9937,0.9931,0.9943
+calculus__differentiate,Transformer+,42,0.9939,0.9936,0.9943
+calculus__differentiate,Transformer+,43,0.9938,0.9933,0.9944
+calculus__differentiate,Transformer+,44,0.9941,0.9938,0.9945
+calculus__differentiate,Transformer+,45,0.9939,0.9934,0.9943
+calculus__differentiate,Transformer+,46,0.9939,0.9932,0.9947
+calculus__differentiate,Transformer+,47,0.9939,0.993,0.9947
+calculus__differentiate,Transformer+,48,0.9942,0.9934,0.9949
+calculus__differentiate,Transformer+,49,0.994,0.9933,0.9948
+calculus__differentiate,Abstractor (pos. symbols),0,0.952,0.9468,0.9572
+calculus__differentiate,Abstractor (pos. symbols),1,0.9806,0.9794,0.9819
+calculus__differentiate,Abstractor (pos. symbols),2,0.9869,0.9855,0.9883
+calculus__differentiate,Abstractor (pos. symbols),3,0.9892,0.988,0.9904
+calculus__differentiate,Abstractor (pos. symbols),4,0.9911,0.9898,0.9923
+calculus__differentiate,Abstractor (pos. symbols),5,0.9921,0.9913,0.993
+calculus__differentiate,Abstractor (pos. symbols),6,0.9929,0.9922,0.9936
+calculus__differentiate,Abstractor (pos. symbols),7,0.9937,0.9931,0.9943
+calculus__differentiate,Abstractor (pos. symbols),8,0.9943,0.9936,0.9951
+calculus__differentiate,Abstractor (pos. symbols),9,0.9947,0.994,0.9953
+calculus__differentiate,Abstractor (pos. symbols),10,0.9949,0.9942,0.9956
+calculus__differentiate,Abstractor (pos. symbols),11,0.9954,0.9946,0.9962
+calculus__differentiate,Abstractor (pos. symbols),12,0.9956,0.9948,0.9964
+calculus__differentiate,Abstractor (pos. symbols),13,0.9958,0.995,0.9966
+calculus__differentiate,Abstractor (pos. symbols),14,0.9961,0.9953,0.9968
+calculus__differentiate,Abstractor (pos. symbols),15,0.9961,0.9953,0.997
+calculus__differentiate,Abstractor (pos. symbols),16,0.9963,0.9952,0.9973
+calculus__differentiate,Abstractor (pos. symbols),17,0.9964,0.9956,0.9971
+calculus__differentiate,Abstractor (pos. symbols),18,0.9966,0.9958,0.9974
+calculus__differentiate,Abstractor (pos. symbols),19,0.9966,0.9956,0.9975
+calculus__differentiate,Abstractor (pos. symbols),20,0.9967,0.9958,0.9977
+calculus__differentiate,Abstractor (pos. symbols),21,0.9966,0.9957,0.9975
+calculus__differentiate,Abstractor (pos. symbols),22,0.9969,0.996,0.9978
+calculus__differentiate,Abstractor (pos. symbols),23,0.997,0.9961,0.9979
+calculus__differentiate,Abstractor (pos. symbols),24,0.997,0.996,0.998
+calculus__differentiate,Abstractor (pos. symbols),25,0.997,0.9962,0.9979
+calculus__differentiate,Abstractor (pos. symbols),26,0.997,0.9961,0.998
+calculus__differentiate,Abstractor (pos. symbols),27,0.997,0.9961,0.9979
+calculus__differentiate,Abstractor (pos. symbols),28,0.9972,0.9963,0.9981
+calculus__differentiate,Abstractor (pos. symbols),29,0.9973,0.9963,0.9982
+calculus__differentiate,Abstractor (pos. symbols),30,0.9973,0.9964,0.9981
+calculus__differentiate,Abstractor (pos. symbols),31,0.9973,0.9965,0.9982
+calculus__differentiate,Abstractor (pos. symbols),32,0.9974,0.9965,0.9983
+calculus__differentiate,Abstractor (pos. symbols),33,0.9975,0.9966,0.9984
+calculus__differentiate,Abstractor (pos. symbols),34,0.9974,0.9965,0.9983
+calculus__differentiate,Abstractor (pos. symbols),35,0.9974,0.9964,0.9984
+calculus__differentiate,Abstractor (pos. symbols),36,0.9975,0.9967,0.9983
+calculus__differentiate,Abstractor (pos. symbols),37,0.9975,0.9966,0.9985
+calculus__differentiate,Abstractor (pos. symbols),38,0.9976,0.9967,0.9985
+calculus__differentiate,Abstractor (pos. symbols),39,0.9976,0.9966,0.9985
+calculus__differentiate,Abstractor (pos. symbols),40,0.9975,0.9966,0.9984
+calculus__differentiate,Abstractor (pos. symbols),41,0.9976,0.9968,0.9985
+calculus__differentiate,Abstractor (pos. symbols),42,0.9978,0.997,0.9986
+calculus__differentiate,Abstractor (pos. symbols),43,0.9977,0.9968,0.9986
+calculus__differentiate,Abstractor (pos. symbols),44,0.9978,0.9969,0.9986
+calculus__differentiate,Abstractor (pos. symbols),45,0.9976,0.9966,0.9987
+calculus__differentiate,Abstractor (pos. symbols),46,0.9976,0.9968,0.9985
+calculus__differentiate,Abstractor (pos. symbols),47,0.9977,0.9967,0.9987
+calculus__differentiate,Abstractor (pos. symbols),48,0.9978,0.997,0.9987
+calculus__differentiate,Abstractor (pos. symbols),49,0.9978,0.9969,0.9987
+calculus__differentiate,Abstractor (symbolic attn),0,0.9607,0.9574,0.9641
+calculus__differentiate,Abstractor (symbolic attn),1,0.9812,0.9791,0.9834
+calculus__differentiate,Abstractor (symbolic attn),2,0.9892,0.9865,0.9919
+calculus__differentiate,Abstractor (symbolic attn),3,0.9927,0.9905,0.995
+calculus__differentiate,Abstractor (symbolic attn),4,0.995,0.9935,0.9966
+calculus__differentiate,Abstractor (symbolic attn),5,0.9963,0.9952,0.9974
+calculus__differentiate,Abstractor (symbolic attn),6,0.9968,0.996,0.9977
+calculus__differentiate,Abstractor (symbolic attn),7,0.9973,0.9965,0.998
+calculus__differentiate,Abstractor (symbolic attn),8,0.9977,0.9971,0.9982
+calculus__differentiate,Abstractor (symbolic attn),9,0.9979,0.9974,0.9983
+calculus__differentiate,Abstractor (symbolic attn),10,0.9983,0.9978,0.9988
+calculus__differentiate,Abstractor (symbolic attn),11,0.9984,0.998,0.9988
+calculus__differentiate,Abstractor (symbolic attn),12,0.9986,0.9983,0.999
+calculus__differentiate,Abstractor (symbolic attn),13,0.9987,0.9984,0.999
+calculus__differentiate,Abstractor (symbolic attn),14,0.9988,0.9984,0.9991
+calculus__differentiate,Abstractor (symbolic attn),15,0.9988,0.9986,0.9991
+calculus__differentiate,Abstractor (symbolic attn),16,0.999,0.9987,0.9993
+calculus__differentiate,Abstractor (symbolic attn),17,0.9991,0.9989,0.9992
+calculus__differentiate,Abstractor (symbolic attn),18,0.999,0.9988,0.9993
+calculus__differentiate,Abstractor (symbolic attn),19,0.9991,0.9989,0.9993
+calculus__differentiate,Abstractor (symbolic attn),20,0.9992,0.9989,0.9994
+calculus__differentiate,Abstractor (symbolic attn),21,0.9992,0.999,0.9994
+calculus__differentiate,Abstractor (symbolic attn),22,0.9993,0.999,0.9995
+calculus__differentiate,Abstractor (symbolic attn),23,0.9993,0.9991,0.9996
+calculus__differentiate,Abstractor (symbolic attn),24,0.9994,0.9992,0.9996
+calculus__differentiate,Abstractor (symbolic attn),25,0.9993,0.9991,0.9995
+calculus__differentiate,Abstractor (symbolic attn),26,0.9994,0.9991,0.9996
+calculus__differentiate,Abstractor (symbolic attn),27,0.9994,0.9992,0.9996
+calculus__differentiate,Abstractor (symbolic attn),28,0.9995,0.9993,0.9996
+calculus__differentiate,Abstractor (symbolic attn),29,0.9994,0.9993,0.9996
+calculus__differentiate,Abstractor (symbolic attn),30,0.9995,0.9993,0.9997
+calculus__differentiate,Abstractor (symbolic attn),31,0.9995,0.9993,0.9997
+calculus__differentiate,Abstractor (symbolic attn),32,0.9996,0.9994,0.9997
+calculus__differentiate,Abstractor (symbolic attn),33,0.9995,0.9994,0.9997
+calculus__differentiate,Abstractor (symbolic attn),34,0.9995,0.9993,0.9997
+calculus__differentiate,Abstractor (symbolic attn),35,0.9995,0.9993,0.9997
+calculus__differentiate,Abstractor (symbolic attn),36,0.9996,0.9994,0.9997
+calculus__differentiate,Abstractor (symbolic attn),37,0.9996,0.9994,0.9998
+calculus__differentiate,Abstractor (symbolic attn),38,0.9996,0.9994,0.9997
+calculus__differentiate,Abstractor (symbolic attn),39,0.9996,0.9994,0.9998
+calculus__differentiate,Abstractor (symbolic attn),40,0.9996,0.9995,0.9997
+calculus__differentiate,Abstractor (symbolic attn),41,0.9996,0.9995,0.9998
+calculus__differentiate,Abstractor (symbolic attn),42,0.9996,0.9995,0.9998
+calculus__differentiate,Abstractor (symbolic attn),43,0.9996,0.9995,0.9997
+calculus__differentiate,Abstractor (symbolic attn),44,0.9997,0.9996,0.9998
+calculus__differentiate,Abstractor (symbolic attn),45,0.9996,0.9995,0.9998
+calculus__differentiate,Abstractor (symbolic attn),46,0.9997,0.9996,0.9998
+calculus__differentiate,Abstractor (symbolic attn),47,0.9997,0.9995,0.9999
+calculus__differentiate,Abstractor (symbolic attn),48,0.9997,0.9996,0.9998
+calculus__differentiate,Abstractor (symbolic attn),49,0.9997,0.9995,0.9998
+polynomials__expand,Transformer,0,0.7023,0.7014,0.7033
+polynomials__expand,Transformer,1,0.7147,0.7124,0.7171
+polynomials__expand,Transformer,2,0.7227,0.7205,0.725
+polynomials__expand,Transformer,3,0.7296,0.7262,0.7329
+polynomials__expand,Transformer,4,0.7326,0.7289,0.7363
+polynomials__expand,Transformer,5,0.7367,0.7338,0.7397
+polynomials__expand,Transformer,6,0.7386,0.7357,0.7416
+polynomials__expand,Transformer,7,0.7413,0.7385,0.7441
+polynomials__expand,Transformer,8,0.7423,0.7396,0.7449
+polynomials__expand,Transformer,9,0.744,0.7416,0.7464
+polynomials__expand,Transformer,10,0.7448,0.7427,0.7469
+polynomials__expand,Transformer,11,0.7456,0.7435,0.7476
+polynomials__expand,Transformer,12,0.7461,0.7443,0.7479
+polynomials__expand,Transformer,13,0.7469,0.7447,0.749
+polynomials__expand,Transformer,14,0.7475,0.745,0.7501
+polynomials__expand,Transformer,15,0.748,0.7462,0.7499
+polynomials__expand,Transformer,16,0.7488,0.7471,0.7504
+polynomials__expand,Transformer,17,0.7492,0.748,0.7505
+polynomials__expand,Transformer,18,0.7493,0.7476,0.751
+polynomials__expand,Transformer,19,0.7496,0.7478,0.7514
+polynomials__expand,Transformer,20,0.7505,0.7484,0.7527
+polynomials__expand,Transformer,21,0.7508,0.7493,0.7524
+polynomials__expand,Transformer,22,0.7501,0.7485,0.7517
+polynomials__expand,Transformer,23,0.7509,0.7493,0.7524
+polynomials__expand,Transformer,24,0.7515,0.7499,0.7532
+polynomials__expand,Transformer,25,0.752,0.7506,0.7533
+polynomials__expand,Transformer,26,0.7525,0.751,0.7539
+polynomials__expand,Transformer,27,0.7521,0.7512,0.7529
+polynomials__expand,Transformer,28,0.7523,0.7512,0.7533
+polynomials__expand,Transformer,29,0.7525,0.7516,0.7535
+polynomials__expand,Transformer,30,0.7531,0.7521,0.7541
+polynomials__expand,Transformer,31,0.7535,0.7521,0.7549
+polynomials__expand,Transformer,32,0.7531,0.7515,0.7547
+polynomials__expand,Transformer,33,0.7532,0.7526,0.7538
+polynomials__expand,Transformer,34,0.754,0.7531,0.7549
+polynomials__expand,Transformer,35,0.7541,0.7532,0.755
+polynomials__expand,Transformer,36,0.754,0.7525,0.7555
+polynomials__expand,Transformer,37,0.7546,0.7532,0.7559
+polynomials__expand,Transformer,38,0.754,0.7528,0.7552
+polynomials__expand,Transformer,39,0.754,0.7526,0.7554
+polynomials__expand,Transformer,40,0.7547,0.7536,0.7559
+polynomials__expand,Transformer,41,0.7549,0.754,0.7558
+polynomials__expand,Transformer,42,0.755,0.7539,0.756
+polynomials__expand,Transformer,43,0.7546,0.754,0.7552
+polynomials__expand,Transformer,44,0.7551,0.7541,0.7561
+polynomials__expand,Transformer,45,0.7553,0.754,0.7566
+polynomials__expand,Transformer,46,0.7557,0.7547,0.7566
+polynomials__expand,Transformer,47,0.7555,0.7547,0.7564
+polynomials__expand,Transformer,48,0.7555,0.7546,0.7564
+polynomials__expand,Transformer,49,0.7552,0.7542,0.7563
+polynomials__expand,Transformer+,0,0.71,0.7089,0.7111
+polynomials__expand,Transformer+,1,0.7228,0.7201,0.7254
+polynomials__expand,Transformer+,2,0.7298,0.7256,0.734
+polynomials__expand,Transformer+,3,0.7357,0.7321,0.7394
+polynomials__expand,Transformer+,4,0.7385,0.7352,0.7419
+polynomials__expand,Transformer+,5,0.7417,0.7385,0.7448
+polynomials__expand,Transformer+,6,0.7435,0.7414,0.7456
+polynomials__expand,Transformer+,7,0.7454,0.7432,0.7476
+polynomials__expand,Transformer+,8,0.7471,0.7443,0.7498
+polynomials__expand,Transformer+,9,0.748,0.7459,0.7502
+polynomials__expand,Transformer+,10,0.7494,0.7471,0.7517
+polynomials__expand,Transformer+,11,0.7505,0.7484,0.7526
+polynomials__expand,Transformer+,12,0.751,0.7488,0.7532
+polynomials__expand,Transformer+,13,0.7515,0.7493,0.7537
+polynomials__expand,Transformer+,14,0.7523,0.7502,0.7544
+polynomials__expand,Transformer+,15,0.7526,0.7504,0.7548
+polynomials__expand,Transformer+,16,0.7535,0.7517,0.7553
+polynomials__expand,Transformer+,17,0.7529,0.751,0.7548
+polynomials__expand,Transformer+,18,0.7539,0.7517,0.7561
+polynomials__expand,Transformer+,19,0.7538,0.7514,0.7562
+polynomials__expand,Transformer+,20,0.7538,0.752,0.7557
+polynomials__expand,Transformer+,21,0.7549,0.753,0.7567
+polynomials__expand,Transformer+,22,0.7558,0.7537,0.7579
+polynomials__expand,Transformer+,23,0.7559,0.7533,0.7584
+polynomials__expand,Transformer+,24,0.7564,0.7541,0.7588
+polynomials__expand,Transformer+,25,0.7569,0.755,0.7588
+polynomials__expand,Transformer+,26,0.757,0.7548,0.7592
+polynomials__expand,Transformer+,27,0.7565,0.7539,0.7592
+polynomials__expand,Transformer+,28,0.7577,0.7555,0.7599
+polynomials__expand,Transformer+,29,0.7579,0.7558,0.7599
+polynomials__expand,Transformer+,30,0.7582,0.7559,0.7605
+polynomials__expand,Transformer+,31,0.7582,0.7559,0.7605
+polynomials__expand,Transformer+,32,0.7584,0.7566,0.7601
+polynomials__expand,Transformer+,33,0.7584,0.756,0.7608
+polynomials__expand,Transformer+,34,0.7587,0.7564,0.7609
+polynomials__expand,Transformer+,35,0.7584,0.7561,0.7606
+polynomials__expand,Transformer+,36,0.7585,0.7562,0.7608
+polynomials__expand,Transformer+,37,0.7597,0.7578,0.7616
+polynomials__expand,Transformer+,38,0.7592,0.7574,0.7611
+polynomials__expand,Transformer+,39,0.7603,0.7583,0.7623
+polynomials__expand,Transformer+,40,0.7602,0.7584,0.7621
+polynomials__expand,Transformer+,41,0.7595,0.7566,0.7624
+polynomials__expand,Transformer+,42,0.7601,0.7579,0.7623
+polynomials__expand,Transformer+,43,0.7604,0.7579,0.7628
+polynomials__expand,Transformer+,44,0.7609,0.7591,0.7627
+polynomials__expand,Transformer+,45,0.7607,0.7589,0.7626
+polynomials__expand,Transformer+,46,0.7613,0.7597,0.7628
+polynomials__expand,Transformer+,47,0.7608,0.7591,0.7625
+polynomials__expand,Transformer+,48,0.761,0.759,0.7629
+polynomials__expand,Transformer+,49,0.7617,0.76,0.7635
+polynomials__expand,Abstractor (pos. symbols),0,0.71,0.7094,0.7107
+polynomials__expand,Abstractor (pos. symbols),1,0.7194,0.7183,0.7205
+polynomials__expand,Abstractor (pos. symbols),2,0.7281,0.7262,0.73
+polynomials__expand,Abstractor (pos. symbols),3,0.7368,0.7326,0.741
+polynomials__expand,Abstractor (pos. symbols),4,0.7434,0.7394,0.7474
+polynomials__expand,Abstractor (pos. symbols),5,0.7489,0.7448,0.7531
+polynomials__expand,Abstractor (pos. symbols),6,0.7537,0.7507,0.7567
+polynomials__expand,Abstractor (pos. symbols),7,0.757,0.7537,0.7603
+polynomials__expand,Abstractor (pos. symbols),8,0.7599,0.7564,0.7635
+polynomials__expand,Abstractor (pos. symbols),9,0.7629,0.7591,0.7666
+polynomials__expand,Abstractor (pos. symbols),10,0.765,0.761,0.769
+polynomials__expand,Abstractor (pos. symbols),11,0.7671,0.7627,0.7715
+polynomials__expand,Abstractor (pos. symbols),12,0.7674,0.7638,0.771
+polynomials__expand,Abstractor (pos. symbols),13,0.77,0.7648,0.7752
+polynomials__expand,Abstractor (pos. symbols),14,0.7702,0.7656,0.7749
+polynomials__expand,Abstractor (pos. symbols),15,0.7718,0.7668,0.7767
+polynomials__expand,Abstractor (pos. symbols),16,0.773,0.7677,0.7783
+polynomials__expand,Abstractor (pos. symbols),17,0.7736,0.7683,0.779
+polynomials__expand,Abstractor (pos. symbols),18,0.7749,0.7693,0.7806
+polynomials__expand,Abstractor (pos. symbols),19,0.7756,0.7696,0.7815
+polynomials__expand,Abstractor (pos. symbols),20,0.7763,0.7706,0.782
+polynomials__expand,Abstractor (pos. symbols),21,0.7768,0.7715,0.7822
+polynomials__expand,Abstractor (pos. symbols),22,0.7776,0.7721,0.7832
+polynomials__expand,Abstractor (pos. symbols),23,0.7778,0.7725,0.783
+polynomials__expand,Abstractor (pos. symbols),24,0.7794,0.7725,0.7862
+polynomials__expand,Abstractor (pos. symbols),25,0.779,0.7735,0.7844
+polynomials__expand,Abstractor (pos. symbols),26,0.7798,0.7741,0.7854
+polynomials__expand,Abstractor (pos. symbols),27,0.7802,0.7737,0.7867
+polynomials__expand,Abstractor (pos. symbols),28,0.7811,0.7749,0.7873
+polynomials__expand,Abstractor (pos. symbols),29,0.7808,0.7752,0.7864
+polynomials__expand,Abstractor (pos. symbols),30,0.7811,0.7754,0.7869
+polynomials__expand,Abstractor (pos. symbols),31,0.7825,0.7768,0.7883
+polynomials__expand,Abstractor (pos. symbols),32,0.7822,0.7757,0.7888
+polynomials__expand,Abstractor (pos. symbols),33,0.7827,0.7768,0.7886
+polynomials__expand,Abstractor (pos. symbols),34,0.7832,0.7774,0.789
+polynomials__expand,Abstractor (pos. symbols),35,0.7833,0.7771,0.7895
+polynomials__expand,Abstractor (pos. symbols),36,0.7841,0.7781,0.7901
+polynomials__expand,Abstractor (pos. symbols),37,0.784,0.7772,0.7908
+polynomials__expand,Abstractor (pos. symbols),38,0.7841,0.778,0.7902
+polynomials__expand,Abstractor (pos. symbols),39,0.7849,0.7788,0.7911
+polynomials__expand,Abstractor (pos. symbols),40,0.7841,0.778,0.7901
+polynomials__expand,Abstractor (pos. symbols),41,0.7852,0.7789,0.7914
+polynomials__expand,Abstractor (pos. symbols),42,0.7849,0.7781,0.7918
+polynomials__expand,Abstractor (pos. symbols),43,0.7854,0.7793,0.7916
+polynomials__expand,Abstractor (pos. symbols),44,0.7863,0.7797,0.793
+polynomials__expand,Abstractor (pos. symbols),45,0.7865,0.7798,0.7933
+polynomials__expand,Abstractor (pos. symbols),46,0.7864,0.7797,0.7931
+polynomials__expand,Abstractor (pos. symbols),47,0.787,0.7798,0.7943
+polynomials__expand,Abstractor (pos. symbols),48,0.7866,0.7802,0.7929
+polynomials__expand,Abstractor (pos. symbols),49,0.7871,0.7802,0.7941
+polynomials__expand,Abstractor (symbolic attn),0,0.7109,0.7081,0.7137
+polynomials__expand,Abstractor (symbolic attn),1,0.7262,0.7213,0.731
+polynomials__expand,Abstractor (symbolic attn),2,0.7379,0.7304,0.7455
+polynomials__expand,Abstractor (symbolic attn),3,0.7457,0.7366,0.7548
+polynomials__expand,Abstractor (symbolic attn),4,0.7525,0.7417,0.7633
+polynomials__expand,Abstractor (symbolic attn),5,0.7582,0.7468,0.7697
+polynomials__expand,Abstractor (symbolic attn),6,0.7634,0.7545,0.7722
+polynomials__expand,Abstractor (symbolic attn),7,0.7692,0.7654,0.7731
+polynomials__expand,Abstractor (symbolic attn),8,0.7734,0.7715,0.7753
+polynomials__expand,Abstractor (symbolic attn),9,0.7758,0.7747,0.7769
+polynomials__expand,Abstractor (symbolic attn),10,0.7782,0.776,0.7805
+polynomials__expand,Abstractor (symbolic attn),11,0.7793,0.7763,0.7823
+polynomials__expand,Abstractor (symbolic attn),12,0.7825,0.7794,0.7855
+polynomials__expand,Abstractor (symbolic attn),13,0.7841,0.7811,0.7872
+polynomials__expand,Abstractor (symbolic attn),14,0.7857,0.782,0.7895
+polynomials__expand,Abstractor (symbolic attn),15,0.7875,0.784,0.7909
+polynomials__expand,Abstractor (symbolic attn),16,0.7888,0.7843,0.7933
+polynomials__expand,Abstractor (symbolic attn),17,0.7894,0.7849,0.7939
+polynomials__expand,Abstractor (symbolic attn),18,0.7923,0.7859,0.7987
+polynomials__expand,Abstractor (symbolic attn),19,0.7931,0.7859,0.8003
+polynomials__expand,Abstractor (symbolic attn),20,0.795,0.7868,0.8032
+polynomials__expand,Abstractor (symbolic attn),21,0.7956,0.7878,0.8033
+polynomials__expand,Abstractor (symbolic attn),22,0.796,0.7885,0.8034
+polynomials__expand,Abstractor (symbolic attn),23,0.7979,0.7888,0.807
+polynomials__expand,Abstractor (symbolic attn),24,0.7986,0.7894,0.8079
+polynomials__expand,Abstractor (symbolic attn),25,0.8002,0.7908,0.8096
+polynomials__expand,Abstractor (symbolic attn),26,0.8013,0.7928,0.8098
+polynomials__expand,Abstractor (symbolic attn),27,0.8016,0.7917,0.8115
+polynomials__expand,Abstractor (symbolic attn),28,0.8016,0.7924,0.8108
+polynomials__expand,Abstractor (symbolic attn),29,0.8021,0.7927,0.8115
+polynomials__expand,Abstractor (symbolic attn),30,0.8033,0.7939,0.8128
+polynomials__expand,Abstractor (symbolic attn),31,0.8046,0.7953,0.814
+polynomials__expand,Abstractor (symbolic attn),32,0.8051,0.7956,0.8146
+polynomials__expand,Abstractor (symbolic attn),33,0.8055,0.7963,0.8147
+polynomials__expand,Abstractor (symbolic attn),34,0.8068,0.7977,0.8158
+polynomials__expand,Abstractor (symbolic attn),35,0.8066,0.7956,0.8175
+polynomials__expand,Abstractor (symbolic attn),36,0.8076,0.7974,0.8178
+polynomials__expand,Abstractor (symbolic attn),37,0.8078,0.7976,0.818
+polynomials__expand,Abstractor (symbolic attn),38,0.8087,0.7987,0.8187
+polynomials__expand,Abstractor (symbolic attn),39,0.8084,0.8003,0.8166
+polynomials__expand,Abstractor (symbolic attn),40,0.8094,0.8002,0.8186
+polynomials__expand,Abstractor (symbolic attn),41,0.8098,0.7989,0.8206
+polynomials__expand,Abstractor (symbolic attn),42,0.8116,0.8019,0.8213
+polynomials__expand,Abstractor (symbolic attn),43,0.8111,0.8006,0.8216
+polynomials__expand,Abstractor (symbolic attn),44,0.8117,0.8028,0.8205
+polynomials__expand,Abstractor (symbolic attn),45,0.8111,0.8021,0.82
+polynomials__expand,Abstractor (symbolic attn),46,0.8118,0.8012,0.8225
+polynomials__expand,Abstractor (symbolic attn),47,0.8123,0.8023,0.8222
+polynomials__expand,Abstractor (symbolic attn),48,0.8144,0.8057,0.8231
+polynomials__expand,Abstractor (symbolic attn),49,0.8126,0.8048,0.8204
+algebra__sequence_next_term,Transformer,0,0.7313,0.7162,0.7465
+algebra__sequence_next_term,Transformer,1,0.7636,0.7573,0.77
+algebra__sequence_next_term,Transformer,2,0.7768,0.7702,0.7833
+algebra__sequence_next_term,Transformer,3,0.7887,0.7808,0.7966
+algebra__sequence_next_term,Transformer,4,0.8006,0.7884,0.8127
+algebra__sequence_next_term,Transformer,5,0.8106,0.7947,0.8265
+algebra__sequence_next_term,Transformer,6,0.8153,0.7991,0.8315
+algebra__sequence_next_term,Transformer,7,0.8197,0.8038,0.8356
+algebra__sequence_next_term,Transformer,8,0.8231,0.8074,0.8389
+algebra__sequence_next_term,Transformer,9,0.825,0.8094,0.8405
+algebra__sequence_next_term,Transformer,10,0.8282,0.8126,0.8438
+algebra__sequence_next_term,Transformer,11,0.8303,0.8155,0.8451
+algebra__sequence_next_term,Transformer,12,0.8329,0.8177,0.848
+algebra__sequence_next_term,Transformer,13,0.8325,0.8164,0.8486
+algebra__sequence_next_term,Transformer,14,0.8351,0.8192,0.8509
+algebra__sequence_next_term,Transformer,15,0.8367,0.8212,0.8523
+algebra__sequence_next_term,Transformer,16,0.8371,0.823,0.8512
+algebra__sequence_next_term,Transformer,17,0.8391,0.8248,0.8535
+algebra__sequence_next_term,Transformer,18,0.8408,0.8265,0.855
+algebra__sequence_next_term,Transformer,19,0.8415,0.8272,0.8558
+algebra__sequence_next_term,Transformer,20,0.8421,0.8273,0.8568
+algebra__sequence_next_term,Transformer,21,0.8426,0.8294,0.8558
+algebra__sequence_next_term,Transformer,22,0.843,0.8289,0.8571
+algebra__sequence_next_term,Transformer,23,0.8447,0.8309,0.8584
+algebra__sequence_next_term,Transformer,24,0.8451,0.8304,0.8599
+algebra__sequence_next_term,Transformer,25,0.8461,0.8331,0.8591
+algebra__sequence_next_term,Transformer,26,0.8455,0.8319,0.859
+algebra__sequence_next_term,Transformer,27,0.8467,0.8343,0.8591
+algebra__sequence_next_term,Transformer,28,0.8484,0.8359,0.8609
+algebra__sequence_next_term,Transformer,29,0.8482,0.8363,0.8602
+algebra__sequence_next_term,Transformer,30,0.8486,0.8363,0.8608
+algebra__sequence_next_term,Transformer,31,0.8484,0.8364,0.8604
+algebra__sequence_next_term,Transformer,32,0.8497,0.8386,0.8607
+algebra__sequence_next_term,Transformer,33,0.851,0.839,0.863
+algebra__sequence_next_term,Transformer,34,0.8523,0.8411,0.8636
+algebra__sequence_next_term,Transformer,35,0.8513,0.8404,0.8623
+algebra__sequence_next_term,Transformer,36,0.8515,0.8397,0.8634
+algebra__sequence_next_term,Transformer,37,0.8528,0.8419,0.8636
+algebra__sequence_next_term,Transformer,38,0.8525,0.8407,0.8643
+algebra__sequence_next_term,Transformer,39,0.8526,0.8418,0.8634
+algebra__sequence_next_term,Transformer,40,0.8528,0.8422,0.8633
+algebra__sequence_next_term,Transformer,41,0.8541,0.8429,0.8653
+algebra__sequence_next_term,Transformer,42,0.8537,0.8436,0.8638
+algebra__sequence_next_term,Transformer,43,0.8546,0.8434,0.8658
+algebra__sequence_next_term,Transformer,44,0.8545,0.8439,0.865
+algebra__sequence_next_term,Transformer,45,0.8549,0.8428,0.867
+algebra__sequence_next_term,Transformer,46,0.8541,0.843,0.8651
+algebra__sequence_next_term,Transformer,47,0.8547,0.844,0.8654
+algebra__sequence_next_term,Transformer,48,0.8559,0.8452,0.8666
+algebra__sequence_next_term,Transformer,49,0.8556,0.8444,0.8669
+algebra__sequence_next_term,Transformer+,0,0.7622,0.7569,0.7675
+algebra__sequence_next_term,Transformer+,1,0.8023,0.7846,0.8199
+algebra__sequence_next_term,Transformer+,2,0.8171,0.7995,0.8347
+algebra__sequence_next_term,Transformer+,3,0.8258,0.8094,0.8421
+algebra__sequence_next_term,Transformer+,4,0.8321,0.8187,0.8454
+algebra__sequence_next_term,Transformer+,5,0.8382,0.8273,0.849
+algebra__sequence_next_term,Transformer+,6,0.8424,0.8332,0.8516
+algebra__sequence_next_term,Transformer+,7,0.8453,0.8381,0.8525
+algebra__sequence_next_term,Transformer+,8,0.8474,0.8389,0.8559
+algebra__sequence_next_term,Transformer+,9,0.8511,0.8427,0.8594
+algebra__sequence_next_term,Transformer+,10,0.8525,0.8443,0.8606
+algebra__sequence_next_term,Transformer+,11,0.8537,0.8464,0.8609
+algebra__sequence_next_term,Transformer+,12,0.8554,0.8475,0.8633
+algebra__sequence_next_term,Transformer+,13,0.856,0.8486,0.8633
+algebra__sequence_next_term,Transformer+,14,0.8582,0.8501,0.8663
+algebra__sequence_next_term,Transformer+,15,0.8617,0.8522,0.8713
+algebra__sequence_next_term,Transformer+,16,0.8632,0.8531,0.8732
+algebra__sequence_next_term,Transformer+,17,0.8641,0.8542,0.8739
+algebra__sequence_next_term,Transformer+,18,0.8658,0.856,0.8756
+algebra__sequence_next_term,Transformer+,19,0.8667,0.8563,0.8771
+algebra__sequence_next_term,Transformer+,20,0.8676,0.8566,0.8786
+algebra__sequence_next_term,Transformer+,21,0.8686,0.8583,0.879
+algebra__sequence_next_term,Transformer+,22,0.8693,0.859,0.8796
+algebra__sequence_next_term,Transformer+,23,0.8707,0.8607,0.8807
+algebra__sequence_next_term,Transformer+,24,0.8717,0.8604,0.8829
+algebra__sequence_next_term,Transformer+,25,0.8716,0.8608,0.8825
+algebra__sequence_next_term,Transformer+,26,0.8729,0.8612,0.8846
+algebra__sequence_next_term,Transformer+,27,0.8731,0.8626,0.8836
+algebra__sequence_next_term,Transformer+,28,0.8729,0.8623,0.8835
+algebra__sequence_next_term,Transformer+,29,0.8745,0.864,0.8851
+algebra__sequence_next_term,Transformer+,30,0.8739,0.8625,0.8853
+algebra__sequence_next_term,Transformer+,31,0.8746,0.863,0.8861
+algebra__sequence_next_term,Transformer+,32,0.8744,0.8634,0.8855
+algebra__sequence_next_term,Transformer+,33,0.8756,0.8646,0.8866
+algebra__sequence_next_term,Transformer+,34,0.875,0.8643,0.8857
+algebra__sequence_next_term,Transformer+,35,0.8762,0.8651,0.8872
+algebra__sequence_next_term,Transformer+,36,0.876,0.8655,0.8865
+algebra__sequence_next_term,Transformer+,37,0.8762,0.8649,0.8875
+algebra__sequence_next_term,Transformer+,38,0.8756,0.8642,0.8871
+algebra__sequence_next_term,Transformer+,39,0.8775,0.866,0.8891
+algebra__sequence_next_term,Transformer+,40,0.8774,0.8666,0.8883
+algebra__sequence_next_term,Transformer+,41,0.8771,0.8665,0.8878
+algebra__sequence_next_term,Transformer+,42,0.8782,0.8672,0.8891
+algebra__sequence_next_term,Transformer+,43,0.8778,0.8674,0.8882
+algebra__sequence_next_term,Transformer+,44,0.8784,0.8681,0.8887
+algebra__sequence_next_term,Transformer+,45,0.8786,0.8681,0.889
+algebra__sequence_next_term,Transformer+,46,0.8783,0.8678,0.8889
+algebra__sequence_next_term,Transformer+,47,0.8803,0.8697,0.891
+algebra__sequence_next_term,Transformer+,48,0.8794,0.8683,0.8905
+algebra__sequence_next_term,Transformer+,49,0.8796,0.8688,0.8903
+algebra__sequence_next_term,Abstractor (pos. symbols),0,0.7577,0.7425,0.7728
+algebra__sequence_next_term,Abstractor (pos. symbols),1,0.795,0.7815,0.8084
+algebra__sequence_next_term,Abstractor (pos. symbols),2,0.8181,0.8005,0.8357
+algebra__sequence_next_term,Abstractor (pos. symbols),3,0.8341,0.8144,0.8539
+algebra__sequence_next_term,Abstractor (pos. symbols),4,0.8447,0.8236,0.8657
+algebra__sequence_next_term,Abstractor (pos. symbols),5,0.8524,0.8319,0.8729
+algebra__sequence_next_term,Abstractor (pos. symbols),6,0.8579,0.8378,0.878
+algebra__sequence_next_term,Abstractor (pos. symbols),7,0.8634,0.8436,0.8832
+algebra__sequence_next_term,Abstractor (pos. symbols),8,0.8669,0.8481,0.8857
+algebra__sequence_next_term,Abstractor (pos. symbols),9,0.8705,0.8519,0.889
+algebra__sequence_next_term,Abstractor (pos. symbols),10,0.8737,0.8554,0.892
+algebra__sequence_next_term,Abstractor (pos. symbols),11,0.8769,0.8599,0.8939
+algebra__sequence_next_term,Abstractor (pos. symbols),12,0.8788,0.8621,0.8955
+algebra__sequence_next_term,Abstractor (pos. symbols),13,0.883,0.8671,0.8989
+algebra__sequence_next_term,Abstractor (pos. symbols),14,0.8856,0.8718,0.8993
+algebra__sequence_next_term,Abstractor (pos. symbols),15,0.8871,0.8729,0.9013
+algebra__sequence_next_term,Abstractor (pos. symbols),16,0.8888,0.8751,0.9025
+algebra__sequence_next_term,Abstractor (pos. symbols),17,0.8922,0.8787,0.9057
+algebra__sequence_next_term,Abstractor (pos. symbols),18,0.8944,0.8819,0.907
+algebra__sequence_next_term,Abstractor (pos. symbols),19,0.8963,0.8847,0.9078
+algebra__sequence_next_term,Abstractor (pos. symbols),20,0.8976,0.8865,0.9087
+algebra__sequence_next_term,Abstractor (pos. symbols),21,0.8984,0.887,0.9098
+algebra__sequence_next_term,Abstractor (pos. symbols),22,0.8996,0.8885,0.9108
+algebra__sequence_next_term,Abstractor (pos. symbols),23,0.902,0.8917,0.9124
+algebra__sequence_next_term,Abstractor (pos. symbols),24,0.9028,0.8921,0.9135
+algebra__sequence_next_term,Abstractor (pos. symbols),25,0.9038,0.8934,0.9142
+algebra__sequence_next_term,Abstractor (pos. symbols),26,0.9052,0.8949,0.9155
+algebra__sequence_next_term,Abstractor (pos. symbols),27,0.9053,0.896,0.9146
+algebra__sequence_next_term,Abstractor (pos. symbols),28,0.9066,0.8963,0.917
+algebra__sequence_next_term,Abstractor (pos. symbols),29,0.9079,0.8981,0.9177
+algebra__sequence_next_term,Abstractor (pos. symbols),30,0.9074,0.8978,0.9171
+algebra__sequence_next_term,Abstractor (pos. symbols),31,0.9098,0.9002,0.9194
+algebra__sequence_next_term,Abstractor (pos. symbols),32,0.9088,0.899,0.9185
+algebra__sequence_next_term,Abstractor (pos. symbols),33,0.91,0.9,0.9199
+algebra__sequence_next_term,Abstractor (pos. symbols),34,0.9094,0.8994,0.9194
+algebra__sequence_next_term,Abstractor (pos. symbols),35,0.9116,0.9017,0.9215
+algebra__sequence_next_term,Abstractor (pos. symbols),36,0.9115,0.9014,0.9215
+algebra__sequence_next_term,Abstractor (pos. symbols),37,0.9122,0.9027,0.9217
+algebra__sequence_next_term,Abstractor (pos. symbols),38,0.9121,0.9019,0.9224
+algebra__sequence_next_term,Abstractor (pos. symbols),39,0.9127,0.9032,0.9222
+algebra__sequence_next_term,Abstractor (pos. symbols),40,0.9134,0.9041,0.9226
+algebra__sequence_next_term,Abstractor (pos. symbols),41,0.9135,0.9034,0.9236
+algebra__sequence_next_term,Abstractor (pos. symbols),42,0.9147,0.9045,0.9249
+algebra__sequence_next_term,Abstractor (pos. symbols),43,0.9149,0.9058,0.924
+algebra__sequence_next_term,Abstractor (pos. symbols),44,0.9145,0.9049,0.9242
+algebra__sequence_next_term,Abstractor (pos. symbols),45,0.9149,0.9054,0.9244
+algebra__sequence_next_term,Abstractor (pos. symbols),46,0.9155,0.9056,0.9254
+algebra__sequence_next_term,Abstractor (pos. symbols),47,0.915,0.9055,0.9244
+algebra__sequence_next_term,Abstractor (pos. symbols),48,0.9168,0.9079,0.9256
+algebra__sequence_next_term,Abstractor (pos. symbols),49,0.9158,0.9063,0.9254
+algebra__sequence_next_term,Abstractor (symbolic attn),0,0.7724,0.7572,0.7875
+algebra__sequence_next_term,Abstractor (symbolic attn),1,0.812,0.7995,0.8245
+algebra__sequence_next_term,Abstractor (symbolic attn),2,0.8425,0.8307,0.8543
+algebra__sequence_next_term,Abstractor (symbolic attn),3,0.8632,0.8526,0.8738
+algebra__sequence_next_term,Abstractor (symbolic attn),4,0.8805,0.873,0.888
+algebra__sequence_next_term,Abstractor (symbolic attn),5,0.8906,0.8837,0.8974
+algebra__sequence_next_term,Abstractor (symbolic attn),6,0.8977,0.8904,0.9049
+algebra__sequence_next_term,Abstractor (symbolic attn),7,0.9055,0.8978,0.9131
+algebra__sequence_next_term,Abstractor (symbolic attn),8,0.9085,0.8993,0.9177
+algebra__sequence_next_term,Abstractor (symbolic attn),9,0.9142,0.904,0.9243
+algebra__sequence_next_term,Abstractor (symbolic attn),10,0.916,0.9048,0.9271
+algebra__sequence_next_term,Abstractor (symbolic attn),11,0.9182,0.9073,0.929
+algebra__sequence_next_term,Abstractor (symbolic attn),12,0.9202,0.9096,0.9308
+algebra__sequence_next_term,Abstractor (symbolic attn),13,0.9216,0.911,0.9321
+algebra__sequence_next_term,Abstractor (symbolic attn),14,0.923,0.9125,0.9336
+algebra__sequence_next_term,Abstractor (symbolic attn),15,0.9246,0.9142,0.935
+algebra__sequence_next_term,Abstractor (symbolic attn),16,0.9254,0.9147,0.9362
+algebra__sequence_next_term,Abstractor (symbolic attn),17,0.9266,0.9147,0.9384
+algebra__sequence_next_term,Abstractor (symbolic attn),18,0.9282,0.9167,0.9396
+algebra__sequence_next_term,Abstractor (symbolic attn),19,0.9294,0.9183,0.9405
+algebra__sequence_next_term,Abstractor (symbolic attn),20,0.9302,0.9188,0.9416
+algebra__sequence_next_term,Abstractor (symbolic attn),21,0.9308,0.9191,0.9425
+algebra__sequence_next_term,Abstractor (symbolic attn),22,0.9311,0.9189,0.9434
+algebra__sequence_next_term,Abstractor (symbolic attn),23,0.9316,0.9203,0.9429
+algebra__sequence_next_term,Abstractor (symbolic attn),24,0.9325,0.9214,0.9437
+algebra__sequence_next_term,Abstractor (symbolic attn),25,0.9319,0.9198,0.9439
+algebra__sequence_next_term,Abstractor (symbolic attn),26,0.9333,0.922,0.9446
+algebra__sequence_next_term,Abstractor (symbolic attn),27,0.9336,0.9227,0.9444
+algebra__sequence_next_term,Abstractor (symbolic attn),28,0.9347,0.9244,0.9449
+algebra__sequence_next_term,Abstractor (symbolic attn),29,0.9364,0.9262,0.9466
+algebra__sequence_next_term,Abstractor (symbolic attn),30,0.9384,0.9282,0.9485
+algebra__sequence_next_term,Abstractor (symbolic attn),31,0.9387,0.9281,0.9492
+algebra__sequence_next_term,Abstractor (symbolic attn),32,0.9392,0.9285,0.95
+algebra__sequence_next_term,Abstractor (symbolic attn),33,0.9382,0.9283,0.9482
+algebra__sequence_next_term,Abstractor (symbolic attn),34,0.94,0.9302,0.9499
+algebra__sequence_next_term,Abstractor (symbolic attn),35,0.94,0.9297,0.9504
+algebra__sequence_next_term,Abstractor (symbolic attn),36,0.9406,0.9308,0.9503
+algebra__sequence_next_term,Abstractor (symbolic attn),37,0.9395,0.9301,0.9488
+algebra__sequence_next_term,Abstractor (symbolic attn),38,0.9413,0.9316,0.951
+algebra__sequence_next_term,Abstractor (symbolic attn),39,0.9412,0.9315,0.9509
+algebra__sequence_next_term,Abstractor (symbolic attn),40,0.9415,0.9324,0.9506
+algebra__sequence_next_term,Abstractor (symbolic attn),41,0.9424,0.9332,0.9516
+algebra__sequence_next_term,Abstractor (symbolic attn),42,0.943,0.9339,0.9522
+algebra__sequence_next_term,Abstractor (symbolic attn),43,0.9433,0.9346,0.9521
+algebra__sequence_next_term,Abstractor (symbolic attn),44,0.9442,0.9352,0.9531
+algebra__sequence_next_term,Abstractor (symbolic attn),45,0.9444,0.9361,0.9528
+algebra__sequence_next_term,Abstractor (symbolic attn),46,0.9455,0.9373,0.9537
+algebra__sequence_next_term,Abstractor (symbolic attn),47,0.9459,0.9374,0.9544
+algebra__sequence_next_term,Abstractor (symbolic attn),48,0.9459,0.9379,0.954
+algebra__sequence_next_term,Abstractor (symbolic attn),49,0.9464,0.9383,0.9545
+polynomials__add,Transformer,0,0.7838,0.7826,0.7849
+polynomials__add,Transformer,1,0.8001,0.7986,0.8017
+polynomials__add,Transformer,2,0.808,0.8065,0.8096
+polynomials__add,Transformer,3,0.8123,0.8105,0.814
+polynomials__add,Transformer,4,0.8155,0.8136,0.8173
+polynomials__add,Transformer,5,0.8182,0.8169,0.8195
+polynomials__add,Transformer,6,0.8197,0.8187,0.8208
+polynomials__add,Transformer,7,0.8211,0.8199,0.8224
+polynomials__add,Transformer,8,0.8221,0.8208,0.8234
+polynomials__add,Transformer,9,0.8235,0.8227,0.8242
+polynomials__add,Transformer,10,0.8239,0.8231,0.8246
+polynomials__add,Transformer,11,0.8247,0.8233,0.8261
+polynomials__add,Transformer,12,0.8251,0.8244,0.8258
+polynomials__add,Transformer,13,0.8259,0.8248,0.8269
+polynomials__add,Transformer,14,0.8262,0.8249,0.8275
+polynomials__add,Transformer,15,0.8267,0.8256,0.8279
+polynomials__add,Transformer,16,0.8274,0.8264,0.8283
+polynomials__add,Transformer,17,0.8273,0.8261,0.8286
+polynomials__add,Transformer,18,0.8279,0.8271,0.8287
+polynomials__add,Transformer,19,0.8279,0.8269,0.829
+polynomials__add,Transformer,20,0.8288,0.8277,0.8298
+polynomials__add,Transformer,21,0.8286,0.8277,0.8296
+polynomials__add,Transformer,22,0.829,0.828,0.8299
+polynomials__add,Transformer,23,0.8296,0.8286,0.8305
+polynomials__add,Transformer,24,0.8293,0.8287,0.83
+polynomials__add,Transformer,25,0.8299,0.8288,0.8309
+polynomials__add,Transformer,26,0.8299,0.829,0.8308
+polynomials__add,Transformer,27,0.83,0.8291,0.8309
+polynomials__add,Transformer,28,0.8303,0.829,0.8316
+polynomials__add,Transformer,29,0.8307,0.8296,0.8318
+polynomials__add,Transformer,30,0.831,0.8299,0.8321
+polynomials__add,Transformer,31,0.831,0.8301,0.8319
+polynomials__add,Transformer,32,0.8312,0.83,0.8323
+polynomials__add,Transformer,33,0.8312,0.8301,0.8322
+polynomials__add,Transformer,34,0.8309,0.8296,0.8322
+polynomials__add,Transformer,35,0.8316,0.8309,0.8323
+polynomials__add,Transformer,36,0.8314,0.8303,0.8324
+polynomials__add,Transformer,37,0.8318,0.831,0.8325
+polynomials__add,Transformer,38,0.8324,0.8317,0.8332
+polynomials__add,Transformer,39,0.8317,0.8301,0.8334
+polynomials__add,Transformer,40,0.8322,0.8311,0.8333
+polynomials__add,Transformer,41,0.8322,0.8311,0.8333
+polynomials__add,Transformer,42,0.8323,0.8305,0.8341
+polynomials__add,Transformer,43,0.832,0.831,0.833
+polynomials__add,Transformer,44,0.8325,0.8312,0.8338
+polynomials__add,Transformer,45,0.8325,0.8314,0.8336
+polynomials__add,Transformer,46,0.8327,0.8316,0.8339
+polynomials__add,Transformer,47,0.8324,0.8311,0.8337
+polynomials__add,Transformer,48,0.8326,0.8318,0.8335
+polynomials__add,Transformer,49,0.8327,0.8315,0.8339
+polynomials__add,Transformer+,0,0.7922,0.7913,0.7931
+polynomials__add,Transformer+,1,0.8088,0.8067,0.8108
+polynomials__add,Transformer+,2,0.8166,0.8144,0.8188
+polynomials__add,Transformer+,3,0.8214,0.82,0.8229
+polynomials__add,Transformer+,4,0.8242,0.8227,0.8257
+polynomials__add,Transformer+,5,0.8261,0.8247,0.8275
+polynomials__add,Transformer+,6,0.8277,0.8263,0.8291
+polynomials__add,Transformer+,7,0.8286,0.8272,0.83
+polynomials__add,Transformer+,8,0.8298,0.8284,0.8311
+polynomials__add,Transformer+,9,0.8309,0.8298,0.832
+polynomials__add,Transformer+,10,0.8316,0.8301,0.833
+polynomials__add,Transformer+,11,0.8322,0.8311,0.8334
+polynomials__add,Transformer+,12,0.8329,0.8318,0.8341
+polynomials__add,Transformer+,13,0.8339,0.8332,0.8347
+polynomials__add,Transformer+,14,0.8335,0.8321,0.8349
+polynomials__add,Transformer+,15,0.835,0.8335,0.8364
+polynomials__add,Transformer+,16,0.8347,0.8334,0.836
+polynomials__add,Transformer+,17,0.8353,0.8344,0.8362
+polynomials__add,Transformer+,18,0.8357,0.8351,0.8364
+polynomials__add,Transformer+,19,0.8362,0.8351,0.8372
+polynomials__add,Transformer+,20,0.8363,0.835,0.8375
+polynomials__add,Transformer+,21,0.8367,0.836,0.8375
+polynomials__add,Transformer+,22,0.8372,0.8365,0.8378
+polynomials__add,Transformer+,23,0.8373,0.8361,0.8385
+polynomials__add,Transformer+,24,0.8373,0.8367,0.838
+polynomials__add,Transformer+,25,0.8376,0.8369,0.8384
+polynomials__add,Transformer+,26,0.8377,0.8365,0.8389
+polynomials__add,Transformer+,27,0.8386,0.8378,0.8394
+polynomials__add,Transformer+,28,0.8389,0.8375,0.8403
+polynomials__add,Transformer+,29,0.8385,0.8376,0.8395
+polynomials__add,Transformer+,30,0.8391,0.8385,0.8398
+polynomials__add,Transformer+,31,0.8389,0.8385,0.8393
+polynomials__add,Transformer+,32,0.8391,0.838,0.8401
+polynomials__add,Transformer+,33,0.8395,0.8385,0.8405
+polynomials__add,Transformer+,34,0.8396,0.8388,0.8405
+polynomials__add,Transformer+,35,0.8398,0.839,0.8406
+polynomials__add,Transformer+,36,0.8398,0.8392,0.8405
+polynomials__add,Transformer+,37,0.8402,0.8397,0.8407
+polynomials__add,Transformer+,38,0.84,0.8393,0.8406
+polynomials__add,Transformer+,39,0.8401,0.8394,0.8407
+polynomials__add,Transformer+,40,0.8406,0.8398,0.8414
+polynomials__add,Transformer+,41,0.8406,0.8402,0.8411
+polynomials__add,Transformer+,42,0.8403,0.8396,0.8411
+polynomials__add,Transformer+,43,0.8406,0.8403,0.8409
+polynomials__add,Transformer+,44,0.8408,0.8401,0.8415
+polynomials__add,Transformer+,45,0.8409,0.8406,0.8411
+polynomials__add,Transformer+,46,0.8414,0.8409,0.8418
+polynomials__add,Transformer+,47,0.841,0.8407,0.8413
+polynomials__add,Transformer+,48,0.8413,0.8408,0.8418
+polynomials__add,Transformer+,49,0.8417,0.8407,0.8427
+polynomials__add,Abstractor (pos. symbols),0,0.7949,0.7923,0.7974
+polynomials__add,Abstractor (pos. symbols),1,0.8175,0.8154,0.8196
+polynomials__add,Abstractor (pos. symbols),2,0.8265,0.8249,0.828
+polynomials__add,Abstractor (pos. symbols),3,0.8318,0.8304,0.8332
+polynomials__add,Abstractor (pos. symbols),4,0.8356,0.8344,0.8367
+polynomials__add,Abstractor (pos. symbols),5,0.8387,0.8379,0.8395
+polynomials__add,Abstractor (pos. symbols),6,0.8405,0.8394,0.8416
+polynomials__add,Abstractor (pos. symbols),7,0.8421,0.8412,0.843
+polynomials__add,Abstractor (pos. symbols),8,0.8435,0.8425,0.8445
+polynomials__add,Abstractor (pos. symbols),9,0.8446,0.8433,0.8459
+polynomials__add,Abstractor (pos. symbols),10,0.8453,0.844,0.8466
+polynomials__add,Abstractor (pos. symbols),11,0.8465,0.8455,0.8476
+polynomials__add,Abstractor (pos. symbols),12,0.8476,0.8463,0.8488
+polynomials__add,Abstractor (pos. symbols),13,0.8481,0.8472,0.8491
+polynomials__add,Abstractor (pos. symbols),14,0.8486,0.8473,0.8499
+polynomials__add,Abstractor (pos. symbols),15,0.8495,0.8483,0.8506
+polynomials__add,Abstractor (pos. symbols),16,0.85,0.849,0.8511
+polynomials__add,Abstractor (pos. symbols),17,0.8507,0.8493,0.8522
+polynomials__add,Abstractor (pos. symbols),18,0.8503,0.8491,0.8516
+polynomials__add,Abstractor (pos. symbols),19,0.8511,0.8499,0.8524
+polynomials__add,Abstractor (pos. symbols),20,0.8518,0.851,0.8526
+polynomials__add,Abstractor (pos. symbols),21,0.8515,0.8504,0.8527
+polynomials__add,Abstractor (pos. symbols),22,0.8524,0.8516,0.8532
+polynomials__add,Abstractor (pos. symbols),23,0.8524,0.851,0.8538
+polynomials__add,Abstractor (pos. symbols),24,0.8523,0.8517,0.8529
+polynomials__add,Abstractor (pos. symbols),25,0.8532,0.8526,0.8539
+polynomials__add,Abstractor (pos. symbols),26,0.8529,0.8514,0.8544
+polynomials__add,Abstractor (pos. symbols),27,0.8534,0.8523,0.8546
+polynomials__add,Abstractor (pos. symbols),28,0.8539,0.8531,0.8546
+polynomials__add,Abstractor (pos. symbols),29,0.8539,0.8529,0.8548
+polynomials__add,Abstractor (pos. symbols),30,0.854,0.8532,0.8547
+polynomials__add,Abstractor (pos. symbols),31,0.854,0.8534,0.8546
+polynomials__add,Abstractor (pos. symbols),32,0.8545,0.8533,0.8557
+polynomials__add,Abstractor (pos. symbols),33,0.8548,0.8536,0.8559
+polynomials__add,Abstractor (pos. symbols),34,0.8548,0.8538,0.8558
+polynomials__add,Abstractor (pos. symbols),35,0.8549,0.8538,0.856
+polynomials__add,Abstractor (pos. symbols),36,0.855,0.8543,0.8556
+polynomials__add,Abstractor (pos. symbols),37,0.8553,0.8545,0.8561
+polynomials__add,Abstractor (pos. symbols),38,0.8556,0.8545,0.8566
+polynomials__add,Abstractor (pos. symbols),39,0.8559,0.8549,0.8569
+polynomials__add,Abstractor (pos. symbols),40,0.8559,0.8547,0.8572
+polynomials__add,Abstractor (pos. symbols),41,0.8555,0.8544,0.8566
+polynomials__add,Abstractor (pos. symbols),42,0.8561,0.8553,0.8568
+polynomials__add,Abstractor (pos. symbols),43,0.8561,0.8552,0.857
+polynomials__add,Abstractor (pos. symbols),44,0.8565,0.8557,0.8574
+polynomials__add,Abstractor (pos. symbols),45,0.8563,0.8549,0.8577
+polynomials__add,Abstractor (pos. symbols),46,0.8568,0.8559,0.8578
+polynomials__add,Abstractor (pos. symbols),47,0.8567,0.8552,0.8582
+polynomials__add,Abstractor (pos. symbols),48,0.8565,0.8557,0.8574
+polynomials__add,Abstractor (pos. symbols),49,0.8568,0.8556,0.858
+polynomials__add,Abstractor (symbolic attn),0,0.7958,0.7928,0.7987
+polynomials__add,Abstractor (symbolic attn),1,0.8167,0.814,0.8195
+polynomials__add,Abstractor (symbolic attn),2,0.8268,0.8247,0.8289
+polynomials__add,Abstractor (symbolic attn),3,0.8335,0.8317,0.8354
+polynomials__add,Abstractor (symbolic attn),4,0.8381,0.8359,0.8404
+polynomials__add,Abstractor (symbolic attn),5,0.8414,0.8392,0.8435
+polynomials__add,Abstractor (symbolic attn),6,0.8441,0.8413,0.8469
+polynomials__add,Abstractor (symbolic attn),7,0.8461,0.8436,0.8486
+polynomials__add,Abstractor (symbolic attn),8,0.848,0.8454,0.8505
+polynomials__add,Abstractor (symbolic attn),9,0.8489,0.8469,0.851
+polynomials__add,Abstractor (symbolic attn),10,0.8506,0.8486,0.8527
+polynomials__add,Abstractor (symbolic attn),11,0.8518,0.85,0.8535
+polynomials__add,Abstractor (symbolic attn),12,0.8532,0.8513,0.855
+polynomials__add,Abstractor (symbolic attn),13,0.8538,0.8518,0.8558
+polynomials__add,Abstractor (symbolic attn),14,0.855,0.8535,0.8565
+polynomials__add,Abstractor (symbolic attn),15,0.8558,0.854,0.8575
+polynomials__add,Abstractor (symbolic attn),16,0.8566,0.855,0.8581
+polynomials__add,Abstractor (symbolic attn),17,0.8572,0.856,0.8585
+polynomials__add,Abstractor (symbolic attn),18,0.8575,0.8556,0.8594
+polynomials__add,Abstractor (symbolic attn),19,0.858,0.8563,0.8598
+polynomials__add,Abstractor (symbolic attn),20,0.8585,0.8565,0.8605
+polynomials__add,Abstractor (symbolic attn),21,0.8587,0.8567,0.8606
+polynomials__add,Abstractor (symbolic attn),22,0.8593,0.8569,0.8617
+polynomials__add,Abstractor (symbolic attn),23,0.8596,0.8575,0.8617
+polynomials__add,Abstractor (symbolic attn),24,0.86,0.8579,0.8621
+polynomials__add,Abstractor (symbolic attn),25,0.8607,0.8585,0.8629
+polynomials__add,Abstractor (symbolic attn),26,0.8607,0.8587,0.8628
+polynomials__add,Abstractor (symbolic attn),27,0.8607,0.8583,0.8631
+polynomials__add,Abstractor (symbolic attn),28,0.8618,0.8592,0.8643
+polynomials__add,Abstractor (symbolic attn),29,0.862,0.8596,0.8645
+polynomials__add,Abstractor (symbolic attn),30,0.8623,0.86,0.8647
+polynomials__add,Abstractor (symbolic attn),31,0.8624,0.86,0.8648
+polynomials__add,Abstractor (symbolic attn),32,0.863,0.8606,0.8653
+polynomials__add,Abstractor (symbolic attn),33,0.8632,0.861,0.8654
+polynomials__add,Abstractor (symbolic attn),34,0.8627,0.8605,0.865
+polynomials__add,Abstractor (symbolic attn),35,0.8636,0.8613,0.8658
+polynomials__add,Abstractor (symbolic attn),36,0.864,0.8615,0.8664
+polynomials__add,Abstractor (symbolic attn),37,0.8637,0.8616,0.8658
+polynomials__add,Abstractor (symbolic attn),38,0.8644,0.8623,0.8664
+polynomials__add,Abstractor (symbolic attn),39,0.8643,0.8624,0.8663
+polynomials__add,Abstractor (symbolic attn),40,0.8648,0.8622,0.8674
+polynomials__add,Abstractor (symbolic attn),41,0.8653,0.8629,0.8677
+polynomials__add,Abstractor (symbolic attn),42,0.8651,0.8629,0.8672
+polynomials__add,Abstractor (symbolic attn),43,0.8657,0.8632,0.8681
+polynomials__add,Abstractor (symbolic attn),44,0.8656,0.863,0.8682
+polynomials__add,Abstractor (symbolic attn),45,0.8658,0.8634,0.8682
+polynomials__add,Abstractor (symbolic attn),46,0.8658,0.8636,0.868
+polynomials__add,Abstractor (symbolic attn),47,0.8662,0.8637,0.8686
+polynomials__add,Abstractor (symbolic attn),48,0.8663,0.864,0.8686
+polynomials__add,Abstractor (symbolic attn),49,0.8668,0.8645,0.869
+algebra__linear_1d,Transformer,0,0.525,0.523,0.5271
+algebra__linear_1d,Transformer,1,0.538,0.5349,0.5411
+algebra__linear_1d,Transformer,2,0.5434,0.5384,0.5483
+algebra__linear_1d,Transformer,3,0.5478,0.5423,0.5532
+algebra__linear_1d,Transformer,4,0.5516,0.547,0.5561
+algebra__linear_1d,Transformer,5,0.5557,0.5521,0.5593
+algebra__linear_1d,Transformer,6,0.5589,0.5558,0.5619
+algebra__linear_1d,Transformer,7,0.563,0.5587,0.5672
+algebra__linear_1d,Transformer,8,0.5691,0.5639,0.5744
+algebra__linear_1d,Transformer,9,0.5742,0.5713,0.5772
+algebra__linear_1d,Transformer,10,0.5806,0.5758,0.5855
+algebra__linear_1d,Transformer,11,0.5877,0.5828,0.5927
+algebra__linear_1d,Transformer,12,0.5962,0.5924,0.6
+algebra__linear_1d,Transformer,13,0.5982,0.5937,0.6027
+algebra__linear_1d,Transformer,14,0.6011,0.5947,0.6076
+algebra__linear_1d,Transformer,15,0.6095,0.602,0.6169
+algebra__linear_1d,Transformer,16,0.613,0.6072,0.6187
+algebra__linear_1d,Transformer,17,0.6089,0.6028,0.615
+algebra__linear_1d,Transformer,18,0.6157,0.6113,0.6201
+algebra__linear_1d,Transformer,19,0.6185,0.6122,0.6249
+algebra__linear_1d,Transformer,20,0.6217,0.6148,0.6286
+algebra__linear_1d,Transformer,21,0.6234,0.6163,0.6305
+algebra__linear_1d,Transformer,22,0.623,0.6166,0.6294
+algebra__linear_1d,Transformer,23,0.6266,0.6203,0.6329
+algebra__linear_1d,Transformer,24,0.6301,0.624,0.6361
+algebra__linear_1d,Transformer,25,0.6298,0.6218,0.6379
+algebra__linear_1d,Transformer,26,0.6311,0.6212,0.6409
+algebra__linear_1d,Transformer,27,0.6342,0.6263,0.642
+algebra__linear_1d,Transformer,28,0.6336,0.6266,0.6407
+algebra__linear_1d,Transformer,29,0.6395,0.6296,0.6495
+algebra__linear_1d,Transformer,30,0.641,0.6349,0.6471
+algebra__linear_1d,Transformer,31,0.6332,0.6269,0.6394
+algebra__linear_1d,Transformer,32,0.6325,0.6271,0.638
+algebra__linear_1d,Transformer,33,0.6397,0.6315,0.6479
+algebra__linear_1d,Transformer,34,0.6448,0.6384,0.6512
+algebra__linear_1d,Transformer,35,0.6392,0.6337,0.6446
+algebra__linear_1d,Transformer,36,0.6379,0.6328,0.643
+algebra__linear_1d,Transformer,37,0.6381,0.6329,0.6432
+algebra__linear_1d,Transformer,38,0.6452,0.6363,0.6542
+algebra__linear_1d,Transformer,39,0.6436,0.6403,0.647
+algebra__linear_1d,Transformer,40,0.641,0.6389,0.6431
+algebra__linear_1d,Transformer,41,0.642,0.6303,0.6536
+algebra__linear_1d,Transformer,42,0.648,0.6389,0.6571
+algebra__linear_1d,Transformer,43,0.647,0.6362,0.6579
+algebra__linear_1d,Transformer,44,0.6424,0.6367,0.6481
+algebra__linear_1d,Transformer,45,0.6433,0.6355,0.651
+algebra__linear_1d,Transformer,46,0.6479,0.6376,0.6581
+algebra__linear_1d,Transformer,47,0.6498,0.6353,0.6642
+algebra__linear_1d,Transformer,48,0.6409,0.627,0.6548
+algebra__linear_1d,Transformer,49,0.6505,0.6394,0.6617
+algebra__linear_1d,Transformer+,0,0.5198,0.5157,0.524
+algebra__linear_1d,Transformer+,1,0.5329,0.5278,0.5379
+algebra__linear_1d,Transformer+,2,0.5386,0.5343,0.5429
+algebra__linear_1d,Transformer+,3,0.5454,0.5398,0.551
+algebra__linear_1d,Transformer+,4,0.5496,0.5439,0.5553
+algebra__linear_1d,Transformer+,5,0.5564,0.5472,0.5656
+algebra__linear_1d,Transformer+,6,0.5603,0.5496,0.571
+algebra__linear_1d,Transformer+,7,0.5637,0.5508,0.5767
+algebra__linear_1d,Transformer+,8,0.5673,0.5517,0.5829
+algebra__linear_1d,Transformer+,9,0.5718,0.5562,0.5875
+algebra__linear_1d,Transformer+,10,0.5751,0.5582,0.592
+algebra__linear_1d,Transformer+,11,0.5788,0.5631,0.5945
+algebra__linear_1d,Transformer+,12,0.581,0.5646,0.5974
+algebra__linear_1d,Transformer+,13,0.5833,0.5645,0.6021
+algebra__linear_1d,Transformer+,14,0.5869,0.5637,0.61
+algebra__linear_1d,Transformer+,15,0.5877,0.5645,0.611
+algebra__linear_1d,Transformer+,16,0.5902,0.5655,0.6149
+algebra__linear_1d,Transformer+,17,0.5917,0.568,0.6154
+algebra__linear_1d,Transformer+,18,0.5957,0.5681,0.6232
+algebra__linear_1d,Transformer+,19,0.5949,0.5699,0.6198
+algebra__linear_1d,Transformer+,20,0.5993,0.573,0.6256
+algebra__linear_1d,Transformer+,21,0.5986,0.5732,0.624
+algebra__linear_1d,Transformer+,22,0.6032,0.5752,0.6312
+algebra__linear_1d,Transformer+,23,0.6029,0.5758,0.63
+algebra__linear_1d,Transformer+,24,0.6042,0.5787,0.6297
+algebra__linear_1d,Transformer+,25,0.6055,0.5795,0.6316
+algebra__linear_1d,Transformer+,26,0.6087,0.582,0.6354
+algebra__linear_1d,Transformer+,27,0.6105,0.5831,0.638
+algebra__linear_1d,Transformer+,28,0.6115,0.5857,0.6374
+algebra__linear_1d,Transformer+,29,0.6131,0.5881,0.6382
+algebra__linear_1d,Transformer+,30,0.6131,0.5902,0.6361
+algebra__linear_1d,Transformer+,31,0.6176,0.5922,0.6431
+algebra__linear_1d,Transformer+,32,0.6171,0.5914,0.6429
+algebra__linear_1d,Transformer+,33,0.6189,0.5947,0.6432
+algebra__linear_1d,Transformer+,34,0.6196,0.596,0.6431
+algebra__linear_1d,Transformer+,35,0.6202,0.5953,0.6452
+algebra__linear_1d,Transformer+,36,0.6233,0.5968,0.6497
+algebra__linear_1d,Transformer+,37,0.6244,0.5974,0.6514
+algebra__linear_1d,Transformer+,38,0.6247,0.5975,0.6518
+algebra__linear_1d,Transformer+,39,0.625,0.5982,0.6518
+algebra__linear_1d,Transformer+,40,0.6252,0.5981,0.6523
+algebra__linear_1d,Transformer+,41,0.6245,0.5982,0.6508
+algebra__linear_1d,Transformer+,42,0.6267,0.6011,0.6523
+algebra__linear_1d,Transformer+,43,0.6273,0.5987,0.6559
+algebra__linear_1d,Transformer+,44,0.6272,0.6003,0.6541
+algebra__linear_1d,Transformer+,45,0.6277,0.6015,0.654
+algebra__linear_1d,Transformer+,46,0.6287,0.6024,0.6549
+algebra__linear_1d,Transformer+,47,0.6291,0.5982,0.66
+algebra__linear_1d,Transformer+,48,0.6289,0.6009,0.6569
+algebra__linear_1d,Transformer+,49,0.6292,0.5978,0.6606
+algebra__linear_1d,Abstractor (pos. symbols),0,0.5286,0.5244,0.5328
+algebra__linear_1d,Abstractor (pos. symbols),1,0.5443,0.5358,0.5528
+algebra__linear_1d,Abstractor (pos. symbols),2,0.5567,0.5476,0.5658
+algebra__linear_1d,Abstractor (pos. symbols),3,0.5656,0.5566,0.5747
+algebra__linear_1d,Abstractor (pos. symbols),4,0.5769,0.5636,0.5903
+algebra__linear_1d,Abstractor (pos. symbols),5,0.598,0.582,0.614
+algebra__linear_1d,Abstractor (pos. symbols),6,0.6164,0.597,0.6357
+algebra__linear_1d,Abstractor (pos. symbols),7,0.6254,0.6069,0.6439
+algebra__linear_1d,Abstractor (pos. symbols),8,0.6322,0.6207,0.6437
+algebra__linear_1d,Abstractor (pos. symbols),9,0.6482,0.6333,0.663
+algebra__linear_1d,Abstractor (pos. symbols),10,0.6539,0.6404,0.6673
+algebra__linear_1d,Abstractor (pos. symbols),11,0.6598,0.6437,0.6758
+algebra__linear_1d,Abstractor (pos. symbols),12,0.6565,0.6469,0.6661
+algebra__linear_1d,Abstractor (pos. symbols),13,0.6683,0.6509,0.6858
+algebra__linear_1d,Abstractor (pos. symbols),14,0.6752,0.6549,0.6956
+algebra__linear_1d,Abstractor (pos. symbols),15,0.6793,0.657,0.7017
+algebra__linear_1d,Abstractor (pos. symbols),16,0.6776,0.6579,0.6973
+algebra__linear_1d,Abstractor (pos. symbols),17,0.6824,0.6574,0.7074
+algebra__linear_1d,Abstractor (pos. symbols),18,0.6886,0.6674,0.7098
+algebra__linear_1d,Abstractor (pos. symbols),19,0.6862,0.6629,0.7096
+algebra__linear_1d,Abstractor (pos. symbols),20,0.689,0.6609,0.717
+algebra__linear_1d,Abstractor (pos. symbols),21,0.6941,0.6692,0.7189
+algebra__linear_1d,Abstractor (pos. symbols),22,0.6963,0.6702,0.7224
+algebra__linear_1d,Abstractor (pos. symbols),23,0.6944,0.6672,0.7217
+algebra__linear_1d,Abstractor (pos. symbols),24,0.6953,0.6684,0.7222
+algebra__linear_1d,Abstractor (pos. symbols),25,0.6974,0.6713,0.7235
+algebra__linear_1d,Abstractor (pos. symbols),26,0.6966,0.671,0.7223
+algebra__linear_1d,Abstractor (pos. symbols),27,0.6993,0.6695,0.7292
+algebra__linear_1d,Abstractor (pos. symbols),28,0.7005,0.6778,0.7231
+algebra__linear_1d,Abstractor (pos. symbols),29,0.6956,0.6722,0.719
+algebra__linear_1d,Abstractor (pos. symbols),30,0.703,0.6781,0.728
+algebra__linear_1d,Abstractor (pos. symbols),31,0.7056,0.6761,0.7351
+algebra__linear_1d,Abstractor (pos. symbols),32,0.7048,0.6713,0.7383
+algebra__linear_1d,Abstractor (pos. symbols),33,0.7056,0.6695,0.7416
+algebra__linear_1d,Abstractor (pos. symbols),34,0.7092,0.6786,0.7397
+algebra__linear_1d,Abstractor (pos. symbols),35,0.7085,0.6682,0.7488
+algebra__linear_1d,Abstractor (pos. symbols),36,0.7084,0.6695,0.7474
+algebra__linear_1d,Abstractor (pos. symbols),37,0.7064,0.6768,0.736
+algebra__linear_1d,Abstractor (pos. symbols),38,0.712,0.6802,0.7438
+algebra__linear_1d,Abstractor (pos. symbols),39,0.709,0.675,0.7431
+algebra__linear_1d,Abstractor (pos. symbols),40,0.7111,0.6794,0.7427
+algebra__linear_1d,Abstractor (pos. symbols),41,0.7154,0.6794,0.7513
+algebra__linear_1d,Abstractor (pos. symbols),42,0.7174,0.6833,0.7515
+algebra__linear_1d,Abstractor (pos. symbols),43,0.7173,0.6803,0.7542
+algebra__linear_1d,Abstractor (pos. symbols),44,0.7139,0.6794,0.7484
+algebra__linear_1d,Abstractor (pos. symbols),45,0.7198,0.6828,0.7569
+algebra__linear_1d,Abstractor (pos. symbols),46,0.7204,0.6857,0.7552
+algebra__linear_1d,Abstractor (pos. symbols),47,0.7144,0.6769,0.7519
+algebra__linear_1d,Abstractor (pos. symbols),48,0.7191,0.6759,0.7624
+algebra__linear_1d,Abstractor (pos. symbols),49,0.7185,0.6826,0.7544
+algebra__linear_1d,Abstractor (symbolic attn),0,0.5284,0.5238,0.533
+algebra__linear_1d,Abstractor (symbolic attn),1,0.5558,0.5374,0.5743
+algebra__linear_1d,Abstractor (symbolic attn),2,0.5886,0.5458,0.6314
+algebra__linear_1d,Abstractor (symbolic attn),3,0.627,0.571,0.683
+algebra__linear_1d,Abstractor (symbolic attn),4,0.6543,0.5947,0.714
+algebra__linear_1d,Abstractor (symbolic attn),5,0.6725,0.6121,0.7329
+algebra__linear_1d,Abstractor (symbolic attn),6,0.6803,0.6142,0.7464
+algebra__linear_1d,Abstractor (symbolic attn),7,0.6924,0.6259,0.759
+algebra__linear_1d,Abstractor (symbolic attn),8,0.6858,0.6374,0.7343
+algebra__linear_1d,Abstractor (symbolic attn),9,0.7006,0.6444,0.7567
+algebra__linear_1d,Abstractor (symbolic attn),10,0.7006,0.6421,0.759
+algebra__linear_1d,Abstractor (symbolic attn),11,0.7074,0.6482,0.7666
+algebra__linear_1d,Abstractor (symbolic attn),12,0.7156,0.6511,0.7801
+algebra__linear_1d,Abstractor (symbolic attn),13,0.7096,0.6548,0.7644
+algebra__linear_1d,Abstractor (symbolic attn),14,0.7154,0.6546,0.7762
+algebra__linear_1d,Abstractor (symbolic attn),15,0.7174,0.6546,0.7802
+algebra__linear_1d,Abstractor (symbolic attn),16,0.7263,0.6597,0.7929
+algebra__linear_1d,Abstractor (symbolic attn),17,0.7272,0.6609,0.7935
+algebra__linear_1d,Abstractor (symbolic attn),18,0.7234,0.6646,0.7822
+algebra__linear_1d,Abstractor (symbolic attn),19,0.7295,0.6677,0.7912
+algebra__linear_1d,Abstractor (symbolic attn),20,0.7304,0.6741,0.7868
+algebra__linear_1d,Abstractor (symbolic attn),21,0.7407,0.6848,0.7967
+algebra__linear_1d,Abstractor (symbolic attn),22,0.7547,0.6973,0.8121
+algebra__linear_1d,Abstractor (symbolic attn),23,0.7512,0.7008,0.8016
+algebra__linear_1d,Abstractor (symbolic attn),24,0.76,0.7141,0.8059
+algebra__linear_1d,Abstractor (symbolic attn),25,0.7625,0.725,0.8
+algebra__linear_1d,Abstractor (symbolic attn),26,0.768,0.7267,0.8092
+algebra__linear_1d,Abstractor (symbolic attn),27,0.7641,0.7319,0.7964
+algebra__linear_1d,Abstractor (symbolic attn),28,0.77,0.7322,0.8078
+algebra__linear_1d,Abstractor (symbolic attn),29,0.7723,0.7376,0.8069
+algebra__linear_1d,Abstractor (symbolic attn),30,0.7771,0.7454,0.8088
+algebra__linear_1d,Abstractor (symbolic attn),31,0.7744,0.7333,0.8156
+algebra__linear_1d,Abstractor (symbolic attn),32,0.7821,0.7496,0.8146
+algebra__linear_1d,Abstractor (symbolic attn),33,0.777,0.7519,0.8021
+algebra__linear_1d,Abstractor (symbolic attn),34,0.7795,0.7584,0.8007
+algebra__linear_1d,Abstractor (symbolic attn),35,0.769,0.7396,0.7984
+algebra__linear_1d,Abstractor (symbolic attn),36,0.7852,0.7563,0.8141
+algebra__linear_1d,Abstractor (symbolic attn),37,0.7794,0.7525,0.8064
+algebra__linear_1d,Abstractor (symbolic attn),38,0.783,0.7571,0.8088
+algebra__linear_1d,Abstractor (symbolic attn),39,0.7846,0.7586,0.8106
+algebra__linear_1d,Abstractor (symbolic attn),40,0.7877,0.7617,0.8136
+algebra__linear_1d,Abstractor (symbolic attn),41,0.7925,0.7657,0.8193
+algebra__linear_1d,Abstractor (symbolic attn),42,0.7873,0.7653,0.8092
+algebra__linear_1d,Abstractor (symbolic attn),43,0.7975,0.7734,0.8215
+algebra__linear_1d,Abstractor (symbolic attn),44,0.7931,0.7531,0.8331
+algebra__linear_1d,Abstractor (symbolic attn),45,0.791,0.7654,0.8165
+algebra__linear_1d,Abstractor (symbolic attn),46,0.8009,0.7705,0.8313
+algebra__linear_1d,Abstractor (symbolic attn),47,0.7932,0.7652,0.8212
+algebra__linear_1d,Abstractor (symbolic attn),48,0.7902,0.7659,0.8144
+algebra__linear_1d,Abstractor (symbolic attn),49,0.8004,0.7756,0.8252

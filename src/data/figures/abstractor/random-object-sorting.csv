@@ -1,0 +1,91 @@
+model,train_size,accuracy,lo,hi
+Abstractor,100,0.0004,0.0002,0.0005
+Abstractor,200,0.2063,0.097,0.3156
+Abstractor,300,0.8286,0.7651,0.8921
+Abstractor,400,0.9092,0.8882,0.9302
+Abstractor,500,0.9931,0.9899,0.9962
+Abstractor,600,0.9926,0.9836,1.0015
+Abstractor,700,0.997,0.9955,0.9985
+Abstractor,800,0.9981,0.9974,0.9988
+Abstractor,900,0.972,0.9488,0.9953
+Abstractor,1000,0.9994,0.9991,0.9997
+Abstractor,1100,0.9992,0.9985,0.9998
+Abstractor,1200,0.9997,0.9995,0.9999
+Abstractor,1300,0.9996,0.9994,0.9999
+Abstractor,1400,0.9997,0.9995,0.9998
+Abstractor,1500,0.9997,0.9992,1.0001
+Abstractor,1600,0.9999,0.9998,1.0
+Abstractor,1700,0.9999,0.9998,1.0
+Abstractor,1800,0.9987,0.9968,1.0006
+Abstractor,1900,0.9999,0.9999,1.0
+Abstractor,2000,0.9998,0.9998,0.9999
+Abstractor,2100,0.9999,0.9999,1.0
+Abstractor,2200,0.9998,0.9997,1.0
+Abstractor,2300,0.9995,0.9987,1.0003
+Abstractor,2400,0.9999,0.9999,1.0
+Abstractor,2500,0.9999,0.9998,1.0
+Abstractor,2600,0.9998,0.9996,1.0001
+Abstractor,2700,0.9988,0.9966,1.001
+Abstractor,2800,0.9999,0.9998,1.0
+Abstractor,2900,0.9999,0.9999,1.0
+Abstractor,3000,1.0,0.9999,1.0
+Ablation Model,100,0.0,0.0,0.0
+Ablation Model,200,0.0,0.0,0.0
+Ablation Model,300,0.0,0.0,0.0
+Ablation Model,400,0.0,0.0,0.0
+Ablation Model,500,0.0,0.0,0.0
+Ablation Model,600,0.0,0.0,0.0
+Ablation Model,700,0.0,0.0,0.0
+Ablation Model,800,0.0,0.0,0.0
+Ablation Model,900,0.0289,-0.0289,0.0868
+Ablation Model,1000,0.0001,-0.0001,0.0003
+Ablation Model,1100,0.0063,-0.0063,0.0189
+Ablation Model,1200,0.282,0.0636,0.5004
+Ablation Model,1300,0.4073,0.2036,0.611
+Ablation Model,1400,0.5261,0.3146,0.7377
+Ablation Model,1500,0.6135,0.3661,0.8608
+Ablation Model,1600,0.4801,0.2353,0.7249
+Ablation Model,1700,0.6694,0.4045,0.9343
+Ablation Model,1800,0.7613,0.5389,0.9836
+Ablation Model,1900,0.8179,0.6328,1.0031
+Ablation Model,2000,0.8486,0.6625,1.0347
+Ablation Model,2100,0.6333,0.3631,0.9036
+Ablation Model,2200,0.92,0.8129,1.0271
+Ablation Model,2300,0.9651,0.9379,0.9923
+Ablation Model,2400,0.9186,0.8087,1.0285
+Ablation Model,2500,0.9608,0.9248,0.9968
+Ablation Model,2600,0.6766,0.4164,0.9367
+Ablation Model,2700,0.6708,0.3895,0.952
+Ablation Model,2800,0.9805,0.9575,1.0036
+Ablation Model,2900,0.9924,0.9847,1.0001
+Ablation Model,3000,0.9903,0.981,0.9997
+Transformer,100,0.0,0.0,0.0
+Transformer,200,0.0,0.0,0.0
+Transformer,300,0.0,0.0,0.0
+Transformer,400,0.0,0.0,0.0
+Transformer,500,0.0,0.0,0.0
+Transformer,600,0.0,0.0,0.0
+Transformer,700,0.0,0.0,0.0
+Transformer,800,0.0,0.0,0.0
+Transformer,900,0.0,0.0,0.0
+Transformer,1000,0.0,0.0,0.0
+Transformer,1100,0.0,0.0,0.0
+Transformer,1200,0.0,0.0,0.0
+Transformer,1300,0.0,0.0,0.0
+Transformer,1400,0.0034,-0.0034,0.0102
+Transformer,1500,0.0098,-0.0085,0.0281
+Transformer,1600,0.026,-0.0142,0.0662
+Transformer,1700,0.5429,0.3397,0.7461
+Transformer,1800,0.3088,0.0612,0.5563
+Transformer,1900,0.4776,0.2122,0.743
+Transformer,2000,0.6266,0.3577,0.8955
+Transformer,2100,0.498,0.2709,0.7252
+Transformer,2200,0.9334,0.8625,1.0044
+Transformer,2300,0.9693,0.9429,0.9956
+Transformer,2400,0.9274,0.8568,0.9981
+Transformer,2500,0.982,0.9595,1.0045
+Transformer,2600,0.6865,0.4821,0.8908
+Transformer,2700,0.9981,0.9972,0.999
+Transformer,2800,0.9392,0.8358,1.0425
+Transformer,2900,0.9965,0.9919,1.0011
+Transformer,3000,0.9984,0.9975,0.9993

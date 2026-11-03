@@ -1,0 +1,281 @@
+model,method_order,method,method_label,role,metric,kind,task,task_order,value
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,aggregate,,,0.9072
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,base_conversion,0,0.9686
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,grid_pathfinding,1,1.0
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,linear_equation_solving,2,0.9647
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,list_summation,3,0.9149
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,multidigit_addition,4,0.9805
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,sorting_algorithms,5,0.6168
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,aggregate,,,0.9916
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,base_conversion,0,1.0
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,grid_pathfinding,1,0.9964
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,linear_equation_solving,2,1.0
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,list_summation,3,0.9988
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,multidigit_addition,4,1.0
+Qwen2.5 0.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,sorting_algorithms,5,0.9477
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,aggregate,,,0.8252
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,base_conversion,0,0.9267
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,grid_pathfinding,1,0.9026
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,linear_equation_solving,2,0.9588
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,list_summation,3,0.8723
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,multidigit_addition,4,0.961
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,sorting_algorithms,5,0.3234
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,aggregate,,,0.9827
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,base_conversion,0,0.9958
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,grid_pathfinding,1,0.9988
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,linear_equation_solving,2,0.9936
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,list_summation,3,0.9815
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,multidigit_addition,4,0.9988
+Qwen2.5 0.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,sorting_algorithms,5,0.9097
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,aggregate,,,0.7471
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,base_conversion,0,0.9476
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,grid_pathfinding,1,0.8831
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,linear_equation_solving,2,0.7235
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,list_summation,3,0.6223
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,multidigit_addition,4,0.9416
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,sorting_algorithms,5,0.3772
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,strategy_match_rate,aggregate,,,0.9968
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,base_conversion,0,0.9994
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,grid_pathfinding,1,0.9988
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,linear_equation_solving,2,1.0
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,list_summation,3,0.9982
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,multidigit_addition,4,1.0
+Qwen2.5 0.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,sorting_algorithms,5,0.9857
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,aggregate,,,0.3516
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,base_conversion,0,0.2984
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,grid_pathfinding,1,0.5325
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,linear_equation_solving,2,0.3529
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,list_summation,3,0.3032
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,multidigit_addition,4,0.3312
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,sorting_algorithms,5,0.3174
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,aggregate,,,0.9989
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,base_conversion,0,0.9994
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,grid_pathfinding,1,1.0
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,linear_equation_solving,2,0.9913
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,list_summation,3,1.0
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,multidigit_addition,4,1.0
+Qwen2.5 0.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,sorting_algorithms,5,0.997
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,aggregate,,,0.3506
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,base_conversion,0,0.3141
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,grid_pathfinding,1,0.513
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,linear_equation_solving,2,0.3353
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,list_summation,3,0.3404
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,multidigit_addition,4,0.3636
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,sorting_algorithms,5,0.2575
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,aggregate,,,0.9961
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,base_conversion,0,0.997
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,grid_pathfinding,1,1.0
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,linear_equation_solving,2,0.9913
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,list_summation,3,0.9975
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,multidigit_addition,4,0.9964
+Qwen2.5 0.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,sorting_algorithms,5,0.9863
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,aggregate,,,0.3486
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,base_conversion,0,0.3351
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,grid_pathfinding,1,0.513
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,linear_equation_solving,2,0.3235
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,list_summation,3,0.2926
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,multidigit_addition,4,0.3831
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,sorting_algorithms,5,0.2695
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,aggregate,,,0.9995
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,base_conversion,0,0.9988
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,grid_pathfinding,1,1.0
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,linear_equation_solving,2,0.9994
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,list_summation,3,1.0
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,multidigit_addition,4,0.9994
+Qwen2.5 0.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,sorting_algorithms,5,0.9929
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,aggregate,,,0.9053
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,base_conversion,0,0.9529
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,grid_pathfinding,1,0.961
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,linear_equation_solving,2,0.9235
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,list_summation,3,0.984
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,multidigit_addition,4,0.974
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,analogical_set_overlap,task,sorting_algorithms,5,0.6287
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,aggregate,,,0.9832
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,base_conversion,0,0.9939
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,grid_pathfinding,1,0.9873
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,linear_equation_solving,2,1.0
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,list_summation,3,0.9988
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,multidigit_addition,4,0.9982
+Qwen2.5 1.5B,0,global_plus_token,"global +
+token",method,strategy_match_rate,task,sorting_algorithms,5,0.9103
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,aggregate,,,0.8174
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,base_conversion,0,0.9581
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,grid_pathfinding,1,0.8636
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,linear_equation_solving,2,0.9706
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,list_summation,3,0.7394
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,multidigit_addition,4,0.9351
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,analogical_set_overlap,task,sorting_algorithms,5,0.4371
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,aggregate,,,0.9737
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,base_conversion,0,1.0
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,grid_pathfinding,1,0.9783
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,linear_equation_solving,2,0.9994
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,list_summation,3,0.9341
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,multidigit_addition,4,0.9988
+Qwen2.5 1.5B,1,token_pressure,"token
+weighting",method,strategy_match_rate,task,sorting_algorithms,5,0.9739
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,aggregate,,,0.8691
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,base_conversion,0,0.9895
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,grid_pathfinding,1,0.9935
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,linear_equation_solving,2,0.9882
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,list_summation,3,0.6809
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,multidigit_addition,4,0.9935
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,analogical_set_overlap,task,sorting_algorithms,5,0.5928
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,strategy_match_rate,aggregate,,,0.9929
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,base_conversion,0,1.0
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,grid_pathfinding,1,0.9994
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,linear_equation_solving,2,1.0
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,list_summation,3,1.0
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,multidigit_addition,4,1.0
+Qwen2.5 1.5B,2,global_norm,"global
+scale",method,strategy_match_rate,task,sorting_algorithms,5,0.9513
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,aggregate,,,0.3721
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,base_conversion,0,0.3298
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,grid_pathfinding,1,0.5844
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,linear_equation_solving,2,0.4176
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,list_summation,3,0.2979
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,multidigit_addition,4,0.3312
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,analogical_set_overlap,task,sorting_algorithms,5,0.2994
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,aggregate,,,0.991
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,base_conversion,0,0.9964
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,grid_pathfinding,1,0.9976
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,linear_equation_solving,2,0.9721
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,list_summation,3,1.0
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,multidigit_addition,4,0.9982
+Qwen2.5 1.5B,3,token_inverse,"token
+inverse",ablation,strategy_match_rate,task,sorting_algorithms,5,0.9994
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,aggregate,,,0.3574
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,base_conversion,0,0.3037
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,grid_pathfinding,1,0.5325
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,linear_equation_solving,2,0.3529
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,list_summation,3,0.3138
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,multidigit_addition,4,0.3701
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,analogical_set_overlap,task,sorting_algorithms,5,0.2994
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,aggregate,,,0.9993
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,base_conversion,0,0.9994
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,grid_pathfinding,1,1.0
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,linear_equation_solving,2,1.0
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,list_summation,3,1.0
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,multidigit_addition,4,1.0
+Qwen2.5 1.5B,4,standard_cvae,ELBO,baseline,strategy_match_rate,task,sorting_algorithms,5,0.9976
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,aggregate,,,0.3594
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,base_conversion,0,0.3089
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,grid_pathfinding,1,0.513
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,linear_equation_solving,2,0.3588
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,list_summation,3,0.3298
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,multidigit_addition,4,0.3636
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,analogical_set_overlap,task,sorting_algorithms,5,0.3054
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,aggregate,,,0.9995
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,base_conversion,0,1.0
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,grid_pathfinding,1,1.0
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,linear_equation_solving,2,1.0
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,list_summation,3,1.0
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,multidigit_addition,4,0.9994
+Qwen2.5 1.5B,5,beta_elbo,β-ELBO,baseline,strategy_match_rate,task,sorting_algorithms,5,0.9941

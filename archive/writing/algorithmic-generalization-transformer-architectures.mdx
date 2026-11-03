@@ -85,7 +85,7 @@ bibtex: |
 
 ## TL;DR
 
-What architectural mechanisms are needed to enable transformers to generalize algorithmically beyond their training distribution? We find that standard transformers, even with Chain-of-Thought training, struggle to scale their reasoning to more complex problems. We explore four key mechanisms which we hypothesize are key to robust algorithmic generalization: ***(i)* input-adaptive recurrence**, ***(ii)* algorithmic supervision**, ***(iii)* depth-invariant discrete latent representations**, and ***(iv)* error correction**. When combined, these mechanisms enable transformers to develop genuine algorithmic reasoning that generalizes to problems much larger than those seen during training. Our mechanistic analysis further uncovers *how* these models compute, revealing a learned circuit that performs modular arithmetic using induction heads and frequency-domain operations.
+What architectural mechanisms are needed to enable transformers to generalize algorithmically beyond their training distribution? We find that standard transformers, even with Chain-of-Thought training, struggle to scale their reasoning to more complex problems. We explore four key mechanisms which we hypothesize are key to robust algorithmic generalization: ***(i)* input-adaptive recurrence**, ***(ii)* incremental computation schedules**, ***(iii)* anchored latent representations via a discrete bottleneck**, and ***(iv)* an explicit error-correction mechanism**. When combined, these mechanisms enable transformers to develop genuine algorithmic reasoning that generalizes to problems much larger than those seen during training. We further show that a model can discover its own computation schedule, without supervision on when each node should be computed, and that the schedule it discovers closely tracks circuit depth.{/* Our mechanistic analysis further uncovers *how* these models compute, revealing a learned circuit that performs modular arithmetic using induction heads and frequency-domain operations. */}
 
 ---
 
@@ -122,10 +122,9 @@ What architectural mechanisms are needed to enable transformer models to discove
 
 Consider this computation graph with 9 nodes:
 
-<Figure class="dag-example-figure">
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/formula_graph.pdf" alt="Computation Graph" invertInDarkMode />
+<Diagram figure="algorithmic-generalization-transformer-architectures/computation-graph" alt="Computation Graph">
   <Fragment slot="caption">Computation graph illustration: green nodes ($x_7$, $x_{42}$, $x_{88}$, $x_{115}$) are leaf nodes with given values; pink boxes denote arithmetic operations ($+$, $\times$, $-$); blue nodes ($x_{23}$, $x_{91}$, $x_{55}$, $x_{101}$, $x_{30}$) are computed from their dependencies.</Fragment>
-</Figure>
+</Diagram>
 
 <Callout type="info" title="The Task">
 Given $x_7=20$, $x_{42}=2$, $x_{88} = 6$, $x_{115} =14$, compute $x_{23}$, $x_{91}$, $x_{55}$, $x_{101}$, and $x_{30}$
@@ -243,7 +242,7 @@ Here, `[...]` denotes the preceding CoT trajectory that computed $x_{23}$ and $x
 <Callout type="warning" title="Key Findings: Catastrophic Failure Beyond Training Distribution">
 - **End-to-End models** (both feedforward and recurrent): Fail to effectively learn the task even in-distribution, with performance rapidly degrading as graph size increases.
 
-- **Chain-of-Thought** enables significant improvement, achieving near-perfect in-distribution performance ($N \leq 32$). However, it exhibits only **limited OOD generalization** to moderately larger graphs ($N \approx 40$), and this capability **rapidly deteriorates** as graph sizes exceed the training regime.
+- **Chain-of-Thought** enables significant improvement, achieving near-perfect in-distribution performance ($N \leq 32$). However, it exhibits only **limited OOD generalization** to moderately larger graphs ($N \approx 48$), and this capability **rapidly deteriorates** as graph sizes exceed the training regime.
 
 **Key Takeaway:** Even CoT—with its explicit step-by-step supervision—learns distribution-specific shortcuts rather than a generalizable algorithm. The token-based linear reasoning format proves brittle and fails to scale.
 </Callout>
@@ -258,7 +257,7 @@ Effective out-of-distribution generalization demands more than memorizing reason
 Rather than forcing computation into a token-by-token format (like CoT), we enable **native latent-space reasoning** through:
 
 1. **Recurrence & Adaptive Computation** - Scale computation time with problem complexity via recurrence
-2. **Algorithmic Supervision** - Guide learning toward a scalable layer-by-layer procedure via latent space supervision
+2. **Incremental Computation Schedules** - Learn a *computation schedule*, an assignment of each part of the computation to a recurrent iteration, via latent space supervision
 3. **Discrete Latent Anchoring** - Prevent representational drift across iterations via discretization
 4. **Self-Correction** - Detect and recover from intermediate errors
 
@@ -271,19 +270,11 @@ These mechanisms impose a **depth-invariant structure**: the model learns a recu
 
 We identify four key architectural mechanisms that enable transformers to develop true algorithmic reasoning:
 
-<FigureGrid columns={4} caption="Four architectural mechanisms enabling algorithmic generalization. (1) Recurrence allows adaptive computation depth matching problem complexity; (2) Algorithmic Supervision guides learning toward the correct layer-by-layer algorithm via latent space supervision; (3) Discretization creates stable checkpoints preventing representational drift across iterations; (4) Error Correction enables the model to detect and fix its own mistakes during iterative reasoning.">
-  <Figure caption="Recurrence & Adaptive Computation">
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/mech1.SVG" alt="Recurrence & Adaptive Computation" invertInDarkMode />
-  </Figure>
-  <Figure caption="Algorithmic Supervision">
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/mech2.SVG" alt="Algorithmic Supervision" invertInDarkMode />
-  </Figure>
-  <Figure caption="Anchored Discrete Latent Space">
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/mech3.SVG" alt="Anchored Discrete Latent Space" invertInDarkMode />
-  </Figure>
-  <Figure caption="Error Correction">
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/mech4.SVG" alt="Error Correction" invertInDarkMode />
-  </Figure>
+<FigureGrid columns={4} caption="Four architectural mechanisms enabling algorithmic generalization. (1) Recurrence allows adaptive computation depth matching problem complexity; (2) Incremental Computation Schedules assign each part of the computation to a recurrent iteration, learned via latent space supervision; (3) Discretization creates stable checkpoints preventing representational drift across iterations; (4) Error Correction enables the model to detect and fix its own mistakes during iterative reasoning.">
+  <Diagram figure="algorithmic-generalization-transformer-architectures/mech-1-recurrence" alt="Recurrence & Adaptive Computation" caption="Recurrence & Adaptive Computation" />
+  <Diagram figure="algorithmic-generalization-transformer-architectures/mech-2-consolidated" alt="Incremental Computation Schedules" caption="Incremental Computation Schedules" />
+  <Diagram figure="algorithmic-generalization-transformer-architectures/mech-3-original" alt="Anchored Discrete Latent Space" caption="Anchored Discrete Latent Space" />
+  <Diagram figure="algorithmic-generalization-transformer-architectures/mech-4-correction" alt="Error Correction" caption="Error Correction" />
 </FigureGrid>
 
 ---
@@ -292,16 +283,17 @@ We identify four key architectural mechanisms that enable transformers to develo
 
 To evaluate the effectiveness of each mechanism, we study multiple model configurations implementing different subsets of these components:
 
-| **Method** | **Mechanism 1: Recurrence** | **Mechanism 2: Supervision** | **Mechanism 3: Discretization** | **Mechanism 4: Error Correction** |
-|------------|:------:|:------:|:------:|:------:|
-| End-to-End Feedforward | ○ | ○ | ○ | ○ |
-| Recurrent End-to-End | ◐ | ○ | ○ | ○ |
-| Chain-of-Thought | ◐ | ◐ | ○ | ○ |
-| Continuous Latent Space Supervision | ● | ● | ○ | ○ |
-| Discrete Latent Space Supervision | ● | ● | ● | ○ |
-| **Discrete Latent Space Supervision ↻** | ● | ● | ● | ● |
+| **Method** | **M1: Recurrence** | **M2a: Depth-Supervised Schedule** | **M2b: Self-Discovered Schedule** | **M3: Discretization** | **M4: Error Correction** |
+|------------|:------:|:------:|:------:|:------:|:------:|
+| Feedforward E2E | ○ | ○ | ○ | ○ | ○ |
+| Recurrent E2E | ◐ | ○ | ○ | ○ | ○ |
+| Chain-of-Thought | ◐ | ◐ | ○ | ○ | ○ |
+| Continuous LSS | ● | ● | ○ | ○ | ○ |
+| Self-Scheduled LSS | ● | ○ | ● | ○ | ○ |
+| Discrete LSS | ● | ● | ○ | ● | ○ |
+| **Discrete LSS + EC** | ● | ● | ○ | ● | ● |
 
-*Table: ● = fully implemented, ◐ = partially implemented, ○ = not implemented*
+*Table: ● = fully implemented, ◐ = partially implemented, ○ = not implemented. *E2E* abbreviates End-to-End, *LSS* abbreviates Latent Space Supervision, and *EC* abbreviates Error Correction.*
 
 ---
 
@@ -322,22 +314,46 @@ Crucially, the number of recurrent iterations $T$ is not fixed—it **adapts to 
 
 </Callout>
 
-<Callout title="Mechanism 2: Latent State Algorithmic Supervision" accent="accent">
-**Motivation**: While recurrence provides capacity for iterative computation, it does not inherently guarantee that the model learns the desired layer-by-layer algorithmic procedure.
+<Callout title="Mechanism 2: Learning an Incremental Computation Schedule" accent="accent">
+**Motivation**: While a recurrent architecture provides the *capacity* for iterative computation, it does not provide an explicit mechanism for *learning* what computation is performed in each step. When only the final answer is supervised, the model may divide the work across iterations arbitrarily. To successfully generalize out-of-distribution to deeper, more complex inputs, the model must learn a robust **computation schedule**: an assignment of each part of the computation to a recurrent iteration. Specifically, we seek computation schedules that enforce incremental **sparse updates**. At each iteration, the model modifies only a subset of the output state and leaves the remainder unchanged, so that it progressively builds upon the solution computed so far. Crucially, the computational complexity of each step remains bounded and does not grow with problem size.
 
-**Implementation**: We provide supervision directly within the model's latent representation space at each recurrent step. At iteration $t$, a shared linear readout layer predicts node values from latent embeddings $E_i^{(t)}$. The training loss is:
+**Implementation**: We learn such a schedule through a **latent space supervision** approach, where a loss is applied to the model's intermediate latent states after every recurrent iteration, rather than applying a loss only to the final output. We consider two ways to learn the schedule. In *Mechanism 2a*, the schedule is supervised during training using the depth of each node. In *Mechanism 2b*, the model discovers its own schedule without supervision on when each node should be computed.
+
+</Callout>
+
+<Callout title="Mechanism 2a: Depth-Supervised Scheduling" accent="accent">
+**Implementation**: The layer-by-layer algorithm defines a natural computation schedule to target. At each iteration, the algorithm computes every node whose parents have all been computed, so that iteration $d+1$ computes the values of all nodes at depth $d$. At each recurrent iteration $t$, we use a shared *linear readout layer* to predict node values from the latent embeddings $E_i^{(t)}$ and apply a step-wise loss that aligns the model with the target layer-by-layer algorithm:
 
 $$
-\text{AlgorithmAlignmentLoss} = \sum_{t=1}^{T} \sum_{i} \underbrace{\mathbb{1}[\text{Depth}(x_i) \leq t]}_{\text{only supervise nodes computable by iteration } t} \cdot \ell(W_{\text{value}} \cdot E_i^{(t)}, \text{Value}(x_i))
+\mathrm{DepthSupervisedLoss} = \sum_{t=1}^{T} \sum_{i \in [n]} \ell\big(W_{\mathtt{value}} \, E_i^{(t)},\ \mathrm{Mask}\big(\mathrm{Value}(x_i),\ \mathrm{Depth}(x_i) < t\big)\big)
 $$
 
-**Intuition**: The algorithm alignment loss encourages the model to solve the problem iteratively, rather than attempting to solve it all at once. At iteration $t$, the layer-by-layer algorithm should have computed all nodes at depth $\leq t$. The indicator $\mathbb{1}[\text{Depth}(x_i) \leq t]$ ensures we only supervise those nodes—if $\text{Depth}(x_i) \leq t$, the value should already be known by iteration $t$, so we train the embedding $E_i^{(t)}$ to correctly predict $\text{Value} (x_i)$.
+where $\mathrm{Value}(x_i)$ is the ground-truth value of $x_i$, $W_{\mathtt{value}}$ is the shared readout, $\ell$ is the cross-entropy loss, and $\mathrm{Mask}(v, b)$ returns $v$ when $b$ holds and $\langle \mathtt{empty} \rangle$ otherwise, a special value that marks a node as not yet computed. $\mathrm{Depth}(x_i)$ is the node depth in the circuit, defined recursively: leaf nodes have depth $0$, and every other node has depth one greater than the maximum depth of its parents.
 
+**Intuition**: The loss requires that after iteration $t$, the model has computed the values of all nodes with depth less than $t$ and marked all other nodes as $\langle \mathtt{empty} \rangle$. For example, in the graph above, supervision at $t=1$ applies to leaf nodes (e.g., $x_7$), while at $t=2$ it extends to include second-layer nodes (e.g., $x_{23}$), and so on.
 
+**Key Distinction**: Like chain-of-thought training, this is a form of intermediate supervision, but it supervises a different object. CoT trains the model to generate a serialized token trace of the computation autoregressively, supervising the model in token space. In contrast, our latent space supervision method acts directly on the model's intermediate *latent states* within the forward pass, and supervises them to align with the step-by-step execution of the target algorithm. Notably, it requires a weaker supervision oracle than CoT. Beyond the final answer, our method needs only the depth of each node, which specifies the order in which nodes should be computed. However, while depth is available in our synthetic task, it may be unavailable or costly to obtain in other domains. Mechanism 2b removes this requirement by training the model to discover its own schedule without supervision.
 
+</Callout>
 
+<Callout title="Mechanism 2b: Self-Discovered Scheduling via Abstention" accent="accent">
+**Motivation**: We propose a method to *learn* an incremental computation schedule without supervision from a ground-truth reference. As in Mechanism 2a, a loss is applied to the latent state after every recurrent iteration. Since there is no reference schedule defining the order in which different parts of the output should be computed, the objective itself must encourage incremental, sparse computation.
 
-**Key Distinction**: Unlike CoT which supervises in token space, this supervises directly in latent states, steering internal representations to align with the algorithm's step-by-step execution.
+**Implementation**: We achieve this by allowing the model to **abstain** from making a prediction when it is uncertain, by predicting the $\langle \mathtt{empty} \rangle$ value. Abstaining receives partial credit so that it is preferred to making an incorrect prediction. This encourages the model to predict the output when it can do so reliably in the current iteration, and to abstain otherwise, deferring the node to a later iteration. For $\alpha \in [0, 1)$, a parameter defining the amount of partial credit received for abstaining, and letting $p_i^{(t)} = \mathrm{softmax}(W_{\mathtt{value}} \, E_i^{(t)})$ denote the predicted distribution over values for $x_i$ at iteration $t$, we define the self-scheduling loss as
+
+$$
+\mathrm{SelfSchedulingLoss} = \sum_{t=1}^{T} \sum_{i \in [n]} - \log \big( p_i^{(t)}[\mathrm{Value}(x_i)] + \alpha \, p_i^{(t)}[\langle \mathtt{empty} \rangle] \big)
+$$
+
+As with standard cross-entropy loss, a confident correct value gives a loss near zero, and a confident, incorrect value gives a loss that grows without bound. Abstaining, on the other hand, gives a fixed loss of $-\log \alpha$ for $\alpha > 0$. Thus, abstaining becomes the optimal choice when the model is uncertain, and $\alpha$ sets the level of confidence required to commit. Since $\alpha < 1$, predicting the correct value is always preferred to abstaining, so the model is pushed to eventually fill in every node.
+
+**Halting**: The abstention mechanism also provides a natural halting rule. At inference, we stop at the first iteration at which the model has committed to a value for every node:
+
+$$
+T_{\text{complete}}(X) := \min \{ t : \hat v_i^{(t)} \neq \langle \mathtt{empty} \rangle \ \forall i \}
+$$
+
+This halting mechanism adapts the iteration count to the input, and requires no knowledge of the input's depth at inference time.
 
 </Callout>
 
@@ -359,19 +375,23 @@ Note that the `value` factor of variable tokens (e.g., `x₄₂`) is `empty` ini
 
 **Effect**: This discrete bottleneck ensures each iteration operates on representations from a shared, anchored space, preventing drift and enabling stable processing across many iterations.
 
+**Training**: Because argmax decoding is not differentiable, we train the discretized model with teacher forcing across iterations, providing the correct intermediate state as the input to each iteration. These intermediate states are the targets of Mechanism 2a, so our implementation of discretization relies on the depth-supervised schedule. Extending it to Mechanism 2b is a direction for future work.
+
 </Callout>
 
 <Callout title="Mechanism 4: Learning to Self-Correct" accent="accent">
 **Motivation**: In sequential reasoning, errors at any step can propagate and compromise the entire solution. As problem complexity scales, the likelihood of encountering errors increases, limiting the ability to generalize to more complex instances.
 
-**Implementation**: We train the model to detect and correct errors by stochastically corrupting the model's discrete latent states during training. At each recurrent iteration, with small probability, we randomly corrupt value components (e.g., changing a computed value from 15 to 8). This forces the model to learn to:
+**Implementation**: Under the depth-supervised schedule of Mechanism 2a, the model only ever sees *correct* intermediate states during training, so it never learns to recover from a mistake. We therefore train each recurrent update on the model's *own* intermediate states, which may contain errors. Each training step makes two passes: the first applies the recurrent block to the correct intermediate latent state and trains it to predict the next state; the second applies it to the state the model itself just predicted, training it to produce the following correct state. When that predicted state contains an error, the model learns to repair the error while continuing the computation. The scheme introduces no additional hyperparameters. This trains the model to:
 
-1. **Detect** when previously-computed values are incorrect (due to corruption or its own mistakes)
+1. **Detect** when previously-computed values are incorrect (its own mistakes)
 2. **Correct** errors in subsequent steps before proceeding with dependent computations
 
-**Empirical Finding**: The model achieves nearly **100% one-step error correction rate**. Notably, effective error correction requires **deeper models** (more layers per recurrent block), as the model must simultaneously identify errors, correct them, and perform the current step's computation.
+**Empirical Finding**: Discrete LSS already generalizes far beyond the training regime, but its solve rate decays slowly as circuits grow, from 99.4% at $N = 32$ to 94.1% at $N = 128$, and becomes increasingly seed-dependent (89.8%–99.5% across five seeds at $N = 128$). Training the model to recover from its own errors largely removes both effects: Discrete LSS + EC attains a mean solve rate of 99.6% at $N = 128$, and the spread across seeds narrows to 98.8%–100%.
 
 </Callout>
+
+<Diagram figure="algorithmic-generalization-transformer-architectures/anchoring-drift" alt="Continuous, discrete, and self-correcting latent trajectories across recurrent iterations" caption="Discrete representations and self-correction under test-time scaling. Each row traces one token's latent state across recurrent iterations; the shaded band represents the representation space learned during training. Continuous latent states drift off that space as computation scales beyond the training regime. Discrete states (Mechanism 3) stay anchored to it and follow the target algorithmic path (dotted) far longer. This prevents representational drift, but does not prevent errors: once one occurs, it propagates to all later iterations. Self-correction (Mechanism 4) teaches the model to repair the error at the next iteration." />
 
 ---
 
@@ -382,25 +402,23 @@ Note that the `value` factor of variable tokens (e.g., `x₄₂`) is `empty` ini
 Combining these mechanisms yields dramatic improvement in out-of-distribution performance:
 
 <TwoColumns>
-  <Figure
+  <Chart
     slot="left"
-    class="method-results-figure"
-    caption="Figure (a): OOD generalization across methods. Our full method (dark blue) achieves near-perfect performance even at 4× training size."
-  >
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/method_ood_comparison_legendtop.pdf" alt="Method OOD Comparison" invertInDarkMode />
-  </Figure>
-  <Figure
+    figure="algorithmic-generalization-transformer-architectures/method-ood-comparison"
+    alt="Method OOD Comparison"
+    caption="Figure (a): Out-of-distribution generalization performance across methods on the modular arithmetic circuits task. Each curve is the mean over five training seeds and each band is ±1 standard error of the mean; the shaded region marks the training range N ≤ 32."
+  />
+  <Chart
     slot="right"
-    class="method-results-figure"
-    caption="Figure (b): Effective OOD generalization via input-adaptive scaling of computation time (Discrete Latent Space Supervision ↻)."
-  >
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/ourmethod_stepwise_results_Blues.pdf" alt="Stepwise Results" invertInDarkMode />
-  </Figure>
+    figure="algorithmic-generalization-transformer-architectures/ec-stepwise-best-seed"
+    alt="Stepwise Results"
+    caption="Figure (b): Input-adaptive scaling of computation time for Discrete LSS + EC: the fraction of instances solved as a function of the number of recurrent iterations, for each circuit size N. The shaded region marks the maximum circuit depth seen in training. Results are from one of the two seeds (out of five) that achieve 100% solve rate up to N = 128."
+  />
 </TwoColumns>
 
 
 
-**Result**: Combining all four mechanisms, our full method (**Discrete Latent Space Supervision ↻**) achieves **perfect performance** even on graphs 4× larger than training.
+**Result**: When all mechanisms are included, i.e., **Discrete LSS + EC**, the model maintains **near-perfect performance** across the entire range we evaluate. Averaged over five training seeds, it solves 99.9% (sd 0.2) of instances at $N = 32$ and 99.6% (sd 0.6) at $N = 128$, four times the largest circuit seen in training. The solve rate shows no appreciable decay as inputs move out of distribution, and this holds consistently across seeds.
 
 ### Ablation Analysis: Understanding Each Mechanism's Contribution
 
@@ -408,18 +426,45 @@ Figure (a) above shows a systematic ablation study. By comparing methods that di
 
 <Callout type="info" title="Key Findings">
 - **Recurrence matters:** Recurrent models improve in-distribution learning versus feedforward ones, but recurrence alone does not enable OOD generalization.
-- **Algorithmic supervision is critical:** Chain-of-Thought (token-space supervision) gives limited OOD gains (to ~N ≈ 40). Full latent-space supervision (continuous) extends generalization substantially further.
-- **Discretization prevents drift:** Continuous latent supervision degrades on much larger graphs; adding a discrete latent bottleneck (Discrete Latent Space Supervision) yields far greater robustness, retaining high accuracy up to N = 128.
-- **Error correction adds robustness:** The complete method (Discrete Latent Space Supervision ↻) with self-correction attains the strongest, near-perfect OOD performance across test sizes.
+- **Algorithmic supervision is critical:** Chain-of-Thought (token-space supervision) gives limited OOD gains (to ~N ≈ 48). Latent space supervision with a depth-supervised schedule (Continuous LSS) extends generalization substantially further.
+- **Discretization prevents drift:** Continuous LSS degrades on much larger graphs; adding a discrete latent bottleneck (Discrete LSS) yields far greater robustness, solving 94.1% of instances at N = 128 (mean of five seeds).
+- **Error correction adds robustness:** The complete method (Discrete LSS + EC) with self-correction attains the strongest, near-perfect OOD performance across test sizes (99.6% at N = 128; 98.8%–100% across five seeds).
+- **A schedule can be discovered, not only supervised:** Self-Scheduled LSS receives no depth information during training, yet solves 69.3% of instances at N = 128 on average (best seed 98.6%), where the chain-of-thought and end-to-end baselines solve none.
 
 **The Synergy Effect:** Each mechanism addresses a distinct failure mode; combined, they produce a robust algorithmic learner whose joint performance exceeds individual contributions.
 </Callout>
 
----
+### Discovering a Computation Schedule without Depth Supervision
+
+The models discussed so far are all trained with a depth-supervised computation schedule. We now explore whether a model can discover an incremental computation schedule without supervision. **Self-Scheduled LSS** is a recurrent model with continuous latent states trained with the $\mathrm{SelfSchedulingLoss}$, which supervises every iteration with the final solution and lets the model defer a node by abstaining (Mechanisms 1 and 2b). The model receives no depth information during training. At inference, the model iterates recurrently until all nodes are predicted without abstentions, halting at $T_{\text{complete}}$.
+
+Averaged over five training seeds, the model solves 92.5% (sd 11.2) of instances in distribution and 69.3% (sd 33.1) at $N = 128$, where the chain-of-thought and end-to-end baselines solve none. It is competitive with Continuous LSS despite receiving no depth supervision, although the seed-to-seed spread of both methods is large. The best seed solves 98.6% of instances at $N = 128$.
+
+<Chart figure="algorithmic-generalization-transformer-architectures/self-scheduled-first-fill" alt="Median first-fill time against node depth for the five Self-Scheduled LSS training seeds, with the layer-by-layer schedule as a dotted reference line.">
+  <Fragment slot="caption">The computation schedule discovered by Self-Scheduled LSS. Median first-fill time (the first iteration at which a node's decoded value is not $\langle \mathtt{empty} \rangle$) as a function of node depth, for each of the five training seeds. The dotted line is the layer-by-layer schedule used for depth supervision (Mechanism 2a), which computes the nodes at depth $d$ at iteration $d+1$. Each line is labelled with its seed's schedule rate, in depth levels per iteration, and its solve rate at $N = 128$.</Fragment>
+</Chart>
+
+To understand how the model achieves this, we examine the computation schedule it discovers. The figure above shows, for each seed, the median *first-fill time* $T_{\text{first}}(i)$ of a node $x_i$, the first iteration at which its decoded value is not $\langle \mathtt{empty} \rangle$, as a function of its depth. In every seed, the first-fill time grows linearly with depth ($R^2 \geq 0.98$), and this trend extrapolates from the training regime (depth at most $6$) to circuits of depth up to $19$. The model therefore discovers a schedule that is aligned with the depth structure of the circuit and performs a bounded amount of computation per iteration, without any depth supervision.
+
+The discovered schedules need not coincide with the layer-by-layer schedule used for depth supervision. Three seeds discover a more efficient schedule that computes $1.6$ to $2.1$ layers per iteration on average, while the other two compute $0.8$ to $0.9$. This is consistent with the objective, which rewards computing each node as soon as it can be computed reliably, but no sooner. We observe that the three seeds with the faster schedules are also the three that generalize best.
+
+While performance is less consistent across seeds than for Discrete LSS + EC, some seeds generalize almost perfectly, which demonstrates that the method is capable of learning a robust, generalizable solution. This suggests that reliability can be improved through better training and optimization. It also motivates combining the self-scheduling loss of Mechanism 2b with discretization and error correction to enhance out-of-distribution stability, perhaps by introducing discretization in a post-training stage.
+
+### Pushing Generalization to Eight Times the Training Size
+
+With all four mechanisms, Discrete LSS + EC generalizes almost perfectly to inputs four times larger than any seen in training. Encouraged by this result, we carried out a follow-up experiment to evaluate how much further this generalization extends. We double the evaluation range once more, to circuits with up to $N = 256$ nodes, eight times the largest training input. Circuits of this size require a larger vocabulary of variable names, so we train a new set of models for this experiment.
+
+<Chart figure="algorithmic-generalization-transformer-architectures/stronger-ood-best-seed" alt="Solve rate against graph size up to N = 256 for the best of five seeds of each method; models trained on N ≤ 32." caption="Generalization from N ≤ 32 to N = 256, best of five seeds." />
+
+The figure above shows the best of five seeds for each method. The best Discrete LSS + EC model remains essentially perfect across the entire range. It solves at least 99.9% of instances at every circuit size, making only $3$ errors on $32{,}768$ test instances, and a second seed matches this performance. The gaps between methods widen at this scale. At $N = 256$, the best Discrete LSS model solves 96.8% of instances, the best Self-Scheduled LSS model solves 71.6%, and the best Continuous LSS model solves only 7.8%. The Chain-of-Thought and End-to-End baselines solve no instances beyond $N = 72$. Results vary more across seeds in this experiment, since some seeds fail to learn the task even within the training range. Even so, averaged over all five seeds, Discrete LSS + EC solves 80.9% of instances at $N = 256$, far ahead of every other method.
+
+{/* Mechanistic interpretability section: hidden for now (kept for later).
 
 ## Mechanistic Interpretability: The Algorithm Learned by the Model?
 
 One of the most exciting aspects of our work is that we don't just show *that* it works—we explain *how* it works! Through detailed analysis, we reverse-engineer the exact algorithm the model learned.
+
+To make the analysis tractable, we make two simplifying choices. First, we analyze Discrete LSS, which includes recurrence, a depth-supervised computation schedule, and discretization (Mechanisms 1, 2a, and 3) but not error correction (Mechanism 4). Second, we use a two-layer recurrent block (16 attention heads, hidden dimension 256), rather than the four-layer block used for this method in our main results. These choices yield a simpler and more human-interpretable solution to the task.
 
 <Callout type="question" title="Central Questions">
 1. What algorithm does the trained model implement?
@@ -456,9 +501,7 @@ We form hypotheses about each component's role, then design controlled experimen
 
 Here's what we found: the model implements an **induction head** mechanism tailored to the task. Let's break it down step-by-step:
 
-<Figure caption="The complete computational circuit showing how each layer contributes.">
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/2-layer-illustrated.pdf" alt="Complete Mechanism" invertInDarkMode />
-</Figure>
+<Diagram figure="algorithmic-generalization-transformer-architectures/two-layer-circuit" alt="Complete Mechanism" caption="The complete computational circuit showing how each layer contributes." />
 
 <Callout title="Layer 1 Attention: Variable Identification" accent="accent">
 **What It Does**: The first layer's attention heads organize into distinct groups, each specialized for tracking specific variable positions in equations.
@@ -473,40 +516,32 @@ Here's what we found: the model implements an **induction head** mechanism tailo
 
 </Callout>
 
-<Figure caption="First-layer attention heads organize into groups based on which variable position they track. This figure shows the grouping structure discovered through relative variance analysis.">
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_head_allocation.pdf" alt="L0 Head Allocation" invertInDarkMode />
-</Figure>
+<Diagram figure="algorithmic-generalization-transformer-architectures/l0-head-allocation" alt="L0 Head Allocation" caption="First-layer attention heads organize into groups based on which variable position they track. This figure shows the grouping structure discovered through relative variance analysis." />
 
 **Relative Variance Analysis Results** — Each heatmap below shows which attention heads respond strongly when perturbing a specific variable position:
 
-<FigureGrid columns={4}>
-  <Figure>
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_var_0_relative_variance_heatmap.pdf" alt="VAR_0" invertInDarkMode />
+<FigureGrid columns={2}>
+  <Chart figure="algorithmic-generalization-transformer-architectures/l0-relative-variance-var-0" alt="VAR_0">
     <Fragment slot="caption"><code>var₀</code> (Heads 4, 8)</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_var_1_relative_variance_heatmap.pdf" alt="VAR_1" invertInDarkMode />
+  </Chart>
+  <Chart figure="algorithmic-generalization-transformer-architectures/l0-relative-variance-var-1" alt="VAR_1">
     <Fragment slot="caption"><code>var₁</code> (Heads 5, 12)</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_var_2_relative_variance_heatmap.pdf" alt="VAR_2" invertInDarkMode />
+  </Chart>
+  <Chart figure="algorithmic-generalization-transformer-architectures/l0-relative-variance-var-2" alt="VAR_2">
     <Fragment slot="caption"><code>var₂</code> (Heads 3, 7, 11, 14)</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_rhs_relative_variance_heatmap.pdf" alt="RHS" invertInDarkMode />
+  </Chart>
+  <Chart figure="algorithmic-generalization-transformer-architectures/l0-relative-variance-rhs" alt="RHS">
     <Fragment slot="caption"><code>rhs</code> (result position)</Fragment>
-  </Figure>
+  </Chart>
 </FigureGrid>
 
-*Reading the heatmaps: Each row represents an attention head (0-15), and red indicates high relative variance. When we perturb $\mathtt{var}_0$, heads 4 and 8 show strong response (left heatmap). Similarly, each `variable` position has its dedicated head group. Crucially, look at the $\mathtt{rhs}$ heatmap (rightmost): heads from all groups show activation, because the $\mathtt{rhs}$ position needs information from all `variable`s.*
+*Reading the heatmaps: Each row represents a query token and each column an attention head (0-15); darker cells indicate high relative variance. When we perturb $\mathtt{var}_0$, heads 4 and 8 show strong response (top left). Similarly, each `variable` position has its dedicated head group. Crucially, look at the $\mathtt{rhs}$ heatmap (bottom right): heads from all groups show activation, because the $\mathtt{rhs}$ position needs information from all `variable`s.*
 
 **Norm Amplification Analysis** — What type of information do these heads copy?
 
-<Figure mediaMaxWidth="440px" caption="Operator norm amplification for different factored embedding types across all 16 attention heads.">
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L0_ov_operator_norm_mpl.pdf" alt="L0 OV Norm" invertInDarkMode />
-</Figure>
+<Chart figure="algorithmic-generalization-transformer-architectures/l0-ov-operator-norm" alt="L0 OV Norm" caption="Operator norm amplification for different factored embedding types across all 16 attention heads." />
 
-The `variable` factor (orange) shows dramatically higher amplification than other factors, confirming that first-layer attention heads copy **`variable` identities** (not `value`s) to the $\mathtt{rhs}$ position.
+The `variable` factor shows dramatically higher amplification than other factors, confirming that first-layer attention heads copy **`variable` identities** (not `value`s) to the $\mathtt{rhs}$ position.
 
 <Callout title="Layer 1 MLP: Minimal Processing" accent="accent">
 **What We Found**: The first MLP makes only minor adjustments to the residual stream (relative $L_2$ change $< 10\%$)
@@ -514,9 +549,7 @@ The `variable` factor (orange) shows dramatically higher amplification than othe
 **Interpretation**: The model discovered an induction head mechanism for solving the task, where the role of the first layer is merely to copy variable identities via attention to be used as the *query* in the *next layer attention*. Thus, the first layer *MLP* does not need to carry out any computation, and is approximately the identity. The arithmetic computation will be carried out by the second layer MLP.
 </Callout>
 
-<Figure caption="Layer 1 MLP contributes minimally; most work happens in attention and the final MLP.">
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/l2_relative_error.pdf" alt="L2 Relative Error" invertInDarkMode />
-</Figure>
+<Chart figure="algorithmic-generalization-transformer-architectures/l2-relative-error" alt="L2 Relative Error" caption="Layer 1 MLP contributes minimally; most work happens in attention and the final MLP." />
 
 <Callout title="Layer 2 Attention: Value Retrieval (The Induction Head)" accent="accent">
 **What It Does**: Now that we know *which* variables we need, the second layer's attention heads retrieve their *values*.
@@ -539,28 +572,23 @@ The `variable` factor (orange) shows dramatically higher amplification than othe
 
 **Attention Head Statistics** — Quantifying head specialization through relative variance analysis
 
-<FigureGrid columns={3}>
-  <Figure>
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var0.pdf" alt="VAR_0_stats" invertInDarkMode />
-    <Fragment slot="caption"><code>var₀</code> relative variance</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var1.pdf" alt="VAR_1_stats" invertInDarkMode />
-    <Fragment slot="caption"><code>var₁</code> relative variance</Fragment>
-  </Figure>
-  <Figure>
-    <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/l1_attention_head_statistics_var2.pdf" alt="VAR_2_stats" invertInDarkMode />
-    <Fragment slot="caption"><code>var₂</code> relative variance</Fragment>
-  </Figure>
-</FigureGrid>
+<Chart figure="algorithmic-generalization-transformer-architectures/l1-attention-head-statistics-var0" alt="VAR_0_stats">
+<Fragment slot="caption"><code>var₀</code> relative variance</Fragment>
+</Chart>
+
+<Chart figure="algorithmic-generalization-transformer-architectures/l1-attention-head-statistics-var1" alt="VAR_1_stats">
+<Fragment slot="caption"><code>var₁</code> relative variance</Fragment>
+</Chart>
+
+<Chart figure="algorithmic-generalization-transformer-architectures/l1-attention-head-statistics-var2" alt="VAR_2_stats">
+<Fragment slot="caption"><code>var₂</code> relative variance</Fragment>
+</Chart>
 
 *Each subfigure shows the relative variance histogram for each attention head. High relative variance for specific heads indicates specialization. For example, heads 0, 8, and 15 show high relative variance for $\mathtt{var}_0$, confirming they specialize in retrieving that `variable`'s `value`.*
 
 **Norm Amplification Analysis** — What type of information is copied?
 
-<Figure mediaMaxWidth="440px" caption="Operator norm amplification for Layer 2 heads.">
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/L1_ov_operator_norm.pdf" alt="L1 OV Operator Norm" invertInDarkMode />
-</Figure>
+<Chart figure="algorithmic-generalization-transformer-architectures/l1-ov-operator-norm" alt="L1 OV Operator Norm" caption="Operator norm amplification for Layer 2 heads." />
 
 Unlike Layer 1 (which amplified `variable` embeddings), Layer 2 heads strongly amplify the `value` factor, confirming they copy **numerical `value`s** (not `variable` names) from previous equations. This reveals the head specialization: different heads focus on retrieving `value`s for different `variable` positions.
 
@@ -587,22 +615,15 @@ The periodic nature of trigonometric functions **automatically handles** the mod
 
 </Callout>
 
-<Figure caption="Before MLP: Dominated by bias term (0,0,0 frequency)">
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-preact.pdf" alt="FFT MLP Preact" invertInDarkMode />
-</Figure>
+<Chart figure="algorithmic-generalization-transformer-architectures/fft-histograms-l1-mlp-preact" alt="FFT MLP Preact" caption="Before MLP: Dominated by bias term (0,0,0 frequency)" />
 
-<Figure caption="During MLP: Bias decreases, diagonal frequencies increase.">
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-postact.pdf" alt="FFT MLP Postact" invertInDarkMode />
-</Figure>
+<Chart figure="algorithmic-generalization-transformer-architectures/fft-histograms-l1-mlp-postact" alt="FFT MLP Postact" caption="During MLP: Bias decreases, diagonal frequencies increase." />
 
-<Figure>
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/fft_histograms_L1-mlp-output.pdf" alt="FFT MLP Output" invertInDarkMode />
+<Chart figure="algorithmic-generalization-transformer-architectures/fft-histograms-l1-mlp-output" alt="FFT MLP Output">
   <Fragment slot="caption">After MLP: Strong diagonal components encoding the sum. The frequency (a,a,a) represents $\cos(2\pi a(\mathtt{var}_0+\mathtt{var}_1+\mathtt{var}_2)/23)$.</Fragment>
-</Figure>
+</Chart>
 
-<Figure caption="Final output maintains the frequency structure for decoding.">
-  <Picture slot="figure" src="/blog/algorithmic-generalization-transformer-architectures/figures/fft_histograms_decoder-output.pdf" alt="FFT Decoder Output" invertInDarkMode />
-</Figure>
+<Chart figure="algorithmic-generalization-transformer-architectures/fft-histograms-decoder-output" alt="FFT Decoder Output" caption="Final output maintains the frequency structure for decoding." />
 
 **Interpreting the Frequency Analysis:** The progression through these figures reveals the MLP's computational strategy. At the output layer (third figure), we observe strong magnitudes for diagonal frequency components $(a,a,a)$ where $a \in \{1, \ldots, 22\}$. These diagonal frequencies are crucial because they encode the sum: a component with frequency $(a,a,a)$ corresponds to trigonometric functions of $\mathtt{var}_0 + \mathtt{var}_1 + \mathtt{var}_2$. The MLP essentially transforms the input into this frequency-based representation, where the final answer can be directly decoded from these sum-encoding components. This elegant mechanism allows modular arithmetic to emerge naturally from the periodic structure of sine and cosine functions.
 
@@ -655,19 +676,19 @@ Let's trace through how the model solves a concrete example to see everything wo
 
 </Callout>
 
----
+*/}
 
 ## Conclusion
 
-Our work demonstrates that transformers can learn genuine algorithms that generalize far beyond their training distribution; but only with the right architectural mechanisms. By integrating **recurrence**, **latent-space supervision**, **discretization**, and **self-correction**, we give transformers the inductive structure needed for **scalable recursive reasoning**. These mechanisms transform raw sequence processing into a depth-invariant computational process that adapts its reasoning to problem complexity.
+Our work demonstrates that transformers can learn genuine algorithms that generalize far beyond their training distribution; but only with the right architectural mechanisms. By integrating **recurrence**, **incremental computation schedules**, **discretization**, and **self-correction**, we give transformers the inductive structure needed for **scalable recursive reasoning**. These mechanisms transform raw sequence processing into a depth-invariant computational process that adapts its reasoning to problem complexity.
 
-The mechanistic analysis reveals an elegant computational structure:
+{/* The mechanistic analysis reveals an elegant computational structure:
 
 - **Layer 1 attention** identifies which variables are needed
 - **Layer 2 attention** retrieves their values via an induction head mechanism
 - **Final MLP** performs modular arithmetic using frequency-domain processing
 - **Recurrence** enables input-adaptive computation that scales to arbitrary problem sizes
 
-This modular, interpretable solution emerges naturally from training with our architectural mechanisms.
+This modular, interpretable solution emerges naturally from training with our architectural mechanisms. */}
 
 **Broader Implication:** This study points toward a new paradigm for building reasoning systems—not by scaling model size alone, but by embedding algorithmic priors directly into the architecture. Such designs can bridge the gap between statistical pattern recognition and symbolic computation, paving the way for models that reason robustly far beyond their training domain.

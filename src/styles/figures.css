@@ -1,0 +1,420 @@
+/* Charts (<Chart>) and diagrams (<Diagram>). See docs/figures.md.
+
+   Colours come from the theme: --figure-1 … --figure-6, --figure-N-alt and
+   --figure-neutral are theme roles, and --figure-tint, --figure-strong and
+   --figure-band-opacity are emitted with them per appearance
+   (src/lib/theme/themeCss.ts). This file only reads them. */
+
+.figure-chart {
+  container-type: inline-size;
+  width: 100%;
+  max-width: var(--figure-width);
+  color: var(--color-fg-soft);
+  font-family: var(--font-ui);
+}
+
+/* Plot's own rules use :where(), so these win without !important. The
+   aria-label rules below are scoped to descendants of Plot's root SVG
+   (.figure-plot): the root's own aria-label is the alt text, which could end
+   in "axis" or "grid", and a diagram's SVG is never matched. */
+.figure-chart .figure-plot {
+  background: none;
+  overflow: visible;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  width: 100%;
+}
+
+.figure-chart .figure-plot-figure {
+  margin: 0;
+}
+
+/* Panel title: small and left-aligned, not a heading. */
+.figure-chart__title {
+  margin: 0 0 4px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-fg-soft);
+}
+
+.figure-chart .figure-plot [aria-label$="tick label"] {
+  fill: var(--color-muted);
+}
+
+.figure-chart .figure-plot [aria-label$="axis label"] {
+  fill: var(--color-fg-soft);
+  font-size: 13px;
+}
+
+.figure-chart .figure-plot [aria-label$="axis tick"],
+.figure-chart .figure-plot [aria-label$="axis"] {
+  stroke: var(--color-rule);
+}
+
+.figure-chart .figure-plot [aria-label$="grid"] {
+  stroke: var(--color-border);
+  stroke-opacity: 1;
+}
+
+.figure-chart .figure-plot [aria-label="frame"],
+.figure-chart .figure-baseline {
+  stroke: var(--color-rule);
+}
+
+.figure-chart .figure-plot [aria-label="area"] {
+  fill-opacity: var(--figure-band-opacity);
+}
+
+/* Error bars: 1px in label ink, so they read against any series colour. */
+.figure-chart .figure-error {
+  stroke: var(--color-fg-soft);
+  stroke-width: 1;
+}
+
+.figure-chart .figure-plot [aria-label="y-axis tick"] {
+  display: none;
+}
+
+.figure-chart .figure-plot [aria-label="facet label"],
+.figure-chart .figure-plot [aria-label$="facet label"] {
+  fill: var(--color-muted);
+}
+
+/* Identifiers (code names) set in the mono face. */
+.figure-chart[data-mono~="x"] .figure-plot [aria-label="x-axis tick label"],
+.figure-chart[data-mono~="fx"] .figure-plot [aria-label="fx-axis tick label"],
+.figure-chart[data-mono~="legend"] .figure-legend {
+  font-family: var(--font-code, var(--font-mono));
+}
+
+/* Hover tip for marks with a title. Fixed, so it can leave the chart box. */
+.figure-tip {
+  position: fixed;
+  z-index: 40;
+  max-width: 260px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  background: var(--color-bg);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.12);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--color-fg-soft);
+  white-space: pre-line;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.figure-chart [data-tip] {
+  cursor: default;
+}
+
+/* Legend: below the plot, left-aligned, no box. */
+.figure-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-fg-soft);
+}
+
+.figure-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.figure-legend svg {
+  flex: none;
+  overflow: visible;
+}
+
+.figure-legend__ramp span {
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* TeX in labels, rendered by KaTeX at build time. Axis labels sit in a
+   foreignObject placed where Plot drew the SVG text. */
+.figure-chart .figure-tex {
+  overflow: visible;
+}
+
+/* TeX labels sit in boxes much larger than their text (an axis label's is
+   twice the chart's width), and the SVG lets them overflow, so a box can
+   cover a neighbouring figure. Labels are never interactive, so the
+   pointer passes through to controls and hover targets beneath, in this
+   figure or the next. The markup carries
+   pointer-events="none" too; this covers the HTML inside. */
+.figure-chart :is(.figure-tex, .d-tex),
+.figure-chart :is(.figure-tex, .d-tex) * {
+  pointer-events: none;
+}
+
+.figure-tex__label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 24px;
+  color: var(--color-fg-soft);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.figure-tex__label[data-anchor="start"] {
+  text-align: left;
+}
+
+.figure-tex__label[data-anchor="end"] {
+  text-align: right;
+}
+
+.figure-chart .katex {
+  font-size: 1.08em;
+}
+
+/* Hooks for hand-drawn axes (panels with their own scales draw ticks, grid
+   and titles as ordinary marks): give those marks these classNames. */
+.figure-chart .figure-tick-label {
+  fill: var(--color-muted);
+}
+
+.figure-chart .figure-axis-label {
+  fill: var(--color-fg-soft);
+  font-size: 13px;
+}
+
+.figure-chart .figure-grid {
+  stroke: var(--color-border);
+  stroke-opacity: 1;
+}
+
+.figure-chart .figure-axis-line {
+  stroke: var(--color-rule);
+}
+
+/* Diagrams (<Diagram>): schematic figures in the charts' palette and type.
+   A tone sets --tone; regions are an opaque tint of it (overlaps stay
+   distinct and nothing shows through), outlined in the tone itself. */
+
+.figure-diagram__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-ui);
+}
+
+.figure-diagram .d-tone-1 { --tone: var(--figure-1); }
+.figure-diagram .d-tone-2 { --tone: var(--figure-2); }
+.figure-diagram .d-tone-3 { --tone: var(--figure-3); }
+.figure-diagram .d-tone-4 { --tone: var(--figure-4); }
+.figure-diagram .d-tone-5 { --tone: var(--figure-5); }
+.figure-diagram .d-tone-6 { --tone: var(--figure-6); }
+.figure-diagram .d-tone-neutral { --tone: var(--figure-neutral); }
+.figure-diagram .d-tone-ink { --tone: var(--color-fg-soft); }
+.figure-diagram .d-tone-muted { --tone: var(--color-muted); }
+.figure-diagram .d-tone-inverse { --tone: #fff; }
+
+.figure-diagram .d-region {
+  stroke: var(--tone);
+}
+
+.figure-diagram .d-fill-tint {
+  fill: color-mix(in srgb, var(--tone) var(--figure-tint), var(--color-bg));
+}
+
+.figure-diagram .d-fill-solid {
+  fill: var(--tone);
+}
+
+/* A darker shade of the tone, dark enough for white text in both themes
+   (the dark theme's tones are lighter, so they are darkened more). */
+.figure-diagram .d-fill-strong {
+  fill: color-mix(in srgb, var(--tone) var(--figure-strong), black);
+  stroke: none;
+}
+
+.figure-diagram .d-fill-none {
+  fill: none;
+}
+
+.figure-diagram .d-no-stroke {
+  stroke: none;
+}
+
+.figure-diagram .d-frame {
+  fill: none;
+  stroke: var(--color-rule);
+}
+
+.figure-diagram .d-line {
+  fill: none;
+  stroke: var(--tone);
+  stroke-linecap: round;
+}
+
+.figure-diagram :is(.d-head, .d-dot) {
+  fill: var(--tone);
+}
+
+.figure-diagram text.d-label {
+  fill: var(--tone);
+}
+
+.figure-diagram .d-label--sm { font-size: 12px; }
+.figure-diagram .d-label--md { font-size: 13px; }
+.figure-diagram .d-label--lg { font-size: 15px; font-weight: 500; }
+
+.figure-diagram .d-italic {
+  font-style: italic;
+}
+
+/* A halo in the page colour lifts a label off the line it sits on. */
+.figure-diagram text.d-halo {
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+
+.figure-diagram .d-tex {
+  overflow: visible;
+}
+
+.figure-diagram div.d-label {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: var(--tone);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.figure-diagram div.d-label[data-anchor="start"] { justify-content: flex-start; }
+.figure-diagram div.d-label[data-anchor="end"] { justify-content: flex-end; }
+.figure-diagram div.d-label[data-baseline="top"] { align-items: flex-start; }
+.figure-diagram div.d-label[data-baseline="bottom"] { align-items: flex-end; }
+
+.figure-diagram div.d-halo > span {
+  padding: 0 3px;
+  border-radius: 3px;
+  background: var(--color-bg);
+}
+
+/* Replay: a small icon button laid over a corner of the drawing, so it takes
+   no row of its own. Quiet at rest, clear on hover and focus. It is shown
+   only after the first play, so never without JS or with reduced motion. */
+.figure-chart__plot {
+  position: relative;
+}
+
+.figure-diagram__replay {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
+  /* muted-2 clears 3:1 on bg in every theme, as a control's icon must. */
+  color: var(--color-muted-2);
+  cursor: pointer;
+  transition:
+    color 120ms ease,
+    border-color 120ms ease;
+}
+
+.figure-diagram__replay[hidden] {
+  display: none;
+}
+
+.figure-diagram__replay[data-corner="top-right"] { top: 0; right: 0; }
+.figure-diagram__replay[data-corner="top-left"] { top: 0; left: 0; }
+.figure-diagram__replay[data-corner="bottom-right"] { bottom: 0; right: 0; }
+.figure-diagram__replay[data-corner="bottom-left"] { bottom: 0; left: 0; }
+
+.figure-diagram:hover .figure-diagram__replay {
+  color: var(--color-muted);
+}
+
+.figure-diagram__replay:hover,
+.figure-diagram__replay:focus-visible {
+  color: var(--color-fg-soft);
+  border-color: var(--color-border);
+}
+
+.figure-diagram__replay:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.figure-diagram__replay svg {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure-diagram__replay {
+    transition: none;
+  }
+}
+
+.figure-legend__region {
+  fill: color-mix(in srgb, var(--tone) var(--figure-tint), var(--color-bg));
+  stroke: var(--tone);
+  stroke-width: 1;
+}
+
+/* A chart sets its own height. Equal-frame grids size image frames to a
+   fixed ratio, which would clip a chart's legend, so a chart's frame takes
+   its natural height instead; cells still align on their tops. */
+.figure-grid .article-figure__body:has(> .figure-chart) {
+  aspect-ratio: auto;
+  height: auto;
+  overflow: visible;
+}
+
+/* Medium and full figures carry a phone layout and swap to it on narrow
+   columns. It is drawn at --figure-compact-width (360px) and is never
+   stretched past that, so its type keeps the size it was set at; in a
+   column between that and the breakpoint it sits centred. */
+.figure-chart__compact {
+  display: none;
+  max-width: var(--figure-compact-width);
+  margin-inline: auto;
+}
+
+@container (max-width: 520px) {
+  .figure-chart:is(.figure-chart--medium, .figure-chart--full) .figure-chart__wide {
+    display: none;
+  }
+
+  .figure-chart:is(.figure-chart--medium, .figure-chart--full) .figure-chart__compact {
+    display: block;
+  }
+
+  /* The drawing's box (and so a Replay button in its corner), the title and
+     the legend line up with the centred layout. */
+  .figure-chart:is(.figure-chart--medium, .figure-chart--full) .figure-chart__plot {
+    max-width: var(--figure-compact-width);
+    margin-inline: auto;
+  }
+
+  .figure-chart:is(.figure-chart--medium, .figure-chart--full)
+    > :is(.figure-chart__title, .figure-legend) {
+    max-width: var(--figure-compact-width);
+    margin-left: max(0px, calc((100% - var(--figure-compact-width)) / 2));
+  }
+}

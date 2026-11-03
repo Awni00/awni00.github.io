@@ -1,0 +1,307 @@
+method_order,method,method_label,role,checkpoint,progress,alignment,fidelity,kl,token_recon,base_recon
+0,standard_cvae,ELBO,baseline,1,0.0198,0.5094,0.742,0.3526,1.2989,1.8107
+0,standard_cvae,ELBO,baseline,2,0.0397,0.4402,0.875,0.027114,1.2069,1.339
+0,standard_cvae,ELBO,baseline,3,0.0595,0.4842,0.914,0.012466,1.1733,1.2482
+0,standard_cvae,ELBO,baseline,4,0.0793,0.4855,0.932,0.0072084,1.1701,1.2509
+0,standard_cvae,ELBO,baseline,5,0.0992,0.4436,0.942,0.0050684,1.1744,1.2236
+0,standard_cvae,ELBO,baseline,6,0.119,0.4735,0.953,0.0042672,1.1738,1.2131
+0,standard_cvae,ELBO,baseline,7,0.1388,0.5035,0.965,0.0032819,1.1589,1.1766
+0,standard_cvae,ELBO,baseline,8,0.1587,0.4601,0.951,0.0032159,1.1521,1.1989
+0,standard_cvae,ELBO,baseline,9,0.1785,0.4775,0.966,0.0028137,1.1382,1.183
+0,standard_cvae,ELBO,baseline,10,0.1983,0.4936,0.942,0.0024618,1.1507,1.2608
+0,standard_cvae,ELBO,baseline,11,0.2182,0.4535,0.944,0.0023244,1.1435,1.2041
+0,standard_cvae,ELBO,baseline,12,0.238,0.4776,0.969,0.0022264,1.136,1.1751
+0,standard_cvae,ELBO,baseline,13,0.2578,0.5027,0.96,0.00187,1.1456,1.1756
+0,standard_cvae,ELBO,baseline,14,0.2777,0.4638,0.963,0.0018026,1.154,1.1682
+0,standard_cvae,ELBO,baseline,15,0.2975,0.4851,0.962,0.0016069,1.145,1.1799
+0,standard_cvae,ELBO,baseline,16,0.3173,0.4664,0.972,0.0014293,1.1417,1.1623
+0,standard_cvae,ELBO,baseline,17,0.3372,0.4592,0.969,0.0011398,1.1435,1.1576
+0,standard_cvae,ELBO,baseline,18,0.357,0.4876,0.95,0.0013437,1.149,1.1575
+0,standard_cvae,ELBO,baseline,19,0.3768,0.4674,0.955,0.0010007,1.1359,1.1696
+0,standard_cvae,ELBO,baseline,20,0.3967,0.5076,0.968,0.0010856,1.1323,1.1483
+0,standard_cvae,ELBO,baseline,21,0.4165,0.4743,0.981,0.0011307,1.1497,1.1559
+0,standard_cvae,ELBO,baseline,22,0.4363,0.4812,0.965,0.00086788,1.1378,1.1543
+0,standard_cvae,ELBO,baseline,23,0.4562,0.4662,0.964,0.00090835,1.1427,1.1532
+0,standard_cvae,ELBO,baseline,24,0.476,0.4642,0.975,0.00084456,1.1361,1.1538
+0,standard_cvae,ELBO,baseline,25,0.4958,0.466,0.97,0.0008316,1.1344,1.1531
+0,standard_cvae,ELBO,baseline,26,0.5157,0.4668,0.976,0.0008457,1.1291,1.1393
+0,standard_cvae,ELBO,baseline,27,0.5355,0.4778,0.967,0.0010222,1.1396,1.1529
+0,standard_cvae,ELBO,baseline,28,0.5553,0.4822,0.966,0.00072364,1.1365,1.1448
+0,standard_cvae,ELBO,baseline,29,0.5752,0.4826,0.969,0.0007563,1.1324,1.1461
+0,standard_cvae,ELBO,baseline,30,0.595,0.4608,0.973,0.00065503,1.1349,1.1382
+0,standard_cvae,ELBO,baseline,31,0.6148,0.4494,0.967,0.00064831,1.1487,1.1532
+0,standard_cvae,ELBO,baseline,32,0.6347,0.4755,0.964,0.00086628,1.1389,1.1394
+0,standard_cvae,ELBO,baseline,33,0.6545,0.4623,0.964,0.00036998,1.1346,1.1429
+0,standard_cvae,ELBO,baseline,34,0.6743,0.4396,0.982,0.00055608,1.1409,1.1386
+0,standard_cvae,ELBO,baseline,35,0.6942,0.4599,0.976,0.00056128,1.1333,1.1479
+0,standard_cvae,ELBO,baseline,36,0.714,0.4906,0.96,0.00054252,1.1386,1.1436
+0,standard_cvae,ELBO,baseline,37,0.7338,0.4845,0.96,0.00050365,1.1526,1.1588
+0,standard_cvae,ELBO,baseline,38,0.7537,0.4774,0.971,0.00050104,1.1418,1.1486
+0,standard_cvae,ELBO,baseline,39,0.7735,0.4977,0.966,0.00062739,1.1498,1.1651
+0,standard_cvae,ELBO,baseline,40,0.7933,0.4726,0.975,0.00038344,1.1366,1.1428
+0,standard_cvae,ELBO,baseline,41,0.8132,0.4702,0.967,0.00041052,1.1365,1.1334
+0,standard_cvae,ELBO,baseline,42,0.833,0.4685,0.968,0.00040459,1.1336,1.1392
+0,standard_cvae,ELBO,baseline,43,0.8528,0.4793,0.981,0.00049599,1.1408,1.1399
+0,standard_cvae,ELBO,baseline,44,0.8727,0.462,0.978,0.00036002,1.1361,1.1367
+0,standard_cvae,ELBO,baseline,45,0.8925,0.4994,0.976,0.00037137,1.1415,1.152
+0,standard_cvae,ELBO,baseline,46,0.9123,0.4971,0.96,0.00033591,1.1358,1.1403
+0,standard_cvae,ELBO,baseline,47,0.9322,0.4907,0.983,0.00036781,1.1416,1.1513
+0,standard_cvae,ELBO,baseline,48,0.952,0.4529,0.971,0.00038972,1.1293,1.1306
+0,standard_cvae,ELBO,baseline,49,0.9718,0.4898,0.982,0.00034141,1.128,1.1351
+0,standard_cvae,ELBO,baseline,50,0.9917,0.4518,0.981,0.00034874,1.1354,1.1433
+0,standard_cvae,ELBO,baseline,51,1.0,0.4658,0.976,0.00036832,1.1292,1.1385
+1,beta_elbo,β-ELBO,baseline,1,0.0198,0.5407,0.759,3.0979,1.2943,1.7342
+1,beta_elbo,β-ELBO,baseline,2,0.0397,0.4529,0.869,0.1813,1.2074,1.3311
+1,beta_elbo,β-ELBO,baseline,3,0.0595,0.4909,0.909,0.026266,1.1721,1.2463
+1,beta_elbo,β-ELBO,baseline,4,0.0793,0.4656,0.936,0.011942,1.1767,1.2239
+1,beta_elbo,β-ELBO,baseline,5,0.0992,0.4597,0.94,0.0086397,1.1687,1.2045
+1,beta_elbo,β-ELBO,baseline,6,0.119,0.4778,0.956,0.0059656,1.1762,1.2202
+1,beta_elbo,β-ELBO,baseline,7,0.1388,0.4857,0.956,0.0043965,1.1631,1.1993
+1,beta_elbo,β-ELBO,baseline,8,0.1587,0.4463,0.949,0.0041064,1.1536,1.1882
+1,beta_elbo,β-ELBO,baseline,9,0.1785,0.4927,0.956,0.0031966,1.1439,1.177
+1,beta_elbo,β-ELBO,baseline,10,0.1983,0.4883,0.943,0.0034319,1.1587,1.192
+1,beta_elbo,β-ELBO,baseline,11,0.2182,0.4617,0.948,0.0025547,1.1394,1.1626
+1,beta_elbo,β-ELBO,baseline,12,0.238,0.4806,0.955,0.0020053,1.1411,1.1901
+1,beta_elbo,β-ELBO,baseline,13,0.2578,0.4855,0.944,0.0020311,1.1483,1.2022
+1,beta_elbo,β-ELBO,baseline,14,0.2777,0.4577,0.957,0.001944,1.1484,1.1801
+1,beta_elbo,β-ELBO,baseline,15,0.2975,0.4951,0.97,0.0021679,1.1443,1.1502
+1,beta_elbo,β-ELBO,baseline,16,0.3173,0.4619,0.963,0.0019673,1.1411,1.1576
+1,beta_elbo,β-ELBO,baseline,17,0.3372,0.4766,0.973,0.0014834,1.1396,1.1447
+1,beta_elbo,β-ELBO,baseline,18,0.357,0.4922,0.966,0.0015156,1.154,1.1612
+1,beta_elbo,β-ELBO,baseline,19,0.3768,0.4694,0.965,0.0014721,1.139,1.1494
+1,beta_elbo,β-ELBO,baseline,20,0.3967,0.5103,0.954,0.0012236,1.1338,1.1571
+1,beta_elbo,β-ELBO,baseline,21,0.4165,0.4715,0.96,0.0014028,1.1519,1.171
+1,beta_elbo,β-ELBO,baseline,22,0.4363,0.4801,0.959,0.0012333,1.1384,1.1575
+1,beta_elbo,β-ELBO,baseline,23,0.4562,0.4753,0.977,0.0012118,1.1398,1.157
+1,beta_elbo,β-ELBO,baseline,24,0.476,0.463,0.965,0.0011885,1.1432,1.1703
+1,beta_elbo,β-ELBO,baseline,25,0.4958,0.4721,0.97,0.0011348,1.1315,1.1514
+1,beta_elbo,β-ELBO,baseline,26,0.5157,0.4588,0.946,0.0010733,1.129,1.1525
+1,beta_elbo,β-ELBO,baseline,27,0.5355,0.4782,0.966,0.00099824,1.137,1.1624
+1,beta_elbo,β-ELBO,baseline,28,0.5553,0.4657,0.961,0.0008756,1.1365,1.1496
+1,beta_elbo,β-ELBO,baseline,29,0.5752,0.4823,0.97,0.00095566,1.1349,1.1456
+1,beta_elbo,β-ELBO,baseline,30,0.595,0.4638,0.977,0.00076631,1.1345,1.1593
+1,beta_elbo,β-ELBO,baseline,31,0.6148,0.4569,0.973,0.00083277,1.1458,1.1478
+1,beta_elbo,β-ELBO,baseline,32,0.6347,0.4522,0.964,0.00065073,1.1304,1.1392
+1,beta_elbo,β-ELBO,baseline,33,0.6545,0.4608,0.972,0.00072757,1.1343,1.1403
+1,beta_elbo,β-ELBO,baseline,34,0.6743,0.4399,0.981,0.0006558,1.1395,1.138
+1,beta_elbo,β-ELBO,baseline,35,0.6942,0.4576,0.975,0.00068813,1.1303,1.1447
+1,beta_elbo,β-ELBO,baseline,36,0.714,0.4682,0.972,0.00062252,1.1366,1.1331
+1,beta_elbo,β-ELBO,baseline,37,0.7338,0.4826,0.968,0.00048851,1.1459,1.1701
+1,beta_elbo,β-ELBO,baseline,38,0.7537,0.4649,0.964,0.00057234,1.1335,1.1705
+1,beta_elbo,β-ELBO,baseline,39,0.7735,0.5137,0.968,0.00055091,1.143,1.175
+1,beta_elbo,β-ELBO,baseline,40,0.7933,0.4783,0.971,0.00043691,1.1407,1.1526
+1,beta_elbo,β-ELBO,baseline,41,0.8132,0.4523,0.981,0.00049141,1.1295,1.1295
+1,beta_elbo,β-ELBO,baseline,42,0.833,0.4647,0.97,0.00057588,1.1302,1.1326
+1,beta_elbo,β-ELBO,baseline,43,0.8528,0.4348,0.968,0.00058491,1.1288,1.1383
+1,beta_elbo,β-ELBO,baseline,44,0.8727,0.4619,0.97,0.0004732,1.1365,1.1377
+1,beta_elbo,β-ELBO,baseline,45,0.8925,0.4843,0.977,0.00046939,1.1307,1.1382
+1,beta_elbo,β-ELBO,baseline,46,0.9123,0.5025,0.978,0.0004348,1.1282,1.1299
+1,beta_elbo,β-ELBO,baseline,47,0.9322,0.4573,0.979,0.00045579,1.1393,1.1535
+1,beta_elbo,β-ELBO,baseline,48,0.952,0.4476,0.977,0.00041393,1.1272,1.1389
+1,beta_elbo,β-ELBO,baseline,49,0.9718,0.4767,0.97,0.00043126,1.1293,1.1387
+1,beta_elbo,β-ELBO,baseline,50,0.9917,0.4741,0.979,0.00038588,1.1333,1.1347
+1,beta_elbo,β-ELBO,baseline,51,1.0,0.4683,0.971,0.00040138,1.1319,1.1303
+2,global_norm,global scale,method,1,0.0198,0.5064,0.781,13.191,1.2653,1.5784
+2,global_norm,global scale,method,2,0.0397,0.4721,0.905,12.035,1.1899,1.2742
+2,global_norm,global scale,method,3,0.0595,0.4823,0.909,5.9939,1.1684,1.22
+2,global_norm,global scale,method,4,0.0793,0.4674,0.936,4.5986,1.1803,1.2244
+2,global_norm,global scale,method,5,0.0992,0.4262,0.938,2.9324,1.1781,1.2222
+2,global_norm,global scale,method,6,0.119,0.464,0.937,4.3659,1.1635,1.2019
+2,global_norm,global scale,method,7,0.1388,0.4929,0.944,5.3849,1.1346,1.1569
+2,global_norm,global scale,method,8,0.1587,0.4738,0.944,5.4832,0.95354,0.97441
+2,global_norm,global scale,method,9,0.1785,0.5162,0.952,4.6135,0.93486,0.95457
+2,global_norm,global scale,method,10,0.1983,0.4844,0.96,4.3568,0.87455,0.87786
+2,global_norm,global scale,method,11,0.2182,0.5149,0.958,6.5542,0.76276,0.76608
+2,global_norm,global scale,method,12,0.238,0.5372,0.958,5.7971,0.73143,0.74244
+2,global_norm,global scale,method,13,0.2578,0.5496,0.962,6.467,0.60986,0.63763
+2,global_norm,global scale,method,14,0.2777,0.6152,0.955,7.9701,0.47914,0.49782
+2,global_norm,global scale,method,15,0.2975,0.6669,0.936,9.2233,0.26724,0.28885
+2,global_norm,global scale,method,16,0.3173,0.7139,0.951,7.3715,0.23281,0.2602
+2,global_norm,global scale,method,17,0.3372,0.7365,0.95,6.0318,0.20406,0.22331
+2,global_norm,global scale,method,18,0.357,0.7442,0.955,5.8969,0.19433,0.22912
+2,global_norm,global scale,method,19,0.3768,0.7598,0.961,6.6227,0.16231,0.19805
+2,global_norm,global scale,method,20,0.3967,0.7617,0.965,5.9871,0.12129,0.16057
+2,global_norm,global scale,method,21,0.4165,0.7563,0.955,5.3021,0.13292,0.16934
+2,global_norm,global scale,method,22,0.4363,0.7802,0.955,5.3991,0.12915,0.16755
+2,global_norm,global scale,method,23,0.4562,0.7841,0.953,5.5867,0.12634,0.17847
+2,global_norm,global scale,method,24,0.476,0.8012,0.958,4.6718,0.14341,0.17328
+2,global_norm,global scale,method,25,0.4958,0.7721,0.96,4.9762,0.12014,0.14698
+2,global_norm,global scale,method,26,0.5157,0.7938,0.96,4.9665,0.098382,0.11586
+2,global_norm,global scale,method,27,0.5355,0.7988,0.96,5.763,0.096953,0.12343
+2,global_norm,global scale,method,28,0.5553,0.7849,0.96,5.2386,0.10502,0.13208
+2,global_norm,global scale,method,29,0.5752,0.8141,0.96,5.2224,0.084152,0.10902
+2,global_norm,global scale,method,30,0.595,0.801,0.959,4.4503,0.077726,0.10111
+2,global_norm,global scale,method,31,0.6148,0.8091,0.95,4.5001,0.085922,0.1063
+2,global_norm,global scale,method,32,0.6347,0.807,0.959,4.7625,0.066332,0.093464
+2,global_norm,global scale,method,33,0.6545,0.8183,0.942,4.9231,0.065269,0.088277
+2,global_norm,global scale,method,34,0.6743,0.8272,0.955,3.929,0.078633,0.097613
+2,global_norm,global scale,method,35,0.6942,0.8057,0.959,4.9112,0.079761,0.10999
+2,global_norm,global scale,method,36,0.714,0.8104,0.945,4.8293,0.058703,0.084449
+2,global_norm,global scale,method,37,0.7338,0.8029,0.968,4.6255,0.077902,0.1069
+2,global_norm,global scale,method,38,0.7537,0.8017,0.96,4.2885,0.054229,0.068732
+2,global_norm,global scale,method,39,0.7735,0.7874,0.965,3.7494,0.080375,0.106
+2,global_norm,global scale,method,40,0.7933,0.8005,0.962,4.1163,0.075307,0.099204
+2,global_norm,global scale,method,41,0.8132,0.8062,0.961,4.0165,0.041857,0.071534
+2,global_norm,global scale,method,42,0.833,0.8128,0.952,4.0453,0.041617,0.069539
+2,global_norm,global scale,method,43,0.8528,0.8393,0.961,3.9805,0.056484,0.075413
+2,global_norm,global scale,method,44,0.8727,0.8266,0.965,3.7215,0.060164,0.080657
+2,global_norm,global scale,method,45,0.8925,0.836,0.952,4.4859,0.055547,0.081058
+2,global_norm,global scale,method,46,0.9123,0.8171,0.963,4.0327,0.041989,0.071544
+2,global_norm,global scale,method,47,0.9322,0.8341,0.955,4.0298,0.038079,0.069123
+2,global_norm,global scale,method,48,0.952,0.8402,0.964,3.9602,0.046573,0.076687
+2,global_norm,global scale,method,49,0.9718,0.8403,0.963,3.5624,0.051391,0.083715
+2,global_norm,global scale,method,50,0.9917,0.8328,0.939,3.7866,0.052835,0.087991
+2,global_norm,global scale,method,51,1.0,0.8085,0.958,3.8823,0.045602,0.078943
+3,token_pressure,token weighting,method,1,0.0198,0.5823,0.693,10.29,1.3287,9.7048
+3,token_pressure,token weighting,method,2,0.0397,0.5004,0.785,7.7372,1.199,10.634
+3,token_pressure,token weighting,method,3,0.0595,0.4872,0.825,12.235,0.97478,9.358
+3,token_pressure,token weighting,method,4,0.0793,0.6201,0.789,13.075,0.55766,8.6842
+3,token_pressure,token weighting,method,5,0.0992,0.6796,0.81,12.897,0.38404,8.0986
+3,token_pressure,token weighting,method,6,0.119,0.7147,0.836,12.989,0.22342,7.8331
+3,token_pressure,token weighting,method,7,0.1388,0.764,0.84,11.353,0.20611,8.0304
+3,token_pressure,token weighting,method,8,0.1587,0.7743,0.844,9.7945,0.13907,7.9291
+3,token_pressure,token weighting,method,9,0.1785,0.7554,0.872,8.3858,0.14506,7.7572
+3,token_pressure,token weighting,method,10,0.1983,0.7854,0.875,8.9967,0.10444,7.7312
+3,token_pressure,token weighting,method,11,0.2182,0.8131,0.88,8.3178,0.10321,7.613
+3,token_pressure,token weighting,method,12,0.238,0.8249,0.905,7.2769,0.080495,7.5831
+3,token_pressure,token weighting,method,13,0.2578,0.8139,0.89,7.2511,0.13233,7.914
+3,token_pressure,token weighting,method,14,0.2777,0.8397,0.892,7.3272,0.085625,7.57
+3,token_pressure,token weighting,method,15,0.2975,0.8246,0.888,8.0014,0.071292,7.3902
+3,token_pressure,token weighting,method,16,0.3173,0.8255,0.905,6.3627,0.090518,7.4609
+3,token_pressure,token weighting,method,17,0.3372,0.8327,0.885,6.2327,0.080713,7.6385
+3,token_pressure,token weighting,method,18,0.357,0.8422,0.884,5.8738,0.069499,7.6728
+3,token_pressure,token weighting,method,19,0.3768,0.8604,0.878,5.9266,0.058072,7.4381
+3,token_pressure,token weighting,method,20,0.3967,0.8775,0.894,5.824,0.062919,7.3925
+3,token_pressure,token weighting,method,21,0.4165,0.8459,0.909,5.5874,0.045885,7.5832
+3,token_pressure,token weighting,method,22,0.4363,0.8709,0.893,5.1299,0.067145,7.451
+3,token_pressure,token weighting,method,23,0.4562,0.8706,0.903,4.8389,0.050696,7.571
+3,token_pressure,token weighting,method,24,0.476,0.869,0.929,5.217,0.060239,7.471
+3,token_pressure,token weighting,method,25,0.4958,0.863,0.885,5.513,0.061029,7.5593
+3,token_pressure,token weighting,method,26,0.5157,0.8591,0.88,4.4031,0.039299,7.5612
+3,token_pressure,token weighting,method,27,0.5355,0.8621,0.9,4.329,0.062676,7.6727
+3,token_pressure,token weighting,method,28,0.5553,0.9043,0.897,4.3944,0.072986,7.5166
+3,token_pressure,token weighting,method,29,0.5752,0.8962,0.9,4.1983,0.049569,7.5814
+3,token_pressure,token weighting,method,30,0.595,0.8765,0.906,4.5865,0.031909,7.5242
+3,token_pressure,token weighting,method,31,0.6148,0.8991,0.918,4.2155,0.039831,7.5841
+3,token_pressure,token weighting,method,32,0.6347,0.8636,0.916,4.1156,0.063314,7.6005
+3,token_pressure,token weighting,method,33,0.6545,0.9044,0.937,3.8835,0.072728,7.6696
+3,token_pressure,token weighting,method,34,0.6743,0.8851,0.908,3.7893,0.063904,7.772
+3,token_pressure,token weighting,method,35,0.6942,0.8892,0.899,3.9688,0.0529,7.6559
+3,token_pressure,token weighting,method,36,0.714,0.9019,0.929,3.8946,0.077514,7.6593
+3,token_pressure,token weighting,method,37,0.7338,0.8806,0.92,3.5135,0.063347,7.5414
+3,token_pressure,token weighting,method,38,0.7537,0.8952,0.93,3.6139,0.040033,7.3964
+3,token_pressure,token weighting,method,39,0.7735,0.8949,0.92,3.8218,0.03952,7.443
+3,token_pressure,token weighting,method,40,0.7933,0.8927,0.923,3.5627,0.057714,7.6224
+3,token_pressure,token weighting,method,41,0.8132,0.891,0.926,3.5818,0.059164,7.6958
+3,token_pressure,token weighting,method,42,0.833,0.881,0.924,3.7117,0.033475,7.6556
+3,token_pressure,token weighting,method,43,0.8528,0.8912,0.902,3.6541,0.064477,7.7892
+3,token_pressure,token weighting,method,44,0.8727,0.8782,0.908,3.7521,0.03486,7.499
+3,token_pressure,token weighting,method,45,0.8925,0.9116,0.913,3.5805,0.079177,7.5806
+3,token_pressure,token weighting,method,46,0.9123,0.8759,0.92,3.5203,0.038403,7.5693
+3,token_pressure,token weighting,method,47,0.9322,0.9099,0.958,3.4419,0.03461,7.5358
+3,token_pressure,token weighting,method,48,0.952,0.8881,0.921,3.4666,0.053434,7.6089
+3,token_pressure,token weighting,method,49,0.9718,0.9061,0.927,3.3532,0.097276,7.6663
+3,token_pressure,token weighting,method,50,0.9917,0.8976,0.93,3.4092,0.033141,7.5047
+3,token_pressure,token weighting,method,51,1.0,0.8902,0.932,3.459,0.037594,7.3994
+4,global_plus_token,global + token,method,1,0.0198,0.4954,0.751,13.987,1.3225,1.627
+4,global_plus_token,global + token,method,2,0.0397,0.4363,0.87,9.2771,1.222,1.3199
+4,global_plus_token,global + token,method,3,0.0595,0.4919,0.886,3.8686,1.1991,1.246
+4,global_plus_token,global + token,method,4,0.0793,0.4953,0.918,4.9277,1.1915,1.2396
+4,global_plus_token,global + token,method,5,0.0992,0.4437,0.931,7.6488,1.0841,1.1171
+4,global_plus_token,global + token,method,6,0.119,0.5408,0.943,7.8389,0.93146,0.97391
+4,global_plus_token,global + token,method,7,0.1388,0.5072,0.92,10.064,0.719,0.77488
+4,global_plus_token,global + token,method,8,0.1587,0.6076,0.933,11.267,0.44239,0.49015
+4,global_plus_token,global + token,method,9,0.1785,0.6856,0.922,11.29,0.26727,0.33872
+4,global_plus_token,global + token,method,10,0.1983,0.7255,0.923,9.18,0.21142,0.26723
+4,global_plus_token,global + token,method,11,0.2182,0.7528,0.928,8.8988,0.17634,0.2182
+4,global_plus_token,global + token,method,12,0.238,0.7306,0.93,8.0851,0.17579,0.28052
+4,global_plus_token,global + token,method,13,0.2578,0.7514,0.926,8.1878,0.14675,0.19959
+4,global_plus_token,global + token,method,14,0.2777,0.7479,0.928,6.632,0.16706,0.21495
+4,global_plus_token,global + token,method,15,0.2975,0.7984,0.931,6.9444,0.14642,0.19926
+4,global_plus_token,global + token,method,16,0.3173,0.7984,0.924,7.5723,0.10426,0.14945
+4,global_plus_token,global + token,method,17,0.3372,0.7908,0.937,7.0377,0.10552,0.14557
+4,global_plus_token,global + token,method,18,0.357,0.8083,0.944,6.788,0.10757,0.14949
+4,global_plus_token,global + token,method,19,0.3768,0.8226,0.954,6.1009,0.079323,0.11224
+4,global_plus_token,global + token,method,20,0.3967,0.8051,0.932,6.109,0.062247,0.096198
+4,global_plus_token,global + token,method,21,0.4165,0.8176,0.952,5.1901,0.078322,0.10735
+4,global_plus_token,global + token,method,22,0.4363,0.8367,0.933,5.9036,0.093727,0.14141
+4,global_plus_token,global + token,method,23,0.4562,0.8177,0.953,5.1583,0.069135,0.097902
+4,global_plus_token,global + token,method,24,0.476,0.8684,0.927,5.4131,0.088264,0.15682
+4,global_plus_token,global + token,method,25,0.4958,0.866,0.927,5.0689,0.055194,0.099838
+4,global_plus_token,global + token,method,26,0.5157,0.8341,0.93,4.8338,0.042984,0.079658
+4,global_plus_token,global + token,method,27,0.5355,0.8246,0.935,4.7227,0.073957,0.10658
+4,global_plus_token,global + token,method,28,0.5553,0.8252,0.934,5.376,0.05366,0.092119
+4,global_plus_token,global + token,method,29,0.5752,0.8626,0.943,4.7143,0.046765,0.06739
+4,global_plus_token,global + token,method,30,0.595,0.8386,0.955,4.3472,0.036629,0.062145
+4,global_plus_token,global + token,method,31,0.6148,0.839,0.936,4.3091,0.063279,0.097892
+4,global_plus_token,global + token,method,32,0.6347,0.8566,0.918,4.623,0.043099,0.082416
+4,global_plus_token,global + token,method,33,0.6545,0.8598,0.939,4.3483,0.046116,0.089343
+4,global_plus_token,global + token,method,34,0.6743,0.8552,0.942,4.0502,0.032298,0.058364
+4,global_plus_token,global + token,method,35,0.6942,0.8667,0.949,3.9923,0.029137,0.052675
+4,global_plus_token,global + token,method,36,0.714,0.8616,0.937,3.805,0.043819,0.081314
+4,global_plus_token,global + token,method,37,0.7338,0.8519,0.941,4.2505,0.044911,0.081405
+4,global_plus_token,global + token,method,38,0.7537,0.8495,0.964,4.1637,0.069849,0.10149
+4,global_plus_token,global + token,method,39,0.7735,0.8637,0.951,3.9232,0.043026,0.070434
+4,global_plus_token,global + token,method,40,0.7933,0.8697,0.955,3.6539,0.036293,0.064537
+4,global_plus_token,global + token,method,41,0.8132,0.8682,0.941,3.9342,0.041915,0.068141
+4,global_plus_token,global + token,method,42,0.833,0.8568,0.942,3.8602,0.04788,0.075027
+4,global_plus_token,global + token,method,43,0.8528,0.8748,0.935,3.6535,0.02508,0.06042
+4,global_plus_token,global + token,method,44,0.8727,0.8771,0.947,3.6835,0.025986,0.057505
+4,global_plus_token,global + token,method,45,0.8925,0.8602,0.939,3.444,0.046526,0.08135
+4,global_plus_token,global + token,method,46,0.9123,0.8561,0.96,3.3919,0.053116,0.079987
+4,global_plus_token,global + token,method,47,0.9322,0.8894,0.949,3.3564,0.03817,0.06586
+4,global_plus_token,global + token,method,48,0.952,0.8977,0.962,3.3394,0.041624,0.071531
+4,global_plus_token,global + token,method,49,0.9718,0.8906,0.956,3.4314,0.043721,0.075905
+4,global_plus_token,global + token,method,50,0.9917,0.8599,0.935,3.3868,0.030936,0.055956
+4,global_plus_token,global + token,method,51,1.0,0.8819,0.954,3.4094,0.05658,0.081039
+5,token_inverse,token inverse,ablation,1,0.0198,0.5507,0.62,12.2,1.792,10.546
+5,token_inverse,token inverse,ablation,2,0.0397,0.5033,0.761,19.389,1.8378,9.3036
+5,token_inverse,token inverse,ablation,3,0.0595,0.5157,0.785,23.606,1.9082,9.1985
+5,token_inverse,token inverse,ablation,4,0.0793,0.5249,0.833,25.861,1.9616,8.7987
+5,token_inverse,token inverse,ablation,5,0.0992,0.463,0.82,67.089,1.8022,8.1506
+5,token_inverse,token inverse,ablation,6,0.119,0.5166,0.831,20.889,1.8912,8.1025
+5,token_inverse,token inverse,ablation,7,0.1388,0.5159,0.876,19.042,1.8173,7.5235
+5,token_inverse,token inverse,ablation,8,0.1587,0.4874,0.887,18.635,1.8175,7.5194
+5,token_inverse,token inverse,ablation,9,0.1785,0.4871,0.889,17.642,1.8758,7.396
+5,token_inverse,token inverse,ablation,10,0.1983,0.4923,0.919,16.608,1.8523,7.539
+5,token_inverse,token inverse,ablation,11,0.2182,0.5283,0.917,15.564,1.9074,7.5055
+5,token_inverse,token inverse,ablation,12,0.238,0.5028,0.909,16.162,1.8343,7.1352
+5,token_inverse,token inverse,ablation,13,0.2578,0.5173,0.927,14.833,1.7615,6.9928
+5,token_inverse,token inverse,ablation,14,0.2777,0.471,0.907,13.668,1.7396,6.8735
+5,token_inverse,token inverse,ablation,15,0.2975,0.5024,0.909,12.35,1.7833,6.7402
+5,token_inverse,token inverse,ablation,16,0.3173,0.5221,0.935,10.794,1.7267,6.3944
+5,token_inverse,token inverse,ablation,17,0.3372,0.4896,0.938,9.7685,1.7438,6.1859
+5,token_inverse,token inverse,ablation,18,0.357,0.4998,0.938,9.1289,1.9447,6.3778
+5,token_inverse,token inverse,ablation,19,0.3768,0.503,0.921,8.3785,1.7606,6.175
+5,token_inverse,token inverse,ablation,20,0.3967,0.5066,0.932,7.5664,1.8286,6.3194
+5,token_inverse,token inverse,ablation,21,0.4165,0.4996,0.946,6.9535,1.713,6.0896
+5,token_inverse,token inverse,ablation,22,0.4363,0.5085,0.932,6.6299,1.7378,6.2786
+5,token_inverse,token inverse,ablation,23,0.4562,0.5034,0.935,6.2495,1.7039,6.3743
+5,token_inverse,token inverse,ablation,24,0.476,0.484,0.939,6.393,1.6976,6.3674
+5,token_inverse,token inverse,ablation,25,0.4958,0.498,0.944,6.1344,1.9143,6.7107
+5,token_inverse,token inverse,ablation,26,0.5157,0.5037,0.942,5.9736,1.7044,6.2595
+5,token_inverse,token inverse,ablation,27,0.5355,0.4945,0.922,5.8091,1.7516,6.1381
+5,token_inverse,token inverse,ablation,28,0.5553,0.5104,0.931,5.8182,1.7775,6.1562
+5,token_inverse,token inverse,ablation,29,0.5752,0.5241,0.946,5.6143,1.8185,5.9777
+5,token_inverse,token inverse,ablation,30,0.595,0.4671,0.936,4.9928,1.7941,5.6158
+5,token_inverse,token inverse,ablation,31,0.6148,0.5106,0.945,4.7674,1.7049,5.5281
+5,token_inverse,token inverse,ablation,32,0.6347,0.5109,0.941,5.3388,1.7981,5.3388
+5,token_inverse,token inverse,ablation,33,0.6545,0.4871,0.951,5.2479,1.6775,5.1199
+5,token_inverse,token inverse,ablation,34,0.6743,0.475,0.951,4.5925,1.6197,5.0746
+5,token_inverse,token inverse,ablation,35,0.6942,0.5037,0.96,4.2956,1.7134,5.1995
+5,token_inverse,token inverse,ablation,36,0.714,0.4849,0.948,3.8595,1.6611,5.1972
+5,token_inverse,token inverse,ablation,37,0.7338,0.494,0.931,3.5538,1.6274,5.0627
+5,token_inverse,token inverse,ablation,38,0.7537,0.5225,0.948,3.8294,1.6627,5.1385
+5,token_inverse,token inverse,ablation,39,0.7735,0.4885,0.936,3.8237,1.6169,5.0645
+5,token_inverse,token inverse,ablation,40,0.7933,0.5091,0.94,3.9298,1.6938,5.1038
+5,token_inverse,token inverse,ablation,41,0.8132,0.4891,0.952,3.4679,1.6991,5.0888
+5,token_inverse,token inverse,ablation,42,0.833,0.5201,0.97,3.1289,1.7121,5.1261
+5,token_inverse,token inverse,ablation,43,0.8528,0.5251,0.946,2.8187,1.8064,5.1259
+5,token_inverse,token inverse,ablation,44,0.8727,0.5289,0.945,2.6945,2.4205,5.6047
+5,token_inverse,token inverse,ablation,45,0.8925,0.5301,0.944,2.6537,1.8424,5.0827
+5,token_inverse,token inverse,ablation,46,0.9123,0.5308,0.955,2.4352,1.7602,5.009
+5,token_inverse,token inverse,ablation,47,0.9322,0.5067,0.955,2.1594,1.8618,5.0715
+5,token_inverse,token inverse,ablation,48,0.952,0.5154,0.94,2.1231,1.6658,4.8824
+5,token_inverse,token inverse,ablation,49,0.9718,0.489,0.949,1.9186,1.8206,5.0387
+5,token_inverse,token inverse,ablation,50,0.9917,0.5074,0.949,1.7323,1.8252,5.0493
+5,token_inverse,token inverse,ablation,51,1.0,0.5131,0.953,1.6684,1.748,4.9894

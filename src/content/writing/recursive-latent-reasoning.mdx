@@ -1,0 +1,130 @@
+---
+title: "Unlocking OOD Generalization via Latent Recurrence"
+type: "paper"
+shortUrl: "/blog/algorithmic-generalization-transformer-architectures"
+aliases:
+  - "Unlocking Out-of-Distribution Generalization in Transformers via Recursive Latent Space Reasoning"
+  - "Algorithmic Generalization in Transformers"
+  - "Recursive Latent Space Reasoning"
+date: "2025-10-15"
+displayDates:
+  - label: "arXiv v1"
+    date: "2025-10-15"
+updated: "2026-11-02"
+summary: "Four architectural mechanisms that let Transformers learn algorithms that scale, on circuits several times larger than those seen in training."
+venue: "Under review"
+tags: ["transformers", "architectures", "inductive biases", "generalization", "reasoning"]
+links: ["topics/inductive-biases", "topics/reasoning"]
+featured: true
+authors:
+  - name: "Awni Altabaa"
+    affiliation: "Yale University"
+  - name: "Siyu Chen"
+    affiliation: "Yale University"
+  - name: "John Lafferty"
+    affiliation: "Yale University"
+  - name: "Zhuoran Yang"
+    affiliation: "Yale University"
+external:
+  arxiv: "https://arxiv.org/abs/2510.14095"
+  code: "https://github.com/Awni00/algorithmic-generalization-transformer-architectures"
+bibtex: |
+  @article{altabaa2025unlocking,
+    title={Unlocking Out-of-Distribution Generalization in Transformers via Recursive Latent Space Reasoning},
+    author={Awni Altabaa and Siyu Chen and John Lafferty and Zhuoran Yang},
+    year={2025},
+    journal={arXiv preprint arXiv:2510.14095},
+    eprint={2510.14095},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG},
+    url={https://arxiv.org/abs/2510.14095},
+  }
+---
+
+Systematic, compositional generalization beyond the training distribution remains a core challenge in machine learning, and a critical bottleneck for the emergent reasoning abilities of modern language models. In this work, we investigate the architectural mechanisms that enable algorithmic out-of-distribution (OOD) generalization in Transformer models: the ability to learn a procedure on small problem instances and apply it correctly to larger and harder ones.
+
+<Diagram figure="algorithmic-generalization-transformer-architectures/anchoring-drift-animated" alt="Latent-state trajectories across recurrent iterations for continuous states, discrete states, and discrete states with self-correction." caption="Discrete representations and self-correction under test-time scaling. Each row traces one token's latent state across recurrent iterations; the shaded band represents the representation space learned during training. Continuous latent states drift off that space as computation scales beyond the training regime. Discrete states stay anchored to it and follow the target algorithmic path (dotted) far longer, but once an error occurs, it propagates to all later iterations. Self-correction teaches the model to repair the error at the next iteration." />
+
+<Callout type="question" title="Guiding question">
+What architectural mechanisms and inductive biases enable Transformers to learn algorithms that adaptively scale their computational depth and generalize robustly beyond the training distribution?
+</Callout>
+
+## The task: arithmetic circuit evaluation
+
+A problem instance is an *arithmetic circuit*: a directed acyclic computation graph that specifies a network of modular arithmetic computations. Leaf nodes are directly assigned values, and every other node is computed by applying an operation to the values of its parent nodes. The operations are modular addition, multiplication, and subtraction with prime modulus $p = 23$. The task is to compute the value of every node, and an output counts as correct only if *all* node values are correct.
+
+<Diagram figure="algorithmic-generalization-transformer-architectures/computation-graph-animated" alt="An example modular arithmetic circuit with four leaf nodes and five computed nodes." caption="An illustration of a modular arithmetic circuit instance. The goal is to compute the values of all nodes in the circuit." />
+
+Arithmetic circuit evaluation is $\mathsf{P}$-complete, so any polynomial-time computation can be encoded as an arithmetic circuit. The computation it requires grows with the depth of the circuit, and under standard complexity conjectures it lies outside the expressive power of fixed-depth Transformers. We train models on circuits with $N \leq 32$ nodes and test them on deeper circuits of up to $N = 128$ nodes. Generalizing to these circuits requires both the ability to adaptively scale computation at test time beyond the training regime and a learned procedure that remains correct as that computation is extended.
+
+## Standard approaches do not scale
+
+Models trained end-to-end, to output the answer directly, perform a fixed amount of computation on every input, so they cannot scale to deeper circuits. Chain-of-thought (CoT) models do not have this limitation, since their reasoning trace grows with the input size. Their limitation lies in learning rather than expressivity: the procedure they learn from small circuits generalizes only modestly beyond the training regime and degrades rapidly on larger circuits.
+
+## Four mechanisms for latent space reasoning
+
+We propose four architectural mechanisms, built on the Transformer, that together enable a model to learn a computation that scales robustly.
+
+<FigureGrid columns={4} caption="Four mechanisms for out-of-distribution generalization.">
+  <Diagram figure="algorithmic-generalization-transformer-architectures/mech-1-recurrence" alt="Recurrence and adaptive computation" caption="Mechanism 1: Recurrence and adaptive computation" />
+  <Diagram figure="algorithmic-generalization-transformer-architectures/mech-2-consolidated" alt="Incremental computation schedules" caption="Mechanism 2: Incremental computation schedules" />
+  <Diagram figure="algorithmic-generalization-transformer-architectures/mech-3-original" alt="Anchored discrete latent space" caption="Mechanism 3: Anchored discrete latent space" />
+  <Diagram figure="algorithmic-generalization-transformer-architectures/mech-4-correction" alt="Error correction" caption="Mechanism 4: Error correction" />
+</FigureGrid>
+
+**Mechanism 1: Recurrence and input-adaptive computation.** We employ a recurrent Transformer block so that each application emulates one algorithmic iteration: computing values for one additional layer of the circuit. The number of recurrent iterations is not fixed but adapts to input complexity, scaling linearly with the depth of the circuit.
+
+**Mechanism 2: Incremental computation schedules.** The model must learn a robust *computation schedule*: an assignment of each part of the computation to a recurrent iteration. We learn it through latent space supervision, where a loss is applied to the model's intermediate latent states after every recurrent iteration. In *Mechanism 2a*, the schedule is supervised using the depth of each node. A shared linear readout predicts node values from the latent embeddings $E_i^{(t)}$, and a step-wise loss aligns the model with the layer-by-layer algorithm:
+
+$$
+\mathrm{DepthSupervisedLoss} = \sum_{t=1}^{T} \sum_{i} \ell\big(W_{\mathtt{value}} E_i^{(t)}, \mathrm{Mask}(\mathrm{Value}(x_i), \mathrm{Depth}(x_i) < t)\big),
+$$
+
+where $\mathrm{Mask}(v, b)$ returns $v$ when $b$ holds and $\langle\mathtt{empty}\rangle$ otherwise, a special value that marks a node as not yet computed. In *Mechanism 2b*, the model discovers its own schedule by *abstaining*: it predicts $\langle\mathtt{empty}\rangle$ when it is uncertain, which receives partial credit $\alpha \in [0, 1)$, deferring the node to a later iteration. With $p_i^{(t)}$ the predicted distribution over values for $x_i$ at iteration $t$,
+
+$$
+\mathrm{SelfSchedulingLoss} = \sum_{t=1}^{T} \sum_{i} - \log \big( p_i^{(t)}[\mathrm{Value}(x_i)] + \alpha \, p_i^{(t)}[\langle\mathtt{empty}\rangle] \big).
+$$
+
+Abstaining gives a fixed loss of $-\log \alpha$, so it becomes the optimal choice when the model is uncertain, and $\alpha$ sets the level of confidence required to commit.
+
+**Mechanism 3: Anchoring via discretization.** After each iteration, the model's continuous hidden states are projected into a structured discrete symbolic space and immediately re-embedded to form the input for the next recurrent step. This ensures the input at each iteration lies in a shared structured space, even as computation scales beyond the training regime.
+
+**Mechanism 4: Learning to self-correct.** We train each recurrent update on the model's *own* intermediate states, which may contain errors. When such a state contains an error, the model learns to repair the error while continuing the computation.
+
+## Results
+
+Combining these mechanisms yields an architecture capable of generalizing far beyond the training distribution. OOD performance improves sharply as more mechanisms are incorporated. When all mechanisms are included, the model (Discrete LSS + EC) maintains near-perfect performance across the entire range we evaluate: averaged over five training seeds, it solves 99.9% of instances at $N = 32$ and 99.6% at $N = 128$, four times the largest circuit seen in training.
+
+<TwoColumns>
+  <Chart
+    slot="left"
+    figure="algorithmic-generalization-transformer-architectures/method-ood-comparison"
+    alt="Solve rate against circuit size for seven methods, trained on N ≤ 32."
+    caption="Out-of-distribution generalization across methods. Each curve is the mean over five training seeds and each band is ±1 standard error of the mean; the shaded region marks the training range N ≤ 32. LSS: latent space supervision; EC: error correction."
+  />
+  <Chart
+    slot="right"
+    figure="algorithmic-generalization-transformer-architectures/ec-stepwise-best-seed"
+    alt="Fraction of instances solved against the number of recurrent iterations, for each circuit size."
+    caption="Test-time scaling for Discrete LSS + EC (best of five seeds): the fraction of instances solved as a function of the number of recurrent iterations, for each circuit size N. Scaling recurrent iterations beyond the training regime enables solving progressively larger and harder instances."
+  />
+</TwoColumns>
+
+### Discovering a schedule without depth supervision
+
+Self-Scheduled LSS (Mechanisms 1 and 2b) receives no depth information during training. Averaged over five seeds, it solves 69.3% of instances at $N = 128$, where the chain-of-thought and end-to-end baselines solve none, and its best seed solves 98.6%. In every seed, the time at which a node is first filled in grows linearly with its depth, and this trend extrapolates from the training regime (depth at most $6$) to circuits of depth up to $19$. The model therefore discovers a schedule that is aligned with the depth structure of the circuit and performs a bounded amount of computation per iteration, without any depth supervision.
+
+<Chart figure="algorithmic-generalization-transformer-architectures/self-scheduled-first-fill" alt="Median first-fill time against node depth for the five Self-Scheduled LSS training seeds.">
+  <Fragment slot="caption">The computation schedule discovered by Self-Scheduled LSS: median first-fill time (the first iteration at which a node's decoded value is not $\langle\mathtt{empty}\rangle$) against node depth, for each of five training seeds. The dotted line is the layer-by-layer schedule used for depth supervision.</Fragment>
+</Chart>
+
+### Eight times the training size
+
+In a follow-up experiment, we double the evaluation range once more, to circuits with up to $N = 256$ nodes, eight times the largest training input. The best Discrete LSS + EC model remains essentially perfect across the entire range, making only $3$ errors on $32{,}768$ test instances. The gaps between methods widen at this scale: at $N = 256$, the best Discrete LSS model solves 96.8% of instances, the best Self-Scheduled LSS model 71.6%, and the best Continuous LSS model only 7.8%.
+
+<Chart figure="algorithmic-generalization-transformer-architectures/stronger-ood-best-seed" alt="Solve rate against circuit size up to N = 256, best of five seeds per method." caption="Generalization from N ≤ 32 to N = 256, best of five seeds." />
+
+## Takeaways
+
+Together, these mechanisms support scalable and robust iterative computation in latent space, enabling the model to scale its effective computational depth in proportion to input complexity. Unlike token-level chain-of-thought, which relies on explicit reasoning traces, latent recurrence reasons internally and avoids autoregressive token-generation constraints. The paper also includes a mechanistic interpretability analysis, which reveals how recurrence, a depth-supervised computation schedule, and discretization enable this generalization, what computational structure the model learns, and why this structure generalizes robustly.
