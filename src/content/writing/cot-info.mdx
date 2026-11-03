@@ -24,6 +24,7 @@ authors:
   - name: "John Lafferty"
     affiliation: "Yale University"
 featured: true
+bibliography: ../../data/references/cot-info.bib
 math:
   macros:
     - "cot-info"
@@ -166,13 +167,10 @@ CoT supervision primarily lives in Step 2. We abstract away the mechanics of tra
 
 CoT traces can be collected in several ways:
 
-- **Human-authored:** experts or trained annotators, or mined from educational content (textbook solutions, etc.).[^humancot]
-- **Model-generated:** prompt an existing model, and filter using self-consistency or self-verification.[^modelcot]
+- **Human-authored:** experts or trained annotators, or mined from educational content (textbook solutions, etc.)<HoverNote cite="cobbe2021gsm8k" />.
+- **Model-generated:** prompt an existing model, and filter using self-consistency or self-verification<HoverNote cite="wang2023selfconsistency" /><HoverNote cite="zelikman2022star" /><HoverNote cite="lightman2024verify" />.
 - **Hybrid:** generate with a model and let humans filter/rate/edit.
 - **Programmatic synthesis:** feasible for some domains with algorithmic generators.
-
-[^humancot]: [Cobbe et al. (GSM8K)](https://arxiv.org/abs/2110.14168)
-[^modelcot]: [Wang et al. (self-consistency)](https://arxiv.org/abs/2203.11171); [Zelikman et al. (STaR)](https://arxiv.org/abs/2203.14465); [Lightman et al. (Let's Verify Step by Step)](https://arxiv.org/abs/2305.20050).
 
 In what follows, we abstract away the mechanics of obtaining CoT traces or their format (e.g., natural language or otherwise). We assume the CoT dataset exists, and ask: *What statistical advantage does CoT training confer relative to vanilla input–output supervision?*
 
@@ -250,9 +248,7 @@ The central analytical challenge in characterizing CoT-supervised learning lies 
 
 This asymmetry prevents the direct application of classical learning theory results.
 
-One approach to studying CoT-supervised learning, taken by recent related work[^joshietal], sidesteps this asymmetry by bounding the CoT risk instead of the end-to-end risk, noting that $\cotrisk{\calD}(h) \geq \eterisk{\calD}(h)$ for all $h$. This problem is now symmetric because both the training and testing objectives are the CoT error, enabling a direct application of standard learning results. In particular, this approach yields a sample complexity of $\bigO\big(\VC(\calLCoT(\calH)) / \epsilon\big)$, where $\calLCoT(\calH) := \{\ell_h^{\CoT}: (x, y, z) \mapsto \Ind{h(x) \neq (y, z)}\}$.
-
-[^joshietal]: [Joshi et al. (2025) [arXiv:2503.07932]](https://arxiv.org/abs/2503.07932)
+One approach to studying CoT-supervised learning, taken by recent related work<HoverNote cite="joshi2025autoregressivecot" />, sidesteps this asymmetry by bounding the CoT risk instead of the end-to-end risk, noting that $\cotrisk{\calD}(h) \geq \eterisk{\calD}(h)$ for all $h$. This problem is now symmetric because both the training and testing objectives are the CoT error, enabling a direct application of standard learning results. In particular, this approach yields a sample complexity of $\bigO\big(\VC(\calLCoT(\calH)) / \epsilon\big)$, where $\calLCoT(\calH) := \{\ell_h^{\CoT}: (x, y, z) \mapsto \Ind{h(x) \neq (y, z)}\}$.
 
 While this provides an upper bound, the resulting rate, scaling as $1/\epsilon$, matches that of standard end-to-end supervision (in terms of the dependence on $\epsilon$). Yet, we know that CoT supervision can provide significant statistical advantages in practice. This suggests that the analysis is loose, failing to capture the full benefit of CoT supervision through the extra information encoded in the traces.
 
@@ -380,7 +376,7 @@ $$
 
 This result scales also with the size of the hypothesis class, through its packing number. Together with the two-point bound, it suggests that the CoT information is not merely an artifact of the upper-bound analysis, but a fundamental measure of the statistical complexity of learning under CoT supervision.
 
-## Part V: Simulations — Theory Meets Practice
+## Part V: Empirical Evaluation via Simulations
 
 The theoretical framework suggests that the CoT information $\cotinfodomain{\mathcal{D}}(\epsilon; \mathcal{H})$ should govern how much faster learning occurs under CoT supervision. To test this prediction, we perform controlled simulations where all quantities can be computed exactly, comparing empirical sample complexity under standard end-to-end supervision versus CoT-augmented training.
 
@@ -442,4 +438,4 @@ This opens new possibilities: quantifying the value of CoT supervision in large-
 
 This work develops a learning theory framework for understanding the statistical advantage of chain-of-thought supervision. By introducing the notion of ***CoT information***, we provide an information-theoretic measure that quantifies how observing reasoning traces accelerate learning. The main results establish upper bounds on sample complexity in terms of the CoT information, together with information-theoretic lower bounds. Together, these results suggest that CoT information is a fundamental measure of the statistical complexity of learning under CoT supervision. Empirical simulations confirm these predictions, demonstrating substantial gains—sometimes by orders of magnitude—when reasoning traces align with the underlying computation.
 
-Several open directions remain. Theoretically, extending the framework to the agnostic and noisy settings raises questions about robustness and alignment between traces and hypotheses. Empirically, estimating CoT information in neural architectures, comparing different trace-generation pipelines, and exploring its role in out-of-distribution generalization and reinforcement learning for reasoning represent promising next steps. Together, these directions aim toward a unified understanding of how CoT supervision reshapes the statistical foundations of reasoning in large models.
+{/* Several open directions remain. Empirically, estimating CoT information in neural architectures, comparing different trace-generation pipelines, and exploring its role in out-of-distribution generalization and reinforcement learning for reasoning represent promising next steps. Together, these directions aim toward a unified understanding of how CoT supervision reshapes the statistical foundations of reasoning in large models. */}
