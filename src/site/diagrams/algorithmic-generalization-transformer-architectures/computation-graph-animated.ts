@@ -45,7 +45,8 @@ const style =
 export default defineDiagram({
   size: "medium",
   alt: ALT,
-  animate: { delay: 400 },
+  // Top-right holds the "Depth 2" heading on phones; bottom-right is empty.
+  animate: { delay: 400, replayCorner: "bottom-right" },
   draw: (context) => {
     let canvas: DiagramCanvas | undefined;
     return drawGraph(context, {
