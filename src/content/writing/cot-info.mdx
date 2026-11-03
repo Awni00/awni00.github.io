@@ -50,49 +50,79 @@ Chain-of-thought (CoT) training has quickly become central to the reasoning brea
 
 We can see this difference in action when both models attempt the same problem.
 
+<Figure>
+  <ToggleFigure slot="figure" ariaLabel="Example questions" defaultValue="decimals">
+    <ToggleFigurePanel label="9.9 or 9.10" value="decimals">
+
 > **Question.** *Which number is larger, 9.9 or 9.10?*
 
+<div class="comparison">
+<div class="comparison__panel">
 
+**ChatGPT 5 Instant** · wrong
 
-<Figure>
-  <ToggleFigure slot="figure" ariaLabel="ChatGPT 5 response variants" defaultValue="instant">
-    <ToggleFigurePanel label="ChatGPT 5 Instant" value="instant">
-      <Picture src="/blog/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-instant+.png" alt="ChatGPT 5 Instant answers the number comparison question incorrectly when forced to respond immediately." invertInDarkMode />
+A: 9.10
+
+</div>
+<div class="comparison__panel">
+
+**ChatGPT 5 Thinking** · correct
+
+*Thought for 7s.* The difference between 9.9 and 9.10 is subtle but important. In decimal notation, trailing zeros don’t change the value, so 9.10 is the same as 9.1. But in versioning, 9.10 could be considered larger than 9.9. For a basic comparison, 9.90 is greater than 9.1, so 9.9 is larger. I'll keep it clear and concise.
+
+A: 9.9
+
+</div>
+</div>
+
     </ToggleFigurePanel>
-    <ToggleFigurePanel label="ChatGPT 5 Thinking" value="thinking">
-      <Picture src="/blog/cot-info/figs/gpt_cot_examples/number-comparison-gpt5-thinking+.png" alt="ChatGPT 5 Thinking solves the number comparison question correctly by reasoning step-by-step." invertInDarkMode />
-    </ToggleFigurePanel>
-  </ToggleFigure>
-  <Fragment slot="caption">
-    ChatGPT 5 Instant, prompted to respond instantly, guesses the wrong answer. ChatGPT 5 Thinking produces the correct answer after reasoning step-by-step.
-  </Fragment>
-</Figure>
+    <ToggleFigurePanel label="Forest" value="forest">
 
 > **Question.** *A forest has 1000 trees. Each year, loggers cut down half of the trees remaining at the start of the year. In the same year, conservationists plant 100 new trees at the end of the year. After this process repeats for two years, how many trees are in the forest?*
 
-<Figure>
-  <ToggleFigure slot="figure" ariaLabel="ChatGPT 5 response variants" defaultValue="instant">
-    <ToggleFigurePanel label="ChatGPT 5 Instant" value="instant">
-      <Picture src="/blog/cot-info/figs/gpt_cot_examples/forest-no-cot.png" alt="ChatGPT 5 Instant fails on the forestry word problem without reasoning." invertInDarkMode />
+<div class="comparison">
+<div class="comparison__panel">
+
+**ChatGPT 5 Instant** · wrong
+
+A: 350
+
+</div>
+<div class="comparison__panel">
+
+**ChatGPT 5 Thinking** · correct
+
+*Thought for 23s.*
+
+A: 400 (Year 1: 1000 → 500 → 600; Year 2: 600 → 300 → 400)
+
+</div>
+</div>
+
     </ToggleFigurePanel>
-    <ToggleFigurePanel label="ChatGPT 5 Thinking" value="thinking">
-      <Picture src="/blog/cot-info/figs/gpt_cot_examples/forest-cot-gpt5-thinking.png" alt="ChatGPT 5 Thinking solves the forestry word problem with chain-of-thought supervision." invertInDarkMode />
-    </ToggleFigurePanel>
-  </ToggleFigure>
-  <Fragment slot="caption">
-    ChatGPT 5 Instant, prompted to respond instantly, guesses the wrong answer. ChatGPT 5 Thinking produces the correct answer after reasoning step-by-step.
-  </Fragment>
-</Figure>
+    <ToggleFigurePanel label="Linear system" value="linear-system">
 
 > **Question.** *Suppose $x + 2y - z = 4$, $-3x - y + z = 10$, $4x + y - 2z = 15$. Solve for $x, y, z$.*
 
-<Figure>
-  <ToggleFigure slot="figure" ariaLabel="ChatGPT 5 response variants" defaultValue="instant">
-    <ToggleFigurePanel label="ChatGPT 5 Instant" value="instant">
-      <Picture src="/blog/cot-info/figs/gpt_cot_examples/syseq-gpt5-instant.png" alt="ChatGPT 5 Instant fails to solve the linear system without reasoning." invertInDarkMode />
-    </ToggleFigurePanel>
-    <ToggleFigurePanel label="ChatGPT 5 Thinking" value="thinking">
-      <Picture src="/blog/cot-info/figs/gpt_cot_examples/syseq-gpt5-thinking.png" alt="ChatGPT 5 Thinking solves the linear system with a reasoning trace." invertInDarkMode />
+<div class="comparison">
+<div class="comparison__panel">
+
+**ChatGPT 5 Instant** · wrong
+
+A: $x = 3,\ y = 2,\ z = 4$
+
+</div>
+<div class="comparison__panel">
+
+**ChatGPT 5 Thinking** · correct
+
+… Now use (3): $4x + y - 2z = 15$. $4x + (2x + 14) - 2(5x + 24) = 15 \Rightarrow 6x + 14 - 10x - 48 = 15 \Rightarrow -4x - 34 = 15 \Rightarrow \dots$ Then $y = 2x + 14 = -\tfrac{21}{2}$, $z = 5x + 24 = -\tfrac{149}{4}$.
+
+A: $x = -\tfrac{49}{4},\ y = -\tfrac{21}{2},\ z = -\tfrac{149}{4}$
+
+</div>
+</div>
+
     </ToggleFigurePanel>
   </ToggleFigure>
   <Fragment slot="caption">
