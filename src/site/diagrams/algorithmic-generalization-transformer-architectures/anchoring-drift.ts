@@ -7,19 +7,20 @@ import { canvas, defineDiagram, type DiagramContext, type Point, type Tone } fro
 // iterations instead of thirteen and puts the row names above the rows.
 //
 // Tones follow the post's charts: Continuous LSS is series 4 (teal),
-// Discrete LSS + EC series 2 (navy), and Discrete LSS a light navy (series 2
-// navy's companion shade, --figure-2-alt, drawn by re-pointing tone 2 inside a group).
+// Discrete LSS + EC series 2 (navy), and Discrete LSS series 5 (violet, the
+// hue next to navy at comparable weight; drawn by re-pointing tone 2 inside a
+// group). Its companion navy read too pale beside the other two rows.
 // Errors take series 3 (ochre) and corrections series 6 (olive), the nearest
 // the palette has to the original's red and green that neither navy row nor
 // the teal row uses.
 
 const CONT: Tone = 4;
-const DISC: Tone = 2; // drawn light, inside LIGHT
+const DISC: Tone = 2; // drawn violet, inside LIGHT
 const DISC_EC: Tone = 2;
-/** A group whose tone-2 marks take the light navy of Discrete LSS. */
+/** A group whose tone-2 marks take Discrete LSS's violet. */
 const LIGHT = "agta-anchor-light";
 const LIGHT_STYLE =
-  `<style>.figure-diagram .${LIGHT} .d-tone-2 { --tone: var(--figure-2-alt); }</style>`;
+  `<style>.figure-diagram .${LIGHT} .d-tone-2 { --tone: var(--figure-5); }</style>`;
 const ERR: Tone = 3;
 const FIX: Tone = 6;
 

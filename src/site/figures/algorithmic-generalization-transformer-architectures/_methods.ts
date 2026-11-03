@@ -1,5 +1,5 @@
 import * as Plot from "@observablehq/plot";
-import { DASH, NEUTRAL, SERIES, SERIES_ALT, type FigureRow } from "../../../lib/figures";
+import { DASH, NEUTRAL, SERIES, type FigureRow } from "../../../lib/figures";
 
 /**
  * A lighter shade of a series colour: mixed toward the page background, so
@@ -11,7 +11,7 @@ export const light = (color: string) => `color-mix(in srgb, ${color} 65%, var(--
 /**
  * The paper's seven methods, with their figure-legend names
  * (paper_figures/labels.py), coloured by family as in the paper's figures:
- * discrete-latent methods navy (the full method strongest), continuous-latent
+ * discrete-latent methods navy and violet (the full method navy), continuous-latent
  * methods greens (teal, olive), end-to-end baselines greys, and
  * chain-of-thought, the one token-space method, claret.
  */
@@ -21,7 +21,7 @@ export const METHODS = [
   { id: "chain-of-thought-supervision", label: "Chain-of-Thought", color: SERIES[0] },
   { id: "continuous-latent-space-supervision", label: "Continuous LSS", color: SERIES[3] },
   { id: "self-scheduled-lss", label: "Self-Scheduled LSS", color: SERIES[5] },
-  { id: "discrete-latent-space-supervision", label: "Discrete LSS", color: SERIES_ALT[1] },
+  { id: "discrete-latent-space-supervision", label: "Discrete LSS", color: SERIES[4] },
   { id: "discrete-latent-space-supervision-on-policy-error-correction", label: "Discrete LSS + EC", color: SERIES[1] }
 ] as const;
 

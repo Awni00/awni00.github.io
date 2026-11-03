@@ -13,7 +13,7 @@ export default definePaperReview({
       label: "Diagram: anchoring vs drift",
       alt: "Continuous, discrete and discrete + self-correction latent trajectories across recurrent iterations.",
       before: { kind: "pdf", src: `/blog/${FIG}/figures/anchoring_drift.pdf`, invertInDarkMode: true },
-      note: "Paper geometry (gen_anchoring_figure.py) scaled to the column. Continuous = series 4 (teal), Discrete = light navy (series 2 mixed 55% toward the page), Discrete + self-correction = series 2 (navy), as in the post's charts; errors series 3 (ochre), correction series 6 (olive). Phone: ten iterations, row names above rows."
+      note: "Paper geometry (gen_anchoring_figure.py) scaled to the column. Continuous = series 4 (teal), Discrete = series 5 (violet), Discrete + self-correction = series 2 (navy), as in the post's charts (violet replaced a pale navy that read weaker than the other rows); errors series 3 (ochre), correction series 6 (olive). Phone: ten iterations, row names above rows."
     },
     {
       kind: "diagram",
