@@ -42,8 +42,8 @@ bibtex: |
   }
 ---
 
-import ChatPair from "../../site/components/ChatPair.astro";
-import ChatWindow from "../../site/components/ChatWindow.astro";
+import ChatPair from "../../site/components/cot-info/ChatPair.astro";
+import ChatWindow from "../../site/components/cot-info/ChatWindow.astro";
 
 
 
@@ -54,7 +54,7 @@ Chain-of-thought (CoT) training has quickly become central to the reasoning brea
 We can see this difference in action when both models attempt the same problem.
 
 <Figure>
-  <ToggleFigure slot="figure" ariaLabel="Example questions" defaultValue="decimals">
+  <ToggleFigure slot="figure" label="Question" align="center" defaultValue="decimals">
     <ToggleFigurePanel label="9.9 or 9.10" value="decimals">
 
 <ChatPair>

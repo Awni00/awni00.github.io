@@ -1,0 +1,40 @@
+---
+/**
+ * Two ChatWindows side by side (stacked on narrow columns), for one tab of a
+ * ToggleFigure. Site-owned (used by cot-info).
+ *
+ * In a ToggleFigure every panel takes the tallest panel's height; the pair
+ * fills that height and the windows stretch with it, so a shorter example
+ * leaves no gap above the caption: the spare room falls inside the windows,
+ * above their composer bar.
+ * Styles are inline: the site's MDX pipeline does not collect scoped CSS
+ * from components imported into posts.
+ */
+---
+
+<div class="chat-pair"><slot /></div>
+
+<style is:inline>
+  .toggle-figure__panel:has(> .chat-pair) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-pair {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  /* Stacked: the second window takes all the spare height, so the first
+     stays compact. */
+  @media (max-width: 600px) {
+    .chat-pair {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      gap: 12px;
+    }
+  }
+</style>
