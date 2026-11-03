@@ -42,6 +42,7 @@ bibtex: |
   }
 ---
 
+import ChatPair from "../../site/components/ChatPair.astro";
 import ChatWindow from "../../site/components/ChatWindow.astro";
 
 
@@ -56,7 +57,7 @@ We can see this difference in action when both models attempt the same problem.
   <ToggleFigure slot="figure" ariaLabel="Example questions" defaultValue="decimals">
     <ToggleFigurePanel label="9.9 or 9.10" value="decimals">
 
-<div class="comparison">
+<ChatPair>
 <ChatWindow model="5 Instant" verdict="wrong">
 
 <Fragment slot="prompt">Which number is larger, 9.9 or 9.10?</Fragment>
@@ -73,12 +74,12 @@ A: 9.10
 A: 9.9
 
 </ChatWindow>
-</div>
+</ChatPair>
 
     </ToggleFigurePanel>
     <ToggleFigurePanel label="Forest" value="forest">
 
-<div class="comparison">
+<ChatPair>
 <ChatWindow model="5 Instant" verdict="wrong">
 
 <Fragment slot="prompt">A forest has 1000 trees. Each year, loggers cut down half of the trees remaining at the start of the year. In the same year, conservationists plant 100 new trees at the end of the year. After this process repeats for two years, how many trees are in the forest?</Fragment>
@@ -93,12 +94,12 @@ A: 350
 A: 400 (Year 1: 1000 → 500 → 600; Year 2: 600 → 300 → 400)
 
 </ChatWindow>
-</div>
+</ChatPair>
 
     </ToggleFigurePanel>
     <ToggleFigurePanel label="Linear system" value="linear-system">
 
-<div class="comparison">
+<ChatPair>
 <ChatWindow model="5 Instant" verdict="wrong">
 
 <Fragment slot="prompt">Suppose $x + 2y - z = 4$, $-3x - y + z = 10$, $4x + y - 2z = 15$. Solve for $x, y, z$.</Fragment>
@@ -115,7 +116,7 @@ A: $x = 3,\ y = 2,\ z = 4$
 A: $x = -\tfrac{49}{4},\ y = -\tfrac{21}{2},\ z = -\tfrac{149}{4}$
 
 </ChatWindow>
-</div>
+</ChatPair>
 
     </ToggleFigurePanel>
   </ToggleFigure>
