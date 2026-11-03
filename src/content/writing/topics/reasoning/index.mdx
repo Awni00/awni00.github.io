@@ -20,7 +20,7 @@ The steps are typically sequential, and finding the right chain often involves s
 The mark of genuine reasoning is *systematicity*: a process that applies to every problem sharing the same structure, including longer or harder ones than any seen in training, rather than memorized patterns that happen to cover the training distribution.
 
 Modern LLMs are transformers pre-trained on internet-scale human text, then trained on high-quality reasoning traces and refined with reinforcement learning. Reasoning emerges somewhere in this pipeline, but we have a limited understanding of how, or how far it extends.
-I'm interested in understanding how these models *learn* to reason from data and experience, how they *represent* and organize the reasoning process internally, and how they *execute* long chains of computation, and in developing methods that make their reasoning generalize out of distribution.
+I'm interested in understanding how these models *learn* to reason from data and experience, how they *represent* and organize the reasoning process internally, and how they *execute* long chains of computation, and in developing methods that improve their out-of-distribution generalization.
 
 {/* 
 In learning, the question is how different supervision schemes and learning algorithms shape a model’s ability to reason. Supervising intermediate steps, not only final answers, can make complex problems learnable that are very difficult to learn from end-to-end supervision alone. Reinforcement learning instead typically rewards only the final answer, leaving the model to explore the space of reasoning chains on its own. In execution, the question is how a model carries out those intermediate steps. The dominant paradigm generates them autoregressively in token space, but alternatives such as input-adaptive recurrence in latent space offer a different path.
@@ -29,9 +29,9 @@ In learning, the question is how different supervision schemes and learning algo
 **Papers in this thread:**
 - **[CoT Information](/blog/cot-info):** a learning theory showing how supervising intermediate steps, rather than only final answers, makes reasoning easier to learn, and formally quantifying the gain in sample efficiency.
 - **[Putting transformer theories to the test](/blog/transformer-theories):** compares and empirically evaluates competing theoretical accounts of which computations transformers can and cannot perform in a single forward pass.
-- **[Recursive latent space reasoning](/blog/recursive-latent-reasoning):** explores recurrence in latent space as an alternative to autoregressive reasoning in token space, combining input-adaptive recurrence, supervision of latent steps, and discrete latent states enabling transformers to extrapolate to problems far larger than those seen in training.
+- **[Recursive latent space reasoning](/blog/recursive-latent-reasoning):** explores recurrence in latent space as an alternative to autoregressive reasoning in token space, combining input-adaptive recurrence, supervision of latent steps, and discrete latent states, enabling transformers to extrapolate to problems far larger than those seen in training.
 - **[Uncovering latent reasoning strategies in language models](/blog/latent-strategies-in-lms):** LLMs implicitly represent a broad repertoire of abstract strategies that generalize across problems; this paper studies how to recover this latent structure as an explicit variable that can be interpreted and controlled.
 
-More broadly, I'm interested in studying and designing better algorithms for learning from experience, including long-horizon problems and continual learning.
+More broadly, I'm interested in studying and designing better algorithms for learning from experience, including for long-horizon problems and continual learning.
 Current reinforcement learning methods for LLMs make little use of the rich structure these models learn, exploring only passively by sampling from their existing distribution.
 Making this structure explicit and controllable could enable a model to actively direct its exploration through abstract strategy space.
