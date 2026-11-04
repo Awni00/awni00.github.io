@@ -9,7 +9,7 @@ export const siteConfigOverrides: SiteConfigOverrides = {
     description:
       "Academic website for Awni Altabaa, a PhD candidate studying the foundations of artificial intelligence.",
     url: "https://awni.xyz",
-    profileImage: "/profile.jpg",
+    profileImage: "/profile.webp",
     links: {
       email: "mailto:awni.altabaa@yale.edu",
       cv: "/cv.pdf",
