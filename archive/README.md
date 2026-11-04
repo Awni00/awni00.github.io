@@ -12,3 +12,8 @@ Retired writing entries, kept for reference. Files here are outside
   `src/site/figures/algorithmic-generalization-transformer-architectures/` and
   `src/site/diagrams/algorithmic-generalization-transformer-architectures/`,
   which the new post uses.
+- `writing/latent-strategies-in-lms.mdx`: the full post for "Uncovering
+  Latent Reasoning Strategies in Language Models", replaced by an
+  abstract-only page at the same path until a new post is written. Its figures
+  still live under `public/blog/latent-strategies-in-lms/` and
+  `src/site/figures/latent-strategies-in-lms/`.
