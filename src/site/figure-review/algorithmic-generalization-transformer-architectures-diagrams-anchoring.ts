@@ -1,4 +1,4 @@
-import { definePaperReview } from "../../fixtures/figure-review/types";
+import { definePaperReview } from "../../dev/figure-review/types";
 
 const FIG = "algorithmic-generalization-transformer-architectures";
 

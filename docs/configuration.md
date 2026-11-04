@@ -64,7 +64,7 @@ Supported top-level sections:
 ### Graph layout and edges
 
 Everything in this section, plus node sizes and the selection mark, can be tried before it is written
-down: run `npm run dev` and open `/fixtures/graph-playground`. It shows your
+down: run `npm run dev` and open `/dev/graph-playground`. It shows your
 writing map as your config draws it, beside the same map driven by sliders and
 toggles, and writes the changed values out as config to paste into
 `src/site/config.ts`. It is a development page only; `astro build` does not
@@ -216,6 +216,20 @@ the panel stacked under the canvas.
 Low-level rendering internals should stay in template-owned code. If a visual or
 feature option should be reusable by many sites, add a documented config knob to
 the template rather than editing a downstream site locally.
+
+## Publications Page
+
+`publications.description` is one line under the publications page's title,
+and the page's meta description. It is empty by default, which hides the line
+(the meta description then reads "Publications by {site.name}."):
+
+```ts
+export const siteConfigOverrides = {
+  publications: {
+    description: "Papers and preprints, with links to code, slides, and posters."
+  }
+} satisfies SiteConfigOverrides;
+```
 
 ## Publication Abstract Display
 

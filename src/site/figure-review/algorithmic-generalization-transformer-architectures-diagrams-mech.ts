@@ -1,4 +1,4 @@
-import { definePaperReview } from "../../fixtures/figure-review/types";
+import { definePaperReview } from "../../dev/figure-review/types";
 
 // review of the redrawn mechanism icons.
 const FIGS = "/blog/algorithmic-generalization-transformer-architectures/figures";

@@ -1,4 +1,4 @@
-import { definePaperReview } from "../../fixtures/figure-review/types";
+import { definePaperReview } from "../../dev/figure-review/types";
 
 const FIGS = "/blog/algorithmic-generalization-transformer-architectures/figures";
 const pdf = (src: string) => ({ kind: "pdf" as const, src: `${FIGS}/${src}`, invertInDarkMode: true });

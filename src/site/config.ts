@@ -133,7 +133,7 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   // },
 
   // Which of the registered themes the site uses. Ten ship with the template
-  // (see docs/theming.md, or run the dev server and open /fixtures/themes to
+  // (see docs/theming.md, or run the dev server and open /dev/themes to
   // compare them); `src/site/themes.ts` is where you define your own.
   // theme: {
   //   light: "dawn",          // paper | dawn | everforest-light | latte | github-light

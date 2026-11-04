@@ -1,4 +1,4 @@
-import { definePaperReview } from "../../fixtures/figure-review/types";
+import { definePaperReview } from "../../dev/figure-review/types";
 
 export default definePaperReview({
   post: "dual-attention",
