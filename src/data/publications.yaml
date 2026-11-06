@@ -177,33 +177,32 @@
       archivePrefix = {arXiv},
       primaryClass = {cs.LG}
     }
-- id: altabaa2026relationfunctions
+- id: altabaa2024relationfunctions
   title: Approximation of Relation Functions and Attention Mechanisms
   authors:
     - Awni Altabaa
     - John Lafferty
-  year: 2026
-  venue: 'Information Theory, Probability and Statistical Learning: A Festschrift in Honor of Andrew Barron'
+  year: 2024
+  venue: 'arXiv preprint; in A Festschrift in Honor of Andrew Barron (Springer, 2026)'
   selected: true
   preview: relation-function-approximation.webp
+  publisher_label: Springer
   links:
     arxiv: '2402.08856'
     blog: /blog/relation-function-approximation
+    publisher: https://link.springer.com/book/9783032139917
   tldr: We show that inner products of neural network feature maps can approximate symmetric and asymmetric relation functions, with applications to attention.
   abstract: Inner products of neural network feature maps arises in a wide variety of machine learning frameworks as a method of modeling relations between inputs. This work studies the approximation properties of inner products of neural networks. It is shown that the inner product of a multi-layer perceptron with itself is a universal approximator for symmetric positive-definite relation functions. In the case of asymmetric relation functions, it is shown that the inner product of two different multi-layer perceptrons is a universal approximator. Finally, these approximation results are applied to analyzing the attention mechanism underlying Transformers.
   bibtex: |
-    @incollection{altabaa2026relationfunctions,
+    @misc{altabaa2024relationfunctions,
       author = {Altabaa, Awni and Lafferty, John},
-      editor = {Klusowski, Jason and Kontoyiannis, Ioannis and Rush, Cynthia},
       title = {Approximation of Relation Functions and Attention Mechanisms},
-      booktitle = {Information Theory, Probability and Statistical Learning: A Festschrift in Honor of Andrew Barron},
-      publisher = {Springer},
-      year = {2026},
-      address = {Cham},
+      year = {2024},
       url = {https://arxiv.org/abs/2402.08856},
       eprint = {2402.08856},
       archivePrefix = {arXiv},
-      primaryClass = {cs.LG}
+      primaryClass = {cs.LG},
+      note = {Also in \emph{Information Theory, Probability and Statistical Learning: A Festschrift in Honor of Andrew Barron}, Springer, 2026}
     }
 - id: altabaa2024relconv
   title: Learning Hierarchical Relational Representations through Relational Convolutions
