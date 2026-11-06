@@ -1,0 +1,346 @@
+# Publications. Display fields are plain text shown as written; `bibtex` is
+# the citation readers copy (publications list, homepage, and the "Cite" block
+# of the page in links.blog), kept verbatim. `npm run validate` checks each
+# citation against its entry. Venue details were checked against the official
+# proceedings and publisher records on 2026-11-06.
+- id: altabaa2026transformertheories
+  title: Putting Transformer Theories to the Test
+  authors:
+    - Awni Altabaa
+    - Tobias Schnabel
+    - Kiran Tomlinson
+  year: 2026
+  venue: arXiv preprint
+  selected: true
+  preview: transformer-theories.webp
+  links:
+    arxiv: '2610.32104'
+    blog: /blog/transformer-theories
+  abstract: 'Several formal theories have been developed to characterize the capabilities and limitations of the transformer architecture, each employing different abstractions that capture different features of the architecture. Due to the differences in their underlying assumptions and conceptual frameworks, these theories can disagree in their predictions about what tasks transformers find easy or hard. We map out seven theories of transformer capability (Star-free, AC0, TC0, C-RASP, MPC, BAPO, and Sensitivity) and translate their results into a common matrix of predictions across a suite of tasks covering different computational structures. We provide new theoretical results to complete this matrix. We then evaluate theoretical predictions through controlled experiments measuring in-distribution sample complexity, length generalization, and pretrained language model performance. We find that no single theory explains the observed pattern of successes and failures. When a theory does not capture the transformer behaviors relevant to a task, its predictions break down; for instance, we show that the k-hop induction task is predicted hard by C-RASP because it does not model content-dependent attention, but we train small transformers on this task that length-generalize. Similarly, theories assuming hard attention like AC0 and BAPO predict binary majority to be hard, for which we also find success in practice. Together, our results point to several specific features that a theory of transformers must capture: soft rather than hard attention, dynamic content-dependent retrieval, bounded computation at each position, an account of learnability and inductive biases, and a combination of upper and lower bounds.'
+  bibtex: |
+    @misc{altabaa2026transformertheories,
+      author = {Altabaa, Awni and Schnabel, Tobias and Tomlinson, Kiran},
+      title = {Putting Transformer Theories to the Test},
+      year = {2026},
+      url = {https://arxiv.org/abs/2610.32104},
+      eprint = {2610.32104},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.LG}
+    }
+- id: altabaa2026latentstrategies
+  title: Uncovering Latent Reasoning Strategies in Language Models
+  authors:
+    - Awni Altabaa
+    - John Lafferty
+  year: 2026
+  venue: arXiv preprint
+  selected: true
+  preview: latent-strategies-in-lms.webp
+  links:
+    arxiv: '2607.17674'
+    code: https://github.com/Awni00/latent-strategies-in-lms
+    blog: /blog/latent-strategies-in-lms
+  abstract: A language model p(y | x) trained on reasoning tasks learns to solve problems via multiple distinct strategies, yet these strategies are implicit and entangled within the model's response distribution. We study the problem of decomposing the response distribution of a given pretrained language model into a structured, strategy-conditioned representation. Specifically, we learn a latent-variable factorization p(y | x) ⇝ (r(z | x), g(y | x, z)), where a router r maps each input to a distribution over latent strategies z and a generator g produces the response conditioned on that strategy. A key challenge is that the generator, initialized from the base model, already represents p(y | x) without using z. Standard variational inference therefore gives the model no incentive to route information through z and can yield a severe form of posterior collapse. To address this, we propose a variational objective that measures fractional information gain relative to the base model's response loss and concentrates reconstruction pressure on tokens with high base model surprisal, encouraging z to encode strategy-relevant response variation. We introduce a benchmark of multi-strategy algorithmic tasks and show that this objective recovers latent codes aligned with distinct reference strategies while preserving the base model's response distribution.
+  bibtex: |
+    @misc{altabaa2026latentstrategies,
+      author = {Altabaa, Awni and Lafferty, John},
+      title = {Uncovering Latent Reasoning Strategies in Language Models},
+      year = {2026},
+      url = {https://arxiv.org/abs/2607.17674},
+      eprint = {2607.17674},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.LG}
+    }
+- id: altabaa2025recursivelatent
+  title: Unlocking Out-of-Distribution Generalization in Transformers via Recursive Latent Space Reasoning
+  authors:
+    - Awni Altabaa
+    - Siyu Chen
+    - John Lafferty
+    - Zhuoran Yang
+  year: 2025
+  venue: arXiv preprint
+  selected: true
+  preview: algorithmic-generalization-transformer-architectures.webp
+  links:
+    arxiv: '2510.14095'
+    code: https://github.com/Awni00/algorithmic-generalization-transformer-architectures
+    blog: /blog/recursive-latent-reasoning
+  tldr: 'We introduce and explore a set of four architectural mechanisms aimed at enhancing out-of-distribution algorithmic generalization: input-adaptive recurrence, algorithmic supervision, anchored latent representations via a discrete bottleneck, and an explicit error-correction mechanism.'
+  abstract: 'Systematic, compositional generalization beyond the training distribution remains a core challenge in machine learning -- and a critical bottleneck for the emergent reasoning abilities of modern language models. This work investigates out-of-distribution (OOD) generalization in Transformer networks using a GSM8K-style modular arithmetic on computational graphs task as a testbed. We introduce and explore a set of four architectural mechanisms aimed at enhancing OOD generalization: (i) input-adaptive recurrence; (ii) algorithmic supervision; (iii) anchored latent representations via a discrete bottleneck; and (iv) an explicit error-correction mechanism. Collectively, these mechanisms yield an architectural approach for native and scalable latent space reasoning in Transformer networks with robust algorithmic generalization capabilities. We complement these empirical results with a detailed mechanistic interpretability analysis that reveals how these mechanisms give rise to robust OOD generalization abilities.'
+  bibtex: |
+    @misc{altabaa2025recursivelatent,
+      author = {Altabaa, Awni and Chen, Siyu and Lafferty, John and Yang, Zhuoran},
+      title = {Unlocking Out-of-Distribution Generalization in Transformers via Recursive Latent Space Reasoning},
+      year = {2025},
+      url = {https://arxiv.org/abs/2510.14095},
+      eprint = {2510.14095},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.LG}
+    }
+- id: altabaa2025cotinformation
+  title: 'CoT Information: Improved Sample Complexity under Chain-of-Thought Supervision'
+  authors:
+    - Awni Altabaa
+    - Omar Montasser
+    - John Lafferty
+  year: 2025
+  venue: Neural Information Processing Systems (NeurIPS)
+  award: Spotlight
+  selected: true
+  preview: cot-info.webp
+  links:
+    arxiv: '2505.15927'
+    blog: /blog/cot-info
+    slides: /publications/slides/cotinfo-slides.pdf
+    poster: /publications/posters/cotinfo-poster.pdf
+    publisher: https://proceedings.neurips.cc/paper_files/paper/2025/hash/235a9abbb6303fac26f205367fe08c0b-Abstract-Conference.html
+  tldr: We develop a statistical theory of learning under chain-of-thought supervision, introducing the CoT information measure to quantify the additional discriminative power gained from observing the reasoning process.
+  abstract: Learning complex functions that involve multi-step reasoning poses a significant challenge for standard supervised learning from input-output examples. Chain-of-thought (CoT) supervision, which provides intermediate reasoning steps together with the final output, has emerged as a powerful empirical technique, underpinning much of the recent progress in the reasoning capabilities of large language models. This paper develops a statistical theory of learning under CoT supervision. A key characteristic of the CoT setting, in contrast to standard supervision, is the mismatch between the training objective (CoT risk) and the test objective (end-to-end risk). A central part of our analysis, distinguished from prior work, is explicitly linking those two types of risk to achieve sharper sample complexity bounds. This is achieved via the CoT information measure, which quantifies the additional discriminative power gained from observing the reasoning process. The main theoretical results demonstrate how CoT supervision can yield significantly faster learning rates compared to standard E2E supervision.
+  bibtex: |
+    @inproceedings{altabaa2025cotinformation,
+      author = {Altabaa, Awni and Montasser, Omar and Lafferty, John},
+      title = {{CoT} Information: Improved Sample Complexity under Chain-of-Thought Supervision},
+      booktitle = {Advances in Neural Information Processing Systems},
+      publisher = {Curran Associates, Inc.},
+      year = {2025},
+      volume = {38},
+      pages = {24822--24862},
+      doi = {10.52202/085713-0834},
+      url = {https://proceedings.neurips.cc/paper_files/paper/2025/hash/235a9abbb6303fac26f205367fe08c0b-Abstract-Conference.html},
+      eprint = {2505.15927},
+      archivePrefix = {arXiv},
+      primaryClass = {stat.ML}
+    }
+- id: altabaa2025dualattention
+  title: Disentangling and Integrating Relational and Sensory Information in Transformer Architectures
+  authors:
+    - Awni Altabaa
+    - John Lafferty
+  year: 2025
+  venue: International Conference on Machine Learning (ICML)
+  selected: true
+  preview: dual-attention.webp
+  links:
+    arxiv: '2405.16727'
+    code: https://github.com/awni00/dual-attention
+    blog: /blog/dual-attention
+    slides: /publications/slides/dat-slides.pdf
+    poster: /publications/posters/dat-poster.pdf
+    publisher: https://proceedings.mlr.press/v267/altabaa25a.html
+  tldr: We introduce the Dual Attention Transformer, an architectural extension of the Transformer framework that incorporates distinct sensory and relational attention mechanisms.
+  abstract: 'Relational reasoning is a central component of generally intelligent systems, enabling robust and data-efficient inductive generalization. Recent empirical evidence shows that many existing neural architectures, including Transformers, struggle with tasks requiring relational reasoning. In this work, we distinguish between two types of information: sensory information about the properties of individual objects, and relational information about the relationships between objects. While neural attention provides a powerful mechanism for controlling the flow of sensory information between objects, the Transformer lacks an explicit computational mechanism for routing and processing relational information. To address this limitation, we propose an architectural extension of the Transformer framework that we call the Dual Attention Transformer (DAT), featuring two distinct attention mechanisms: sensory attention for directing the flow of sensory information, and a novel relational attention mechanism for directing the flow of relational information.'
+  bibtex: |
+    @inproceedings{altabaa2025dualattention,
+      author = {Altabaa, Awni and Lafferty, John},
+      title = {Disentangling and Integrating Relational and Sensory Information in Transformer Architectures},
+      booktitle = {Proceedings of the 42nd International Conference on Machine Learning},
+      publisher = {PMLR},
+      year = {2025},
+      volume = {267},
+      series = {Proceedings of Machine Learning Research},
+      pages = {1271--1297},
+      url = {https://proceedings.mlr.press/v267/altabaa25a.html},
+      eprint = {2405.16727},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.LG}
+    }
+- id: altabaa2024infostructure
+  title: On the Role of Information Structure in Reinforcement Learning for Partially-Observable Sequential Teams and Games
+  authors:
+    - Awni Altabaa
+    - Zhuoran Yang
+  year: 2024
+  venue: Neural Information Processing Systems (NeurIPS)
+  selected: true
+  preview: information-structure-rl.webp
+  links:
+    arxiv: '2403.00993'
+    blog: /blog/information-structure-rl
+    slides: /publications/slides/rl-info-struct-slides.pdf
+    poster: /publications/posters/rl-info-struct-poster.pdf
+    publisher: https://proceedings.neurips.cc/paper_files/paper/2024/hash/0cbbdfb0a4098af8dc7a497a5e59aff7-Abstract-Conference.html
+  tldr: We introduce a reinforcement learning model that explicitly represents information structure in sequential decision-making problems.
+  abstract: In sequential decision-making problems, the information structure describes the causal dependencies between system variables, encompassing the dynamics of the environment and the agents' actions. Classical models of reinforcement learning assume a restricted and highly regular information structure, while more general models like predictive state representations do not explicitly model the information structure. By contrast, real-world sequential decision-making problems typically involve a complex and time-varying interdependence of system variables, requiring a rich and flexible representation of information structure. In this paper, we formalize a novel reinforcement learning model which explicitly represents the information structure.
+  bibtex: |
+    @inproceedings{altabaa2024infostructure,
+      author = {Altabaa, Awni and Yang, Zhuoran},
+      title = {On the Role of Information Structure in Reinforcement Learning for Partially-Observable Sequential Teams and Games},
+      booktitle = {Advances in Neural Information Processing Systems},
+      publisher = {Curran Associates, Inc.},
+      year = {2024},
+      volume = {37},
+      pages = {6648--6710},
+      doi = {10.52202/079017-0214},
+      url = {https://proceedings.neurips.cc/paper_files/paper/2024/hash/0cbbdfb0a4098af8dc7a497a5e59aff7-Abstract-Conference.html},
+      eprint = {2403.00993},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.LG}
+    }
+- id: altabaa2026relationfunctions
+  title: Approximation of Relation Functions and Attention Mechanisms
+  authors:
+    - Awni Altabaa
+    - John Lafferty
+  year: 2026
+  venue: 'Information Theory, Probability and Statistical Learning: A Festschrift in Honor of Andrew Barron'
+  selected: true
+  preview: relation-function-approximation.webp
+  links:
+    arxiv: '2402.08856'
+    blog: /blog/relation-function-approximation
+  tldr: We show that inner products of neural network feature maps can approximate symmetric and asymmetric relation functions, with applications to attention.
+  abstract: Inner products of neural network feature maps arises in a wide variety of machine learning frameworks as a method of modeling relations between inputs. This work studies the approximation properties of inner products of neural networks. It is shown that the inner product of a multi-layer perceptron with itself is a universal approximator for symmetric positive-definite relation functions. In the case of asymmetric relation functions, it is shown that the inner product of two different multi-layer perceptrons is a universal approximator. Finally, these approximation results are applied to analyzing the attention mechanism underlying Transformers.
+  bibtex: |
+    @incollection{altabaa2026relationfunctions,
+      author = {Altabaa, Awni and Lafferty, John},
+      editor = {Klusowski, Jason and Kontoyiannis, Ioannis and Rush, Cynthia},
+      title = {Approximation of Relation Functions and Attention Mechanisms},
+      booktitle = {Information Theory, Probability and Statistical Learning: A Festschrift in Honor of Andrew Barron},
+      publisher = {Springer},
+      year = {2026},
+      address = {Cham},
+      url = {https://arxiv.org/abs/2402.08856},
+      eprint = {2402.08856},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.LG}
+    }
+- id: altabaa2024relconv
+  title: Learning Hierarchical Relational Representations through Relational Convolutions
+  authors:
+    - Awni Altabaa
+    - John Lafferty
+  year: 2024
+  venue: Transactions on Machine Learning Research (TMLR)
+  selected: true
+  preview: relational-convolutions.webp
+  links:
+    arxiv: '2310.03240'
+    code: https://github.com/awni00/relational-convolutions
+    blog: /blog/relational-convolutions
+    publisher: https://openreview.net/forum?id=vNZlnznmV2
+  tldr: We introduce relational convolutional networks, a neural architecture for hierarchical relational feature representations.
+  abstract: An evolving area of research in deep learning is the study of architectures and inductive biases that support the learning of relational feature representations. In this paper, we address the challenge of learning representations of hierarchical relations--that is, higher-order relational patterns among groups of objects. We introduce relational convolutional networks, a neural architecture equipped with computational mechanisms that capture progressively more complex relational features through the composition of simple modules.
+  bibtex: |
+    @article{altabaa2024relconv,
+      author = {Altabaa, Awni and Lafferty, John},
+      title = {Learning Hierarchical Relational Representations through Relational Convolutions},
+      journal = {Transactions on Machine Learning Research},
+      year = {2024},
+      url = {https://openreview.net/forum?id=vNZlnznmV2},
+      issn = {2835-8856},
+      eprint = {2310.03240},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.LG}
+    }
+- id: webb2024relationalbottleneck
+  title: The Relational Bottleneck as an Inductive Bias for Efficient Abstraction
+  authors:
+    - Taylor W. Webb
+    - Steven M. Frankland
+    - Awni Altabaa
+    - Simon Segert
+    - Kamesh Krishnamurthy
+    - Declan Campbell
+    - Jacob Russin
+    - Tyler Giallanza
+    - Randall O'Reilly
+    - John Lafferty
+    - Jonathan D. Cohen
+  year: 2024
+  venue: Trends in Cognitive Sciences (TICS)
+  selected: true
+  preview: relational-bottleneck.webp
+  links:
+    arxiv: '2309.06629'
+    blog: /blog/relational-bottleneck
+    publisher: https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(24)00080-9
+  tldr: We review relational bottleneck models as an inductive bias for data-efficient abstraction in minds and machines.
+  abstract: A central challenge for cognitive science is to explain how abstract concepts are acquired from limited experience. Here, we highlight a recently emerging line of work that suggests a novel reconciliation of empiricist and nativist approaches, by exploiting an inductive bias that we term the relational bottleneck. We review a family of models that employ this approach to induce abstractions in a data-efficient manner, emphasizing their potential as candidate models for the acquisition of abstract concepts in the human mind and brain.
+  bibtex: |
+    @article{webb2024relationalbottleneck,
+      author = {Webb, Taylor W. and Frankland, Steven M. and Altabaa, Awni and Segert, Simon and Krishnamurthy, Kamesh and Campbell, Declan and Russin, Jacob and Giallanza, Tyler and O'Reilly, Randall and Lafferty, John and Cohen, Jonathan D.},
+      title = {The Relational Bottleneck as an Inductive Bias for Efficient Abstraction},
+      journal = {Trends in Cognitive Sciences},
+      year = {2024},
+      volume = {28},
+      number = {9},
+      pages = {829--843},
+      doi = {10.1016/j.tics.2024.04.001},
+      url = {https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(24)00080-9},
+      eprint = {2309.06629},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.AI}
+    }
+- id: altabaa2024abstractors
+  title: 'Abstractors and Relational Cross-Attention: An Inductive Bias for Explicit Relational Reasoning in Transformers'
+  authors:
+    - Awni Altabaa
+    - Taylor W. Webb
+    - Jonathan D. Cohen
+    - John Lafferty
+  year: 2024
+  venue: International Conference on Learning Representations (ICLR)
+  selected: true
+  preview: abstractor.webp
+  links:
+    arxiv: '2304.00195'
+    code: https://github.com/awni00/abstractor
+    blog: /blog/abstractor
+    slides: /publications/slides/abstractor-slides.pdf
+    poster: /publications/posters/abstractor-poster.pdf
+    publisher: https://openreview.net/forum?id=XNa6r6ZjoB
+  tldr: We introduce the Abstractor, a neural module using relational cross-attention for explicit relational reasoning in Transformers.
+  abstract: An extension of Transformers is proposed that enables explicit relational reasoning through a novel module called the Abstractor. At the core of the Abstractor is a variant of attention called relational cross-attention. The approach is motivated by an architectural inductive bias for relational learning that disentangles relational information from extraneous features about individual objects. This enables explicit relational reasoning, supporting abstraction and generalization from limited data.
+  bibtex: |
+    @inproceedings{altabaa2024abstractors,
+      author = {Altabaa, Awni and Webb, Taylor W. and Cohen, Jonathan D. and Lafferty, John},
+      title = {Abstractors and Relational Cross-Attention: An Inductive Bias for Explicit Relational Reasoning in Transformers},
+      booktitle = {International Conference on Learning Representations},
+      year = {2024},
+      pages = {24597--24613},
+      url = {https://openreview.net/forum?id=XNa6r6ZjoB},
+      eprint = {2304.00195},
+      archivePrefix = {arXiv},
+      primaryClass = {stat.ML}
+    }
+- id: altabaa2023decentralizedmarl
+  title: Decentralized Multi-Agent Reinforcement Learning for Continuous-Space Stochastic Games
+  authors:
+    - Awni Altabaa
+    - Bora Yongacoglu
+    - Serdar Yüksel
+  year: 2023
+  venue: IEEE American Control Conference (ACC)
+  selected: true
+  preview: decentralized-marl-continuous-spaces.webp
+  links:
+    arxiv: '2303.13539'
+    code: https://github.com/awni00/decentralized-MARL-general-cts-spaces
+    blog: /blog/decentralized-marl-continuous-spaces
+    slides: /publications/slides/cts-dec-rl-slides.pdf
+    publisher: https://ieeexplore.ieee.org/document/10155828
+  tldr: We propose a decentralized multi-agent reinforcement learning algorithm for stochastic games with continuous state spaces.
+  abstract: Stochastic games are a popular framework for studying multi-agent reinforcement learning. Recent advances in MARL have focused primarily on games with finitely many states. In this work, we study multi-agent learning in stochastic games with general state spaces and an information structure in which agents do not observe each other's actions.
+  bibtex: |
+    @inproceedings{altabaa2023decentralizedmarl,
+      author = {Altabaa, Awni and Yongacoglu, Bora and Y{\"u}ksel, Serdar},
+      title = {Decentralized Multi-Agent Reinforcement Learning for Continuous-Space Stochastic Games},
+      booktitle = {2023 American Control Conference (ACC)},
+      publisher = {IEEE},
+      year = {2023},
+      pages = {72--77},
+      doi = {10.23919/ACC55779.2023.10155828},
+      url = {https://ieeexplore.ieee.org/document/10155828},
+      eprint = {2303.13539},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.LG}
+    }
+
+# Omitted from the site (2026-10-12); kept for reference.
+# - id: altabaa2022genedragnn
+#   title: "geneDRAGNN: Gene Disease Prioritization Using Graph Neural Networks"
+#   authors: [Awni Altabaa, David Huang, Ciaran Byles-Ho, Hani Khatib, Fabian Sosa, Ting Hu]
+#   year: 2022
+#   venue: IEEE Conference on Computational Intelligence in Bioinformatics and Computational Biology (CIBCB)
+#   links: { doi: 10.1109/CIBCB55180.2022.9863043, publisher: https://ieeexplore.ieee.org/abstract/document/9863043 }
