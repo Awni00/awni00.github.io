@@ -11,6 +11,8 @@ export const siteConfigOverrides: SiteConfigOverrides = {
     url: "https://awni.xyz",
     profileImage: "/profile.webp",
     ogImage: "/og-image.png",
+    // Ask crawlers to skip the CV; it stays public at its URL.
+    robots: { disallow: ["/cv.pdf", "/cv/"] },
     links: {
       email: "mailto:awni.altabaa@yale.edu",
       cv: "/cv.pdf",
