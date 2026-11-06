@@ -21,7 +21,11 @@ export type Publication = {
   slides?: string;
   poster?: string;
   video?: string;
+  website?: string;
+  /** The paper's page at its venue: proceedings, journal, OpenReview, conference site. */
   publisherPage?: string;
+  /** Recognition shown beside the venue: "Spotlight", "Oral", "Best Paper". */
+  award?: string;
   preview?: string;
   selected: boolean;
   bibtexShow: boolean;
