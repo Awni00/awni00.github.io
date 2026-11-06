@@ -62,6 +62,8 @@ export const siteConfigOverrides: SiteConfigOverrides = {
   writing: {
     route: "/blog",
     label: "Blog",
+    description: "A map of my research.",
+    nodePanel: { openLabel: { article: "Read blog" } },
     rss: {
       route: "/blog/rss.xml"
     },
