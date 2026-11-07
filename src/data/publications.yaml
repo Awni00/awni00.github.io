@@ -1,7 +1,8 @@
 # Publications. Display fields are plain text shown as written; `bibtex` is
 # the citation readers copy (publications list, homepage, and the "Cite" block
-# of the page in links.blog), kept verbatim. `npm run validate` checks each
-# citation against its entry. Venue details were checked against the official
+# of the page in links.blog), kept verbatim. The page in links.blog also takes
+# its venue, award and link chips from here, so its frontmatter has none.
+# `npm run validate` checks each citation against its entry. Venue details were checked against the official
 # proceedings and publisher records on 2026-11-06.
 - id: altabaa2026transformertheories
   title: Putting Transformer Theories to the Test
